@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Purchase receipt of the three-part continuous form: the button of the
+         receipt form hands the ESC/P stream to SNERP, which sends it unchanged
+         to the dot-matrix RAW queue. The receipt is the purchase receipt of the
+         warehouse, so the button stays on the incoming transfers that carry a
+         purchase line. -->
+    <record id="view_stock_picking_form_goods_receipt_prn" model="ir.ui.view">
+        <field name="name">stock.picking.form.goods.receipt.prn</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_print_goods_receipt_prn"
+                        type="object"
+                        string="Print Purchase Receipt"
+                        class="btn-secondary"
+                        invisible="picking_type_code != 'incoming' or state == 'cancel'"
+                        groups="stock.group_stock_user"/>
+                <button name="action_print_vendor_return_prn"
+                        type="object"
+                        string="Print Purchase Return"
+                        class="btn-secondary"
+                        invisible="not sn_prn_vendor_return or state == 'cancel'"
+                        groups="stock.group_stock_user"/>
+            </xpath>
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="sn_prn_reviewer_id"
+                       invisible="picking_type_code != 'incoming' and not sn_prn_vendor_return"/>
+                <field name="sn_prn_note"
+                       invisible="picking_type_code != 'incoming' and not sn_prn_vendor_return"/>
+                <field name="sn_prn_vendor_return" invisible="1"/>
+                <field name="sn_prn_print_count" readonly="1" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Batch printing from the list: the selection goes to the bridge in one
+         job, so a reception of several transfers is printed without selecting
+         the printer again. -->
+    <record id="action_print_goods_receipt_prn" model="ir.actions.server">
+        <field name="name">Print Purchase Receipts (ESC/P)</field>
+        <field name="model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_print_goods_receipt_prn()</field>
+    </record>
+
+    <record id="action_print_vendor_return_prn" model="ir.actions.server">
+        <field name="name">Print Purchase Returns (ESC/P)</field>
+        <field name="model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_print_vendor_return_prn()</field>
+    </record>
+</odoo>

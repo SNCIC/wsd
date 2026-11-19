@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_toll" model="ir.ui.view">
+        <field name="name">res.partner.form.toll</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="sn_is_toll_customer"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_res_partner_filter_toll" model="ir.ui.view">
+        <field name="name">res.partner.search.toll</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='inactive']" position="before">
+                <filter name="filter_sn_toll_customer" string="Toll Customers"
+                        domain="[('sn_is_toll_customer', '=', True)]"/>
+                <separator/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,58 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-07 00:00+0000\n"
+"PO-Revision-Date: 2026-11-07 00:00+0000\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: sn_wsd_prn
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_prn.field_sn_prn_mixin__sn_prn_print_count
+msgid "Print Count"
+msgstr "打印次数"
+
+#. module: sn_wsd_prn
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_prn.field_sn_prn_mixin__sn_prn_note
+msgid "Print Remark"
+msgstr "打印备注"
+
+#. module: sn_wsd_prn
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_prn.field_sn_prn_mixin__sn_prn_reviewer_id
+msgid "Sheet Approved By"
+msgstr "审核人"
+
+#. module: sn_wsd_prn
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_prn.field_sn_prn_mixin__sn_prn_keeper_id
+msgid "Warehouse Keeper"
+msgstr "仓管员"
+
+#. module: sn_wsd_prn
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_prn.field_sn_prn_mixin__sn_prn_keeper_id
+msgid "Name printed on the keeper line of the dot-matrix sheet."
+msgstr "打印在点阵单据仓管员栏的人名。"
+
+#. module: sn_wsd_prn
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_prn.field_sn_prn_mixin__sn_prn_inspector_id
+msgid "Inspected By"
+msgstr "检验人"
+
+#. module: sn_wsd_prn
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_prn.field_sn_prn_mixin__sn_prn_inspector_id
+msgid ""
+"Name printed on the inspection line of the dot-matrix sheet. Kept on the "
+"document rather than read from the quality control, because a sheet is also "
+"printed for the transfers that no inspection covers."
+msgstr ""
+"打印在点阵单据检验栏的人名。保存在单据上而不是取自质检记录，因为无检验覆盖的调拨也要打印单据。"

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_time_entry_mrp,time entry mrp,model_sn_wsd_time_entry,mrp.group_mrp_user,1,1,1,1
+access_work_timer_mrp,work timer mrp,model_sn_wsd_work_timer,mrp.group_mrp_user,1,1,1,0
+access_labor_analysis_user,labor analysis,model_sn_wsd_labor_analysis,sn_wsd_piece_rate.group_piece_rate_user,1,0,0,0
+access_labor_cost_user,labor cost,model_sn_wsd_labor_cost,sn_wsd_piece_rate.group_piece_rate_user,1,0,0,0
+access_payroll_summary_user,payroll summary,model_sn_wsd_payroll_summary,sn_wsd_piece_rate.group_piece_rate_user,1,0,0,0
+access_payroll_export_user,payroll export,model_sn_wsd_payroll_export,sn_wsd_piece_rate.group_piece_rate_user,1,1,1,1

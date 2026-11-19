@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 计件单价：计酬方式 -->
+    <record id="view_piece_rate_list_type" model="ir.ui.view">
+        <field name="name">sn.wsd.piece.rate.list.type</field>
+        <field name="model">sn.wsd.piece.rate</field>
+        <field name="inherit_id" ref="sn_wsd_piece_rate.view_sn_wsd_piece_rate_tree"/>
+        <field name="arch" type="xml">
+            <field name="price" position="before">
+                <field name="x_rate_type"/>
+            </field>
+            <field name="price" position="attributes">
+                <attribute name="string">单价（元/件 或 元/小时）</attribute>
+            </field>
+        </field>
+    </record>
+    <record id="view_piece_rate_form_type" model="ir.ui.view">
+        <field name="name">sn.wsd.piece.rate.form.type</field>
+        <field name="model">sn.wsd.piece.rate</field>
+        <field name="inherit_id" ref="sn_wsd_piece_rate.view_sn_wsd_piece_rate_form"/>
+        <field name="arch" type="xml">
+            <field name="price" position="before">
+                <field name="x_rate_type" widget="radio"/>
+            </field>
+            <field name="price" position="attributes">
+                <attribute name="string">单价（元/件 或 元/小时）</attribute>
+            </field>
+        </field>
+    </record>
+
+    <!-- 结算单：计酬方式 + 工时 -->
+    <record id="view_piece_settlement_list_time" model="ir.ui.view">
+        <field name="name">sn.wsd.piece.settlement.list.time</field>
+        <field name="model">sn.wsd.piece.settlement</field>
+        <field name="inherit_id" ref="sn_wsd_piece_rate.view_sn_wsd_piece_settlement_list"/>
+        <field name="arch" type="xml">
+            <field name="price" position="before">
+                <field name="x_rate_type"/>
+                <field name="x_std_hours" sum="合计" optional="show"/>
+                <field name="x_hours" sum="合计"/>
+            </field>
+        </field>
+    </record>
+    <record id="view_piece_settlement_form_time" model="ir.ui.view">
+        <field name="name">sn.wsd.piece.settlement.form.time</field>
+        <field name="model">sn.wsd.piece.settlement</field>
+        <field name="inherit_id" ref="sn_wsd_piece_rate.view_sn_wsd_piece_settlement_form"/>
+        <field name="arch" type="xml">
+            <field name="price" position="before">
+                <field name="x_rate_type" readonly="1"/>
+                <field name="x_std_hours" readonly="1"/>
+                <field name="x_hours" readonly="1"/>
+            </field>
+            <xpath expr="//field[@name='participant_ids']/list/field[@name='performance_ratio']" position="before">
+                <field name="x_hours"/>
+                <field name="x_qty_share"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 报工记录：开工/完工、工时、标准工时、效率；参与人在岗时段与工时 -->
+    <record id="view_operation_report_form_time" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.operation.report.form.time</field>
+        <field name="model">sn.wsd.mes.operation.report</field>
+        <field name="inherit_id" ref="sn_wsd_piece_rate.view_sn_wsd_mes_operation_report_form_piece"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_ratio_by_hours" type="object" string="按工时分摊比例"
+                        invisible="x_piece_settled"/>
+            </xpath>
+            <xpath expr="//group[@name='counters']" position="after">
+                <group name="time" string="工时">
+                    <field name="x_date_start"/>
+                    <field name="x_date_end"/>
+                    <field name="x_timer_seconds" invisible="not x_timer_seconds"/>
+                    <field name="x_duration_hours"/>
+                    <field name="x_hours_source" readonly="1"/>
+                    <field name="x_hours_alloc"/>
+                    <field name="x_headcount"/>
+                    <field name="x_man_hours"/>
+                </group>
+                <group name="std" string="效率与工资">
+                    <field name="x_std_seconds"/>
+                    <field name="x_std_hours"/>
+                    <field name="x_efficiency"/>
+                    <field name="x_uph"/>
+                    <field name="x_rate_type"/>
+                    <field name="x_unit_price"/>
+                    <field name="x_wage_amount"/>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='participant_ids']/list/field[@name='employee_code']" position="after">
+                <field name="performance_ratio" string="比例(%)"/>
+                <field name="x_duty_start"/>
+                <field name="x_duty_end"/>
+                <field name="x_hours_input" optional="hide"/>
+                <field name="x_work_hours" sum="合计"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="工时记录" name="time_entries">
+                    <field name="time_entry_ids" readonly="1">
+                        <list>
+                            <field name="name"/>
+                            <field name="employee_id"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="hours" sum="合计"/>
+                            <field name="qty_ok" sum="合计"/>
+                            <field name="source"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_operation_report_list_time" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.operation.report.list.time</field>
+        <field name="model">sn.wsd.mes.operation.report</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_sn_wsd_mes_operation_report_list"/>
+        <field name="arch" type="xml">
+            <field name="reported_by" position="before">
+                <field name="x_date_start" optional="show"/>
+                <field name="x_date_end" optional="show"/>
+                <field name="x_headcount" optional="show"/>
+                <field name="x_man_hours" sum="合计" optional="show"/>
+                <field name="x_std_hours" sum="合计" optional="show"/>
+                <field name="x_efficiency" optional="show"/>
+                <field name="x_hours_source" optional="hide"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- 制令单：按工时推进的实际开工 / 完工与人工工时 -->
+    <record id="view_mes_order_form_labor" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.order.form.labor</field>
+        <field name="model">sn.wsd.mes.order</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_sn_wsd_mes_order_form"/>
+        <field name="arch" type="xml">
+            <field name="x_done_date" position="after">
+                <field name="x_labor_start"/>
+                <field name="x_labor_end"/>
+                <field name="x_labor_hours"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- 关账向导：提示待确认补录工时 -->
+    <record id="view_close_wizard_form_time" model="ir.ui.view">
+        <field name="name">sn.wsd.piece.close.wizard.form.time</field>
+        <field name="model">sn.wsd.piece.close.wizard</field>
+        <field name="inherit_id" ref="sn_wsd_piece_rate.view_sn_wsd_piece_close_wizard_form"/>
+        <field name="arch" type="xml">
+            <field name="draft_count" position="after">
+                <field name="time_pending_count" readonly="1"/>
+            </field>
+        </field>
+    </record>
+</odoo>

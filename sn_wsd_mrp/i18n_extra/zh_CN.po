@@ -1,0 +1,41 @@
+# 本地演示补译（LOCAL PATCH #4）：sn_wsd_mrp 代码字符串缺 zh_CN 翻译
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: zh_CN\n"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid "not fed into this order"
+msgstr "未投入本制令单"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid "already at %(op)s"
+msgstr "已在 %(op)s"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid "not the next operation after %(op)s"
+msgstr "不是 %(op)s 的下一道工序"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid "decision pending at %(op)s"
+msgstr "%(op)s 结果待判定"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid "last pass at %(op)s was %(result)s"
+msgstr "%(op)s 最近一次结果为 %(result)s"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid "pass limit reached (%(limit)s) at %(op)s"
+msgstr "%(op)s 已达过站次数上限（%(limit)s）"

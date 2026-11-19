@@ -1590,3 +1590,279 @@ msgid ""
 "read from the operation type. Its valuation account is the one booking the "
 "loss or the gain."
 msgstr "盘点作业差异经过的虚拟库位，取自作业类型；该库位的存货计价科目用于盘亏或盘盈记账。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_prn_other_receipt
+msgid "Other Receipt Sheet"
+msgstr "其他入库单"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_prn_other_receipt
+msgid ""
+"The transfer is an other receipt: it is printed on the other receipt sheet."
+msgstr "该调拨为其他入库，打印在其他入库单上。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_prn_other_delivery
+msgid "Other Delivery Sheet"
+msgstr "其他出库单"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_prn_other_delivery
+msgid ""
+"The transfer is an other delivery: it is printed on the other delivery "
+"sheet."
+msgstr "该调拨为其他出库，打印在其他出库单上。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_picking_form_other_operation_prn
+msgid "Print Other Receipt"
+msgstr "打印其他入库单"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_picking_form_other_operation_prn
+msgid "Print Other Delivery"
+msgstr "打印其他出库单"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.actions.server,name:sn_wsd_stock.action_print_other_receipt_prn
+msgid "Print Other Receipts (ESC/P)"
+msgstr "批量打印其他入库单（ESC/P）"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.actions.server,name:sn_wsd_stock.action_print_other_delivery_prn
+msgid "Print Other Deliveries (ESC/P)"
+msgstr "批量打印其他出库单（ESC/P）"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Receipt Type:"
+msgstr "入库类型："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Business Type:"
+msgstr "业务类型："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Department:"
+msgstr "部门："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Date:"
+msgstr "日期："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Document No.:"
+msgstr "单据编号："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "No."
+msgstr "序号"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Material Name"
+msgstr "物料名称"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Received Quantity"
+msgstr "实收数量"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Remark"
+msgstr "备注"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Total:"
+msgstr "合计："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Approved by:"
+msgstr "审核："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Inspected by:"
+msgstr "检验："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Warehouse Keeper:"
+msgstr "仓管员："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Collected by:"
+msgstr "领料："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Prepared by:"
+msgstr "制单："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Page %(page)d / %(total)d"
+msgstr "第%(page)d/%(total)d页"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_prn_reviewer_id
+msgid "Sheet Approved By"
+msgstr "审核人"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_prn_reviewer_id
+msgid ""
+"Name printed on the approval line of the dot-matrix sheet."
+msgstr "打印在点阵单据审核栏的人名。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_prn_note
+msgid "Print Remark"
+msgstr "打印备注"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_prn_note
+msgid "Remark printed on the dot-matrix sheet of this document."
+msgstr "打印在本单据点阵表单上的备注。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_prn_print_count
+msgid "Print Count"
+msgstr "打印次数"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_prn_print_count
+msgid ""
+"Number of times the dot-matrix sheet of this document has been printed."
+msgstr "本单据点阵表单已打印的次数。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_prn_keeper_id
+msgid "Warehouse Keeper"
+msgstr "仓管员"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_prn_keeper_id
+msgid "Name printed on the keeper line of the dot-matrix sheet."
+msgstr "打印在点阵单据仓管员栏的人名。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_prn_inspector_id
+msgid "Inspected By"
+msgstr "检验人"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_prn_inspector_id
+msgid ""
+"Name printed on the inspection line of the dot-matrix sheet. Kept on the "
+"document rather than read from the quality control, because a sheet is also "
+"printed for the transfers that no inspection covers."
+msgstr ""
+"打印在点阵单据检验栏的人名。保存在单据上而不是取自质检记录，因为无检验覆盖的调拨也要打印单据。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_inventory_session
+msgid "Inventory Session"
+msgstr "盘点会话"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move__sn_inventory_session
+msgid ""
+"Document the line is merged on in the inventory detail reports: the transfer "
+"of a former inventory loss or gain, or one application of the physical "
+"inventory, named and dated the same for every line it booked."
+msgstr ""
+"明细行所属的盘点单据，盘盈盘亏明细按它合并单据信息：历史盘盈/盘亏取对应调拨单，官方实物库存取一次应用；同一次应用写入的每一行名称与日期相同。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_inventory_user_id
+msgid "Counted By"
+msgstr "盘点人"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move__sn_inventory_user_id
+msgid ""
+"User who counted the stock: the responsible of the transfer of a former "
+"inventory loss or gain, the user who applied the physical inventory "
+"otherwise."
+msgstr "盘点人：历史盘盈/盘亏取调拨单负责人，官方实物库存盘点取执行应用的用户。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_inventory_stock_location_id
+msgid "Stock Location"
+msgstr "库存位置"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move__sn_inventory_stock_location_id
+msgid ""
+"Internal location whose stock the difference of the inventory loss or gain "
+"was booked on."
+msgstr "盘盈/盘亏差异记入的内部库位。"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_operation_detail_list
+msgid "Counting Date"
+msgstr "盘点日期"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_inventory_operation
+msgid ""
+"Inventory loss or inventory gain the transfer of the former inventory "
+"operation menus was created from. The difference of a physical inventory is "
+"booked on the stock moves directly, so only the transfers kept from the "
+"former feature carry it."
+msgstr ""
+"历史盘盈/盘亏菜单创建的调拨单所属的盘点作业。实物库存盘点的差异直接记在库存移动上，因此只有旧功能保留的调拨单携带该标记。"

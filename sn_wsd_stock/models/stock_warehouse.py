@@ -31,24 +31,6 @@ class StockWarehouse(models.Model):
              "through the inventory adjustment location, without a sales "
              "order.",
     )
-    sn_inventory_loss_type_id = fields.Many2one(
-        'stock.picking.type',
-        string='Inventory Loss Type',
-        copy=False,
-        check_company=True,
-        help="Operation type of the inventory losses: goods leaving the stock "
-             "on the inventory loss location, whose valuation account books "
-             "the loss of the difference.",
-    )
-    sn_inventory_gain_type_id = fields.Many2one(
-        'stock.picking.type',
-        string='Inventory Gain Type',
-        copy=False,
-        check_company=True,
-        help="Operation type of the inventory gains: goods entering the stock "
-             "from the inventory gain location, whose valuation account books "
-             "the gain of the difference.",
-    )
     sn_consignment_in_type_id = fields.Many2one(
         'stock.picking.type',
         string='Consignment Receipt Type',
@@ -184,71 +166,6 @@ class StockWarehouse(models.Model):
             warehouse.write(values)
         return self.sn_consignment_in_type_id
 
-    def _get_inventory_operation_create_values(self, kind):
-        """Values of the inventory loss and inventory gain operations.
-
-        A loss takes the goods out of the stock and a gain brings them in, so
-        they use the outgoing and the incoming codes and mirror each other.
-        Both take the inventory adjustment location as their external end, the
-        way the other receipts and deliveries do: the difference goes through
-        the same virtual location as the inventory adjustment of the products,
-        whose valuation account books the loss or the gain.
-        """
-        self.ensure_one()
-        adjustment_location = self._get_inventory_adjustment_location()
-        if kind == 'loss':
-            name = _('Inventory Losses')
-            code = 'outgoing'
-            sequence_code = 'IVL'
-            src_location = self.lot_stock_id
-            dest_location = (
-                adjustment_location
-                or self.env.ref('stock.stock_location_customers'))
-        else:
-            name = _('Inventory Gains')
-            code = 'incoming'
-            sequence_code = 'IVG'
-            src_location = (
-                adjustment_location
-                or self.env.ref('stock.stock_location_suppliers'))
-            dest_location = self.lot_stock_id
-        return {
-            'name': name,
-            'code': code,
-            'sequence_code': sequence_code,
-            'default_location_src_id': src_location.id,
-            'default_location_dest_id': dest_location.id,
-            'barcode': self.code.replace(" ", "").upper() + sequence_code,
-            'company_id': self.company_id.id,
-            # The difference is booked on the batches already carrying the
-            # stock: the operation neither creates nor requires a new batch.
-            'use_create_lots': False,
-            'use_existing_lots': True,
-        }
-
-    def _ensure_inventory_operation_type(self, kind):
-        """Return the inventory loss or gain operation, creating it if needed.
-
-        The operation types are created with the warehouse, but a warehouse
-        installed before this feature only gets them once the warehouse is
-        written. Creating them lazily keeps the module upgrade safe: the
-        barcode module adds required columns to the operation types and is
-        loaded after this one.
-        """
-        self.ensure_one()
-        field_name = (
-            'sn_inventory_loss_type_id'
-            if kind == 'loss'
-            else 'sn_inventory_gain_type_id'
-        )
-        if self[field_name].active:
-            return self[field_name]
-        warehouse = self.sudo()
-        values = warehouse._create_or_update_sequences_and_picking_types()
-        if values:
-            warehouse.write(values)
-        return self[field_name]
-
     def _get_picking_type_update_values(self):
         values = super()._get_picking_type_update_values()
         for picking_type, lot_settings in (
@@ -280,20 +197,6 @@ class StockWarehouse(models.Model):
             'default_location_dest_id': (
                 adjustment_location
                 or self.env.ref('stock.stock_location_customers')).id,
-        }
-        values['sn_inventory_loss_type_id'] = {
-            'active': self.active,
-            'default_location_src_id': self.lot_stock_id.id,
-            'default_location_dest_id': (
-                adjustment_location
-                or self.env.ref('stock.stock_location_customers')).id,
-        }
-        values['sn_inventory_gain_type_id'] = {
-            'active': self.active,
-            'default_location_src_id': (
-                adjustment_location
-                or self.env.ref('stock.stock_location_suppliers')).id,
-            'default_location_dest_id': self.lot_stock_id.id,
         }
         return values
 
@@ -331,15 +234,7 @@ class StockWarehouse(models.Model):
             self._get_consignment_in_create_values(),
             sequence=max_sequence + 3,
         )
-        values['sn_inventory_loss_type_id'] = dict(
-            self._get_inventory_operation_create_values('loss'),
-            sequence=max_sequence + 4,
-        )
-        values['sn_inventory_gain_type_id'] = dict(
-            self._get_inventory_operation_create_values('gain'),
-            sequence=max_sequence + 5,
-        )
-        return values, max_sequence + 6
+        return values, max_sequence + 4
 
     def _get_other_operation_create_values(self, kind):
         """Values of the other receipt and other delivery operations.
@@ -405,20 +300,6 @@ class StockWarehouse(models.Model):
             'name': _('%(name)s Sequence consignment receipts', name=name),
             'prefix': code + '/' + (
                 self.sn_consignment_in_type_id.sequence_code or 'CIN') + '/',
-            'padding': 5,
-            'company_id': self.company_id.id,
-        }
-        values['sn_inventory_loss_type_id'] = {
-            'name': _('%(name)s Sequence inventory losses', name=name),
-            'prefix': code + '/' + (
-                self.sn_inventory_loss_type_id.sequence_code or 'IVL') + '/',
-            'padding': 5,
-            'company_id': self.company_id.id,
-        }
-        values['sn_inventory_gain_type_id'] = {
-            'name': _('%(name)s Sequence inventory gains', name=name),
-            'prefix': code + '/' + (
-                self.sn_inventory_gain_type_id.sequence_code or 'IVG') + '/',
             'padding': 5,
             'company_id': self.company_id.id,
         }

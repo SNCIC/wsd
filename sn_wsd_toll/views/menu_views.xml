@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_sn_toll_root"
+              name="Toll Manufacturing"
+              parent="mrp.menu_mrp_root"
+              groups="mrp.group_mrp_user"
+              sequence="60"/>
+
+    <menuitem id="menu_sn_toll_order"
+              name="Orders"
+              parent="menu_sn_toll_root"
+              action="action_sn_toll_order"
+              sequence="10"/>
+
+    <menuitem id="menu_sn_toll_loss"
+              name="Loss Settlements"
+              parent="menu_sn_toll_root"
+              action="action_sn_toll_loss"
+              sequence="20"/>
+
+    <menuitem id="menu_sn_toll_material_receipt"
+              name="Material Receipts"
+              parent="menu_sn_toll_root"
+              action="action_sn_toll_material_receipt"
+              sequence="30"/>
+
+    <menuitem id="menu_sn_toll_delivery"
+              name="Finished Goods Deliveries"
+              parent="menu_sn_toll_root"
+              action="action_sn_toll_delivery"
+              sequence="40"/>
+</odoo>

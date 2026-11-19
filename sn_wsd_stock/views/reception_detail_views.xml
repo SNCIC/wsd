@@ -8,7 +8,8 @@
          step, one line per move. Refer to the purchase detail list: the
          document information is printed on the first line of its document
          only, the cells of the other lines staying blank (merged cells list of
-         sn_wsd_list).
+         sn_wsd_list). Clicking a line opens the document of the operation (see
+         StockMove.sn_action_open_document).
 
          The three views are written out instead of inheriting each other:
          Odoo applies every view inheriting a view to that view too, so adding
@@ -20,6 +21,7 @@
         <field name="arch" type="xml">
             <list string="Receipt Details" create="false" delete="false"
                   js_class="sn_wsd_merged_cells_list"
+                  action="sn_action_open_document" type="object"
                   default_order="sn_validation_date desc, sn_picking_date desc, picking_id, id">
                 <field name="picking_id" column_invisible="1"/>
                 <field name="reference" string="Document No."/>
@@ -56,6 +58,7 @@
         <field name="arch" type="xml">
             <list string="Quality Control Details" create="false" delete="false"
                   js_class="sn_wsd_merged_cells_list"
+                  action="sn_action_open_document" type="object"
                   default_order="sn_validation_date desc, sn_picking_date desc, picking_id, id">
                 <field name="picking_id" column_invisible="1"/>
                 <field name="reference" string="Document No."/>
@@ -92,6 +95,7 @@
         <field name="arch" type="xml">
             <list string="Storage Details" create="false" delete="false"
                   js_class="sn_wsd_merged_cells_list"
+                  action="sn_action_open_document" type="object"
                   default_order="sn_validation_date desc, sn_picking_date desc, picking_id, id">
                 <field name="picking_id" column_invisible="1"/>
                 <field name="reference" string="Document No."/>

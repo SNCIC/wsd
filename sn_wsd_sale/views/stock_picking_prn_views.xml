@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sales delivery of the 135 mm continuous form: the button of the
+         delivery hands the ESC/P stream to SNERP, which sends it unchanged to
+         the dot-matrix RAW queue. -->
+    <record id="view_stock_picking_form_sales_delivery_prn" model="ir.ui.view">
+        <field name="name">stock.picking.form.sales.delivery.prn</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_print_sales_delivery_prn"
+                        type="object"
+                        string="Print Sales Delivery"
+                        class="btn-secondary"
+                        invisible="not sn_prn_sales_delivery or state == 'cancel'"
+                        groups="stock.group_stock_user"/>
+            </xpath>
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="sn_prn_sales_delivery" invisible="1"/>
+                <field name="sn_prn_note"
+                       string="Delivery Remark"
+                       invisible="not sn_prn_sales_delivery"/>
+                <field name="sn_prn_print_count" readonly="1" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_print_sales_delivery_prn" model="ir.actions.server">
+        <field name="name">Print Sales Deliveries (ESC/P)</field>
+        <field name="model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_print_sales_delivery_prn()</field>
+    </record>
+</odoo>

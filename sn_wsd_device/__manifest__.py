@@ -2,8 +2,8 @@
     'name': "Device Management",
     'summary': "Device data collection (reflow soldering, etc.)",
     'category': 'Manufacturing/Device Management',
-    'version': '19.0.4.2.0',
-    'depends': ['base', 'product', 'hr', 'sn_wsd_code_rule'],
+    'version': '19.0.4.3.0',
+    'depends': ['base', 'product', 'hr', 'mrp', 'sn_wsd_code_rule'],
     'data': [
         'security/ir.model.access.csv',
         'security/company_rules.xml',

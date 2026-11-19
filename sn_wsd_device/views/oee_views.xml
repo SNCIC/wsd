@@ -43,7 +43,7 @@
                 <field name="qualified_qty" optional="hide"/>
                 <field name="availability_rate" optional="hide"/>
                 <field name="performance_rate" optional="hide"/>
-                <field name="quality_rate" optional="hide"/>
+                <field name="quality_rate" optional="show"/>
                 <field name="oee_value" widget="badge"
                        decoration-success="oee_value &gt;= 85"
                        decoration-info="oee_value &gt;= 70 and oee_value &lt; 85"

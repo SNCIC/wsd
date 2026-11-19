@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_payroll_summary_list" model="ir.ui.view">
+        <field name="name">sn.wsd.payroll.summary.list</field>
+        <field name="model">sn.wsd.payroll.summary</field>
+        <field name="arch" type="xml">
+            <list string="员工月度计件计时汇总" create="false" edit="false" delete="false">
+                <field name="period"/>
+                <field name="employee_code"/>
+                <field name="employee_id"/>
+                <field name="piece_qty" sum="合计"/>
+                <field name="piece_amount" sum="合计"/>
+                <field name="hour_amount" sum="合计"/>
+                <field name="total_amount" sum="合计"/>
+                <button name="action_view_piece" type="object" string="结算明细" icon="fa-search"/>
+                <field name="work_hours" sum="合计"/>
+                <field name="downtime_hours" sum="合计"/>
+                <button name="action_view_time" type="object" string="工时明细" icon="fa-clock-o"/>
+                <field name="hourly_income"/>
+                <field name="month_closed"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_payroll_summary_pivot" model="ir.ui.view">
+        <field name="name">sn.wsd.payroll.summary.pivot</field>
+        <field name="model">sn.wsd.payroll.summary</field>
+        <field name="arch" type="xml">
+            <pivot string="员工月度计件计时汇总">
+                <field name="employee_id" type="row"/>
+                <field name="period" type="col"/>
+                <field name="piece_qty" type="measure"/>
+                <field name="work_hours" type="measure"/>
+                <field name="total_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_payroll_summary_search" model="ir.ui.view">
+        <field name="name">sn.wsd.payroll.summary.search</field>
+        <field name="model">sn.wsd.payroll.summary</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="period"/>
+                <group>
+                    <filter name="g_period" string="工资月份" context="{'group_by': 'period'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_payroll_summary" model="ir.actions.act_window">
+        <field name="name">员工月度计件计时汇总</field>
+        <field name="res_model">sn.wsd.payroll.summary</field>
+        <field name="view_mode">list,pivot</field>
+    </record>
+
+    <record id="view_payroll_piece_line_list" model="ir.ui.view">
+        <field name="name">sn.wsd.piece.settlement.participant.payroll.list</field>
+        <field name="model">sn.wsd.piece.settlement.participant</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <list string="结算明细" create="false" edit="false" delete="false">
+                <field name="settlement_id"/>
+                <field name="settlement_date"/>
+                <field name="mes_order_id"/>
+                <field name="route_operation_id"/>
+                <field name="x_rate_type"/>
+                <field name="settlement_qty_ok"/>
+                <field name="x_unit_price"/>
+                <field name="performance_ratio"/>
+                <field name="x_qty_share"/>
+                <field name="x_hours"/>
+                <field name="amount" sum="合计"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_payroll_export_form" model="ir.ui.view">
+        <field name="name">sn.wsd.payroll.export.form</field>
+        <field name="model">sn.wsd.payroll.export</field>
+        <field name="arch" type="xml">
+            <form string="导出月度计件计时工资表">
+                <group>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="period" placeholder="YYYY-MM"/>
+                    </group>
+                </group>
+                <div class="text-muted">Excel 三张表：工资汇总（工号/姓名/件数/计件金额/计时金额/应发合计/工时）、结算明细（每张结算单的本人比例、件数、工时、金额）、工时明细（每条工时的时段、来源、类别）。金额只含已确认结算单，列固定，可导入工资或财务系统。</div>
+                <footer>
+                    <button name="action_export" type="object" string="导出 Excel" class="btn-primary"/>
+                    <button string="取消" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_payroll_export" model="ir.actions.act_window">
+        <field name="name">导出月度计件计时工资表</field>
+        <field name="res_model">sn.wsd.payroll.export</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

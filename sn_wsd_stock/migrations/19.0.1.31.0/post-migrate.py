@@ -54,6 +54,11 @@ def migrate(cr, version):
     customer_location = env.ref('stock.stock_location_customers')
     supplier_location = env.ref('stock.stock_location_suppliers')
     dedicated = Location
+    # The operation types were retired by 19.0.1.33.0: a database upgrading
+    # from an older version runs this migration with the new model, which no
+    # longer knows the columns.
+    if 'sn_inventory_loss_type_id' not in env['stock.warehouse']._fields:
+        return
     for warehouse in warehouses:
         adjustment_location = warehouse._get_inventory_adjustment_location()
         loss_type = warehouse.sn_inventory_loss_type_id

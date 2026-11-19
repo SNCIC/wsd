@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_time_leader" model="res.groups">
+        <field name="name">班组长（补录工时确认）</field>
+        <field name="implied_ids" eval="[Command.link(ref('sn_wsd_piece_rate.group_piece_rate_user'))]"/>
+    </record>
+    <record id="sn_wsd_piece_rate.group_piece_rate_manager" model="res.groups">
+        <field name="implied_ids" eval="[Command.link(ref('sn_wsd_piece_time.group_time_leader'))]"/>
+    </record>
+    <record id="rule_time_entry_company" model="ir.rule">
+        <field name="name">工时记录多公司</field>
+        <field name="model_id" ref="model_sn_wsd_time_entry"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_work_timer_company" model="ir.rule">
+        <field name="name">工位计时多公司</field>
+        <field name="model_id" ref="model_sn_wsd_work_timer"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

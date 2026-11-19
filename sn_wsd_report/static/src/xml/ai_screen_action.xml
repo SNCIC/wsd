@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_report.AiScreenAction">
+        <Layout className="'o_sn_wsd_ai_screen_action'">
+            <t t-set-slot="default">
+                <div class="o_ai_viewport">
+                    <div class="o_ai_stage" t-att-style="stageStyle">
+                        <div class="o_ai_bg_layer"/>
+                        <div class="o_ai_grid_layer"/>
+                        <div class="o_ai_scan_layer"/>
+
+                        <header class="o_ai_header">
+                            <div class="o_ai_header_left">
+                                <span class="o_ai_date"><t t-esc="summary.today_date || ''"/></span>
+                                <span class="o_ai_dot"/>
+                                <span class="o_ai_realtime"><t t-esc="(summary.refresh_time || '').slice(11)"/></span>
+                            </div>
+                            <div class="o_ai_header_title">
+                                <h1>中南多维度看板</h1>
+                                <i class="o_ai_title_glow"/>
+                            </div>
+                            <div class="o_ai_header_right">
+                                <button class="o_ai_btn" t-att-class="state.autoRefresh ? 'o_active' : ''" t-on-click="toggleAutoRefresh">
+                                    <t t-esc="state.autoRefresh ? `自动 ${state.countdown}s` : '自动 OFF'"/>
+                                </button>
+                                <button class="o_ai_btn o_primary" t-on-click="manualRefresh">
+                                    <t t-esc="state.refreshing ? '刷新中…' : '立即刷新'"/>
+                                </button>
+                            </div>
+                        </header>
+
+                        <nav class="o_ai_dim_tabs">
+                            <button t-foreach="dimensions" t-as="dim" t-key="dim.key"
+                                    class="o_ai_dim_tab"
+                                    t-att-class="isDimension(dim.key) ? 'o_active' : ''"
+                                    t-on-click="() => this.switchDimension(dim.key)">
+                                <t t-esc="dim.label"/>
+                            </button>
+                            <div class="o_ai_dim_hint">
+                                <span>当前视角：</span>
+                                <b><t t-esc="dimensionLabel"/>维度</b>
+                                <span>· 产量 / 工时 / 设备效率</span>
+                            </div>
+                        </nav>
+
+                        <section class="o_ai_kpi_row">
+                            <div t-foreach="kpiCards" t-as="card" t-key="card.label" class="o_ai_kpi">
+                                <label><t t-esc="card.label"/></label>
+                                <strong t-att-class="`o_${card.color || 'cyan'}`">
+                                    <t t-esc="formatCardValue(card, card_index)"/>
+                                </strong>
+                            </div>
+                        </section>
+
+                        <main class="o_ai_mid_row">
+                            <section class="o_ai_panel o_ai_panel_trend">
+                                <div class="o_ai_panel_heading">
+                                    <span>生产趋势分析</span>
+                                    <small>近 12 小时</small>
+                                </div>
+                                <div class="o_ai_chart"><canvas t-ref="trendCanvas"/></div>
+                            </section>
+
+                            <section class="o_ai_core">
+                                <div class="o_ai_core_orbit o_orbit_a"/>
+                                <div class="o_ai_core_orbit o_orbit_b"/>
+                                <div class="o_ai_core_orbit o_orbit_c"/>
+                                <div class="o_ai_core_dots">
+                                    <i t-foreach="Array.from({length:10})" t-as="i" t-key="dot_i" t-att-class="'o_dot o_dot_' + dot_index"/>
+                                </div>
+                                <div class="o_ai_gauge" t-att-style="coreGaugeStyle">
+                                    <div class="o_ai_gauge_arc"/>
+                                    <div class="o_ai_gauge_value">
+                                        <strong><t t-esc="formatNumber(achieveRate, 1)"/>%</strong>
+                                        <span>目标达成率</span>
+                                    </div>
+                                </div>
+                                <div class="o_ai_flip">
+                                    <span>今日累计产量</span>
+                                    <div class="o_ai_flip_digits">
+                                        <b t-foreach="coreDigits" t-as="d" t-key="flip_d"><t t-esc="d"/></b>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="o_ai_panel o_ai_panel_detail">
+                                <div class="o_ai_panel_heading">
+                                    <span><t t-esc="dimensionLabel"/>明细</span>
+                                    <small><t t-esc="detail.rows.length"/> 条</small>
+                                </div>
+                                <div class="o_ai_detail_table">
+                                    <div class="o_ai_detail_head">
+                                        <span t-foreach="detail.columns" t-as="col" t-key="col"><t t-esc="col"/></span>
+                                    </div>
+                                    <div t-foreach="detail.rows" t-as="row" t-key="row_index"
+                                         class="o_ai_detail_row" t-att-class="detailRowClass(row.level)">
+                                        <span t-foreach="row.cells" t-as="cell" t-key="cell_index"><t t-esc="cell"/></span>
+                                    </div>
+                                </div>
+                            </section>
+                        </main>
+
+                        <section class="o_ai_bot_row">
+                            <section class="o_ai_panel o_ai_panel_capacity">
+                                <div class="o_ai_panel_heading">
+                                    <span><t t-esc="dimensionLabel"/>产量对比</span>
+                                    <small>计划 vs 实际</small>
+                                </div>
+                                <div class="o_ai_chart"><canvas t-ref="capacityCanvas"/></div>
+                            </section>
+                            <section class="o_ai_panel o_ai_panel_quality">
+                                <div class="o_ai_panel_heading">
+                                    <span><t t-esc="dimensionLabel"/>工时分布</span>
+                                    <small>单位 h</small>
+                                </div>
+                                <div class="o_ai_chart"><canvas t-ref="qualityCanvas"/></div>
+                            </section>
+                            <section class="o_ai_panel o_ai_panel_live">
+                                <div class="o_ai_panel_heading"><span>实时动态</span><small>最近 8 条</small></div>
+                                <div class="o_ai_live_list">
+                                    <div t-foreach="liveActivities" t-as="ev" t-key="ev.time + ev_index"
+                                         class="o_ai_live_row" t-att-class="'o_level_' + ev.level">
+                                        <span class="o_ai_live_time"><t t-esc="ev.time"/></span>
+                                        <span class="o_ai_live_dot"/>
+                                        <span class="o_ai_live_msg"><t t-esc="ev.message"/></span>
+                                    </div>
+                                </div>
+                            </section>
+                        </section>
+                    </div>
+                </div>
+            </t>
+        </Layout>
+    </t>
+</templates>

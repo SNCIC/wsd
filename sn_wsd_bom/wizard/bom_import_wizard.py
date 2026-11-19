@@ -67,6 +67,8 @@ class BomImportWizard(models.TransientModel):
         wizard = self.create({})
         return {
             'type': 'ir.actions.act_window',
+            # LOCAL PATCH #11: 补窗口标题，否则弹窗标题回落为 "Odoo"
+            'name': self.env.ref('sn_wsd_bom.action_bom_import_open').name,
             'res_model': self._name,
             'res_id': wizard.id,
             'view_mode': 'form',
@@ -450,6 +452,8 @@ class BomImportWizard(models.TransientModel):
     def _reopen(self):
         return {
             'type': 'ir.actions.act_window',
+            # LOCAL PATCH #11: 同上，重开向导时也带标题
+            'name': self.env.ref('sn_wsd_bom.action_bom_import_open').name,
             'res_model': self._name,
             'res_id': self.id,
             'view_mode': 'form',

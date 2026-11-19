@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_piece_time.ShopFloorTimer" t-inherit="sn_wsd_workorder.ShopFloor" t-inherit-mode="extension">
+        <xpath expr="//button[contains(@t-on-click, 'openStationReportDialog(selectedStationOrder)')]/.." position="before">
+            <div class="o_sn_timer_bar d-flex flex-wrap align-items-center gap-2 mt-2 p-2 border rounded bg-light">
+                <i class="fa fa-clock-o fa-lg text-primary" role="img"/>
+                <span class="fw-semibold">工时计时</span>
+                <span class="badge"
+                      t-att-class="snTimer(selectedStationOrder).state === 'running' ? 'text-bg-success' : (snTimer(selectedStationOrder).state === 'paused' ? 'text-bg-warning' : 'text-bg-secondary')"
+                      t-out="snTimerStateLabel(selectedStationOrder)"/>
+                <span class="fs-4 fw-bold font-monospace" t-out="snElapsed(selectedStationOrder)"/>
+                <span t-if="snTimer(selectedStationOrder)" class="small text-muted" t-out="snTimer(selectedStationOrder).people"/>
+                <div class="ms-auto d-flex gap-2">
+                    <button t-if="!snTimer(selectedStationOrder)" class="btn btn-success btn-sm"
+                            t-on-click="() => this.snTimerAction(selectedStationOrder, 'start')">
+                        <i class="fa fa-play me-1" role="img"/>开工
+                    </button>
+                    <button t-if="snTimer(selectedStationOrder).state === 'running'" class="btn btn-warning btn-sm"
+                            t-on-click="() => this.snTimerAction(selectedStationOrder, 'pause')">
+                        <i class="fa fa-pause me-1" role="img"/>暂停
+                    </button>
+                    <button t-if="snTimer(selectedStationOrder).state === 'paused'" class="btn btn-primary btn-sm"
+                            t-on-click="() => this.snTimerAction(selectedStationOrder, 'resume')">
+                        <i class="fa fa-play me-1" role="img"/>继续
+                    </button>
+                    <button t-if="snTimer(selectedStationOrder) and selectedStationOrder.manage_mode === 'station'"
+                            class="btn btn-dark btn-sm"
+                            t-on-click="() => this.snTimerAction(selectedStationOrder, 'finish')">
+                        <i class="fa fa-stop me-1" role="img"/>完工
+                    </button>
+                    <span t-if="snTimer(selectedStationOrder) and selectedStationOrder.manage_mode === 'report'"
+                          class="small text-muted align-self-center">完工请点「报工」录入数量，工时自动带入</span>
+                </div>
+            </div>
+        </xpath>
+    </t>
+</templates>

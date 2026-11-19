@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_toll" model="ir.ui.view">
+        <field name="name">sale.order.form.toll</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_create_sn_toll_orders"
+                        string="Create Toll Orders" type="object"
+                        invisible="not sn_is_toll or state not in ('sale', 'done') or sn_toll_order_count &gt; 0"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_sn_toll_orders" type="object"
+                        class="oe_stat_button" icon="fa-industry"
+                        invisible="sn_toll_order_count == 0">
+                    <field name="sn_toll_order_count" widget="statinfo"
+                           string="Toll Orders"/>
+                </button>
+            </xpath>
+            <xpath expr="//page[@name='other_information']" position="inside">
+                <group string="Toll Manufacturing">
+                    <field name="sn_is_toll"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

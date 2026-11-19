@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Production order sheet of the 135 mm continuous form: the task the
+         workshop receives, printed through the SNERP RAW bridge. -->
+    <record id="view_mrp_production_form_prn" model="ir.ui.view">
+        <field name="name">mrp.production.form.prn</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_print_production_order_prn"
+                        type="object"
+                        string="Print Production Order"
+                        class="btn-secondary"
+                        invisible="state == 'cancel'"
+                        groups="mrp.group_mrp_user"/>
+            </xpath>
+            <xpath expr="//field[@name='product_qty']" position="after">
+                <field name="sn_prn_reviewer_id"/>
+                <field name="sn_prn_note"/>
+                <field name="sn_prn_print_count" readonly="1" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_print_production_order_prn" model="ir.actions.server">
+        <field name="name">Print Production Orders (ESC/P)</field>
+        <field name="model_id" ref="mrp.model_mrp_production"/>
+        <field name="binding_model_id" ref="mrp.model_mrp_production"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_print_production_order_prn()</field>
+    </record>
+</odoo>

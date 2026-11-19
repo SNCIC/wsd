@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Expense invoice of the 135 mm continuous form: the button of the
+         vendor bill hands the ESC/P stream to SNERP, which sends it unchanged
+         to the dot-matrix RAW queue. -->
+    <record id="view_move_form_expense_invoice_prn" model="ir.ui.view">
+        <field name="name">account.move.form.expense.invoice.prn</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_print_expense_invoice_prn"
+                        type="object"
+                        string="Print Expense Invoice"
+                        class="btn-secondary"
+                        invisible="move_type not in ('in_invoice', 'in_refund') or state == 'cancel'"
+                        groups="account.group_account_invoice"/>
+            </xpath>
+            <!-- Department the expense is booked for: the column of the paper
+                 form, taken from the user who enters the bill and editable on
+                 the line. -->
+            <xpath expr="//field[@name='invoice_line_ids']/list/field[@name='price_total']"
+                   position="after">
+                <field name="sn_prn_department_id" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="sn_prn_note"
+                       invisible="move_type not in ('in_invoice', 'in_refund')"/>
+                <field name="sn_prn_print_count" readonly="1" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_print_expense_invoice_prn" model="ir.actions.server">
+        <field name="name">Print Expense Invoices (ESC/P)</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_print_expense_invoice_prn()</field>
+    </record>
+</odoo>

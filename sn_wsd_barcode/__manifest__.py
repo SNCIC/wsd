@@ -8,12 +8,13 @@ This module enables the barcode scanning feature for the warehouse management sy
     """,
     'category': 'Supply Chain/Inventory',
     'sequence': 255,
-    'version': '19.0.2.6.0',
-    'depends': ['stock', 'web_tour', 'sn_wsd_stock', 'sn_wsd_api', 'sn_wsd_smt',
+    'version': '19.0.2.7.0',
+    'depends': ['stock', 'web_tour', 'mrp', 'sn_wsd_stock', 'sn_wsd_api', 'sn_wsd_smt',
                  'sn_wsd_quality', 'sn_wsd_tooling', 'sn_wsd_consumable',
                  'sn_wsd_drawing_material', 'sn_wsd_device'],
     'data': [
         'security/ir.model.access.csv',
+        'data/data.xml',
         'views/stock_inventory_views.xml',
         'views/stock_picking_views.xml',
         'views/stock_picking_type_views.xml',
@@ -28,7 +29,6 @@ This module enables the barcode scanning feature for the warehouse management sy
         'views/stock_location_views.xml',
         'wizard/sn_wsd_barcode_cancel_operation.xml',
         'wizard/stock_backorder_confirmation_views.xml',
-        'data/data.xml',
     ],
     'demo': [
         'data/demo.xml',
