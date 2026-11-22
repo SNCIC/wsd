@@ -1,10 +1,19 @@
 // A cell repeating the value of the line above keeps its place -- the columns
 // stay aligned -- and hides its content, the way the merged cells of the
-// Kingdee lists read. visibility (and not display) is what keeps the cell in
-// the layout, and it also takes the cell out of the tooltip and the click
-// handling, so a hidden value cannot be reached by accident.
+// Kingdee lists read.
+//
+// The content is hidden, not the cell: `visibility: hidden` on the cell would
+// take it out of the hit testing as well, so clicking a repeated cell (the
+// blank half of the lines below the first one of a document) would do nothing
+// while the cells carrying a value open the document. The plain values are
+// text nodes, hidden by a transparent color, and the widgets (badges, avatars)
+// are elements, hidden by visibility.
 .o_list_renderer {
     .o_sn_wsd_merged_cell {
-        visibility: hidden;
+        color: transparent;
+
+        > * {
+            visibility: hidden;
+        }
     }
 }

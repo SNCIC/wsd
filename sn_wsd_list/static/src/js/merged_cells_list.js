@@ -90,6 +90,21 @@ export class SnWsdMergedCellsListRenderer extends ListRenderer {
     }
 
     /**
+     * A repeated cell hides its value, so its tooltip is dropped as well: the
+     * cell stays clickable (a click opens the document of the line) but it
+     * must not reveal the value of the line above.
+     */
+    getCellTitle(column, record) {
+        if (
+            this.mergeConfig.fieldNames.includes(column.name) &&
+            !this.isFirstLineOfDocument(record)
+        ) {
+            return false;
+        }
+        return super.getCellTitle(column, record);
+    }
+
+    /**
      * Whether the line is the first one of its document, hence the one
      * carrying the header information.
      *
