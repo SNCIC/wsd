@@ -9470,19 +9470,2539 @@ msgid "NQI push transport is not configured yet."
 msgstr "NQI 推送传输尚未配置。"
 
 #. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_checkup_form
+msgid "SN / PCB code"
+msgstr "SN / PCB 编码"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_checkup_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_checkup_form
+msgid "Run Checkup"
+msgstr "执行体检"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_checkup_form
+msgid "SN Data Checkup"
+msgstr "SN 数据体检"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_config_form
+msgid "Enterprise Identity"
+msgstr "企业身份"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_config_form
+msgid "Push API"
+msgstr "推送 API"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_config_form
+msgid "Archived"
+msgstr "已归档"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_code_search
+msgid "Code Type"
+msgstr "代码类型"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_code_search
+msgid "Code"
+msgstr "代码"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_device_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_device_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_device_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_device_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_device_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_device_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_device_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_person_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_person_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_person_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_person_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_person_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_person_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_person_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_staff_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_staff_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_staff_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_staff_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_staff_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_staff_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_achievement_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_achievement_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_achievement_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_achievement_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_achievement_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_achievement_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_capacity_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_capacity_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_capacity_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_capacity_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_capacity_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_capacity_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_mgt_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_mgt_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_mgt_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_mgt_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_mgt_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_mgt_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_agreement_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_agreement_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_agreement_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_agreement_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_agreement_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_agreement_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_standard_setting_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_standard_setting_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_standard_setting_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_standard_setting_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_standard_setting_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_standard_setting_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_rb_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_rb_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_rb_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_rb_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_rb_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_rb_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_qi_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_qi_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_qi_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_qi_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_qi_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_qi_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_supplier_score_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_supplier_score_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_supplier_score_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_supplier_score_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_supplier_score_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_supplier_score_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pub_file_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pub_file_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pub_file_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pub_file_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pub_file_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pub_file_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pub_file_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_field_mapping_form
+msgid "Target"
+msgstr "目标"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_field_mapping_form
+msgid "Source"
+msgstr "来源"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_info_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_info_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_info_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_info_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_info_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_info_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_info_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_pcb_mounting_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_pcb_mounting_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_pcb_mounting_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_pcb_mounting_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_pcb_mounting_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_pcb_mounting_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_mounting_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_mounting_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_mounting_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_mounting_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_mounting_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_mounting_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_component_bind_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_component_bind_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_component_bind_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_component_bind_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_component_bind_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_component_bind_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_pcb_serial_bind_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_pcb_serial_bind_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_pcb_serial_bind_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_pcb_serial_bind_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_pcb_serial_bind_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_pcb_serial_bind_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_aoi_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_aoi_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_aoi_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_aoi_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_aoi_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_aoi_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_aoi_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_basicerr_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_basicerr_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_basicerr_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_basicerr_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_basicerr_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_basicerr_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_basicerr_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_const_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_const_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_const_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_const_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_const_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_const_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_const_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_creeping_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_creeping_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_creeping_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_creeping_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_creeping_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_creeping_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_creeping_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_dayerr_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_dayerr_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_dayerr_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_dayerr_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_dayerr_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_dayerr_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_dayerr_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_demandvalue_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_demandvalue_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_demandvalue_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_demandvalue_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_demandvalue_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_demandvalue_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_demandvalue_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_esam_read_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_esam_read_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_esam_read_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_esam_read_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_esam_read_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_esam_read_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_esam_read_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_function_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_function_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_function_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_function_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_function_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_function_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_function_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_hutchison_combina_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_hutchison_combina_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_hutchison_combina_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_hutchison_combina_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_hutchison_combina_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_hutchison_combina_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_hutchison_combina_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_intuit_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_intuit_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_intuit_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_intuit_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_intuit_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_intuit_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_intuit_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_mounting_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_mounting_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_mounting_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_mounting_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_mounting_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_mounting_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_mounting_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_parameter_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_parameter_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_parameter_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_parameter_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_parameter_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_parameter_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_parameter_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_rfid_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_rfid_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_rfid_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_rfid_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_rfid_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_rfid_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_rfid_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_single_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_single_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_single_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_single_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_single_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_single_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_single_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_starting_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_starting_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_starting_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_starting_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_starting_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_starting_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_starting_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_time_error_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_time_error_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_time_error_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_time_error_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_time_error_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_time_error_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_time_error_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_ts_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_ts_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_ts_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_ts_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_ts_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_ts_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_ts_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_volt_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_volt_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_volt_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_volt_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_volt_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_volt_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_volt_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_ot_other_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_ot_other_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_ot_other_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_ot_other_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_ot_other_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_ot_other_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_ot_other_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_consist_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_consist_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_consist_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_consist_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_consist_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_consist_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_consist_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_demand_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_demand_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_demand_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_demand_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_demand_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_demand_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_demand_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_eq_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_eq_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_eq_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_eq_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_eq_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_eq_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_eq_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_error_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_error_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_error_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_error_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_error_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_error_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_error_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_event_record_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_event_record_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_event_record_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_event_record_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_event_record_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_event_record_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_event_record_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_fee_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_fee_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_fee_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_fee_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_fee_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_fee_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_fee_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demandvalue_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demandvalue_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demandvalue_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demandvalue_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demandvalue_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demandvalue_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demandvalue_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demand_err_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demand_err_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demand_err_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demand_err_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demand_err_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demand_err_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demand_err_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_overload_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_overload_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_overload_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_overload_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_overload_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_overload_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_overload_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_power_measure_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_power_measure_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_power_measure_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_power_measure_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_power_measure_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_power_measure_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_power_measure_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_standard_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_standard_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_standard_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_standard_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_standard_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_standard_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_standard_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_variation_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_variation_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_variation_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_variation_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_variation_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_variation_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_variation_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_form_expand
+msgid "Expand Details"
+msgstr "展开明细"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_form_expand
+msgid "Plan Details"
+msgstr "计划明细"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_bidding_info_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_bidding_info_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_bidding_info_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_bidding_info_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_bidding_info_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_bidding_info_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_bidding_change_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_bidding_change_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_bidding_change_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_bidding_change_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_bidding_change_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_bidding_change_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_purchase_plan_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_purchase_plan_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_purchase_plan_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_purchase_plan_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_purchase_plan_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_purchase_plan_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_purchase_plan_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_arrive_batch_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_arrive_batch_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_arrive_batch_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_arrive_batch_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_arrive_batch_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_arrive_batch_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_arrive_batch_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_test_result_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_test_result_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_test_result_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_test_result_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_test_result_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_test_result_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_test_result_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_unqualified_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_unqualified_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_unqualified_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_unqualified_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_unqualified_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_unqualified_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_unqualified_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_detail_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_detail_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_detail_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_detail_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_detail_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_detail_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_detail_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_process_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_process_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_process_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_process_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_process_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_process_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_procedure_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_procedure_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_procedure_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_procedure_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_procedure_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_procedure_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_env_temp_hum_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_env_temp_hum_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_env_temp_hum_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_env_temp_hum_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_env_temp_hum_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_env_temp_hum_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_unqualified_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_unqualified_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_unqualified_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_unqualified_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_unqualified_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_unqualified_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_push_log_list
+msgid "Time"
+msgstr "时间"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_push_log_form
+msgid "Retry"
+msgstr "重推"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_push_log_form
+msgid "Error"
+msgstr "错误"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_push_log_form
+msgid "Payload"
+msgstr "推送载荷"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_info_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_info_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_info_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_info_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_info_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_info_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_info_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_detail_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_detail_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_detail_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_detail_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_detail_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_detail_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_detail_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_test_report_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_test_report_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_test_report_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_test_report_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_test_report_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_test_report_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_test_report_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_detail_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_detail_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_detail_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_detail_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_detail_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_detail_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_list_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_list_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_list_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_list_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_list_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_list_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_list_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_change_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_change_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_change_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_change_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_change_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_change_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_change_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_change_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_change_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_change_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_change_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_change_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_change_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_change_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_box_bind_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_box_bind_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_box_bind_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_box_bind_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_box_bind_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_box_bind_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_batch_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_batch_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_batch_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_batch_form
+msgid "Bring-in Anchor"
+msgstr "带出锚点"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_batch_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_batch_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_batch_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_test_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_test_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_test_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_test_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_test_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_test_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_spot_check_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_spot_check_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_spot_check_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_spot_check_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_spot_check_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_spot_check_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_recall_form
+msgid "Mark to Push"
+msgstr "标记待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_recall_form
+msgid "Envelope"
+msgstr "信封字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_recall_form
+msgid "NQI Columns"
+msgstr "NQI 字段"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_recall_search
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_recall_search
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_recall_search
+msgid "Missing Data"
+msgstr "缺失数据"
+
+#. module: sn_wsd_nqi
 #: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_batch_fill_form
 msgid "Cancel"
 msgstr "取消"
 
 #. module: sn_wsd_nqi
 #: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_batch_fill_form
-msgid "Batch Fill"
-msgstr "批量填充"
+msgid "Apply"
+msgstr "应用"
 
 #. module: sn_wsd_nqi
 #: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_batch_fill_form
-msgid "Apply"
-msgstr "应用"
+msgid "Batch Fill"
+msgstr "批量填充"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_config__auth_type
@@ -11505,46 +14025,196 @@ msgid "Failed"
 msgstr "失败"
 
 #. module: sn_wsd_nqi
-#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_code_type)_code_type_uniq
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_code_sort_code_type_uniq
 msgid "A code type can only be declared once."
 msgstr "代码类型只能声明一次。"
 
 #. module: sn_wsd_nqi
-#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_code_type_code_uniq
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_code_code_uniq
 msgid "A code id must be unique inside its code type."
 msgstr "代码编号在其代码类型内必须唯一。"
 
 #. module: sn_wsd_nqi
-#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_code)_code_uniq
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_component_code_uniq
 msgid "Component code must be unique."
 msgstr "元器件编码必须唯一。"
 
 #. module: sn_wsd_nqi
-#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_company_id)_company_uniq
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_config_company_uniq
 msgid "Only one NQI integration config per company."
 msgstr "每家公司只能有一条 NQI 对接配置。"
 
 #. module: sn_wsd_nqi
-#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_company_id_natural_key_uniq
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_fit_meter_info_natural_key_uniq
 msgid "Natural key must be unique per company."
 msgstr "自然键在公司内必须唯一。"
 
 #. module: sn_wsd_nqi
-#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_company_id_output_history_uniq
-msgid "One mirror row per output pass event."
-msgstr "每次产出过站事件只生成一条镜像行。"
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_fit_pcb_serial_bind_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
 
 #. module: sn_wsd_nqi
-#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_company_id_history_uniq
-msgid "One mirror row per station pass event."
-msgstr "每次过站事件只生成一条镜像行。"
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_aoi_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
 
 #. module: sn_wsd_nqi
-#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_company_id_binding_uniq
-msgid "One mirror row per serial binding event."
-msgstr "每次 SN 绑定事件只生成一条镜像行。"
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_basicerr_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
 
 #. module: sn_wsd_nqi
-#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_company_id_component_binding_uniq
-msgid "One mirror row per component binding event."
-msgstr "每次元器件绑定事件只生成一条镜像行。"
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_const_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_creeping_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_dayerr_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_demandvalue_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_esam_read_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_function_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_hutchison_combina_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_intuit_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_mounting_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_parameter_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_rfid_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_single_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_starting_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_time_error_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_ts_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_mt_volt_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_ot_other_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_tt_consist_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_tt_demand_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_tt_eq_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_tt_error_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_tt_event_record_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_tt_fee_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_tt_max_demandvalue_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_tt_max_demand_err_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_tt_overload_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_tt_power_measure_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_tt_standard_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_tt_variation_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_pt_plan_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_rd_product_info_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
