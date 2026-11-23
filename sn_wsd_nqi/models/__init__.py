@@ -10,6 +10,8 @@ from . import nqi_fit
 from . import nqi_sp
 from . import nqi_mt
 from . import nqi_field_mapping
+from . import nqi_generation
+from . import nqi_worker
 from . import nqi_plan_expand
 from . import nqi_bring_in
 from . import product

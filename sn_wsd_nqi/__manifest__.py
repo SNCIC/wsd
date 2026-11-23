@@ -3,7 +3,10 @@
     'summary': "NQI platform supplier data staging and push (data model V2.1)",
     'category': 'Manufacturing/MES',
     'version': '19.0.1.0.0',
-    'depends': ['mail', 'sn_wsd_mrp', 'sn_wsd_api', 'sn_wsd_device', 'hr'],
+    'depends': [
+        'mail', 'sn_wsd_mrp', 'sn_wsd_api', 'sn_wsd_device',
+        'sn_wsd_quality', 'hr',
+    ],
     'data': [
         'security/nqi_security.xml',
         'security/ir.model.access.csv',
@@ -18,6 +21,7 @@
         'views/nqi_sp_views.xml',
         'views/nqi_mt_views.xml',
         'views/nqi_field_mapping_views.xml',
+        'data/cron_nqi.xml',
         'data/nqi_code_sort_data.xml',
         'data/nqi_code_data.xml',
         'data/sn.wsd.nqi.component.csv',

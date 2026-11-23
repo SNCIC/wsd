@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ir_cron_nqi_enrich" model="ir.cron">
+            <field name="name">NQI: Enrich Mirror Rows</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_worker"/>
+            <field name="state">code</field>
+            <field name="code">model.run_enrich()</field>
+            <field name="interval_number">10</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="False"/>
+        </record>
+
+        <record id="ir_cron_nqi_test_mapping" model="ir.cron">
+            <field name="name">NQI: Map Test Results</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_worker"/>
+            <field name="state">code</field>
+            <field name="code">model.run_test_mapping()</field>
+            <field name="interval_number">10</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="False"/>
+        </record>
+
+        <record id="ir_cron_nqi_progress" model="ir.cron">
+            <field name="name">NQI: Update Production Progress</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_worker"/>
+            <field name="state">code</field>
+            <field name="code">model.run_progress()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="active" eval="False"/>
+        </record>
+    </data>
+</odoo>
