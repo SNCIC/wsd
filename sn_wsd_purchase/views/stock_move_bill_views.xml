@@ -17,6 +17,7 @@
                             groups="purchase.group_purchase_user"/>
                 </header>
                 <field name="picking_id"/>
+                <field name="sn_picking_partner_id" optional="show"/>
                 <field name="date" optional="show"/>
                 <field name="product_id"/>
                 <field name="quantity" string="Received Quantity"/>
@@ -27,7 +28,7 @@
                        decoration-muted="sn_bill_status == 'closed'"
                        decoration-info="sn_bill_status == 'partial'"/>
                 <field name="sn_bill_names" optional="show"/>
-                <field name="purchase_line_id" optional="show"/>
+                <field name="purchase_line_id" optional="hide"/>
                 <field name="company_id" groups="base.group_multi_company" optional="hide"/>
             </list>
         </field>
@@ -41,7 +42,7 @@
                 <field name="picking_id"/>
                 <field name="product_id"/>
                 <field name="purchase_line_id"/>
-                <field name="partner_id" string="Vendor"/>
+                <field name="sn_picking_partner_id" string="Vendor"/>
                 <filter name="filter_to_bill" string="To Bill"
                         domain="[('sn_bill_status', '=', 'to_bill')]"/>
                 <filter name="filter_partial" string="Partially Billed"
@@ -54,7 +55,7 @@
                 <filter name="filter_done" string="Done" domain="[('state', '=', 'done')]"/>
                 <group>
                     <filter name="group_vendor" string="Vendor"
-                            context="{'group_by': 'picking_id'}"/>
+                            context="{'group_by': 'sn_picking_partner_id'}"/>
                     <filter name="group_product" string="Product"
                             context="{'group_by': 'product_id'}"/>
                     <filter name="group_status" string="Billing Status"

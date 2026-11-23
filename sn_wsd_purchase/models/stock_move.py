@@ -44,6 +44,14 @@ class StockMove(models.Model):
         compute='_compute_sn_bill_names',
         help="Vendor bills that consumed this receipt line.",
     )
+    sn_picking_partner_id = fields.Many2one(
+        comodel_name='res.partner',
+        string='Vendor',
+        related='picking_id.partner_id',
+        store=True,
+        readonly=True,
+        help="Vendor of the receipt the line belongs to.",
+    )
     sn_billing_closed = fields.Boolean(
         string='Billing Closed',
         copy=False,
