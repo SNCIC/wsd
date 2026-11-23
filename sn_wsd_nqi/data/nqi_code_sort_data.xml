@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="nqi_code_sort_enterprise_type" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">1</field>
+            <field name="name">企业类型</field>
+            <field name="code_type">ENTERPRISE_TYPE</field>
+        </record>
+        <record id="nqi_code_sort_product_categid" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">2</field>
+            <field name="name">产品类别</field>
+            <field name="code_type">PRODUCT_CATEGID</field>
+        </record>
+        <record id="nqi_code_sort_component_type_code" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">3</field>
+            <field name="name">元器件类型</field>
+            <field name="code_type">COMPONENT_TYPE_CODE</field>
+        </record>
+        <record id="nqi_code_sort_device_type" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">4</field>
+            <field name="name">企业设备类型</field>
+            <field name="code_type">DEVICE_TYPE</field>
+        </record>
+        <record id="nqi_code_sort_ot_test_name" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">5</field>
+            <field name="name">其他检测项目</field>
+            <field name="code_type">OT_TEST_NAME</field>
+        </record>
+        <record id="nqi_code_sort_meter_para_current" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">6</field>
+            <field name="name">电能表电流参数</field>
+            <field name="code_type">METER_PARA_CURRENT</field>
+        </record>
+        <record id="nqi_code_sort_meter_para_voltage" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">7</field>
+            <field name="name">电能表电压参数</field>
+            <field name="code_type">METER_PARA_VOLTAGE</field>
+        </record>
+        <record id="nqi_code_sort_meter_para_pf_rate" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">8</field>
+            <field name="name">电能表功率参数</field>
+            <field name="code_type">METER_PARA_PF_RATE</field>
+        </record>
+        <record id="nqi_code_sort_meter_para_power_flag" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">9</field>
+            <field name="name">电能表功率方向参数</field>
+            <field name="code_type">METER_PARA_POWER_FLAG</field>
+        </record>
+        <record id="nqi_code_sort_meter_para_freq" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">10</field>
+            <field name="name">电能表频率参数</field>
+            <field name="code_type">METER_PARA_FREQ</field>
+        </record>
+        <record id="nqi_code_sort_product_name" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">11</field>
+            <field name="name">电能表产品名称</field>
+            <field name="code_type">PRODUCT_NAME</field>
+        </record>
+        <record id="nqi_code_sort_local_comm_type" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">12</field>
+            <field name="name">本地通讯方式</field>
+            <field name="code_type">LOCAL_COMM_TYPE</field>
+        </record>
+        <record id="nqi_code_sort_remote_comm_type" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">13</field>
+            <field name="name">远程通讯方式</field>
+            <field name="code_type">REMOTE_COMM_TYPE</field>
+        </record>
+        <record id="nqi_code_sort_rate_control_type" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">14</field>
+            <field name="name">费控方式</field>
+            <field name="code_type">RATE_CONTROL_TYPE</field>
+        </record>
+        <record id="nqi_code_sort_test_type" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">15</field>
+            <field name="name">检测类型</field>
+            <field name="code_type">TEST_TYPE</field>
+        </record>
+        <record id="nqi_code_sort_test_organization" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">16</field>
+            <field name="name">检测机构</field>
+            <field name="code_type">TEST_ORGANIZATION</field>
+        </record>
+        <record id="nqi_code_sort_change_status" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">17</field>
+            <field name="name">变更状态</field>
+            <field name="code_type">CHANGE_STATUS</field>
+        </record>
+        <record id="nqi_code_sort_component_solution" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">18</field>
+            <field name="name">元器件不合格品制定对策</field>
+            <field name="code_type">COMPONENT_SOLUTION</field>
+        </record>
+        <record id="nqi_code_sort_test_result" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">19</field>
+            <field name="name">检验结论</field>
+            <field name="code_type">TEST_RESULT</field>
+        </record>
+        <record id="nqi_code_sort_handle_flag" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">20</field>
+            <field name="name">处理标记</field>
+            <field name="code_type">HANDLE_FLAG</field>
+        </record>
+        <record id="nqi_code_sort_meter_para_min_current" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">21</field>
+            <field name="name">电能表最小电流参数</field>
+            <field name="code_type">METER_PARA_MIN_CURRENT</field>
+        </record>
+        <record id="nqi_code_sort_meter_para_turn_current" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">22</field>
+            <field name="name">电能表转折电流参数</field>
+            <field name="code_type">METER_PARA_TURN_CURRENT</field>
+        </record>
+        <record id="nqi_code_sort_meter_para_rated_current" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">23</field>
+            <field name="name">电能表额定电流参数</field>
+            <field name="code_type">METER_PARA_RATED_CURRENT</field>
+        </record>
+        <record id="nqi_code_sort_meter_para_max_current" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">24</field>
+            <field name="name">电能表最大电流参数</field>
+            <field name="code_type">METER_PARA_MAX_CURRENT</field>
+        </record>
+        <record id="nqi_code_sort_pcb_producing_process" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">25</field>
+            <field name="name">PCB生产工序</field>
+            <field name="code_type">PCB_PRODUCING_PROCESS</field>
+        </record>
+        <record id="nqi_code_sort_meter_producing_process" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">26</field>
+            <field name="name">整表生产工序</field>
+            <field name="code_type">METER_PRODUCING_PROCESS</field>
+        </record>
+        <record id="nqi_code_sort_character_split" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">27</field>
+            <field name="name">分隔字符</field>
+            <field name="code_type">CHARACTER_SPLIT</field>
+        </record>
+        <record id="nqi_code_sort_cet_type" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">28</field>
+            <field name="name">证书类型</field>
+            <field name="code_type">CET_TYPE</field>
+        </record>
+        <record id="nqi_code_sort_meter_spec" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">29</field>
+            <field name="name">电能表品规</field>
+            <field name="code_type">METER_SPEC</field>
+        </record>
+        <record id="nqi_code_sort_uaser_nature" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">30</field>
+            <field name="name">用户性质</field>
+            <field name="code_type">UASER_NATURE</field>
+        </record>
+        <record id="nqi_code_sort_production_type" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">31</field>
+            <field name="name">生产类型</field>
+            <field name="code_type">PRODUCTION_TYPE</field>
+        </record>
+        <record id="nqi_code_sort_environment_type" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">32</field>
+            <field name="name">环境类型</field>
+            <field name="code_type">ENVIRONMENT_TYPE</field>
+        </record>
+        <record id="nqi_code_sort_attachment_type" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">33</field>
+            <field name="name">附件类型</field>
+            <field name="code_type">ATTACHMENT_TYPE</field>
+        </record>
+        <record id="nqi_code_sort_improvement_project" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">34</field>
+            <field name="name">质量改进项目类型</field>
+            <field name="code_type">IMPROVEMENT_PROJECT</field>
+        </record>
+        <record id="nqi_code_sort_person_cet_type" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">35</field>
+            <field name="name">企业人员证书类型</field>
+            <field name="code_type">PERSON_CET_TYPE</field>
+        </record>
+        <record id="nqi_code_sort_standard_level" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">36</field>
+            <field name="name">标准等级</field>
+            <field name="code_type">STANDARD_LEVEL</field>
+        </record>
+        <record id="nqi_code_sort_quality_award_type" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">37</field>
+            <field name="name">质量奖项</field>
+            <field name="code_type">QUALITY_AWARD_TYPE</field>
+        </record>
+        <record id="nqi_code_sort_parameter_test_type" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">38</field>
+            <field name="name">参数分类</field>
+            <field name="code_type">PARAMETER_TEST_TYPE</field>
+        </record>
+        <record id="nqi_code_sort_phase_current" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">41</field>
+            <field name="name">电流相别</field>
+            <field name="code_type">PHASE_CURRENT</field>
+        </record>
+        <record id="nqi_code_sort_meter_test_curload" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">42</field>
+            <field name="name">电能表测试电流负载</field>
+            <field name="code_type">METER_TEST_CURLOAD</field>
+        </record>
+        <record id="nqi_code_sort_meter_test_volt" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">43</field>
+            <field name="name">电能表测试电压</field>
+            <field name="code_type">METER_TEST_VOLT</field>
+        </record>
+        <record id="nqi_code_sort_read_type_code" model="sn.wsd.nqi.code.sort">
+            <field name="code_sort_id">44</field>
+            <field name="name">示数类型</field>
+            <field name="code_type">READ_TYPE_CODE</field>
+        </record>
+    </data>
+</odoo>
