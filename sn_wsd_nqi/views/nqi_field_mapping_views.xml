@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_nqi_field_mapping_list" model="ir.ui.view">
+        <field name="name">nqi.field.mapping.list</field>
+        <field name="model">sn.wsd.nqi.field.mapping</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="nqi_model_id"/>
+                <field name="nqi_field"/>
+                <field name="source_kind"/>
+                <field name="source_key"/>
+                <field name="transform" optional="hide"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_nqi_field_mapping_form" model="ir.ui.view">
+        <field name="name">nqi.field.mapping.form</field>
+        <field name="model">sn.wsd.nqi.field.mapping</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="active" invisible="1"/>
+                <sheet>
+                    <group>
+                        <group string="Target">
+                            <field name="nqi_model_id"/>
+                            <field name="nqi_field"/>
+                        </group>
+                        <group string="Source">
+                            <field name="source_kind"/>
+                            <field name="source_key"/>
+                            <field name="transform"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_nqi_field_mapping" model="ir.actions.act_window">
+        <field name="name">NQI Field Mappings</field>
+        <field name="res_model">sn.wsd.nqi.field.mapping</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_nqi_field_mapping_entry"
+              name="Field Mappings"
+              parent="menu_nqi_config"
+              action="action_nqi_field_mapping"
+              sequence="50"/>
+</odoo>

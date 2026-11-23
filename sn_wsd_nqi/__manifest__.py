@@ -16,6 +16,8 @@
         'views/nqi_pt_views.xml',
         'views/nqi_fit_views.xml',
         'views/nqi_sp_views.xml',
+        'views/nqi_mt_views.xml',
+        'views/nqi_field_mapping_views.xml',
         'data/nqi_code_sort_data.xml',
         'data/nqi_code_data.xml',
         'data/sn.wsd.nqi.component.csv',

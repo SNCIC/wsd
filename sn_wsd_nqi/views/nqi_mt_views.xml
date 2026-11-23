@@ -1,0 +1,2541 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_nqi_mt_aoi_list" model="ir.ui.view">
+        <field name="name">nqi.mt_aoi.list</field>
+        <field name="model">sn.wsd.nqi.mt_aoi</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="pcb_code"/>
+                <field name="module_type"/>
+                <field name="detect_date"/>
+                <field name="conc_code"/>
+                <field name="cause"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_aoi_form" model="ir.ui.view">
+        <field name="name">nqi.mt_aoi.form</field>
+        <field name="model">sn.wsd.nqi.mt_aoi</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="pcb_code"/>
+                            <field name="module_type"/>
+                            <field name="detect_date"/>
+                            <field name="conc_code"/>
+                            <field name="cause"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_aoi_search" model="ir.ui.view">
+        <field name="name">nqi.mt_aoi.search</field>
+        <field name="model">sn.wsd.nqi.mt_aoi</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="pcb_code"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_aoi" model="ir.actions.act_window">
+        <field name="name">MT_AOI_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_aoi</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_aoi_entry"
+              name="MT_AOI_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_aoi"
+              sequence="10"/>
+
+    <record id="view_nqi_mt_basicerr_list" model="ir.ui.view">
+        <field name="name">nqi.mt_basicerr.list</field>
+        <field name="model">sn.wsd.nqi.mt_basicerr</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="detect_circle"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_basicerr_form" model="ir.ui.view">
+        <field name="name">nqi.mt_basicerr.form</field>
+        <field name="model">sn.wsd.nqi.mt_basicerr</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="both_way_power_flag_id"/>
+                            <field name="iabc_id"/>
+                            <field name="load_current_id"/>
+                            <field name="load_voltage_id"/>
+                            <field name="freq_id"/>
+                            <field name="pf_id"/>
+                            <field name="detect_circle"/>
+                            <field name="simpling"/>
+                            <field name="error_number"/>
+                            <field name="error"/>
+                            <field name="ave_err"/>
+                            <field name="int_convert_err"/>
+                            <field name="conc_code"/>
+                            <field name="err_up"/>
+                            <field name="err_down"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_basicerr_search" model="ir.ui.view">
+        <field name="name">nqi.mt_basicerr.search</field>
+        <field name="model">sn.wsd.nqi.mt_basicerr</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_basicerr" model="ir.actions.act_window">
+        <field name="name">MT_BASICERR_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_basicerr</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_basicerr_entry"
+              name="MT_BASICERR_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_basicerr"
+              sequence="20"/>
+
+    <record id="view_nqi_mt_const_list" model="ir.ui.view">
+        <field name="name">nqi.mt_const.list</field>
+        <field name="model">sn.wsd.nqi.mt_const</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="real_pules"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_const_form" model="ir.ui.view">
+        <field name="name">nqi.mt_const.form</field>
+        <field name="model">sn.wsd.nqi.mt_const</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="load_current_id"/>
+                            <field name="both_way_power_flag_id"/>
+                            <field name="real_pules"/>
+                            <field name="start_reading"/>
+                            <field name="end_reading"/>
+                            <field name="diff_reading"/>
+                            <field name="standard_reading"/>
+                            <field name="error"/>
+                            <field name="err_down"/>
+                            <field name="err_up"/>
+                            <field name="const_err"/>
+                            <field name="volt"/>
+                            <field name="fee_start_time"/>
+                            <field name="fee_ratio"/>
+                            <field name="qualified_pules"/>
+                            <field name="divide_electric_quantity"/>
+                            <field name="pf_id"/>
+                            <field name="control_method_id"/>
+                            <field name="conc_code"/>
+                            <field name="ir_last_reading"/>
+                            <field name="read_type_code_id"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_const_search" model="ir.ui.view">
+        <field name="name">nqi.mt_const.search</field>
+        <field name="model">sn.wsd.nqi.mt_const</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_const" model="ir.actions.act_window">
+        <field name="name">MT_CONST_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_const</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_const_entry"
+              name="MT_CONST_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_const"
+              sequence="30"/>
+
+    <record id="view_nqi_mt_creeping_list" model="ir.ui.view">
+        <field name="name">nqi.mt_creeping.list</field>
+        <field name="model">sn.wsd.nqi.mt_creeping</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="pules"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_creeping_form" model="ir.ui.view">
+        <field name="name">nqi.mt_creeping.form</field>
+        <field name="model">sn.wsd.nqi.mt_creeping</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="load_voltage_id"/>
+                            <field name="pules"/>
+                            <field name="load_current_id"/>
+                            <field name="both_way_power_flag_id"/>
+                            <field name="test_time"/>
+                            <field name="real_test_time"/>
+                            <field name="conc_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_creeping_search" model="ir.ui.view">
+        <field name="name">nqi.mt_creeping.search</field>
+        <field name="model">sn.wsd.nqi.mt_creeping</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_creeping" model="ir.actions.act_window">
+        <field name="name">MT_CREEPING_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_creeping</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_creeping_entry"
+              name="MT_CREEPING_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_creeping"
+              sequence="40"/>
+
+    <record id="view_nqi_mt_dayerr_list" model="ir.ui.view">
+        <field name="name">nqi.mt_dayerr.list</field>
+        <field name="model">sn.wsd.nqi.mt_dayerr</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="sec_piles"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_dayerr_form" model="ir.ui.view">
+        <field name="name">nqi.mt_dayerr.form</field>
+        <field name="model">sn.wsd.nqi.mt_dayerr</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="sec_piles"/>
+                            <field name="test_time"/>
+                            <field name="simpling"/>
+                            <field name="err_abs"/>
+                            <field name="load_voltage"/>
+                            <field name="error"/>
+                            <field name="avg_err"/>
+                            <field name="int_convert_err"/>
+                            <field name="conc_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_dayerr_search" model="ir.ui.view">
+        <field name="name">nqi.mt_dayerr.search</field>
+        <field name="model">sn.wsd.nqi.mt_dayerr</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_dayerr" model="ir.actions.act_window">
+        <field name="name">MT_DAYERR_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_dayerr</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_dayerr_entry"
+              name="MT_DAYERR_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_dayerr"
+              sequence="50"/>
+
+    <record id="view_nqi_mt_demandvalue_list" model="ir.ui.view">
+        <field name="name">nqi.mt_demandvalue.list</field>
+        <field name="model">sn.wsd.nqi.mt_demandvalue</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="demand_period"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_demandvalue_form" model="ir.ui.view">
+        <field name="name">nqi.mt_demandvalue.form</field>
+        <field name="model">sn.wsd.nqi.mt_demandvalue</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="demand_period"/>
+                            <field name="demand_time"/>
+                            <field name="demand_interval"/>
+                            <field name="real_demand"/>
+                            <field name="real_period"/>
+                            <field name="demand_value_err"/>
+                            <field name="demand_standard"/>
+                            <field name="demand_value_err_abs"/>
+                            <field name="clear_data_rst"/>
+                            <field name="value_conc_code"/>
+                            <field name="both_way_power_flag_id"/>
+                            <field name="voltage_id"/>
+                            <field name="load_current_id"/>
+                            <field name="pf_id"/>
+                            <field name="control_method_id"/>
+                            <field name="err_up"/>
+                            <field name="err_dowm"/>
+                            <field name="conc_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_demandvalue_search" model="ir.ui.view">
+        <field name="name">nqi.mt_demandvalue.search</field>
+        <field name="model">sn.wsd.nqi.mt_demandvalue</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_demandvalue" model="ir.actions.act_window">
+        <field name="name">MT_DEMANDVALUE_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_demandvalue</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_demandvalue_entry"
+              name="MT_DEMANDVALUE_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_demandvalue"
+              sequence="60"/>
+
+    <record id="view_nqi_mt_esam_read_list" model="ir.ui.view">
+        <field name="name">nqi.mt_esam_read.list</field>
+        <field name="model">sn.wsd.nqi.mt_esam_read</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="conc_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_esam_read_form" model="ir.ui.view">
+        <field name="name">nqi.mt_esam_read.form</field>
+        <field name="model">sn.wsd.nqi.mt_esam_read</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="conc_code"/>
+                            <field name="load_voltage_id"/>
+                            <field name="load_current_id"/>
+                            <field name="pf_id"/>
+                            <field name="test_item"/>
+                            <field name="test_method_differ"/>
+                            <field name="trip_delay_time"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_esam_read_search" model="ir.ui.view">
+        <field name="name">nqi.mt_esam_read.search</field>
+        <field name="model">sn.wsd.nqi.mt_esam_read</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_esam_read" model="ir.actions.act_window">
+        <field name="name">MT_ESAM_READ_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_esam_read</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_esam_read_entry"
+              name="MT_ESAM_READ_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_esam_read"
+              sequence="70"/>
+
+    <record id="view_nqi_mt_function_list" model="ir.ui.view">
+        <field name="name">nqi.mt_function.list</field>
+        <field name="model">sn.wsd.nqi.mt_function</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="function_type"/>
+                <field name="conc_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_function_form" model="ir.ui.view">
+        <field name="name">nqi.mt_function.form</field>
+        <field name="model">sn.wsd.nqi.mt_function</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="function_type"/>
+                            <field name="conc_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_function_search" model="ir.ui.view">
+        <field name="name">nqi.mt_function.search</field>
+        <field name="model">sn.wsd.nqi.mt_function</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_function" model="ir.actions.act_window">
+        <field name="name">MT_FUNCTION_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_function</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_function_entry"
+              name="MT_FUNCTION_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_function"
+              sequence="80"/>
+
+    <record id="view_nqi_mt_hutchison_combina_list" model="ir.ui.view">
+        <field name="name">nqi.mt_hutchison_combina.list</field>
+        <field name="model">sn.wsd.nqi.mt_hutchison_combina</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="fee_ratio"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_hutchison_combina_form" model="ir.ui.view">
+        <field name="name">nqi.mt_hutchison_combina.form</field>
+        <field name="model">sn.wsd.nqi.mt_hutchison_combina</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="both_way_power_flag_id"/>
+                            <field name="load_current_id"/>
+                            <field name="pf_id"/>
+                            <field name="fee_ratio"/>
+                            <field name="control_method_id"/>
+                            <field name="ir_time"/>
+                            <field name="ir_reading"/>
+                            <field name="err_down"/>
+                            <field name="err_up"/>
+                            <field name="voltage"/>
+                            <field name="total_reading_err"/>
+                            <field name="total_increment"/>
+                            <field name="sumer_all_increment"/>
+                            <field name="sharp_increment"/>
+                            <field name="peak_increment"/>
+                            <field name="flat_increment"/>
+                            <field name="valley_increment"/>
+                            <field name="value_conc_code"/>
+                            <field name="conc_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_hutchison_combina_search" model="ir.ui.view">
+        <field name="name">nqi.mt_hutchison_combina.search</field>
+        <field name="model">sn.wsd.nqi.mt_hutchison_combina</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_hutchison_combina" model="ir.actions.act_window">
+        <field name="name">MT_HUTCHISON_COMBINA_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_hutchison_combina</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_hutchison_combina_entry"
+              name="MT_HUTCHISON_COMBINA_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_hutchison_combina"
+              sequence="90"/>
+
+    <record id="view_nqi_mt_intuit_list" model="ir.ui.view">
+        <field name="name">nqi.mt_intuit.list</field>
+        <field name="model">sn.wsd.nqi.mt_intuit</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="detect_content"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_intuit_form" model="ir.ui.view">
+        <field name="name">nqi.mt_intuit.form</field>
+        <field name="model">sn.wsd.nqi.mt_intuit</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="detect_content"/>
+                            <field name="conc_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_intuit_search" model="ir.ui.view">
+        <field name="name">nqi.mt_intuit.search</field>
+        <field name="model">sn.wsd.nqi.mt_intuit</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_intuit" model="ir.actions.act_window">
+        <field name="name">MT_INTUIT_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_intuit</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_intuit_entry"
+              name="MT_INTUIT_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_intuit"
+              sequence="100"/>
+
+    <record id="view_nqi_mt_mounting_list" model="ir.ui.view">
+        <field name="name">nqi.mt_mounting.list</field>
+        <field name="model">sn.wsd.nqi.mt_mounting</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="pcb_code"/>
+                <field name="module_type"/>
+                <field name="make_plan_code"/>
+                <field name="device_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_mounting_form" model="ir.ui.view">
+        <field name="name">nqi.mt_mounting.form</field>
+        <field name="model">sn.wsd.nqi.mt_mounting</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="pcb_code"/>
+                            <field name="module_type"/>
+                            <field name="make_plan_code"/>
+                            <field name="device_code"/>
+                            <field name="operator_code"/>
+                            <field name="position_no"/>
+                            <field name="test_type"/>
+                            <field name="test_project"/>
+                            <field name="detect_date"/>
+                            <field name="test_result"/>
+                            <field name="cause"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_mounting_search" model="ir.ui.view">
+        <field name="name">nqi.mt_mounting.search</field>
+        <field name="model">sn.wsd.nqi.mt_mounting</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_mounting" model="ir.actions.act_window">
+        <field name="name">MT_MOUNTING_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_mounting</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_mounting_entry"
+              name="MT_MOUNTING_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_mounting"
+              sequence="110"/>
+
+    <record id="view_nqi_mt_parameter_list" model="ir.ui.view">
+        <field name="name">nqi.mt_parameter.list</field>
+        <field name="model">sn.wsd.nqi.mt_parameter</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="plan_code"/>
+                <field name="serial_no"/>
+                <field name="test_type"/>
+                <field name="test_name"/>
+                <field name="operator_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_parameter_form" model="ir.ui.view">
+        <field name="name">nqi.mt_parameter.form</field>
+        <field name="model">sn.wsd.nqi.mt_parameter</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="plan_code"/>
+                            <field name="serial_no"/>
+                            <field name="test_type"/>
+                            <field name="test_name"/>
+                            <field name="operator_code"/>
+                            <field name="detect_date"/>
+                            <field name="conc_code_id"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_parameter_search" model="ir.ui.view">
+        <field name="name">nqi.mt_parameter.search</field>
+        <field name="model">sn.wsd.nqi.mt_parameter</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_parameter" model="ir.actions.act_window">
+        <field name="name">MT_PARAMETER_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_parameter</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_parameter_entry"
+              name="MT_PARAMETER_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_parameter"
+              sequence="120"/>
+
+    <record id="view_nqi_mt_rfid_list" model="ir.ui.view">
+        <field name="name">nqi.mt_rfid.list</field>
+        <field name="model">sn.wsd.nqi.mt_rfid</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="rfid_code"/>
+                <field name="conc_code"/>
+                <field name="cause"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_rfid_form" model="ir.ui.view">
+        <field name="name">nqi.mt_rfid.form</field>
+        <field name="model">sn.wsd.nqi.mt_rfid</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="rfid_code"/>
+                            <field name="conc_code"/>
+                            <field name="cause"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_rfid_search" model="ir.ui.view">
+        <field name="name">nqi.mt_rfid.search</field>
+        <field name="model">sn.wsd.nqi.mt_rfid</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_rfid" model="ir.actions.act_window">
+        <field name="name">MT_RFID_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_rfid</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_rfid_entry"
+              name="MT_RFID_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_rfid"
+              sequence="130"/>
+
+    <record id="view_nqi_mt_single_list" model="ir.ui.view">
+        <field name="name">nqi.mt_single.list</field>
+        <field name="model">sn.wsd.nqi.mt_single</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="pcb_code"/>
+                <field name="module_type"/>
+                <field name="detect_date"/>
+                <field name="test_project"/>
+                <field name="test_data"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_single_form" model="ir.ui.view">
+        <field name="name">nqi.mt_single.form</field>
+        <field name="model">sn.wsd.nqi.mt_single</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="pcb_code"/>
+                            <field name="module_type"/>
+                            <field name="detect_date"/>
+                            <field name="test_project"/>
+                            <field name="test_data"/>
+                            <field name="conc_code"/>
+                            <field name="cause"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_single_search" model="ir.ui.view">
+        <field name="name">nqi.mt_single.search</field>
+        <field name="model">sn.wsd.nqi.mt_single</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="pcb_code"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_single" model="ir.actions.act_window">
+        <field name="name">MT_SINGLE_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_single</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_single_entry"
+              name="MT_SINGLE_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_single"
+              sequence="140"/>
+
+    <record id="view_nqi_mt_starting_list" model="ir.ui.view">
+        <field name="name">nqi.mt_starting.list</field>
+        <field name="model">sn.wsd.nqi.mt_starting</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="pules"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_starting_form" model="ir.ui.view">
+        <field name="name">nqi.mt_starting.form</field>
+        <field name="model">sn.wsd.nqi.mt_starting</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="load_voltage_id"/>
+                            <field name="pules"/>
+                            <field name="both_way_power_flag_id"/>
+                            <field name="load_current_id"/>
+                            <field name="test_time"/>
+                            <field name="real_test_time"/>
+                            <field name="start_current"/>
+                            <field name="conc_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_starting_search" model="ir.ui.view">
+        <field name="name">nqi.mt_starting.search</field>
+        <field name="model">sn.wsd.nqi.mt_starting</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_starting" model="ir.actions.act_window">
+        <field name="name">MT_STARTING_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_starting</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_starting_entry"
+              name="MT_STARTING_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_starting"
+              sequence="150"/>
+
+    <record id="view_nqi_mt_time_error_list" model="ir.ui.view">
+        <field name="name">nqi.mt_time_error.list</field>
+        <field name="model">sn.wsd.nqi.mt_time_error</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="conc_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_time_error_form" model="ir.ui.view">
+        <field name="name">nqi.mt_time_error.form</field>
+        <field name="model">sn.wsd.nqi.mt_time_error</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="conc_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_time_error_search" model="ir.ui.view">
+        <field name="name">nqi.mt_time_error.search</field>
+        <field name="model">sn.wsd.nqi.mt_time_error</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_time_error" model="ir.actions.act_window">
+        <field name="name">MT_TIME_ERROR_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_time_error</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_time_error_entry"
+              name="MT_TIME_ERROR_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_time_error"
+              sequence="160"/>
+
+    <record id="view_nqi_mt_ts_list" model="ir.ui.view">
+        <field name="name">nqi.mt_ts.list</field>
+        <field name="model">sn.wsd.nqi.mt_ts</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="ts_err_conc_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_ts_form" model="ir.ui.view">
+        <field name="name">nqi.mt_ts.form</field>
+        <field name="model">sn.wsd.nqi.mt_ts</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="ts_err_conc_code"/>
+                            <field name="conc_code"/>
+                            <field name="volt_id"/>
+                            <field name="ts_way"/>
+                            <field name="start_time"/>
+                            <field name="ts_start_time"/>
+                            <field name="ts_err"/>
+                            <field name="err_up"/>
+                            <field name="err_dowm"/>
+                            <field name="ts_real_time"/>
+                            <field name="fee"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_ts_search" model="ir.ui.view">
+        <field name="name">nqi.mt_ts.search</field>
+        <field name="model">sn.wsd.nqi.mt_ts</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_ts" model="ir.actions.act_window">
+        <field name="name">MT_TS_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_ts</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_ts_entry"
+              name="MT_TS_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_ts"
+              sequence="170"/>
+
+    <record id="view_nqi_mt_volt_list" model="ir.ui.view">
+        <field name="name">nqi.mt_volt.list</field>
+        <field name="model">sn.wsd.nqi.mt_volt</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="detect_item_point"/>
+                <field name="volt_test_value"/>
+                <field name="test_time"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_mt_volt_form" model="ir.ui.view">
+        <field name="name">nqi.mt_volt.form</field>
+        <field name="model">sn.wsd.nqi.mt_volt</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="detect_item_point"/>
+                            <field name="volt_test_value"/>
+                            <field name="test_time"/>
+                            <field name="conc_code"/>
+                            <field name="cause"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_mt_volt_search" model="ir.ui.view">
+        <field name="name">nqi.mt_volt.search</field>
+        <field name="model">sn.wsd.nqi.mt_volt</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_mt_volt" model="ir.actions.act_window">
+        <field name="name">MT_VOLT_CONC</field>
+        <field name="res_model">sn.wsd.nqi.mt_volt</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_mt_volt_entry"
+              name="MT_VOLT_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_mt_volt"
+              sequence="180"/>
+
+    <record id="view_nqi_ot_other_list" model="ir.ui.view">
+        <field name="name">nqi.ot_other.list</field>
+        <field name="model">sn.wsd.nqi.ot_other</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="pcb_code"/>
+                <field name="test_name"/>
+                <field name="conc_code"/>
+                <field name="cause"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_ot_other_form" model="ir.ui.view">
+        <field name="name">nqi.ot_other.form</field>
+        <field name="model">sn.wsd.nqi.ot_other</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="pcb_code"/>
+                            <field name="test_name"/>
+                            <field name="conc_code"/>
+                            <field name="cause"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_ot_other_search" model="ir.ui.view">
+        <field name="name">nqi.ot_other.search</field>
+        <field name="model">sn.wsd.nqi.ot_other</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_ot_other" model="ir.actions.act_window">
+        <field name="name">OT_OTHER_CONC</field>
+        <field name="res_model">sn.wsd.nqi.ot_other</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_ot_other_entry"
+              name="OT_OTHER_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_ot_other"
+              sequence="190"/>
+
+    <record id="view_nqi_tt_consist_list" model="ir.ui.view">
+        <field name="name">nqi.tt_consist.list</field>
+        <field name="model">sn.wsd.nqi.tt_consist</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="pules"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_tt_consist_form" model="ir.ui.view">
+        <field name="name">nqi.tt_consist.form</field>
+        <field name="model">sn.wsd.nqi.tt_consist</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="both_way_power_flag_id"/>
+                            <field name="load_voltage_id"/>
+                            <field name="load_current_id"/>
+                            <field name="pf_id"/>
+                            <field name="pules"/>
+                            <field name="simpling"/>
+                            <field name="all_error"/>
+                            <field name="avg_error"/>
+                            <field name="int_convert_err"/>
+                            <field name="all_avg_error"/>
+                            <field name="all_int_error"/>
+                            <field name="error"/>
+                            <field name="err_down"/>
+                            <field name="err_up"/>
+                            <field name="once_err"/>
+                            <field name="avg_once_err"/>
+                            <field name="int_once_err"/>
+                            <field name="twice_err"/>
+                            <field name="avg_twice_err"/>
+                            <field name="int_twice_err"/>
+                            <field name="conc_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_tt_consist_search" model="ir.ui.view">
+        <field name="name">nqi.tt_consist.search</field>
+        <field name="model">sn.wsd.nqi.tt_consist</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_tt_consist" model="ir.actions.act_window">
+        <field name="name">TT_CONSIST_CONC</field>
+        <field name="res_model">sn.wsd.nqi.tt_consist</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_tt_consist_entry"
+              name="TT_CONSIST_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_tt_consist"
+              sequence="200"/>
+
+    <record id="view_nqi_tt_demand_list" model="ir.ui.view">
+        <field name="name">nqi.tt_demand.list</field>
+        <field name="model">sn.wsd.nqi.tt_demand</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="demand_period"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_tt_demand_form" model="ir.ui.view">
+        <field name="name">nqi.tt_demand.form</field>
+        <field name="model">sn.wsd.nqi.tt_demand</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="demand_period"/>
+                            <field name="demand_time"/>
+                            <field name="demand_interval"/>
+                            <field name="real_demand"/>
+                            <field name="real_period"/>
+                            <field name="demand_period_err"/>
+                            <field name="demand_standard"/>
+                            <field name="demand_period_err_abs"/>
+                            <field name="clear_data_rst"/>
+                            <field name="period_conc_code"/>
+                            <field name="both_way_power_flag_id"/>
+                            <field name="control_method"/>
+                            <field name="load_current_id"/>
+                            <field name="voltage_id"/>
+                            <field name="freq_id"/>
+                            <field name="pf_id"/>
+                            <field name="err_up"/>
+                            <field name="err_dowm"/>
+                            <field name="int_convert_err"/>
+                            <field name="conc_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_tt_demand_search" model="ir.ui.view">
+        <field name="name">nqi.tt_demand.search</field>
+        <field name="model">sn.wsd.nqi.tt_demand</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_tt_demand" model="ir.actions.act_window">
+        <field name="name">TT_DEMAND_CONC</field>
+        <field name="res_model">sn.wsd.nqi.tt_demand</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_tt_demand_entry"
+              name="TT_DEMAND_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_tt_demand"
+              sequence="210"/>
+
+    <record id="view_nqi_tt_eq_list" model="ir.ui.view">
+        <field name="name">nqi.tt_eq.list</field>
+        <field name="model">sn.wsd.nqi.tt_eq</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="total_eq"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_tt_eq_form" model="ir.ui.view">
+        <field name="name">nqi.tt_eq.form</field>
+        <field name="model">sn.wsd.nqi.tt_eq</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="total_eq"/>
+                            <field name="surplus_eq"/>
+                            <field name="curr_elec_price"/>
+                            <field name="load_current_id"/>
+                            <field name="pf_id"/>
+                            <field name="conc_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_tt_eq_search" model="ir.ui.view">
+        <field name="name">nqi.tt_eq.search</field>
+        <field name="model">sn.wsd.nqi.tt_eq</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_tt_eq" model="ir.actions.act_window">
+        <field name="name">TT_EQ_CONC</field>
+        <field name="res_model">sn.wsd.nqi.tt_eq</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_tt_eq_entry"
+              name="TT_EQ_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_tt_eq"
+              sequence="220"/>
+
+    <record id="view_nqi_tt_error_list" model="ir.ui.view">
+        <field name="name">nqi.tt_error.list</field>
+        <field name="model">sn.wsd.nqi.tt_error</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="pules"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_tt_error_form" model="ir.ui.view">
+        <field name="name">nqi.tt_error.form</field>
+        <field name="model">sn.wsd.nqi.tt_error</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="both_way_power_flag_id"/>
+                            <field name="load_voltage_id"/>
+                            <field name="load_current_id"/>
+                            <field name="pf_id"/>
+                            <field name="pules"/>
+                            <field name="simpling"/>
+                            <field name="once_err"/>
+                            <field name="avg_once_err"/>
+                            <field name="int_once_err"/>
+                            <field name="twice_err"/>
+                            <field name="avg_twice_err"/>
+                            <field name="error"/>
+                            <field name="err_down"/>
+                            <field name="err_up"/>
+                            <field name="int_twice_err"/>
+                            <field name="conc_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_tt_error_search" model="ir.ui.view">
+        <field name="name">nqi.tt_error.search</field>
+        <field name="model">sn.wsd.nqi.tt_error</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_tt_error" model="ir.actions.act_window">
+        <field name="name">TT_ERROR_CONC</field>
+        <field name="res_model">sn.wsd.nqi.tt_error</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_tt_error_entry"
+              name="TT_ERROR_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_tt_error"
+              sequence="230"/>
+
+    <record id="view_nqi_tt_event_record_list" model="ir.ui.view">
+        <field name="name">nqi.tt_event_record.list</field>
+        <field name="model">sn.wsd.nqi.tt_event_record</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="simpling"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_tt_event_record_form" model="ir.ui.view">
+        <field name="name">nqi.tt_event_record.form</field>
+        <field name="model">sn.wsd.nqi.tt_event_record</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="load_current_id"/>
+                            <field name="pf_id"/>
+                            <field name="simpling"/>
+                            <field name="overload_time"/>
+                            <field name="recover_time"/>
+                            <field name="err_up"/>
+                            <field name="err_down"/>
+                            <field name="conc_code"/>
+                            <field name="ir_pules"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_tt_event_record_search" model="ir.ui.view">
+        <field name="name">nqi.tt_event_record.search</field>
+        <field name="model">sn.wsd.nqi.tt_event_record</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_tt_event_record" model="ir.actions.act_window">
+        <field name="name">TT_EVENT_RECORD_CONC</field>
+        <field name="res_model">sn.wsd.nqi.tt_event_record</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_tt_event_record_entry"
+              name="TT_EVENT_RECORD_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_tt_event_record"
+              sequence="240"/>
+
+    <record id="view_nqi_tt_fee_list" model="ir.ui.view">
+        <field name="name">nqi.tt_fee.list</field>
+        <field name="model">sn.wsd.nqi.tt_fee</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="conc_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_tt_fee_form" model="ir.ui.view">
+        <field name="name">nqi.tt_fee.form</field>
+        <field name="model">sn.wsd.nqi.tt_fee</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="conc_code"/>
+                            <field name="pf_id"/>
+                            <field name="cur_phase_code_id"/>
+                            <field name="load_current_id"/>
+                            <field name="both_way_power_flag_id"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_tt_fee_search" model="ir.ui.view">
+        <field name="name">nqi.tt_fee.search</field>
+        <field name="model">sn.wsd.nqi.tt_fee</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_tt_fee" model="ir.actions.act_window">
+        <field name="name">TT_FEE_CONC</field>
+        <field name="res_model">sn.wsd.nqi.tt_fee</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_tt_fee_entry"
+              name="TT_FEE_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_tt_fee"
+              sequence="250"/>
+
+    <record id="view_nqi_tt_max_demandvalue_list" model="ir.ui.view">
+        <field name="name">nqi.tt_max_demandvalue.list</field>
+        <field name="model">sn.wsd.nqi.tt_max_demandvalue</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="conc_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_tt_max_demandvalue_form" model="ir.ui.view">
+        <field name="name">nqi.tt_max_demandvalue.form</field>
+        <field name="model">sn.wsd.nqi.tt_max_demandvalue</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="conc_code"/>
+                            <field name="cur_phase_code_id"/>
+                            <field name="load_current_id"/>
+                            <field name="both_way_power_flag_id"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_tt_max_demandvalue_search" model="ir.ui.view">
+        <field name="name">nqi.tt_max_demandvalue.search</field>
+        <field name="model">sn.wsd.nqi.tt_max_demandvalue</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_tt_max_demandvalue" model="ir.actions.act_window">
+        <field name="name">TT_MAX_DEMANDVALUE_CONC</field>
+        <field name="res_model">sn.wsd.nqi.tt_max_demandvalue</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_tt_max_demandvalue_entry"
+              name="TT_MAX_DEMANDVALUE_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_tt_max_demandvalue"
+              sequence="260"/>
+
+    <record id="view_nqi_tt_max_demand_err_list" model="ir.ui.view">
+        <field name="name">nqi.tt_max_demand_err.list</field>
+        <field name="model">sn.wsd.nqi.tt_max_demand_err</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="error"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_tt_max_demand_err_form" model="ir.ui.view">
+        <field name="name">nqi.tt_max_demand_err.form</field>
+        <field name="model">sn.wsd.nqi.tt_max_demand_err</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="load_current_id"/>
+                            <field name="load_voltage_id"/>
+                            <field name="freq_id"/>
+                            <field name="pf_id"/>
+                            <field name="error"/>
+                            <field name="avg_err"/>
+                            <field name="int_convert_err"/>
+                            <field name="conc_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_tt_max_demand_err_search" model="ir.ui.view">
+        <field name="name">nqi.tt_max_demand_err.search</field>
+        <field name="model">sn.wsd.nqi.tt_max_demand_err</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_tt_max_demand_err" model="ir.actions.act_window">
+        <field name="name">TT_MAX_DEMAND_ERR_CONC</field>
+        <field name="res_model">sn.wsd.nqi.tt_max_demand_err</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_tt_max_demand_err_entry"
+              name="TT_MAX_DEMAND_ERR_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_tt_max_demand_err"
+              sequence="270"/>
+
+    <record id="view_nqi_tt_overload_list" model="ir.ui.view">
+        <field name="name">nqi.tt_overload.list</field>
+        <field name="model">sn.wsd.nqi.tt_overload</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="pules"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_tt_overload_form" model="ir.ui.view">
+        <field name="name">nqi.tt_overload.form</field>
+        <field name="model">sn.wsd.nqi.tt_overload</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="load_voltage_id"/>
+                            <field name="load_current_id"/>
+                            <field name="pf_id"/>
+                            <field name="pules"/>
+                            <field name="simpling"/>
+                            <field name="overload_time"/>
+                            <field name="wait_time"/>
+                            <field name="error"/>
+                            <field name="err_down"/>
+                            <field name="err_up"/>
+                            <field name="avg_err"/>
+                            <field name="int_converter_err"/>
+                            <field name="conc_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_tt_overload_search" model="ir.ui.view">
+        <field name="name">nqi.tt_overload.search</field>
+        <field name="model">sn.wsd.nqi.tt_overload</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_tt_overload" model="ir.actions.act_window">
+        <field name="name">TT_OVERLOAD_CONC</field>
+        <field name="res_model">sn.wsd.nqi.tt_overload</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_tt_overload_entry"
+              name="TT_OVERLOAD_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_tt_overload"
+              sequence="280"/>
+
+    <record id="view_nqi_tt_power_measure_list" model="ir.ui.view">
+        <field name="name">nqi.tt_power_measure.list</field>
+        <field name="model">sn.wsd.nqi.tt_power_measure</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="conc_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_tt_power_measure_form" model="ir.ui.view">
+        <field name="name">nqi.tt_power_measure.form</field>
+        <field name="model">sn.wsd.nqi.tt_power_measure</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="conc_code"/>
+                            <field name="cur_phase_code_id"/>
+                            <field name="consist_down"/>
+                            <field name="consist_up"/>
+                            <field name="volt_ratio"/>
+                            <field name="err_down"/>
+                            <field name="err_up"/>
+                            <field name="simpling_space"/>
+                            <field name="simpling"/>
+                            <field name="pf_id"/>
+                            <field name="load_current_id"/>
+                            <field name="both_way_power_flag_id"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_tt_power_measure_search" model="ir.ui.view">
+        <field name="name">nqi.tt_power_measure.search</field>
+        <field name="model">sn.wsd.nqi.tt_power_measure</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_tt_power_measure" model="ir.actions.act_window">
+        <field name="name">TT_POWER_MEASURE_CONC</field>
+        <field name="res_model">sn.wsd.nqi.tt_power_measure</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_tt_power_measure_entry"
+              name="TT_POWER_MEASURE_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_tt_power_measure"
+              sequence="290"/>
+
+    <record id="view_nqi_tt_standard_list" model="ir.ui.view">
+        <field name="name">nqi.tt_standard.list</field>
+        <field name="model">sn.wsd.nqi.tt_standard</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="data_flag"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_tt_standard_form" model="ir.ui.view">
+        <field name="name">nqi.tt_standard.form</field>
+        <field name="model">sn.wsd.nqi.tt_standard</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="data_flag"/>
+                            <field name="detect_basis"/>
+                            <field name="setting_value"/>
+                            <field name="read_value"/>
+                            <field name="conc_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_tt_standard_search" model="ir.ui.view">
+        <field name="name">nqi.tt_standard.search</field>
+        <field name="model">sn.wsd.nqi.tt_standard</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_tt_standard" model="ir.actions.act_window">
+        <field name="name">TT_STANDARD_CONC</field>
+        <field name="res_model">sn.wsd.nqi.tt_standard</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_tt_standard_entry"
+              name="TT_STANDARD_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_tt_standard"
+              sequence="300"/>
+
+    <record id="view_nqi_tt_variation_list" model="ir.ui.view">
+        <field name="name">nqi.tt_variation.list</field>
+        <field name="model">sn.wsd.nqi.tt_variation</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="test_result_id"/>
+                <field name="serial_no"/>
+                <field name="detect_date"/>
+                <field name="para_index"/>
+                <field name="detect_item_point"/>
+                <field name="detect_circle"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_tt_variation_form" model="ir.ui.view">
+        <field name="name">nqi.tt_variation.form</field>
+        <field name="model">sn.wsd.nqi.tt_variation</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="test_result_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="detect_date"/>
+                            <field name="para_index"/>
+                            <field name="detect_item_point"/>
+                            <field name="both_way_power_flag_id"/>
+                            <field name="load_voltage_id"/>
+                            <field name="load_current_id"/>
+                            <field name="iabc_id"/>
+                            <field name="pf_id"/>
+                            <field name="detect_circle"/>
+                            <field name="simpling"/>
+                            <field name="wait_time"/>
+                            <field name="up_err1"/>
+                            <field name="up_err2"/>
+                            <field name="avg_up_err"/>
+                            <field name="int_up_err"/>
+                            <field name="down_err1"/>
+                            <field name="down_err2"/>
+                            <field name="avg_down_err"/>
+                            <field name="int_down_err"/>
+                            <field name="variation_err"/>
+                            <field name="int_variation_err"/>
+                            <field name="conc_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_tt_variation_search" model="ir.ui.view">
+        <field name="name">nqi.tt_variation.search</field>
+        <field name="model">sn.wsd.nqi.tt_variation</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_tt_variation" model="ir.actions.act_window">
+        <field name="name">TT_VARIATION_CONC</field>
+        <field name="res_model">sn.wsd.nqi.tt_variation</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_tt_variation_entry"
+              name="TT_VARIATION_CONC"
+              parent="menu_nqi_testing"
+              action="action_nqi_tt_variation"
+              sequence="310"/>
+
+</odoo>
