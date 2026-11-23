@@ -548,8 +548,20 @@ msgstr "维修方法"
 #. module: sn_wsd_api
 #. odoo-python
 #: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Missing required field: componentSns"
+msgstr "缺少必填字段：componentSns"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
 msgid "Missing required field: password"
 msgstr "缺少必填字段：password"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Missing required field: sn"
+msgstr "缺少必填字段：sn"
 
 #. module: sn_wsd_api
 #. odoo-python
@@ -562,6 +574,12 @@ msgstr "缺少必填字段：userName"
 #: code:addons/sn_wsd_api/models/api_scan_pass.py:0
 msgid "Missing required field: workOrderNo"
 msgstr "缺少必填字段：workOrderNo"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Missing required field: workStation"
+msgstr "缺少必填字段：workStation"
 
 #. module: sn_wsd_api
 #. odoo-python
@@ -1019,6 +1037,14 @@ msgstr "产品SN %s 在产品包装报表中已存在。"
 #: code:addons/sn_wsd_api/models/api_scan_pass.py:0
 msgid "SN %s is inactive."
 msgstr "SN %s 已停用。"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid ""
+"SN %s is unknown; SNs register themselves when they enter a start "
+"operation."
+msgstr "SN %s 未知；SN 会在进入起始工序时自动登记。"
 
 #. module: sn_wsd_api
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_list_api

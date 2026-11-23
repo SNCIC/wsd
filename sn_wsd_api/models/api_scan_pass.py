@@ -524,6 +524,47 @@ class SnWsdApiService(models.AbstractModel):
             'test_result_id': result_info.get('test_result_id'),
         }
 
+    def unbind_components(self, payload):
+        """Component-unbind API (bind-error correction). Standard JSON
+        contract (camelCase, AOI style): sn / componentSns / workStation /
+        employee / externalEventId; the company comes from the work station
+        like AOI's machineName. Delegates to the unbind kernel -- never
+        touches the station kernel (no pass count, no consumption)."""
+        payload = payload or {}
+        sn_name = str(payload.get('sn') or '').strip()
+        work_station = str(payload.get('workStation') or '').strip()
+        employee_code = str(payload.get('employee') or '').strip()
+        external_event_id = str(payload.get('externalEventId') or '').strip()
+        component_sns = [
+            str(item or '').strip()
+            for item in (payload.get('componentSns') or [])
+            if str(item or '').strip()]
+        if not sn_name:
+            raise ApiBadRequest('Missing required field: sn')
+        if not component_sns:
+            raise ApiBadRequest('Missing required field: componentSns')
+        if not work_station:
+            raise ApiBadRequest('Missing required field: workStation')
+        workcenter = self._resolve_workcenter(work_station)
+        self = self.with_company(workcenter.company_id)
+        identity = self._resolve_identity(sn_name)
+        if not identity:
+            raise ApiNotFound(_(
+                'SN %s is unknown; SNs register themselves when they '
+                'enter a start operation.', sn_name))
+        if employee_code:
+            self._resolve_employee(employee_code)
+        events = self.env['sn.wsd.meter.component.binding'].unbind_component_bindings(
+            identity, component_sns,
+            workcenter=workcenter,
+            operator_code=employee_code or False,
+            external_event_id=external_event_id or False)
+        return {
+            'ok': True,
+            'sn': identity.name,
+            'unbound': len(events),
+        }
+
     @api.model
     def request_next_sn(self, payload):
         """B2: a device (e.g. the laser printer) asks for the next SN of the

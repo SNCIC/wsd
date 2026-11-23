@@ -530,6 +530,12 @@ msgid "Component %s is already assembled into %s."
 msgstr "组件 %s 已装配进 %s。"
 
 #. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/meter_component_trace.py:0
+msgid "Component %s is not actively bound on %s."
+msgstr "组件 %s 未绑定在 %s 上。"
+
+#. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__component_batch_no
 msgid "Component Batch No."
 msgstr "元器件批次号"
@@ -555,6 +561,13 @@ msgstr "元器件绑定历史"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_component_binding_search
 msgid "Component Bindings"
 msgstr "元器件绑定"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/meter_component_trace.py:0
+msgid ""
+"Component binding of %s on %s has no MES order; contact the administrator."
+msgstr "组件 %s 在 %s 上的绑定没有制令单，请联系管理员。"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__component_lot_id
@@ -2152,6 +2165,12 @@ msgid "MES Work Center"
 msgstr "MES工作中心"
 
 #. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/meter_component_trace.py:0
+msgid "MES order %s is %s; unbind is not allowed."
+msgstr "制令单 %s 已%s，不允许解绑。"
+
+#. module: sn_wsd_quality
 #: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__component_type__main_pcb
 msgid "Main PCB"
 msgstr "主板 (Main PCB)"
@@ -2578,6 +2597,12 @@ msgstr "序号"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
 msgid "No.:"
 msgstr "编号："
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/meter_component_trace.py:0
+msgid "Nothing to unbind."
+msgstr "没有要解绑的组件。"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__nominal_value
@@ -3631,6 +3656,12 @@ msgstr "条码冻结向导"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_mrp_workorder_form_sn_wsd_quality
 msgid "SN Freezes"
 msgstr "条码冻结"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/meter_component_trace.py:0
+msgid "SN %s is unknown."
+msgstr "SN %s 未知。"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__serial_identity_id

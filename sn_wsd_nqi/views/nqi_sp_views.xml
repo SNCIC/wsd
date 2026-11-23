@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_nqi_sp_box_bind_list" model="ir.ui.view">
+        <field name="name">nqi.sp.box.bind.list</field>
+        <field name="model">sn.wsd.nqi.sp.box.bind</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="barcode"/>
+                <field name="box_code"/>
+                <field name="device_code"/>
+                <field name="operator_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_sp_box_bind_form" model="ir.ui.view">
+        <field name="name">nqi.sp.box.bind.form</field>
+        <field name="model">sn.wsd.nqi.sp.box.bind</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="NQI Columns">
+                            <field name="barcode"/>
+                            <field name="box_code"/>
+                            <field name="device_code"/>
+                            <field name="operator_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_sp_box_bind_search" model="ir.ui.view">
+        <field name="name">nqi.sp.box.bind.search</field>
+        <field name="model">sn.wsd.nqi.sp.box.bind</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="box_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_sp_box_bind" model="ir.actions.act_window">
+        <field name="name">SP_BOX_METER_BIND</field>
+        <field name="res_model">sn.wsd.nqi.sp.box.bind</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_sp_box_bind_entry"
+              name="SP_BOX_METER_BIND"
+              parent="menu_nqi_supply"
+              action="action_nqi_sp_box_bind"
+              sequence="10"/>
+
+    <record id="view_nqi_sp_supply_batch_list" model="ir.ui.view">
+        <field name="name">nqi.sp.supply.batch.list</field>
+        <field name="model">sn.wsd.nqi.sp.supply.batch</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="picking_id"/>
+                <field name="business_contract_code"/>
+                <field name="supply_batch_no"/>
+                <field name="supply_num"/>
+                <field name="start_number_code"/>
+                <field name="end_number_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_sp_supply_batch_form" model="ir.ui.view">
+        <field name="name">nqi.sp.supply.batch.form</field>
+        <field name="model">sn.wsd.nqi.sp.supply.batch</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="picking_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="business_contract_code"/>
+                            <field name="supply_batch_no"/>
+                            <field name="supply_num"/>
+                            <field name="start_number_code"/>
+                            <field name="end_number_code"/>
+                            <field name="start_barcode"/>
+                            <field name="finish_barcode"/>
+                            <field name="supply_date"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_sp_supply_batch_search" model="ir.ui.view">
+        <field name="name">nqi.sp.supply.batch.search</field>
+        <field name="model">sn.wsd.nqi.sp.supply.batch</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="supply_batch_no"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_sp_supply_batch" model="ir.actions.act_window">
+        <field name="name">SP_SUPPLY_BATCH</field>
+        <field name="res_model">sn.wsd.nqi.sp.supply.batch</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_sp_supply_batch_entry"
+              name="SP_SUPPLY_BATCH"
+              parent="menu_nqi_supply"
+              action="action_nqi_sp_supply_batch"
+              sequence="20"/>
+
+    <record id="view_nqi_sp_supply_test_list" model="ir.ui.view">
+        <field name="name">nqi.sp.supply.test.list</field>
+        <field name="model">sn.wsd.nqi.sp.supply.test</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="supply_batch_no"/>
+                <field name="start_barcode"/>
+                <field name="finish_barcode"/>
+                <field name="detect_date"/>
+                <field name="person_code"/>
+                <field name="file_url"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_sp_supply_test_form" model="ir.ui.view">
+        <field name="name">nqi.sp.supply.test.form</field>
+        <field name="model">sn.wsd.nqi.sp.supply.test</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="NQI Columns">
+                            <field name="supply_batch_no"/>
+                            <field name="start_barcode"/>
+                            <field name="finish_barcode"/>
+                            <field name="detect_date"/>
+                            <field name="person_code"/>
+                            <field name="file_url"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_sp_supply_test_search" model="ir.ui.view">
+        <field name="name">nqi.sp.supply.test.search</field>
+        <field name="model">sn.wsd.nqi.sp.supply.test</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="supply_batch_no"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_sp_supply_test" model="ir.actions.act_window">
+        <field name="name">SP_SUPPLY_TEST</field>
+        <field name="res_model">sn.wsd.nqi.sp.supply.test</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_sp_supply_test_entry"
+              name="SP_SUPPLY_TEST"
+              parent="menu_nqi_supply"
+              action="action_nqi_sp_supply_test"
+              sequence="30"/>
+
+    <record id="view_nqi_sp_spot_check_list" model="ir.ui.view">
+        <field name="name">nqi.sp.spot.check.list</field>
+        <field name="model">sn.wsd.nqi.sp.spot.check</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="supply_batch_no"/>
+                <field name="device_code"/>
+                <field name="test_unit"/>
+                <field name="barcode"/>
+                <field name="test_date"/>
+                <field name="test_project"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_sp_spot_check_form" model="ir.ui.view">
+        <field name="name">nqi.sp.spot.check.form</field>
+        <field name="model">sn.wsd.nqi.sp.spot.check</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="NQI Columns">
+                            <field name="supply_batch_no"/>
+                            <field name="device_code"/>
+                            <field name="test_unit"/>
+                            <field name="barcode"/>
+                            <field name="test_date"/>
+                            <field name="test_project"/>
+                            <field name="test_result"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_sp_spot_check_search" model="ir.ui.view">
+        <field name="name">nqi.sp.spot.check.search</field>
+        <field name="model">sn.wsd.nqi.sp.spot.check</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="supply_batch_no"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_sp_spot_check" model="ir.actions.act_window">
+        <field name="name">SP_SPOT_CHECK_RECORD</field>
+        <field name="res_model">sn.wsd.nqi.sp.spot.check</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_sp_spot_check_entry"
+              name="SP_SPOT_CHECK_RECORD"
+              parent="menu_nqi_supply"
+              action="action_nqi_sp_spot_check"
+              sequence="40"/>
+
+    <record id="view_nqi_sp_recall_list" model="ir.ui.view">
+        <field name="name">nqi.sp.recall.list</field>
+        <field name="model">sn.wsd.nqi.sp.recall</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="supply_batch_no"/>
+                <field name="start_barcode"/>
+                <field name="finish_barcode"/>
+                <field name="unpass_analysis"/>
+                <field name="solution"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_sp_recall_form" model="ir.ui.view">
+        <field name="name">nqi.sp.recall.form</field>
+        <field name="model">sn.wsd.nqi.sp.recall</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="NQI Columns">
+                            <field name="supply_batch_no"/>
+                            <field name="start_barcode"/>
+                            <field name="finish_barcode"/>
+                            <field name="unpass_analysis"/>
+                            <field name="solution"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_sp_recall_search" model="ir.ui.view">
+        <field name="name">nqi.sp.recall.search</field>
+        <field name="model">sn.wsd.nqi.sp.recall</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="supply_batch_no"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_sp_recall" model="ir.actions.act_window">
+        <field name="name">SP_METER_RECALL</field>
+        <field name="res_model">sn.wsd.nqi.sp.recall</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_sp_recall_entry"
+              name="SP_METER_RECALL"
+              parent="menu_nqi_supply"
+              action="action_nqi_sp_recall"
+              sequence="50"/>
+
+</odoo>

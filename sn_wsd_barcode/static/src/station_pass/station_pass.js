@@ -12,6 +12,7 @@ const MODES = [
     { key: "ok", label: _t("OK") },
     { key: "ng", label: _t("NG") },
     { key: "scrap", label: _t("Scrap") },
+    { key: "unbind", label: _t("Unbind") },
     { key: "clear", label: _t("Clear Pass") },
 ];
 
@@ -40,6 +41,7 @@ export class StationPassAction extends Component {
             scrapReasons: [],
             mode: "ok",
             ngPending: false,   // {wipId, sn} while waiting for the defect code
+            unbindPending: false, // {sn} while waiting for the component scan
             scrapDialog: false, // {wipId, sn, reasonId}
             selector: false,    // 'line' | 'workcenter'
             command: "",
@@ -163,8 +165,14 @@ export class StationPassAction extends Component {
         if (this.state.ngPending) {
             return _t("Scan the defect code.");
         }
+        if (this.state.unbindPending) {
+            return _t("Scan the component SN to unbind from %s.", this.state.unbindPending.sn);
+        }
         if (this.state.mode === "clear") {
             return _t("Scan the SN to clear.");
+        }
+        if (this.state.mode === "unbind") {
+            return _t("Scan the parent SN.");
         }
         return _t("Scan the SN in progress.");
     }
@@ -233,6 +241,7 @@ export class StationPassAction extends Component {
         state.operationLabel = (data.workcenter || {}).operation || "";
         state.ngPending = false;
         state.scrapDialog = false;
+        state.unbindPending = false;
     }
 
     async _refreshCounts() {
@@ -242,10 +251,12 @@ export class StationPassAction extends Component {
                 [this.state.selectedWorkcenterId || false]);
             const pending = this.state.ngPending;
             const dialog = this.state.scrapDialog;
+            const unbind = this.state.unbindPending;
             this._applyFloorData(data);
-            // a refresh must never eat an in-flight NG/scrap interaction
+            // a refresh must never eat an in-flight NG/scrap/unbind interaction
             this.state.ngPending = pending;
             this.state.scrapDialog = dialog;
+            this.state.unbindPending = unbind;
         } catch (error) { /* counts are cosmetic */ }
     }
 
@@ -306,6 +317,7 @@ export class StationPassAction extends Component {
     setMode(key) {
         this.state.mode = key;
         this.state.ngPending = false;
+        this.state.unbindPending = false;
         this.focusInput();
     }
 
@@ -325,6 +337,8 @@ export class StationPassAction extends Component {
         try {
             if (this.state.ngPending) {
                 await this._leaveNg(code);
+            } else if (this.state.unbindPending) {
+                await this._unbindComponent(code);
             } else {
                 await this._resolveAndLeave(code);
             }
@@ -340,6 +354,21 @@ export class StationPassAction extends Component {
     async _resolveAndLeave(code) {
         if (!this.state.selectedWorkcenterId) {
             this._setResult(_t("Select a work center first."), "warning");
+            return;
+        }
+        if (this.state.mode === "unbind") {
+            // unbind mode, step 1 of 2: validate the parent SN and hold it
+            // (step 2 scans the component to unbind)
+            const found = await this.orm.silent.call(
+                "sn.wsd.serial.identity", "search_read",
+                [[["name", "=", code]], ["name"]],
+                { limit: 1, context: { active_test: false } });
+            if (!found.length) {
+                this._setResult(_t("No SN matches %s.", code), "danger");
+                return;
+            }
+            this.state.unbindPending = { sn: found[0].name };
+            this._setResult(_t("SN %s — scan the component SN.", found[0].name), "info");
             return;
         }
         if (this.state.mode === "clear") {
@@ -414,6 +443,20 @@ export class StationPassAction extends Component {
                pending.sn, this.state.operationLabel || "", defect.name),
             "success");
         await this._refreshCounts();
+    }
+
+    async _unbindComponent(code) {
+        // unbind mode, step 2 of 2: the held parent SN + this component
+        // scan go to the unbind kernel (trace-only, no station pass)
+        const pending = this.state.unbindPending;
+        const result = await this.orm.silent.call(
+            "sn.wsd.meter.component.binding", "unbind_from_scan",
+            [this.state.selectedWorkcenterId, pending.sn, code]);
+        this.state.unbindPending = false;
+        this._setResult(
+            _t("Unbound %s from %s.",
+               result.component_type || code, pending.sn),
+            "success");
     }
 
     async submitCommand(ev) {

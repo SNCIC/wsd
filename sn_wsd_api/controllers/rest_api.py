@@ -179,6 +179,16 @@ class SnWsdDeviceApi(http.Controller):
         return self._respond(self._logged_call(
             '/api/v1/next-sn', self._service().request_next_sn, payload))
 
+    @http.route('/api/v1/components/unbind', type='http', auth='public',
+                methods=['POST'], csrf=False)
+    def components_unbind(self, **kwargs):
+        payload, error = self._body_or_error()
+        if error:
+            return error
+        return self._respond(self._logged_call(
+            '/api/v1/components/unbind',
+            self._service().unbind_components, payload))
+
     @http.route('/api/v1/aoi/results', type='http', auth='public',
                 methods=['POST'], csrf=False)
     def aoi_results(self, **kwargs):

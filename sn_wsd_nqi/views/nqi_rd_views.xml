@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_nqi_rd_product_info_list" model="ir.ui.view">
+        <field name="name">nqi.rd.product.info.list</field>
+        <field name="model">sn.wsd.nqi.rd.product.info</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="product_id"/>
+                <field name="product_code"/>
+                <field name="product_type"/>
+                <field name="product_name"/>
+                <field name="product_design_basis"/>
+                <field name="remarks"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_rd_product_info_form" model="ir.ui.view">
+        <field name="name">nqi.rd.product.info.form</field>
+        <field name="model">sn.wsd.nqi.rd.product.info</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="product_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="product_code"/>
+                            <field name="product_type"/>
+                            <field name="product_name"/>
+                            <field name="product_categid_id"/>
+                            <field name="product_design_basis"/>
+                            <field name="remarks"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_rd_product_info_search" model="ir.ui.view">
+        <field name="name">nqi.rd.product.info.search</field>
+        <field name="model">sn.wsd.nqi.rd.product.info</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_rd_product_info" model="ir.actions.act_window">
+        <field name="name">RD_PRODUCT_INFO</field>
+        <field name="res_model">sn.wsd.nqi.rd.product.info</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_rd_product_info_entry"
+              name="RD_PRODUCT_INFO"
+              parent="menu_nqi_rd"
+              action="action_nqi_rd_product_info"
+              sequence="10"/>
+
+    <record id="view_nqi_rd_product_detail_list" model="ir.ui.view">
+        <field name="name">nqi.rd.product.detail.list</field>
+        <field name="model">sn.wsd.nqi.rd.product.detail</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="product_id"/>
+                <field name="product_detail_code"/>
+                <field name="product_detail_name"/>
+                <field name="product_code"/>
+                <field name="development_project_no"/>
+                <field name="rated_voltage"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_rd_product_detail_form" model="ir.ui.view">
+        <field name="name">nqi.rd.product.detail.form</field>
+        <field name="model">sn.wsd.nqi.rd.product.detail</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="product_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="product_detail_code"/>
+                            <field name="product_detail_name"/>
+                            <field name="product_code"/>
+                            <field name="development_project_no"/>
+                            <field name="product_spec_id"/>
+                            <field name="rated_voltage"/>
+                            <field name="min_current"/>
+                            <field name="turn_current"/>
+                            <field name="rated_current"/>
+                            <field name="max_current"/>
+                            <field name="act_pwr_accuracy_grade"/>
+                            <field name="active_power_constant"/>
+                            <field name="lcd_integer_digits"/>
+                            <field name="lcd_decimal_digits"/>
+                            <field name="local_comm_type"/>
+                            <field name="remote_comm_type_id"/>
+                            <field name="rate_control_type_id"/>
+                            <field name="technology_rules"/>
+                            <field name="file_url"/>
+                            <field name="remarks"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_rd_product_detail_search" model="ir.ui.view">
+        <field name="name">nqi.rd.product.detail.search</field>
+        <field name="model">sn.wsd.nqi.rd.product.detail</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_detail_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_rd_product_detail" model="ir.actions.act_window">
+        <field name="name">RD_PRODUCT_DETAIL</field>
+        <field name="res_model">sn.wsd.nqi.rd.product.detail</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_rd_product_detail_entry"
+              name="RD_PRODUCT_DETAIL"
+              parent="menu_nqi_rd"
+              action="action_nqi_rd_product_detail"
+              sequence="20"/>
+
+    <record id="view_nqi_rd_product_test_report_list" model="ir.ui.view">
+        <field name="name">nqi.rd.product.test.report.list</field>
+        <field name="model">sn.wsd.nqi.rd.product.test.report</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="product_id"/>
+                <field name="product_code"/>
+                <field name="product_detail_code"/>
+                <field name="development_project_no"/>
+                <field name="test_report_code"/>
+                <field name="test_organization"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_rd_product_test_report_form" model="ir.ui.view">
+        <field name="name">nqi.rd.product.test.report.form</field>
+        <field name="model">sn.wsd.nqi.rd.product.test.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="product_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="product_code"/>
+                            <field name="product_detail_code"/>
+                            <field name="development_project_no"/>
+                            <field name="test_report_code"/>
+                            <field name="test_type_id"/>
+                            <field name="test_organization"/>
+                            <field name="report_date"/>
+                            <field name="report_valid_date"/>
+                            <field name="witness_material_url"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_rd_product_test_report_search" model="ir.ui.view">
+        <field name="name">nqi.rd.product.test.report.search</field>
+        <field name="model">sn.wsd.nqi.rd.product.test.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_rd_product_test_report" model="ir.actions.act_window">
+        <field name="name">RD_PRODUCT_TEST_REPORT</field>
+        <field name="res_model">sn.wsd.nqi.rd.product.test.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_rd_product_test_report_entry"
+              name="RD_PRODUCT_TEST_REPORT"
+              parent="menu_nqi_rd"
+              action="action_nqi_rd_product_test_report"
+              sequence="30"/>
+
+    <record id="view_nqi_rd_project_list" model="ir.ui.view">
+        <field name="name">nqi.rd.project.list</field>
+        <field name="model">sn.wsd.nqi.rd.project</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="product_id"/>
+                <field name="development_project_no"/>
+                <field name="product_code"/>
+                <field name="product_name"/>
+                <field name="product_type"/>
+                <field name="product_design_function_basis"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_rd_project_form" model="ir.ui.view">
+        <field name="name">nqi.rd.project.form</field>
+        <field name="model">sn.wsd.nqi.rd.project</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="product_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="development_project_no"/>
+                            <field name="product_code"/>
+                            <field name="product_name"/>
+                            <field name="product_type"/>
+                            <field name="product_design_function_basis"/>
+                            <field name="review_count"/>
+                            <field name="change_count"/>
+                            <field name="test_count"/>
+                            <field name="files_count"/>
+                            <field name="sources_demand"/>
+                            <field name="file_path"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_rd_project_search" model="ir.ui.view">
+        <field name="name">nqi.rd.project.search</field>
+        <field name="model">sn.wsd.nqi.rd.project</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="development_project_no"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_rd_project" model="ir.actions.act_window">
+        <field name="name">RD_PROJECT</field>
+        <field name="res_model">sn.wsd.nqi.rd.project</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_rd_project_entry"
+              name="RD_PROJECT"
+              parent="menu_nqi_rd"
+              action="action_nqi_rd_project"
+              sequence="40"/>
+
+    <record id="view_nqi_rd_project_detail_list" model="ir.ui.view">
+        <field name="name">nqi.rd.project.detail.list</field>
+        <field name="model">sn.wsd.nqi.rd.project.detail</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="development_project_no"/>
+                <field name="module_type"/>
+                <field name="software_version"/>
+                <field name="hardware_version"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_rd_project_detail_form" model="ir.ui.view">
+        <field name="name">nqi.rd.project.detail.form</field>
+        <field name="model">sn.wsd.nqi.rd.project.detail</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="NQI Columns">
+                            <field name="development_project_no"/>
+                            <field name="module_type"/>
+                            <field name="software_version"/>
+                            <field name="hardware_version"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_rd_project_detail_search" model="ir.ui.view">
+        <field name="name">nqi.rd.project.detail.search</field>
+        <field name="model">sn.wsd.nqi.rd.project.detail</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="development_project_no"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_rd_project_detail" model="ir.actions.act_window">
+        <field name="name">RD_PROJECT_DETAIL</field>
+        <field name="res_model">sn.wsd.nqi.rd.project.detail</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_rd_project_detail_entry"
+              name="RD_PROJECT_DETAIL"
+              parent="menu_nqi_rd"
+              action="action_nqi_rd_project_detail"
+              sequence="50"/>
+
+    <record id="view_nqi_rd_component_list_list" model="ir.ui.view">
+        <field name="name">nqi.rd.component.list.list</field>
+        <field name="model">sn.wsd.nqi.rd.component.list</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="product_id"/>
+                <field name="bom_id"/>
+                <field name="comment_project_no"/>
+                <field name="product_code"/>
+                <field name="product_detail_code"/>
+                <field name="module_type"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_rd_component_list_form" model="ir.ui.view">
+        <field name="name">nqi.rd.component.list.form</field>
+        <field name="model">sn.wsd.nqi.rd.component.list</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="product_id"/>
+                            <field name="bom_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="comment_project_no"/>
+                            <field name="product_code"/>
+                            <field name="product_detail_code"/>
+                            <field name="module_type"/>
+                            <field name="development_project_no"/>
+                            <field name="hardware_version"/>
+                            <field name="component_code"/>
+                            <field name="component_position"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_rd_component_list_search" model="ir.ui.view">
+        <field name="name">nqi.rd.component.list.search</field>
+        <field name="model">sn.wsd.nqi.rd.component.list</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_rd_component_list" model="ir.actions.act_window">
+        <field name="name">RD_COMPONENT_DETAIL_LIST</field>
+        <field name="res_model">sn.wsd.nqi.rd.component.list</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_rd_component_list_entry"
+              name="RD_COMPONENT_DETAIL_LIST"
+              parent="menu_nqi_rd"
+              action="action_nqi_rd_component_list"
+              sequence="60"/>
+
+    <record id="view_nqi_rd_project_change_list" model="ir.ui.view">
+        <field name="name">nqi.rd.project.change.list</field>
+        <field name="model">sn.wsd.nqi.rd.project.change</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="product_id"/>
+                <field name="change_type"/>
+                <field name="change_content"/>
+                <field name="change_result"/>
+                <field name="change_time"/>
+                <field name="change_scheme"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_rd_project_change_form" model="ir.ui.view">
+        <field name="name">nqi.rd.project.change.form</field>
+        <field name="model">sn.wsd.nqi.rd.project.change</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="product_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="change_type"/>
+                            <field name="change_content"/>
+                            <field name="change_result"/>
+                            <field name="change_time"/>
+                            <field name="change_scheme"/>
+                            <field name="development_project_no"/>
+                            <field name="module_type"/>
+                            <field name="old_software_version"/>
+                            <field name="new_software_version"/>
+                            <field name="old_hardware_version"/>
+                            <field name="new_hardware_version"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_rd_project_change_search" model="ir.ui.view">
+        <field name="name">nqi.rd.project.change.search</field>
+        <field name="model">sn.wsd.nqi.rd.project.change</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="change_type"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_rd_project_change" model="ir.actions.act_window">
+        <field name="name">RD_PROJECT_CHANGE_RECOND</field>
+        <field name="res_model">sn.wsd.nqi.rd.project.change</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_rd_project_change_entry"
+              name="RD_PROJECT_CHANGE_RECOND"
+              parent="menu_nqi_rd"
+              action="action_nqi_rd_project_change"
+              sequence="70"/>
+
+    <record id="view_nqi_rd_component_change_list" model="ir.ui.view">
+        <field name="name">nqi.rd.component.change.list</field>
+        <field name="model">sn.wsd.nqi.rd.component.change</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="product_id"/>
+                <field name="change_record_code"/>
+                <field name="development_project_no"/>
+                <field name="module_type"/>
+                <field name="product_code"/>
+                <field name="product_detail_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_rd_component_change_form" model="ir.ui.view">
+        <field name="name">nqi.rd.component.change.form</field>
+        <field name="model">sn.wsd.nqi.rd.component.change</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="product_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="change_record_code"/>
+                            <field name="development_project_no"/>
+                            <field name="module_type"/>
+                            <field name="product_code"/>
+                            <field name="product_detail_code"/>
+                            <field name="business_contract_code"/>
+                            <field name="plan_code"/>
+                            <field name="supplier_enterprise_code"/>
+                            <field name="change_reason"/>
+                            <field name="witness_material"/>
+                            <field name="old_component_position"/>
+                            <field name="old_component_code"/>
+                            <field name="new_component_position"/>
+                            <field name="new_component_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_rd_component_change_search" model="ir.ui.view">
+        <field name="name">nqi.rd.component.change.search</field>
+        <field name="model">sn.wsd.nqi.rd.component.change</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="change_record_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_rd_component_change" model="ir.actions.act_window">
+        <field name="name">RD_COMPONENT_CHANGE_RECORD</field>
+        <field name="res_model">sn.wsd.nqi.rd.component.change</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_rd_component_change_entry"
+              name="RD_COMPONENT_CHANGE_RECORD"
+              parent="menu_nqi_rd"
+              action="action_nqi_rd_component_change"
+              sequence="80"/>
+
+</odoo>

@@ -22,3 +22,4 @@ from . import test_oqc_retest_wizard
 from . import test_oqc_rework_route
 from . import test_oqc_scrap_link
 from . import test_oqc_current_panel
+from . import test_meter_component_unbind

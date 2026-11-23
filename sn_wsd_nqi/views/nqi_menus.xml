@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root menu: mirrors the NQI data model document structure. -->
+    <menuitem id="menu_nqi_root"
+              name="NQI Information"
+              sequence="60"
+              groups="sn_wsd_nqi.group_nqi_user"/>
+
+    <!-- Chapter 1: R&D business -->
+    <menuitem id="menu_nqi_rd"
+              name="R&amp;D"
+              parent="menu_nqi_root"
+              sequence="10"/>
+
+    <!-- Chapter 2: purchase business -->
+    <menuitem id="menu_nqi_purchase"
+              name="Purchase"
+              parent="menu_nqi_root"
+              sequence="20"/>
+
+    <!-- Chapter 3.1: production planning -->
+    <menuitem id="menu_nqi_plan"
+              name="Production Planning"
+              parent="menu_nqi_root"
+              sequence="30"/>
+
+    <!-- Chapter 3.2: production process -->
+    <menuitem id="menu_nqi_process"
+              name="Production Process"
+              parent="menu_nqi_root"
+              sequence="40"/>
+
+    <!-- Chapter 3.3: production testing (33 tables) -->
+    <menuitem id="menu_nqi_testing"
+              name="Production Testing"
+              parent="menu_nqi_root"
+              sequence="50"/>
+
+    <!-- Chapter 4: supply business -->
+    <menuitem id="menu_nqi_supply"
+              name="Supply"
+              parent="menu_nqi_root"
+              sequence="60"/>
+
+    <!-- Chapter 5: NQI certification, enterprise collection push -->
+    <menuitem id="menu_nqi_cert"
+              name="NQI Certification"
+              parent="menu_nqi_root"
+              sequence="70"/>
+
+    <!-- Push center: workbench, to-push list, push log -->
+    <menuitem id="menu_nqi_push_center"
+              name="Push Center"
+              parent="menu_nqi_root"
+              sequence="80"/>
+
+    <!-- Configuration: integration config, dictionaries, field mapping -->
+    <menuitem id="menu_nqi_config"
+              name="Configuration"
+              parent="menu_nqi_root"
+              sequence="90"
+              groups="sn_wsd_nqi.group_nqi_manager"/>
+</odoo>

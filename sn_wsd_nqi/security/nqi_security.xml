@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="module_category_nqi" model="ir.module.category">
+            <field name="name">NQI Integration</field>
+            <field name="sequence">65</field>
+        </record>
+
+        <record model="res.groups.privilege" id="res_groups_privilege_nqi">
+            <field name="name">NQI Integration</field>
+            <field name="category_id" ref="module_category_nqi"/>
+        </record>
+
+        <record id="group_nqi_user" model="res.groups">
+            <field name="name">NQI User</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="privilege_id" ref="res_groups_privilege_nqi"/>
+        </record>
+
+        <record id="group_nqi_manager" model="res.groups">
+            <field name="name">NQI Manager</field>
+            <field name="implied_ids" eval="[(4, ref('group_nqi_user'))]"/>
+            <field name="privilege_id" ref="res_groups_privilege_nqi"/>
+        </record>
+
+        <record id="rule_nqi_config_company" model="ir.rule">
+            <field name="name">NQI Config Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_config"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+            <record id="rule_rd_product_info_company" model="ir.rule">
+            <field name="name">NQI Info Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_rd_product_info"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_rd_product_detail_company" model="ir.rule">
+            <field name="name">NQI Detail Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_rd_product_detail"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_rd_product_test_report_company" model="ir.rule">
+            <field name="name">NQI Report Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_rd_product_test_report"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_rd_project_company" model="ir.rule">
+            <field name="name">NQI Project Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_rd_project"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_rd_project_detail_company" model="ir.rule">
+            <field name="name">NQI Detail Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_rd_project_detail"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_rd_project_change_company" model="ir.rule">
+            <field name="name">NQI Change Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_rd_project_change"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_pr_bidding_info_company" model="ir.rule">
+            <field name="name">NQI Info Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_pr_bidding_info"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_pr_bidding_change_company" model="ir.rule">
+            <field name="name">NQI Change Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_pr_bidding_change"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_pr_purchase_plan_company" model="ir.rule">
+            <field name="name">NQI Plan Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_pr_purchase_plan"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_pr_arrive_batch_company" model="ir.rule">
+            <field name="name">NQI Batch Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_pr_arrive_batch"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_pr_test_result_company" model="ir.rule">
+            <field name="name">NQI Result Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_pr_test_result"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_pr_unqualified_company" model="ir.rule">
+            <field name="name">NQI Unqualified Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_pr_unqualified"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_et_device_company" model="ir.rule">
+            <field name="name">NQI Device Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_et_device"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_et_person_company" model="ir.rule">
+            <field name="name">NQI Person Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_et_person"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_et_staff_company" model="ir.rule">
+            <field name="name">NQI Staff Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_et_staff"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_et_achievement_company" model="ir.rule">
+            <field name="name">NQI Achievement Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_et_achievement"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_et_capacity_company" model="ir.rule">
+            <field name="name">NQI Capacity Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_et_capacity"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_et_as_mgt_company" model="ir.rule">
+            <field name="name">NQI Mgt Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_et_as_mgt"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_et_as_agreement_company" model="ir.rule">
+            <field name="name">NQI Agreement Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_et_as_agreement"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_et_standard_setting_company" model="ir.rule">
+            <field name="name">NQI Setting Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_et_standard_setting"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_et_rb_company" model="ir.rule">
+            <field name="name">NQI Rb Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_et_rb"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_et_qi_company" model="ir.rule">
+            <field name="name">NQI Qi Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_et_qi"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_et_supplier_score_company" model="ir.rule">
+            <field name="name">NQI Score Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_et_supplier_score"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_pub_file_company" model="ir.rule">
+            <field name="name">NQI File Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_pub_file"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_pt_plan_company" model="ir.rule">
+            <field name="name">NQI Plan Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_pt_plan"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_pt_plan_detail_company" model="ir.rule">
+            <field name="name">NQI Detail Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_pt_plan_detail"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_pt_process_company" model="ir.rule">
+            <field name="name">NQI Process Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_pt_process"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_pt_procedure_company" model="ir.rule">
+            <field name="name">NQI Procedure Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_pt_procedure"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_pt_env_temp_hum_company" model="ir.rule">
+            <field name="name">NQI Hum Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_pt_env_temp_hum"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_pt_unqualified_company" model="ir.rule">
+            <field name="name">NQI Unqualified Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_pt_unqualified"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_fit_meter_info_company" model="ir.rule">
+            <field name="name">NQI Info Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_fit_meter_info"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_fit_pcb_mounting_company" model="ir.rule">
+            <field name="name">NQI Mounting Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_fit_pcb_mounting"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_fit_meter_mounting_company" model="ir.rule">
+            <field name="name">NQI Mounting Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_fit_meter_mounting"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_fit_pcb_serial_bind_company" model="ir.rule">
+            <field name="name">NQI Bind Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_fit_pcb_serial_bind"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sp_box_bind_company" model="ir.rule">
+            <field name="name">NQI Bind Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_sp_box_bind"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sp_supply_batch_company" model="ir.rule">
+            <field name="name">NQI Batch Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_sp_supply_batch"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sp_supply_test_company" model="ir.rule">
+            <field name="name">NQI Test Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_sp_supply_test"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sp_spot_check_company" model="ir.rule">
+            <field name="name">NQI Check Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_sp_spot_check"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sp_recall_company" model="ir.rule">
+            <field name="name">NQI Recall Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_sp_recall"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_aoi_company" model="ir.rule">
+            <field name="name">NQI Aoi Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_aoi"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_basicerr_company" model="ir.rule">
+            <field name="name">NQI Basicerr Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_basicerr"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_const_company" model="ir.rule">
+            <field name="name">NQI Const Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_const"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_creeping_company" model="ir.rule">
+            <field name="name">NQI Creeping Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_creeping"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_dayerr_company" model="ir.rule">
+            <field name="name">NQI Dayerr Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_dayerr"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_demandvalue_company" model="ir.rule">
+            <field name="name">NQI Demandvalue Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_demandvalue"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_esam_read_company" model="ir.rule">
+            <field name="name">NQI Read Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_esam_read"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_function_company" model="ir.rule">
+            <field name="name">NQI Function Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_function"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_hutchison_combina_company" model="ir.rule">
+            <field name="name">NQI Combina Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_hutchison_combina"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_intuit_company" model="ir.rule">
+            <field name="name">NQI Intuit Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_intuit"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_mounting_company" model="ir.rule">
+            <field name="name">NQI Mounting Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_mounting"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_parameter_company" model="ir.rule">
+            <field name="name">NQI Parameter Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_parameter"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_rfid_company" model="ir.rule">
+            <field name="name">NQI Rfid Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_rfid"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_single_company" model="ir.rule">
+            <field name="name">NQI Single Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_single"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_starting_company" model="ir.rule">
+            <field name="name">NQI Starting Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_starting"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_time_error_company" model="ir.rule">
+            <field name="name">NQI Error Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_time_error"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_ts_company" model="ir.rule">
+            <field name="name">NQI Ts Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_ts"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mt_volt_company" model="ir.rule">
+            <field name="name">NQI Volt Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_mt_volt"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_ot_other_company" model="ir.rule">
+            <field name="name">NQI Other Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_ot_other"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_tt_consist_company" model="ir.rule">
+            <field name="name">NQI Consist Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_tt_consist"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_tt_demand_company" model="ir.rule">
+            <field name="name">NQI Demand Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_tt_demand"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_tt_eq_company" model="ir.rule">
+            <field name="name">NQI Eq Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_tt_eq"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_tt_error_company" model="ir.rule">
+            <field name="name">NQI Error Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_tt_error"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_tt_event_record_company" model="ir.rule">
+            <field name="name">NQI Record Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_tt_event_record"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_tt_fee_company" model="ir.rule">
+            <field name="name">NQI Fee Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_tt_fee"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_tt_max_demandvalue_company" model="ir.rule">
+            <field name="name">NQI Demandvalue Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_tt_max_demandvalue"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_tt_max_demand_err_company" model="ir.rule">
+            <field name="name">NQI Err Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_tt_max_demand_err"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_tt_overload_company" model="ir.rule">
+            <field name="name">NQI Overload Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_tt_overload"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_tt_power_measure_company" model="ir.rule">
+            <field name="name">NQI Measure Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_tt_power_measure"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_tt_standard_company" model="ir.rule">
+            <field name="name">NQI Standard Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_tt_standard"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_tt_variation_company" model="ir.rule">
+            <field name="name">NQI Variation Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_tt_variation"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_field_mapping_company" model="ir.rule">
+            <field name="name">NQI Mapping Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_field_mapping"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+</data>
+</odoo>

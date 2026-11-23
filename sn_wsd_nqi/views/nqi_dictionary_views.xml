@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Code sorts -->
+    <record id="view_nqi_code_sort_list" model="ir.ui.view">
+        <field name="name">nqi.code.sort.list</field>
+        <field name="model">sn.wsd.nqi.code.sort</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code_sort_id" optional="show"/>
+                <field name="name"/>
+                <field name="code_type"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_nqi_code_sort_form" model="ir.ui.view">
+        <field name="name">nqi.code.sort.form</field>
+        <field name="model">sn.wsd.nqi.code.sort</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="code_sort_id"/>
+                    </group>
+                    <group>
+                        <field name="code_type"/>
+                        <field name="note"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_nqi_code_sort" model="ir.actions.act_window">
+        <field name="name">NQI Code Sorts</field>
+        <field name="res_model">sn.wsd.nqi.code.sort</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Codes -->
+    <record id="view_nqi_code_list" model="ir.ui.view">
+        <field name="name">nqi.code.list</field>
+        <field name="model">sn.wsd.nqi.code</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code_type" readonly="1"/>
+                <field name="code_id"/>
+                <field name="value"/>
+                <field name="name"/>
+                <field name="note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_nqi_code_form" model="ir.ui.view">
+        <field name="name">nqi.code.form</field>
+        <field name="model">sn.wsd.nqi.code</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="code_type"/>
+                        <field name="code_id"/>
+                    </group>
+                    <group>
+                        <field name="value"/>
+                        <field name="name"/>
+                    </group>
+                    <field name="note"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_nqi_code_search" model="ir.ui.view">
+        <field name="name">nqi.code.search</field>
+        <field name="model">sn.wsd.nqi.code</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Code"/>
+                <field name="code_id"/>
+                <field name="value"/>
+                <group>
+                    <filter name="group_by_code_type" string="Code Type"
+                            context="{'group_by': 'code_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_nqi_code" model="ir.actions.act_window">
+        <field name="name">NQI Codes</field>
+        <field name="res_model">sn.wsd.nqi.code</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Components -->
+    <record id="view_nqi_component_list" model="ir.ui.view">
+        <field name="name">nqi.component.list</field>
+        <field name="model">sn.wsd.nqi.component</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="type_code"/>
+                <field name="model_code" optional="show"/>
+                <field name="spec_code"/>
+                <field name="performance_parameter_code" optional="hide"/>
+                <field name="supplier_enterprise_code" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_nqi_component_form" model="ir.ui.view">
+        <field name="name">nqi.component.form</field>
+        <field name="model">sn.wsd.nqi.component</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="type_code"/>
+                    </group>
+                    <group>
+                        <field name="model_code"/>
+                        <field name="spec_code"/>
+                        <field name="performance_parameter_code"/>
+                        <field name="supplier_enterprise_code"/>
+                        <field name="note"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_nqi_component" model="ir.actions.act_window">
+        <field name="name">NQI Components</field>
+        <field name="res_model">sn.wsd.nqi.component</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_nqi_code_sort_entry"
+              name="Code Sorts"
+              parent="menu_nqi_config"
+              action="action_nqi_code_sort"
+              sequence="20"/>
+    <menuitem id="menu_nqi_code_entry"
+              name="Codes"
+              parent="menu_nqi_config"
+              action="action_nqi_code"
+              sequence="30"/>
+    <menuitem id="menu_nqi_component_entry"
+              name="Components"
+              parent="menu_nqi_config"
+              action="action_nqi_component"
+              sequence="40"/>
+</odoo>

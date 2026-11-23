@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_nqi_pr_bidding_info_list" model="ir.ui.view">
+        <field name="name">nqi.pr.bidding.info.list</field>
+        <field name="model">sn.wsd.nqi.pr.bidding.info</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="business_contract_code"/>
+                <field name="bidding_batch"/>
+                <field name="bidding_position"/>
+                <field name="bidding_time"/>
+                <field name="bidding_count"/>
+                <field name="uaser_nature"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_pr_bidding_info_form" model="ir.ui.view">
+        <field name="name">nqi.pr.bidding.info.form</field>
+        <field name="model">sn.wsd.nqi.pr.bidding.info</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="NQI Columns">
+                            <field name="business_contract_code"/>
+                            <field name="bidding_batch"/>
+                            <field name="bidding_position"/>
+                            <field name="bidding_party_a_id"/>
+                            <field name="bidding_time"/>
+                            <field name="bidding_count"/>
+                            <field name="uaser_nature"/>
+                            <field name="development_project_no"/>
+                            <field name="software_version"/>
+                            <field name="hardware_version"/>
+                            <field name="product_detail_code"/>
+                            <field name="internal_control_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_pr_bidding_info_search" model="ir.ui.view">
+        <field name="name">nqi.pr.bidding.info.search</field>
+        <field name="model">sn.wsd.nqi.pr.bidding.info</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="business_contract_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_pr_bidding_info" model="ir.actions.act_window">
+        <field name="name">PR_BIDDING_INFO</field>
+        <field name="res_model">sn.wsd.nqi.pr.bidding.info</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_pr_bidding_info_entry"
+              name="PR_BIDDING_INFO"
+              parent="menu_nqi_purchase"
+              action="action_nqi_pr_bidding_info"
+              sequence="10"/>
+
+    <record id="view_nqi_pr_bidding_change_list" model="ir.ui.view">
+        <field name="name">nqi.pr.bidding.change.list</field>
+        <field name="model">sn.wsd.nqi.pr.bidding.change</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="change_record_code"/>
+                <field name="change_type"/>
+                <field name="change_content"/>
+                <field name="change_result"/>
+                <field name="change_time"/>
+                <field name="business_contract_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_pr_bidding_change_form" model="ir.ui.view">
+        <field name="name">nqi.pr.bidding.change.form</field>
+        <field name="model">sn.wsd.nqi.pr.bidding.change</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="NQI Columns">
+                            <field name="change_record_code"/>
+                            <field name="change_type"/>
+                            <field name="change_content"/>
+                            <field name="change_result"/>
+                            <field name="change_time"/>
+                            <field name="business_contract_code"/>
+                            <field name="product_detail_code"/>
+                            <field name="new_product_code"/>
+                            <field name="new_module_type"/>
+                            <field name="new_product_hard_code"/>
+                            <field name="new_product_soft_code"/>
+                            <field name="file_url"/>
+                            <field name="status"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_pr_bidding_change_search" model="ir.ui.view">
+        <field name="name">nqi.pr.bidding.change.search</field>
+        <field name="model">sn.wsd.nqi.pr.bidding.change</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="change_record_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_pr_bidding_change" model="ir.actions.act_window">
+        <field name="name">PR_BIDDING_CHANGE_RECOND</field>
+        <field name="res_model">sn.wsd.nqi.pr.bidding.change</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_pr_bidding_change_entry"
+              name="PR_BIDDING_CHANGE_RECOND"
+              parent="menu_nqi_purchase"
+              action="action_nqi_pr_bidding_change"
+              sequence="20"/>
+
+    <record id="view_nqi_pr_purchase_plan_list" model="ir.ui.view">
+        <field name="name">nqi.pr.purchase.plan.list</field>
+        <field name="model">sn.wsd.nqi.pr.purchase.plan</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="purchase_id"/>
+                <field name="purchase_code"/>
+                <field name="bidding_batch"/>
+                <field name="business_contract_code"/>
+                <field name="plan_code"/>
+                <field name="component_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_pr_purchase_plan_form" model="ir.ui.view">
+        <field name="name">nqi.pr.purchase.plan.form</field>
+        <field name="model">sn.wsd.nqi.pr.purchase.plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="purchase_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="purchase_code"/>
+                            <field name="bidding_batch"/>
+                            <field name="business_contract_code"/>
+                            <field name="plan_code"/>
+                            <field name="component_code"/>
+                            <field name="supplier_enterprise_code"/>
+                            <field name="purchase_num"/>
+                            <field name="arrived_time"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_pr_purchase_plan_search" model="ir.ui.view">
+        <field name="name">nqi.pr.purchase.plan.search</field>
+        <field name="model">sn.wsd.nqi.pr.purchase.plan</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="plan_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_pr_purchase_plan" model="ir.actions.act_window">
+        <field name="name">PR_COMPONENT_PURCHASE_PLAN</field>
+        <field name="res_model">sn.wsd.nqi.pr.purchase.plan</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_pr_purchase_plan_entry"
+              name="PR_COMPONENT_PURCHASE_PLAN"
+              parent="menu_nqi_purchase"
+              action="action_nqi_pr_purchase_plan"
+              sequence="30"/>
+
+    <record id="view_nqi_pr_arrive_batch_list" model="ir.ui.view">
+        <field name="name">nqi.pr.arrive.batch.list</field>
+        <field name="model">sn.wsd.nqi.pr.arrive.batch</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="picking_id"/>
+                <field name="arrived_batch_no"/>
+                <field name="purchase_code"/>
+                <field name="component_code"/>
+                <field name="component_num"/>
+                <field name="arrived_date"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_pr_arrive_batch_form" model="ir.ui.view">
+        <field name="name">nqi.pr.arrive.batch.form</field>
+        <field name="model">sn.wsd.nqi.pr.arrive.batch</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="picking_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="arrived_batch_no"/>
+                            <field name="purchase_code"/>
+                            <field name="component_code"/>
+                            <field name="component_num"/>
+                            <field name="arrived_date"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_pr_arrive_batch_search" model="ir.ui.view">
+        <field name="name">nqi.pr.arrive.batch.search</field>
+        <field name="model">sn.wsd.nqi.pr.arrive.batch</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="arrived_batch_no"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_pr_arrive_batch" model="ir.actions.act_window">
+        <field name="name">PR_COMPONENT_ARRIVE_BATCH</field>
+        <field name="res_model">sn.wsd.nqi.pr.arrive.batch</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_pr_arrive_batch_entry"
+              name="PR_COMPONENT_ARRIVE_BATCH"
+              parent="menu_nqi_purchase"
+              action="action_nqi_pr_arrive_batch"
+              sequence="40"/>
+
+    <record id="view_nqi_pr_test_result_list" model="ir.ui.view">
+        <field name="name">nqi.pr.test.result.list</field>
+        <field name="model">sn.wsd.nqi.pr.test.result</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="picking_id"/>
+                <field name="test_record_code"/>
+                <field name="component_code"/>
+                <field name="arrived_batch_no"/>
+                <field name="make_batch_no"/>
+                <field name="device_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_pr_test_result_form" model="ir.ui.view">
+        <field name="name">nqi.pr.test.result.form</field>
+        <field name="model">sn.wsd.nqi.pr.test.result</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="picking_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="test_record_code"/>
+                            <field name="component_code"/>
+                            <field name="arrived_batch_no"/>
+                            <field name="make_batch_no"/>
+                            <field name="device_code"/>
+                            <field name="operator_code"/>
+                            <field name="test_type"/>
+                            <field name="test_count"/>
+                            <field name="test_result"/>
+                            <field name="file_url"/>
+                            <field name="test_date"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_pr_test_result_search" model="ir.ui.view">
+        <field name="name">nqi.pr.test.result.search</field>
+        <field name="model">sn.wsd.nqi.pr.test.result</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="test_record_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_pr_test_result" model="ir.actions.act_window">
+        <field name="name">PR_COMPONENT_TEST_RESULT</field>
+        <field name="res_model">sn.wsd.nqi.pr.test.result</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_pr_test_result_entry"
+              name="PR_COMPONENT_TEST_RESULT"
+              parent="menu_nqi_purchase"
+              action="action_nqi_pr_test_result"
+              sequence="50"/>
+
+    <record id="view_nqi_pr_unqualified_list" model="ir.ui.view">
+        <field name="name">nqi.pr.unqualified.list</field>
+        <field name="model">sn.wsd.nqi.pr.unqualified</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="product_id"/>
+                <field name="in_control_code"/>
+                <field name="component_code"/>
+                <field name="arrived_batch_no"/>
+                <field name="make_batch_no"/>
+                <field name="cause"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_pr_unqualified_form" model="ir.ui.view">
+        <field name="name">nqi.pr.unqualified.form</field>
+        <field name="model">sn.wsd.nqi.pr.unqualified</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="product_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="in_control_code"/>
+                            <field name="component_code"/>
+                            <field name="arrived_batch_no"/>
+                            <field name="make_batch_no"/>
+                            <field name="cause"/>
+                            <field name="unpass_analysis"/>
+                            <field name="solution"/>
+                            <field name="valid_result"/>
+                            <field name="create_time"/>
+                            <field name="valid_time"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_pr_unqualified_search" model="ir.ui.view">
+        <field name="name">nqi.pr.unqualified.search</field>
+        <field name="model">sn.wsd.nqi.pr.unqualified</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="in_control_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_pr_unqualified" model="ir.actions.act_window">
+        <field name="name">PR_UNQUALIFIED_CONTROL</field>
+        <field name="res_model">sn.wsd.nqi.pr.unqualified</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_pr_unqualified_entry"
+              name="PR_UNQUALIFIED_CONTROL"
+              parent="menu_nqi_purchase"
+              action="action_nqi_pr_unqualified"
+              sequence="60"/>
+
+</odoo>

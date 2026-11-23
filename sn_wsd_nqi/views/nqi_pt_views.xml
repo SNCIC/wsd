@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_nqi_pt_plan_list" model="ir.ui.view">
+        <field name="name">nqi.pt.plan.list</field>
+        <field name="model">sn.wsd.nqi.pt.plan</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="sale_order_id"/>
+                <field name="plan_code"/>
+                <field name="start_time"/>
+                <field name="finish_time"/>
+                <field name="business_contract_code"/>
+                <field name="product_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_pt_plan_form" model="ir.ui.view">
+        <field name="name">nqi.pt.plan.form</field>
+        <field name="model">sn.wsd.nqi.pt.plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="sale_order_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="plan_code"/>
+                            <field name="start_time"/>
+                            <field name="finish_time"/>
+                            <field name="business_contract_code"/>
+                            <field name="product_code"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_pt_plan_search" model="ir.ui.view">
+        <field name="name">nqi.pt.plan.search</field>
+        <field name="model">sn.wsd.nqi.pt.plan</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="plan_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_pt_plan" model="ir.actions.act_window">
+        <field name="name">PT_PRODUCTION_PLAN</field>
+        <field name="res_model">sn.wsd.nqi.pt.plan</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_pt_plan_entry"
+              name="PT_PRODUCTION_PLAN"
+              parent="menu_nqi_plan"
+              action="action_nqi_pt_plan"
+              sequence="10"/>
+
+    <record id="view_nqi_pt_plan_detail_list" model="ir.ui.view">
+        <field name="name">nqi.pt.plan.detail.list</field>
+        <field name="model">sn.wsd.nqi.pt.plan.detail</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="plan_id"/>
+                <field name="plan_code"/>
+                <field name="count"/>
+                <field name="type"/>
+                <field name="module_type"/>
+                <field name="start_serial_no"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_pt_plan_detail_form" model="ir.ui.view">
+        <field name="name">nqi.pt.plan.detail.form</field>
+        <field name="model">sn.wsd.nqi.pt.plan.detail</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="plan_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="plan_code"/>
+                            <field name="count"/>
+                            <field name="type"/>
+                            <field name="module_type"/>
+                            <field name="start_serial_no"/>
+                            <field name="finish_serial_no"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_pt_plan_detail_search" model="ir.ui.view">
+        <field name="name">nqi.pt.plan.detail.search</field>
+        <field name="model">sn.wsd.nqi.pt.plan.detail</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="plan_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_pt_plan_detail" model="ir.actions.act_window">
+        <field name="name">PT_PRODUCTION_DETAIL_PLAN</field>
+        <field name="res_model">sn.wsd.nqi.pt.plan.detail</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_pt_plan_detail_entry"
+              name="PT_PRODUCTION_DETAIL_PLAN"
+              parent="menu_nqi_plan"
+              action="action_nqi_pt_plan_detail"
+              sequence="20"/>
+
+    <record id="view_nqi_pt_process_list" model="ir.ui.view">
+        <field name="name">nqi.pt.process.list</field>
+        <field name="model">sn.wsd.nqi.pt.process</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="plan_code"/>
+                <field name="module_type"/>
+                <field name="plan_num"/>
+                <field name="finish_num"/>
+                <field name="excepiton_handle"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_pt_process_form" model="ir.ui.view">
+        <field name="name">nqi.pt.process.form</field>
+        <field name="model">sn.wsd.nqi.pt.process</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="NQI Columns">
+                            <field name="plan_code"/>
+                            <field name="bidding_party_a_id"/>
+                            <field name="meter_producing_process_code_id"/>
+                            <field name="module_type"/>
+                            <field name="plan_num"/>
+                            <field name="finish_num"/>
+                            <field name="excepiton_handle"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_pt_process_search" model="ir.ui.view">
+        <field name="name">nqi.pt.process.search</field>
+        <field name="model">sn.wsd.nqi.pt.process</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="plan_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_pt_process" model="ir.actions.act_window">
+        <field name="name">PT_PRODUCTION_PROCESS</field>
+        <field name="res_model">sn.wsd.nqi.pt.process</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_pt_process_entry"
+              name="PT_PRODUCTION_PROCESS"
+              parent="menu_nqi_plan"
+              action="action_nqi_pt_process"
+              sequence="30"/>
+
+    <record id="view_nqi_pt_procedure_list" model="ir.ui.view">
+        <field name="name">nqi.pt.procedure.list</field>
+        <field name="model">sn.wsd.nqi.pt.procedure</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="plan_code"/>
+                <field name="procedure_name"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_pt_procedure_form" model="ir.ui.view">
+        <field name="name">nqi.pt.procedure.form</field>
+        <field name="model">sn.wsd.nqi.pt.procedure</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="NQI Columns">
+                            <field name="procedure_code_id"/>
+                            <field name="plan_code"/>
+                            <field name="procedure_name"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_pt_procedure_search" model="ir.ui.view">
+        <field name="name">nqi.pt.procedure.search</field>
+        <field name="model">sn.wsd.nqi.pt.procedure</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="procedure_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_pt_procedure" model="ir.actions.act_window">
+        <field name="name">PT_PRODUCTION_PROCEDURE</field>
+        <field name="res_model">sn.wsd.nqi.pt.procedure</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_pt_procedure_entry"
+              name="PT_PRODUCTION_PROCEDURE"
+              parent="menu_nqi_plan"
+              action="action_nqi_pt_procedure"
+              sequence="40"/>
+
+    <record id="view_nqi_pt_env_temp_hum_list" model="ir.ui.view">
+        <field name="name">nqi.pt.env.temp.hum.list</field>
+        <field name="model">sn.wsd.nqi.pt.env.temp.hum</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="place"/>
+                <field name="temperature"/>
+                <field name="humidity"/>
+                <field name="file_url"/>
+                <field name="read_date"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_pt_env_temp_hum_form" model="ir.ui.view">
+        <field name="name">nqi.pt.env.temp.hum.form</field>
+        <field name="model">sn.wsd.nqi.pt.env.temp.hum</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="NQI Columns">
+                            <field name="procedure_code_id"/>
+                            <field name="place"/>
+                            <field name="temperature"/>
+                            <field name="humidity"/>
+                            <field name="file_url"/>
+                            <field name="read_date"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_pt_env_temp_hum_search" model="ir.ui.view">
+        <field name="name">nqi.pt.env.temp.hum.search</field>
+        <field name="model">sn.wsd.nqi.pt.env.temp.hum</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="place"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_pt_env_temp_hum" model="ir.actions.act_window">
+        <field name="name">PT_ENV_TEMP_HUM</field>
+        <field name="res_model">sn.wsd.nqi.pt.env.temp.hum</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_pt_env_temp_hum_entry"
+              name="PT_ENV_TEMP_HUM"
+              parent="menu_nqi_plan"
+              action="action_nqi_pt_env_temp_hum"
+              sequence="50"/>
+
+    <record id="view_nqi_pt_unqualified_list" model="ir.ui.view">
+        <field name="name">nqi.pt.unqualified.list</field>
+        <field name="model">sn.wsd.nqi.pt.unqualified</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="in_control_code"/>
+                <field name="serial_no"/>
+                <field name="device_code"/>
+                <field name="operator_code"/>
+                <field name="create_time"/>
+                <field name="procedure_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_pt_unqualified_form" model="ir.ui.view">
+        <field name="name">nqi.pt.unqualified.form</field>
+        <field name="model">sn.wsd.nqi.pt.unqualified</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="NQI Columns">
+                            <field name="in_control_code"/>
+                            <field name="serial_no"/>
+                            <field name="device_code"/>
+                            <field name="operator_code"/>
+                            <field name="create_time"/>
+                            <field name="procedure_code"/>
+                            <field name="fault_phenomena"/>
+                            <field name="repair_operator_code"/>
+                            <field name="position"/>
+                            <field name="unpass_analysis"/>
+                            <field name="solution"/>
+                            <field name="valid_time"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_pt_unqualified_search" model="ir.ui.view">
+        <field name="name">nqi.pt.unqualified.search</field>
+        <field name="model">sn.wsd.nqi.pt.unqualified</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="in_control_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_pt_unqualified" model="ir.actions.act_window">
+        <field name="name">PT_UNQUALIFIED_CONTROL</field>
+        <field name="res_model">sn.wsd.nqi.pt.unqualified</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_nqi_pt_unqualified_entry"
+              name="PT_UNQUALIFIED_CONTROL"
+              parent="menu_nqi_plan"
+              action="action_nqi_pt_unqualified"
+              sequence="60"/>
+
+</odoo>
