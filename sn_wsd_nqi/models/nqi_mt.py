@@ -17,7 +17,7 @@ class NqiAoi(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     pcb_code = fields.Char(index=True)
     module_type = fields.Char()
     detect_date = fields.Char(index=True)
@@ -59,38 +59,38 @@ class NqiBasicerr(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
     detect_item_point = fields.Char()
     both_way_power_flag_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Both Way Power Flag',
+        'sn.wsd.nqi.code', string='Both Way Power Flag (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_POWER_FLAG')]",
         ondelete='restrict')
     both_way_power_flag = fields.Char()
     iabc_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Iabc',
+        'sn.wsd.nqi.code', string='Iabc (Dictionary)',
         domain="[('code_type', '=', 'PHASE_CURRENT')]",
         ondelete='restrict')
     iabc = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     load_voltage_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Voltage',
+        'sn.wsd.nqi.code', string='Load Voltage (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_VOLTAGE')]",
         ondelete='restrict')
     load_voltage = fields.Char()
     freq_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Freq',
+        'sn.wsd.nqi.code', string='Freq (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_FREQ')]",
         ondelete='restrict')
     freq = fields.Char()
     pf_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Pf',
+        'sn.wsd.nqi.code', string='Pf (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_PF_RATE')]",
         ondelete='restrict')
     pf = fields.Char()
@@ -127,18 +127,18 @@ class NqiConst(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
     detect_item_point = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     both_way_power_flag_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Both Way Power Flag',
+        'sn.wsd.nqi.code', string='Both Way Power Flag (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_POWER_FLAG')]",
         ondelete='restrict')
     both_way_power_flag = fields.Char()
@@ -157,19 +157,19 @@ class NqiConst(models.Model):
     qualified_pules = fields.Char()
     divide_electric_quantity = fields.Char()
     pf_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Pf',
+        'sn.wsd.nqi.code', string='Pf (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_PF_RATE')]",
         ondelete='restrict')
     pf = fields.Char()
     control_method_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Control Method',
+        'sn.wsd.nqi.code', string='Control Method (Dictionary)',
         domain="[('code_type', '=', 'RATE_CONTROL_TYPE')]",
         ondelete='restrict')
     control_method = fields.Char()
     conc_code = fields.Char()
     ir_last_reading = fields.Char()
     read_type_code_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Read Type Code',
+        'sn.wsd.nqi.code', string='Read Type Code (Dictionary)',
         domain="[('code_type', '=', 'READ_TYPE_CODE')]",
         ondelete='restrict')
     read_type_code = fields.Char()
@@ -199,24 +199,24 @@ class NqiCreeping(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
     detect_item_point = fields.Char()
     load_voltage_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Voltage',
+        'sn.wsd.nqi.code', string='Load Voltage (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_VOLTAGE')]",
         ondelete='restrict')
     load_voltage = fields.Char()
     pules = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     both_way_power_flag_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Both Way Power Flag',
+        'sn.wsd.nqi.code', string='Both Way Power Flag (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_POWER_FLAG')]",
         ondelete='restrict')
     both_way_power_flag = fields.Char()
@@ -252,7 +252,7 @@ class NqiDayerr(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -291,7 +291,7 @@ class NqiDemandvalue(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -307,27 +307,27 @@ class NqiDemandvalue(models.Model):
     clear_data_rst = fields.Char()
     value_conc_code = fields.Char()
     both_way_power_flag_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Both Way Power Flag',
+        'sn.wsd.nqi.code', string='Both Way Power Flag (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_POWER_FLAG')]",
         ondelete='restrict')
     both_way_power_flag = fields.Char()
     voltage_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Voltage',
+        'sn.wsd.nqi.code', string='Voltage (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_VOLT')]",
         ondelete='restrict')
     voltage = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     pf_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Pf',
+        'sn.wsd.nqi.code', string='Pf (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_PF_RATE')]",
         ondelete='restrict')
     pf = fields.Char()
     control_method_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Control Method',
+        'sn.wsd.nqi.code', string='Control Method (Dictionary)',
         domain="[('code_type', '=', 'RATE_CONTROL_TYPE')]",
         ondelete='restrict')
     control_method = fields.Char()
@@ -357,24 +357,24 @@ class NqiEsamRead(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
     detect_item_point = fields.Char()
     conc_code = fields.Char()
     load_voltage_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Voltage',
+        'sn.wsd.nqi.code', string='Load Voltage (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_VOLTAGE')]",
         ondelete='restrict')
     load_voltage = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     pf_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Pf',
+        'sn.wsd.nqi.code', string='Pf (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_PF_RATE')]",
         ondelete='restrict')
     pf = fields.Char()
@@ -402,7 +402,7 @@ class NqiFunction(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     function_type = fields.Char()
@@ -447,29 +447,29 @@ class NqiHutchisonCombina(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
     detect_item_point = fields.Char()
     both_way_power_flag_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Both Way Power Flag',
+        'sn.wsd.nqi.code', string='Both Way Power Flag (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_POWER_FLAG')]",
         ondelete='restrict')
     both_way_power_flag = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     pf_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Pf',
+        'sn.wsd.nqi.code', string='Pf (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_PF_RATE')]",
         ondelete='restrict')
     pf = fields.Char()
     fee_ratio = fields.Char()
     control_method_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Control Method',
+        'sn.wsd.nqi.code', string='Control Method (Dictionary)',
         domain="[('code_type', '=', 'RATE_CONTROL_TYPE')]",
         ondelete='restrict')
     control_method = fields.Char()
@@ -510,7 +510,7 @@ class NqiIntuit(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -540,7 +540,7 @@ class NqiMounting(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     pcb_code = fields.Char(index=True)
     module_type = fields.Char()
@@ -576,7 +576,7 @@ class NqiParameter(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     plan_code = fields.Char(index=True)
     serial_no = fields.Char(index=True)
     test_type = fields.Char()
@@ -584,7 +584,7 @@ class NqiParameter(models.Model):
     operator_code = fields.Char()
     detect_date = fields.Char(index=True)
     conc_code_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Conc Code',
+        'sn.wsd.nqi.code', string='Conc Code (Dictionary)',
         domain="[('code_type', '=', 'TEST_RESULT')]",
         ondelete='restrict')
     conc_code = fields.Char()
@@ -609,7 +609,7 @@ class NqiRfid(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     rfid_code = fields.Char()
@@ -637,7 +637,7 @@ class NqiSingle(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     pcb_code = fields.Char(index=True)
     module_type = fields.Char()
     detect_date = fields.Char(index=True)
@@ -672,24 +672,24 @@ class NqiStarting(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
     detect_item_point = fields.Char()
     load_voltage_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Voltage',
+        'sn.wsd.nqi.code', string='Load Voltage (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_VOLTAGE')]",
         ondelete='restrict')
     load_voltage = fields.Char()
     pules = fields.Char()
     both_way_power_flag_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Both Way Power Flag',
+        'sn.wsd.nqi.code', string='Both Way Power Flag (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_POWER_FLAG')]",
         ondelete='restrict')
     both_way_power_flag = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
@@ -719,7 +719,7 @@ class NqiTimeError(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -747,7 +747,7 @@ class NqiTs(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -755,7 +755,7 @@ class NqiTs(models.Model):
     ts_err_conc_code = fields.Char()
     conc_code = fields.Char()
     volt_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Volt',
+        'sn.wsd.nqi.code', string='Volt (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_VOLT')]",
         ondelete='restrict')
     volt = fields.Char()
@@ -788,7 +788,7 @@ class NqiVolt(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     detect_item_point = fields.Char()
@@ -817,7 +817,7 @@ class NqiOther(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     pcb_code = fields.Char(index=True)
     test_name = fields.Char()
@@ -865,28 +865,28 @@ class NqiConsist(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
     detect_item_point = fields.Char()
     both_way_power_flag_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Both Way Power Flag',
+        'sn.wsd.nqi.code', string='Both Way Power Flag (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_POWER_FLAG')]",
         ondelete='restrict')
     both_way_power_flag = fields.Char()
     load_voltage_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Voltage',
+        'sn.wsd.nqi.code', string='Load Voltage (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_VOLTAGE')]",
         ondelete='restrict')
     load_voltage = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     pf_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Pf',
+        'sn.wsd.nqi.code', string='Pf (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_PF_RATE')]",
         ondelete='restrict')
     pf = fields.Char()
@@ -948,7 +948,7 @@ class NqiDemand(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -964,28 +964,28 @@ class NqiDemand(models.Model):
     clear_data_rst = fields.Char()
     period_conc_code = fields.Char()
     both_way_power_flag_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Both Way Power Flag',
+        'sn.wsd.nqi.code', string='Both Way Power Flag (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_POWER_FLAG')]",
         ondelete='restrict')
     both_way_power_flag = fields.Char()
     control_method = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     voltage_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Voltage',
+        'sn.wsd.nqi.code', string='Voltage (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_VOLT')]",
         ondelete='restrict')
     voltage = fields.Char()
     freq_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Freq',
+        'sn.wsd.nqi.code', string='Freq (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_FREQ')]",
         ondelete='restrict')
     freq = fields.Char()
     pf_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Pf',
+        'sn.wsd.nqi.code', string='Pf (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_PF_RATE')]",
         ondelete='restrict')
     pf = fields.Char()
@@ -1020,7 +1020,7 @@ class NqiEq(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -1029,12 +1029,12 @@ class NqiEq(models.Model):
     surplus_eq = fields.Char()
     curr_elec_price = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     pf_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Pf',
+        'sn.wsd.nqi.code', string='Pf (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_PF_RATE')]",
         ondelete='restrict')
     pf = fields.Char()
@@ -1076,28 +1076,28 @@ class NqiError(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
     detect_item_point = fields.Char()
     both_way_power_flag_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Both Way Power Flag',
+        'sn.wsd.nqi.code', string='Both Way Power Flag (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_POWER_FLAG')]",
         ondelete='restrict')
     both_way_power_flag = fields.Char()
     load_voltage_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Voltage',
+        'sn.wsd.nqi.code', string='Load Voltage (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_VOLTAGE')]",
         ondelete='restrict')
     load_voltage = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     pf_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Pf',
+        'sn.wsd.nqi.code', string='Pf (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_PF_RATE')]",
         ondelete='restrict')
     pf = fields.Char()
@@ -1143,18 +1143,18 @@ class NqiEventRecord(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
     detect_item_point = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     pf_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Pf',
+        'sn.wsd.nqi.code', string='Pf (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_PF_RATE')]",
         ondelete='restrict')
     pf = fields.Char()
@@ -1191,29 +1191,29 @@ class NqiFee(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
     detect_item_point = fields.Char()
     conc_code = fields.Char()
     pf_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Pf',
+        'sn.wsd.nqi.code', string='Pf (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_PF_RATE')]",
         ondelete='restrict')
     pf = fields.Char()
     cur_phase_code_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Cur Phase Code',
+        'sn.wsd.nqi.code', string='Cur Phase Code (Dictionary)',
         domain="[('code_type', '=', 'PHASE_CURRENT')]",
         ondelete='restrict')
     cur_phase_code = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     both_way_power_flag_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Both Way Power Flag',
+        'sn.wsd.nqi.code', string='Both Way Power Flag (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_POWER_FLAG')]",
         ondelete='restrict')
     both_way_power_flag = fields.Char()
@@ -1242,24 +1242,24 @@ class NqiMaxDemandvalue(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
     detect_item_point = fields.Char()
     conc_code = fields.Char()
     cur_phase_code_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Cur Phase Code',
+        'sn.wsd.nqi.code', string='Cur Phase Code (Dictionary)',
         domain="[('code_type', '=', 'PHASE_CURRENT')]",
         ondelete='restrict')
     cur_phase_code = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     both_way_power_flag_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Both Way Power Flag',
+        'sn.wsd.nqi.code', string='Both Way Power Flag (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_POWER_FLAG')]",
         ondelete='restrict')
     both_way_power_flag = fields.Char()
@@ -1292,28 +1292,28 @@ class NqiMaxDemandErr(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
     detect_item_point = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     load_voltage_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Voltage',
+        'sn.wsd.nqi.code', string='Load Voltage (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_VOLTAGE')]",
         ondelete='restrict')
     load_voltage = fields.Char()
     freq_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Freq',
+        'sn.wsd.nqi.code', string='Freq (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_FREQ')]",
         ondelete='restrict')
     freq = fields.Char()
     pf_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Pf',
+        'sn.wsd.nqi.code', string='Pf (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_PF_RATE')]",
         ondelete='restrict')
     pf = fields.Char()
@@ -1355,23 +1355,23 @@ class NqiOverload(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
     detect_item_point = fields.Char()
     load_voltage_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Voltage',
+        'sn.wsd.nqi.code', string='Load Voltage (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_VOLTAGE')]",
         ondelete='restrict')
     load_voltage = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     pf_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Pf',
+        'sn.wsd.nqi.code', string='Pf (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_PF_RATE')]",
         ondelete='restrict')
     pf = fields.Char()
@@ -1418,14 +1418,14 @@ class NqiPowerMeasure(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
     detect_item_point = fields.Char()
     conc_code = fields.Char()
     cur_phase_code_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Cur Phase Code',
+        'sn.wsd.nqi.code', string='Cur Phase Code (Dictionary)',
         domain="[('code_type', '=', 'PHASE_CURRENT')]",
         ondelete='restrict')
     cur_phase_code = fields.Char()
@@ -1437,17 +1437,17 @@ class NqiPowerMeasure(models.Model):
     simpling_space = fields.Char()
     simpling = fields.Char()
     pf_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Pf',
+        'sn.wsd.nqi.code', string='Pf (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_PF_RATE')]",
         ondelete='restrict')
     pf = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     both_way_power_flag_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Both Way Power Flag',
+        'sn.wsd.nqi.code', string='Both Way Power Flag (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_POWER_FLAG')]",
         ondelete='restrict')
     both_way_power_flag = fields.Char()
@@ -1477,7 +1477,7 @@ class NqiStandard(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -1527,33 +1527,33 @@ class NqiVariation(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
     detect_item_point = fields.Char()
     both_way_power_flag_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Both Way Power Flag',
+        'sn.wsd.nqi.code', string='Both Way Power Flag (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_POWER_FLAG')]",
         ondelete='restrict')
     both_way_power_flag = fields.Char()
     load_voltage_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Voltage',
+        'sn.wsd.nqi.code', string='Load Voltage (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_VOLTAGE')]",
         ondelete='restrict')
     load_voltage = fields.Char()
     load_current_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Load Current',
+        'sn.wsd.nqi.code', string='Load Current (Dictionary)',
         domain="[('code_type', '=', 'METER_TEST_CURLOAD')]",
         ondelete='restrict')
     load_current = fields.Char()
     iabc_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Iabc',
+        'sn.wsd.nqi.code', string='Iabc (Dictionary)',
         domain="[('code_type', '=', 'PHASE_CURRENT')]",
         ondelete='restrict')
     iabc = fields.Char()
     pf_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Pf',
+        'sn.wsd.nqi.code', string='Pf (Dictionary)',
         domain="[('code_type', '=', 'METER_PARA_PF_RATE')]",
         ondelete='restrict')
     pf = fields.Char()

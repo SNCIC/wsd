@@ -39,7 +39,7 @@ class NqiSupplyBatch(models.Model):
 
     picking_id = fields.Many2one(
         'stock.picking', string='Delivery',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     business_contract_code = fields.Char(index=True)
     supply_batch_no = fields.Char()
     supply_num = fields.Char()

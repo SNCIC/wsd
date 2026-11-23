@@ -19,12 +19,12 @@ class NqiProductInfo(models.Model):
 
     product_id = fields.Many2one(
         'product.product', string='Product',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     product_code = fields.Char(index=True)
     product_type = fields.Char()
     product_name = fields.Char()
     product_categid_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Product Categid',
+        'sn.wsd.nqi.code', string='Product Categid (Dictionary)',
         domain="[('code_type', '=', 'PRODUCT_CATEGID')]",
         ondelete='restrict')
     product_categid = fields.Char()
@@ -60,13 +60,13 @@ class NqiProductDetail(models.Model):
 
     product_id = fields.Many2one(
         'product.product', string='Product',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     product_detail_code = fields.Char()
     product_detail_name = fields.Char()
     product_code = fields.Char(index=True)
     development_project_no = fields.Char()
     product_spec_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Product Spec',
+        'sn.wsd.nqi.code', string='Product Spec (Dictionary)',
         domain="[('code_type', '=', 'METER_SPEC')]",
         ondelete='restrict')
     product_spec = fields.Char()
@@ -81,12 +81,12 @@ class NqiProductDetail(models.Model):
     lcd_decimal_digits = fields.Char()
     local_comm_type = fields.Char()
     remote_comm_type_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Remote Comm Type',
+        'sn.wsd.nqi.code', string='Remote Comm Type (Dictionary)',
         domain="[('code_type', '=', 'REMOTE_COMM_TYPE')]",
         ondelete='restrict')
     remote_comm_type = fields.Char()
     rate_control_type_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Rate Control Type',
+        'sn.wsd.nqi.code', string='Rate Control Type (Dictionary)',
         domain="[('code_type', '=', 'RATE_CONTROL_TYPE')]",
         ondelete='restrict')
     rate_control_type = fields.Char()
@@ -112,13 +112,13 @@ class NqiProductTestReport(models.Model):
 
     product_id = fields.Many2one(
         'product.product', string='Product',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     product_code = fields.Char(index=True)
     product_detail_code = fields.Char()
     development_project_no = fields.Char()
     test_report_code = fields.Char()
     test_type_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Test Type',
+        'sn.wsd.nqi.code', string='Test Type (Dictionary)',
         domain="[('code_type', '=', 'TEST_TYPE')]",
         ondelete='restrict')
     test_type = fields.Char()
@@ -142,7 +142,7 @@ class NqiProject(models.Model):
 
     product_id = fields.Many2one(
         'product.product', string='Product',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     development_project_no = fields.Char()
     product_code = fields.Char(index=True)
     product_name = fields.Char()
@@ -190,10 +190,10 @@ class NqiComponentList(models.Model):
 
     product_id = fields.Many2one(
         'product.product', string='Product',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     bom_id = fields.Many2one(
         'mrp.bom', string='BoM',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     comment_project_no = fields.Char()
     product_code = fields.Char(index=True)
     product_detail_code = fields.Char()
@@ -225,7 +225,7 @@ class NqiProjectChange(models.Model):
 
     product_id = fields.Many2one(
         'product.product', string='Product',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     change_type = fields.Char()
     change_content = fields.Text()
     change_result = fields.Char()
@@ -260,7 +260,7 @@ class NqiComponentChange(models.Model):
 
     product_id = fields.Many2one(
         'product.product', string='Product',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     change_record_code = fields.Char(index=True)
     development_project_no = fields.Char()
     module_type = fields.Char()

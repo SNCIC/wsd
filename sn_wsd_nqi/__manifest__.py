@@ -2,7 +2,7 @@
     'name': "NQI Platform Integration",
     'summary': "NQI platform supplier data staging and push (data model V2.1)",
     'category': 'Manufacturing/MES',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.1.0',
     'depends': [
         'mail', 'sn_wsd_mrp', 'sn_wsd_api', 'sn_wsd_device',
         'sn_wsd_quality', 'hr',

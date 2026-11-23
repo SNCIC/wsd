@@ -25,13 +25,13 @@ class NqiDevice(models.Model):
 
     equipment_id = fields.Many2one(
         'sn.wsd.device.equipment', string='Equipment Ledger',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     device_code = fields.Char()
     device_make_code = fields.Char()
     device_name = fields.Char()
     device_type = fields.Char()
     type_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Type',
+        'sn.wsd.nqi.code', string='Type (Dictionary)',
         domain="[('code_type', '=', 'DEVICE_TYPE')]",
         ondelete='restrict')
     type = fields.Char()
@@ -59,7 +59,7 @@ class NqiPerson(models.Model):
 
     employee_id = fields.Many2one(
         'hr.employee', string='Employee',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     person_code = fields.Char()
     post_type = fields.Char()
 
@@ -163,7 +163,7 @@ class NqiAsAgreement(models.Model):
     )
 
     enterprise_type_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Enterprise Type',
+        'sn.wsd.nqi.code', string='Enterprise Type (Dictionary)',
         domain="[('code_type', '=', 'ENTERPRISE_TYPE')]",
         ondelete='restrict')
     enterprise_type = fields.Char()
@@ -265,7 +265,7 @@ class NqiFile(models.Model):
 
     attachment_id = fields.Many2one(
         'ir.attachment', string='Attachment',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     type = fields.Char()
     file_url = fields.Char()
     download_url = fields.Char()

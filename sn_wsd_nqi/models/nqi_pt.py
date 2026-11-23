@@ -19,7 +19,7 @@ class NqiPlan(models.Model):
 
     sale_order_id = fields.Many2one(
         'sale.order', string='Sales Order',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     plan_code = fields.Char(index=True)
     start_time = fields.Char()
     finish_time = fields.Char()
@@ -47,7 +47,7 @@ class NqiPlanDetail(models.Model):
 
     plan_id = fields.Many2one(
         'sn.wsd.nqi.pt.plan', string='NQI Plan',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     plan_code = fields.Char(index=True)
     count = fields.Char()
     type = fields.Char()
@@ -70,12 +70,12 @@ class NqiProcess(models.Model):
 
     plan_code = fields.Char(index=True)
     bidding_party_a_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Bidding Party A',
+        'sn.wsd.nqi.code', string='Bidding Party A (Dictionary)',
         domain="[('code_type', '=', 'BIDDING_PARTY_A')]",
         ondelete='restrict')
     bidding_party_a = fields.Char()
     meter_producing_process_code_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Meter Producing Process Code',
+        'sn.wsd.nqi.code', string='Meter Producing Process Code (Dictionary)',
         domain="[('code_type', '=', 'METER_PRODUCING_PROCESS')]",
         ondelete='restrict')
     meter_producing_process_code = fields.Char()
@@ -98,7 +98,7 @@ class NqiProcedure(models.Model):
     )
 
     procedure_code_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Procedure Code',
+        'sn.wsd.nqi.code', string='Procedure Code (Dictionary)',
         domain="[('code_type', '=', 'METER_PRODUCING_PROCESS')]",
         ondelete='restrict')
     procedure_code = fields.Char()
@@ -120,7 +120,7 @@ class NqiEnvTempHum(models.Model):
     )
 
     procedure_code_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Procedure Code',
+        'sn.wsd.nqi.code', string='Procedure Code (Dictionary)',
         domain="[('code_type', '=', 'ENVIRONMENT_TYPE')]",
         ondelete='restrict')
     procedure_code = fields.Char()

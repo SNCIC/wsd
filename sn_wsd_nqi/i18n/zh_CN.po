@@ -4943,3 +4943,113 @@ msgstr "销售订单 %s 名下未找到制造订单（请检查 MTO 链）。"
 #: code:addons/sn_wsd_nqi/models/*.py:0
 msgid "NQI push transport is not configured yet."
 msgstr "NQI 推送传输尚未配置。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_et_device__type_id
+msgid "Type (Dictionary)"
+msgstr "类型（字典）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_et_as_agreement__enterprise_type_id
+msgid "Enterprise Type (Dictionary)"
+msgstr "企业类型（字典）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_fit_pcb_mounting__procedure_code_id
+msgid "Procedure Code (Dictionary)"
+msgstr "工序编号（字典）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__both_way_power_flag_id
+msgid "Both Way Power Flag (Dictionary)"
+msgstr ""
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__iabc_id
+msgid "Iabc (Dictionary)"
+msgstr ""
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__load_current_id
+msgid "Load Current (Dictionary)"
+msgstr ""
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__load_voltage_id
+msgid "Load Voltage (Dictionary)"
+msgstr ""
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__freq_id
+msgid "Freq (Dictionary)"
+msgstr ""
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__pf_id
+msgid "Pf (Dictionary)"
+msgstr ""
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__control_method_id
+msgid "Control Method (Dictionary)"
+msgstr ""
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__read_type_code_id
+msgid "Read Type Code (Dictionary)"
+msgstr ""
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__voltage_id
+msgid "Voltage (Dictionary)"
+msgstr ""
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__conc_code_id
+msgid "Conc Code (Dictionary)"
+msgstr ""
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__volt_id
+msgid "Volt (Dictionary)"
+msgstr ""
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__cur_phase_code_id
+msgid "Cur Phase Code (Dictionary)"
+msgstr ""
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_pr_bidding_info__bidding_party_a_id
+msgid "Bidding Party A (Dictionary)"
+msgstr "合同甲方单位（字典）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_pt_process__meter_producing_process_code_id
+msgid "Meter Producing Process Code (Dictionary)"
+msgstr "工序Code（字典）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_info__product_categid_id
+msgid "Product Categid (Dictionary)"
+msgstr "产品类别（字典）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_detail__product_spec_id
+msgid "Product Spec (Dictionary)"
+msgstr "产品规格（字典）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_detail__remote_comm_type_id
+msgid "Remote Comm Type (Dictionary)"
+msgstr "远程通讯方式（字典）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_detail__rate_control_type_id
+msgid "Rate Control Type (Dictionary)"
+msgstr "费控方式（字典）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_test_report__test_type_id
+msgid "Test Type (Dictionary)"
+msgstr "检测类型（字典）"

@@ -26,7 +26,7 @@ class NqiBiddingInfo(models.Model):
     bidding_batch = fields.Char()
     bidding_position = fields.Char()
     bidding_party_a_id = fields.Many2one(
-        'sn.wsd.nqi.code', string='Bidding Party A',
+        'sn.wsd.nqi.code', string='Bidding Party A (Dictionary)',
         domain="[('code_type', '=', 'BIDDING_PARTY_A')]",
         ondelete='restrict')
     bidding_party_a = fields.Char()
@@ -90,7 +90,7 @@ class NqiPurchasePlan(models.Model):
 
     purchase_id = fields.Many2one(
         'purchase.order', string='Purchase Order',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     purchase_code = fields.Char()
     bidding_batch = fields.Char()
     business_contract_code = fields.Char(index=True)
@@ -117,7 +117,7 @@ class NqiArriveBatch(models.Model):
 
     picking_id = fields.Many2one(
         'stock.picking', string='Receipt',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     arrived_batch_no = fields.Char()
     purchase_code = fields.Char()
     component_code = fields.Char()
@@ -144,7 +144,7 @@ class NqiTestResult(models.Model):
 
     picking_id = fields.Many2one(
         'stock.picking', string='Receipt',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     test_record_code = fields.Char()
     component_code = fields.Char()
     arrived_batch_no = fields.Char()
@@ -179,7 +179,7 @@ class NqiUnqualified(models.Model):
 
     product_id = fields.Many2one(
         'product.product', string='Product',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     in_control_code = fields.Char()
     component_code = fields.Char()
     arrived_batch_no = fields.Char()
