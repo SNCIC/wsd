@@ -151,6 +151,8 @@ class SerialOperationHistoryNqi(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         records = super().create(vals_list)
+        if self.env.context.get('nqi_skip_birth'):
+            return records
         try:
             self.env['sn.wsd.nqi.fit.meter.info'].sudo(
             )._nqi_birth_from_history(records)

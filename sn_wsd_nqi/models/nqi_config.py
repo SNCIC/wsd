@@ -32,11 +32,6 @@ class NqiConfig(models.Model):
          ('api_key', 'API Key'), ('basic', 'Basic Auth')],
         string='Auth Type', default='bearer', required=True)
     api_token = fields.Char(string='API Token', copy=False)
-    callback_token = fields.Char(
-        string='Callback Token', copy=False,
-        help='Shared secret for the NQI gateway callback endpoint '
-             '(/nqi/callback). Give the gateway this token together with '
-             'the callback URL; empty token rejects every callback.')
     timeout_sec = fields.Integer(
         string='Timeout (seconds)', default=30, required=True)
     retry_times = fields.Integer(

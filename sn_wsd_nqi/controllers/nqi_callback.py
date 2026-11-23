@@ -3,8 +3,8 @@
 The gateway parses uploaded batches asynchronously and reports the
 outcome by notice number: {"noticeNo", "return_flag" (1 ok / 0 fail),
 "return_msg"}. The transport is unrestricted per the spec; we accept
-JSON or form-encoded POSTs, authenticated by the shared callback token
-from the NQI integration config.
+JSON or form-encoded POSTs. No token check (removed by decision): the
+endpoint only carries notice-number outcome flags.
 """
 import logging
 
@@ -33,16 +33,6 @@ class NqiCallbackController(http.Controller):
         if not notice_no or return_flag in (None, ''):
             return request.make_json_response({
                 'return_flag': '0', 'return_msg': 'missing parameters'})
-        token = (
-            request.httprequest.args.get('token')
-            or request.httprequest.headers.get('X-Callback-Token'))
-        config = request.env['sn.wsd.nqi.config'].sudo().search(
-            [('company_id', 'in', request.env.companies.ids)], limit=1)
-        if not config or not config.callback_token or token != config.callback_token:
-            _logger.warning(
-                'NQI callback rejected (bad token) for notice %s', notice_no)
-            return request.make_json_response({
-                'return_flag': '0', 'return_msg': 'invalid token'})
         try:
             request.env['sn.wsd.nqi.push.log'].sudo().process_callback(
                 notice_no, return_flag, payload.get('return_msg', ''))
