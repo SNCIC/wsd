@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_nqi_batch_fill_form" model="ir.ui.view">
+        <field name="name">nqi.batch.fill.form</field>
+        <field name="model">sn.wsd.nqi.batch.fill</field>
+        <field name="arch" type="xml">
+            <form string="Batch Fill">
+                <group>
+                    <field name="target_model" invisible="1"/>
+                    <field name="field_name"/>
+                    <field name="value"/>
+                </group>
+                <footer>
+                    <button name="action_apply" type="object"
+                            string="Apply" class="oe_highlight"
+                            data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

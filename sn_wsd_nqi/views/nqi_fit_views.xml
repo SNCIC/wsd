@@ -43,6 +43,7 @@
                             <field name="status"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -117,6 +118,7 @@
                             <field name="detect_date"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -190,6 +192,7 @@
                             <field name="detect_date"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -260,6 +263,7 @@
                             <field name="make_batch_no"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -328,6 +332,7 @@
                             <field name="module_type"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>

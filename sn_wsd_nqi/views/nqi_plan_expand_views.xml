@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_nqi_pt_plan_form_expand" model="ir.ui.view">
+        <field name="name">nqi.pt.plan.form.expand</field>
+        <field name="model">sn.wsd.nqi.pt.plan</field>
+        <field name="inherit_id" ref="view_nqi_pt_plan_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_expand_details" type="object"
+                        string="Expand Details" class="oe_highlight"/>
+            </header>
+            <group position="inside">
+                <group string="Plan Details">
+                    <field name="detail_ids" nolabel="1" colspan="2">
+                        <list editable="bottom">
+                            <field name="plan_code" readonly="1"/>
+                            <field name="type"/>
+                            <field name="count"/>
+                            <field name="start_serial_no"/>
+                            <field name="finish_serial_no"/>
+                        </list>
+                    </field>
+                </group>
+            </group>
+        </field>
+    </record>
+</odoo>

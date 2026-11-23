@@ -1,2 +1,3 @@
 from . import test_nqi_envelope
 from . import test_nqi_generation
+from . import test_nqi_completion

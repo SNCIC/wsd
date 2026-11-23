@@ -38,6 +38,7 @@
                             <field name="product_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -113,6 +114,7 @@
                             <field name="finish_serial_no"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -185,6 +187,7 @@
                             <field name="excepiton_handle"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -250,6 +253,7 @@
                             <field name="procedure_name"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -321,6 +325,7 @@
                             <field name="read_date"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -399,6 +404,7 @@
                             <field name="valid_time"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -434,30 +440,5 @@
               parent="menu_nqi_plan"
               action="action_nqi_pt_unqualified"
               sequence="60"/>
-
-    <record id="view_nqi_pt_plan_form_expand" model="ir.ui.view">
-        <field name="name">nqi.pt.plan.form.expand</field>
-        <field name="model">sn.wsd.nqi.pt.plan</field>
-        <field name="inherit_id" ref="view_nqi_pt_plan_form"/>
-        <field name="arch" type="xml">
-            <header position="inside">
-                <button name="action_expand_details" type="object"
-                        string="Expand Details" class="oe_highlight"/>
-            </header>
-            <group position="inside">
-                <group string="Plan Details">
-                    <field name="detail_ids" nolabel="1" colspan="2">
-                        <list editable="bottom">
-                            <field name="plan_code" readonly="1"/>
-                            <field name="type"/>
-                            <field name="count"/>
-                            <field name="start_serial_no"/>
-                            <field name="finish_serial_no"/>
-                        </list>
-                    </field>
-                </group>
-            </group>
-        </field>
-    </record>
 
 </odoo>

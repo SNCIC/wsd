@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="view_nqi_mt_aoi_list" model="ir.ui.view">
-        <field name="name">nqi.mt_aoi.list</field>
-        <field name="model">sn.wsd.nqi.mt_aoi</field>
+        <field name="name">nqi.mt.aoi.list</field>
+        <field name="model">sn.wsd.nqi.mt.aoi</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -17,8 +17,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_aoi_form" model="ir.ui.view">
-        <field name="name">nqi.mt_aoi.form</field>
-        <field name="model">sn.wsd.nqi.mt_aoi</field>
+        <field name="name">nqi.mt.aoi.form</field>
+        <field name="model">sn.wsd.nqi.mt.aoi</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -38,6 +38,7 @@
                             <field name="cause"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -50,8 +51,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_aoi_search" model="ir.ui.view">
-        <field name="name">nqi.mt_aoi.search</field>
-        <field name="model">sn.wsd.nqi.mt_aoi</field>
+        <field name="name">nqi.mt.aoi.search</field>
+        <field name="model">sn.wsd.nqi.mt.aoi</field>
         <field name="arch" type="xml">
             <search>
                 <field name="pcb_code"/>
@@ -64,7 +65,7 @@
     </record>
     <record id="action_nqi_mt_aoi" model="ir.actions.act_window">
         <field name="name">MT_AOI_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_aoi</field>
+        <field name="res_model">sn.wsd.nqi.mt.aoi</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -75,8 +76,8 @@
               sequence="10"/>
 
     <record id="view_nqi_mt_basicerr_list" model="ir.ui.view">
-        <field name="name">nqi.mt_basicerr.list</field>
-        <field name="model">sn.wsd.nqi.mt_basicerr</field>
+        <field name="name">nqi.mt.basicerr.list</field>
+        <field name="model">sn.wsd.nqi.mt.basicerr</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -91,8 +92,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_basicerr_form" model="ir.ui.view">
-        <field name="name">nqi.mt_basicerr.form</field>
-        <field name="model">sn.wsd.nqi.mt_basicerr</field>
+        <field name="name">nqi.mt.basicerr.form</field>
+        <field name="model">sn.wsd.nqi.mt.basicerr</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -126,6 +127,7 @@
                             <field name="err_down"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -138,8 +140,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_basicerr_search" model="ir.ui.view">
-        <field name="name">nqi.mt_basicerr.search</field>
-        <field name="model">sn.wsd.nqi.mt_basicerr</field>
+        <field name="name">nqi.mt.basicerr.search</field>
+        <field name="model">sn.wsd.nqi.mt.basicerr</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -152,7 +154,7 @@
     </record>
     <record id="action_nqi_mt_basicerr" model="ir.actions.act_window">
         <field name="name">MT_BASICERR_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_basicerr</field>
+        <field name="res_model">sn.wsd.nqi.mt.basicerr</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -163,8 +165,8 @@
               sequence="20"/>
 
     <record id="view_nqi_mt_const_list" model="ir.ui.view">
-        <field name="name">nqi.mt_const.list</field>
-        <field name="model">sn.wsd.nqi.mt_const</field>
+        <field name="name">nqi.mt.const.list</field>
+        <field name="model">sn.wsd.nqi.mt.const</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -179,8 +181,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_const_form" model="ir.ui.view">
-        <field name="name">nqi.mt_const.form</field>
-        <field name="model">sn.wsd.nqi.mt_const</field>
+        <field name="name">nqi.mt.const.form</field>
+        <field name="model">sn.wsd.nqi.mt.const</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -220,6 +222,7 @@
                             <field name="read_type_code_id"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -232,8 +235,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_const_search" model="ir.ui.view">
-        <field name="name">nqi.mt_const.search</field>
-        <field name="model">sn.wsd.nqi.mt_const</field>
+        <field name="name">nqi.mt.const.search</field>
+        <field name="model">sn.wsd.nqi.mt.const</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -246,7 +249,7 @@
     </record>
     <record id="action_nqi_mt_const" model="ir.actions.act_window">
         <field name="name">MT_CONST_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_const</field>
+        <field name="res_model">sn.wsd.nqi.mt.const</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -257,8 +260,8 @@
               sequence="30"/>
 
     <record id="view_nqi_mt_creeping_list" model="ir.ui.view">
-        <field name="name">nqi.mt_creeping.list</field>
-        <field name="model">sn.wsd.nqi.mt_creeping</field>
+        <field name="name">nqi.mt.creeping.list</field>
+        <field name="model">sn.wsd.nqi.mt.creeping</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -273,8 +276,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_creeping_form" model="ir.ui.view">
-        <field name="name">nqi.mt_creeping.form</field>
-        <field name="model">sn.wsd.nqi.mt_creeping</field>
+        <field name="name">nqi.mt.creeping.form</field>
+        <field name="model">sn.wsd.nqi.mt.creeping</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -300,6 +303,7 @@
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -312,8 +316,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_creeping_search" model="ir.ui.view">
-        <field name="name">nqi.mt_creeping.search</field>
-        <field name="model">sn.wsd.nqi.mt_creeping</field>
+        <field name="name">nqi.mt.creeping.search</field>
+        <field name="model">sn.wsd.nqi.mt.creeping</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -326,7 +330,7 @@
     </record>
     <record id="action_nqi_mt_creeping" model="ir.actions.act_window">
         <field name="name">MT_CREEPING_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_creeping</field>
+        <field name="res_model">sn.wsd.nqi.mt.creeping</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -337,8 +341,8 @@
               sequence="40"/>
 
     <record id="view_nqi_mt_dayerr_list" model="ir.ui.view">
-        <field name="name">nqi.mt_dayerr.list</field>
-        <field name="model">sn.wsd.nqi.mt_dayerr</field>
+        <field name="name">nqi.mt.dayerr.list</field>
+        <field name="model">sn.wsd.nqi.mt.dayerr</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -353,8 +357,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_dayerr_form" model="ir.ui.view">
-        <field name="name">nqi.mt_dayerr.form</field>
-        <field name="model">sn.wsd.nqi.mt_dayerr</field>
+        <field name="name">nqi.mt.dayerr.form</field>
+        <field name="model">sn.wsd.nqi.mt.dayerr</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -382,6 +386,7 @@
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -394,8 +399,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_dayerr_search" model="ir.ui.view">
-        <field name="name">nqi.mt_dayerr.search</field>
-        <field name="model">sn.wsd.nqi.mt_dayerr</field>
+        <field name="name">nqi.mt.dayerr.search</field>
+        <field name="model">sn.wsd.nqi.mt.dayerr</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -408,7 +413,7 @@
     </record>
     <record id="action_nqi_mt_dayerr" model="ir.actions.act_window">
         <field name="name">MT_DAYERR_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_dayerr</field>
+        <field name="res_model">sn.wsd.nqi.mt.dayerr</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -419,8 +424,8 @@
               sequence="50"/>
 
     <record id="view_nqi_mt_demandvalue_list" model="ir.ui.view">
-        <field name="name">nqi.mt_demandvalue.list</field>
-        <field name="model">sn.wsd.nqi.mt_demandvalue</field>
+        <field name="name">nqi.mt.demandvalue.list</field>
+        <field name="model">sn.wsd.nqi.mt.demandvalue</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -435,8 +440,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_demandvalue_form" model="ir.ui.view">
-        <field name="name">nqi.mt_demandvalue.form</field>
-        <field name="model">sn.wsd.nqi.mt_demandvalue</field>
+        <field name="name">nqi.mt.demandvalue.form</field>
+        <field name="model">sn.wsd.nqi.mt.demandvalue</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -473,6 +478,7 @@
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -485,8 +491,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_demandvalue_search" model="ir.ui.view">
-        <field name="name">nqi.mt_demandvalue.search</field>
-        <field name="model">sn.wsd.nqi.mt_demandvalue</field>
+        <field name="name">nqi.mt.demandvalue.search</field>
+        <field name="model">sn.wsd.nqi.mt.demandvalue</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -499,7 +505,7 @@
     </record>
     <record id="action_nqi_mt_demandvalue" model="ir.actions.act_window">
         <field name="name">MT_DEMANDVALUE_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_demandvalue</field>
+        <field name="res_model">sn.wsd.nqi.mt.demandvalue</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -510,8 +516,8 @@
               sequence="60"/>
 
     <record id="view_nqi_mt_esam_read_list" model="ir.ui.view">
-        <field name="name">nqi.mt_esam_read.list</field>
-        <field name="model">sn.wsd.nqi.mt_esam_read</field>
+        <field name="name">nqi.mt.esam.read.list</field>
+        <field name="model">sn.wsd.nqi.mt.esam.read</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -526,8 +532,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_esam_read_form" model="ir.ui.view">
-        <field name="name">nqi.mt_esam_read.form</field>
-        <field name="model">sn.wsd.nqi.mt_esam_read</field>
+        <field name="name">nqi.mt.esam.read.form</field>
+        <field name="model">sn.wsd.nqi.mt.esam.read</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -553,6 +559,7 @@
                             <field name="trip_delay_time"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -565,8 +572,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_esam_read_search" model="ir.ui.view">
-        <field name="name">nqi.mt_esam_read.search</field>
-        <field name="model">sn.wsd.nqi.mt_esam_read</field>
+        <field name="name">nqi.mt.esam.read.search</field>
+        <field name="model">sn.wsd.nqi.mt.esam.read</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -579,7 +586,7 @@
     </record>
     <record id="action_nqi_mt_esam_read" model="ir.actions.act_window">
         <field name="name">MT_ESAM_READ_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_esam_read</field>
+        <field name="res_model">sn.wsd.nqi.mt.esam.read</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -590,8 +597,8 @@
               sequence="70"/>
 
     <record id="view_nqi_mt_function_list" model="ir.ui.view">
-        <field name="name">nqi.mt_function.list</field>
-        <field name="model">sn.wsd.nqi.mt_function</field>
+        <field name="name">nqi.mt.function.list</field>
+        <field name="model">sn.wsd.nqi.mt.function</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -605,8 +612,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_function_form" model="ir.ui.view">
-        <field name="name">nqi.mt_function.form</field>
-        <field name="model">sn.wsd.nqi.mt_function</field>
+        <field name="name">nqi.mt.function.form</field>
+        <field name="model">sn.wsd.nqi.mt.function</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -625,6 +632,7 @@
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -637,8 +645,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_function_search" model="ir.ui.view">
-        <field name="name">nqi.mt_function.search</field>
-        <field name="model">sn.wsd.nqi.mt_function</field>
+        <field name="name">nqi.mt.function.search</field>
+        <field name="model">sn.wsd.nqi.mt.function</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -651,7 +659,7 @@
     </record>
     <record id="action_nqi_mt_function" model="ir.actions.act_window">
         <field name="name">MT_FUNCTION_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_function</field>
+        <field name="res_model">sn.wsd.nqi.mt.function</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -662,8 +670,8 @@
               sequence="80"/>
 
     <record id="view_nqi_mt_hutchison_combina_list" model="ir.ui.view">
-        <field name="name">nqi.mt_hutchison_combina.list</field>
-        <field name="model">sn.wsd.nqi.mt_hutchison_combina</field>
+        <field name="name">nqi.mt.hutchison.combina.list</field>
+        <field name="model">sn.wsd.nqi.mt.hutchison.combina</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -678,8 +686,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_hutchison_combina_form" model="ir.ui.view">
-        <field name="name">nqi.mt_hutchison_combina.form</field>
-        <field name="model">sn.wsd.nqi.mt_hutchison_combina</field>
+        <field name="name">nqi.mt.hutchison.combina.form</field>
+        <field name="model">sn.wsd.nqi.mt.hutchison.combina</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -717,6 +725,7 @@
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -729,8 +738,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_hutchison_combina_search" model="ir.ui.view">
-        <field name="name">nqi.mt_hutchison_combina.search</field>
-        <field name="model">sn.wsd.nqi.mt_hutchison_combina</field>
+        <field name="name">nqi.mt.hutchison.combina.search</field>
+        <field name="model">sn.wsd.nqi.mt.hutchison.combina</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -743,7 +752,7 @@
     </record>
     <record id="action_nqi_mt_hutchison_combina" model="ir.actions.act_window">
         <field name="name">MT_HUTCHISON_COMBINA_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_hutchison_combina</field>
+        <field name="res_model">sn.wsd.nqi.mt.hutchison.combina</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -754,8 +763,8 @@
               sequence="90"/>
 
     <record id="view_nqi_mt_intuit_list" model="ir.ui.view">
-        <field name="name">nqi.mt_intuit.list</field>
-        <field name="model">sn.wsd.nqi.mt_intuit</field>
+        <field name="name">nqi.mt.intuit.list</field>
+        <field name="model">sn.wsd.nqi.mt.intuit</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -770,8 +779,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_intuit_form" model="ir.ui.view">
-        <field name="name">nqi.mt_intuit.form</field>
-        <field name="model">sn.wsd.nqi.mt_intuit</field>
+        <field name="name">nqi.mt.intuit.form</field>
+        <field name="model">sn.wsd.nqi.mt.intuit</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -792,6 +801,7 @@
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -804,8 +814,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_intuit_search" model="ir.ui.view">
-        <field name="name">nqi.mt_intuit.search</field>
-        <field name="model">sn.wsd.nqi.mt_intuit</field>
+        <field name="name">nqi.mt.intuit.search</field>
+        <field name="model">sn.wsd.nqi.mt.intuit</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -818,7 +828,7 @@
     </record>
     <record id="action_nqi_mt_intuit" model="ir.actions.act_window">
         <field name="name">MT_INTUIT_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_intuit</field>
+        <field name="res_model">sn.wsd.nqi.mt.intuit</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -829,8 +839,8 @@
               sequence="100"/>
 
     <record id="view_nqi_mt_mounting_list" model="ir.ui.view">
-        <field name="name">nqi.mt_mounting.list</field>
-        <field name="model">sn.wsd.nqi.mt_mounting</field>
+        <field name="name">nqi.mt.mounting.list</field>
+        <field name="model">sn.wsd.nqi.mt.mounting</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -845,8 +855,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_mounting_form" model="ir.ui.view">
-        <field name="name">nqi.mt_mounting.form</field>
-        <field name="model">sn.wsd.nqi.mt_mounting</field>
+        <field name="name">nqi.mt.mounting.form</field>
+        <field name="model">sn.wsd.nqi.mt.mounting</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -873,6 +883,7 @@
                             <field name="cause"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -885,8 +896,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_mounting_search" model="ir.ui.view">
-        <field name="name">nqi.mt_mounting.search</field>
-        <field name="model">sn.wsd.nqi.mt_mounting</field>
+        <field name="name">nqi.mt.mounting.search</field>
+        <field name="model">sn.wsd.nqi.mt.mounting</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -899,7 +910,7 @@
     </record>
     <record id="action_nqi_mt_mounting" model="ir.actions.act_window">
         <field name="name">MT_MOUNTING_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_mounting</field>
+        <field name="res_model">sn.wsd.nqi.mt.mounting</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -910,8 +921,8 @@
               sequence="110"/>
 
     <record id="view_nqi_mt_parameter_list" model="ir.ui.view">
-        <field name="name">nqi.mt_parameter.list</field>
-        <field name="model">sn.wsd.nqi.mt_parameter</field>
+        <field name="name">nqi.mt.parameter.list</field>
+        <field name="model">sn.wsd.nqi.mt.parameter</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -926,8 +937,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_parameter_form" model="ir.ui.view">
-        <field name="name">nqi.mt_parameter.form</field>
-        <field name="model">sn.wsd.nqi.mt_parameter</field>
+        <field name="name">nqi.mt.parameter.form</field>
+        <field name="model">sn.wsd.nqi.mt.parameter</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -949,6 +960,7 @@
                             <field name="conc_code_id"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -961,8 +973,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_parameter_search" model="ir.ui.view">
-        <field name="name">nqi.mt_parameter.search</field>
-        <field name="model">sn.wsd.nqi.mt_parameter</field>
+        <field name="name">nqi.mt.parameter.search</field>
+        <field name="model">sn.wsd.nqi.mt.parameter</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -975,7 +987,7 @@
     </record>
     <record id="action_nqi_mt_parameter" model="ir.actions.act_window">
         <field name="name">MT_PARAMETER_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_parameter</field>
+        <field name="res_model">sn.wsd.nqi.mt.parameter</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -986,8 +998,8 @@
               sequence="120"/>
 
     <record id="view_nqi_mt_rfid_list" model="ir.ui.view">
-        <field name="name">nqi.mt_rfid.list</field>
-        <field name="model">sn.wsd.nqi.mt_rfid</field>
+        <field name="name">nqi.mt.rfid.list</field>
+        <field name="model">sn.wsd.nqi.mt.rfid</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -1002,8 +1014,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_rfid_form" model="ir.ui.view">
-        <field name="name">nqi.mt_rfid.form</field>
-        <field name="model">sn.wsd.nqi.mt_rfid</field>
+        <field name="name">nqi.mt.rfid.form</field>
+        <field name="model">sn.wsd.nqi.mt.rfid</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -1023,6 +1035,7 @@
                             <field name="cause"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -1035,8 +1048,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_rfid_search" model="ir.ui.view">
-        <field name="name">nqi.mt_rfid.search</field>
-        <field name="model">sn.wsd.nqi.mt_rfid</field>
+        <field name="name">nqi.mt.rfid.search</field>
+        <field name="model">sn.wsd.nqi.mt.rfid</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -1049,7 +1062,7 @@
     </record>
     <record id="action_nqi_mt_rfid" model="ir.actions.act_window">
         <field name="name">MT_RFID_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_rfid</field>
+        <field name="res_model">sn.wsd.nqi.mt.rfid</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -1060,8 +1073,8 @@
               sequence="130"/>
 
     <record id="view_nqi_mt_single_list" model="ir.ui.view">
-        <field name="name">nqi.mt_single.list</field>
-        <field name="model">sn.wsd.nqi.mt_single</field>
+        <field name="name">nqi.mt.single.list</field>
+        <field name="model">sn.wsd.nqi.mt.single</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -1076,8 +1089,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_single_form" model="ir.ui.view">
-        <field name="name">nqi.mt_single.form</field>
-        <field name="model">sn.wsd.nqi.mt_single</field>
+        <field name="name">nqi.mt.single.form</field>
+        <field name="model">sn.wsd.nqi.mt.single</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -1099,6 +1112,7 @@
                             <field name="cause"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -1111,8 +1125,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_single_search" model="ir.ui.view">
-        <field name="name">nqi.mt_single.search</field>
-        <field name="model">sn.wsd.nqi.mt_single</field>
+        <field name="name">nqi.mt.single.search</field>
+        <field name="model">sn.wsd.nqi.mt.single</field>
         <field name="arch" type="xml">
             <search>
                 <field name="pcb_code"/>
@@ -1125,7 +1139,7 @@
     </record>
     <record id="action_nqi_mt_single" model="ir.actions.act_window">
         <field name="name">MT_SINGLE_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_single</field>
+        <field name="res_model">sn.wsd.nqi.mt.single</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -1136,8 +1150,8 @@
               sequence="140"/>
 
     <record id="view_nqi_mt_starting_list" model="ir.ui.view">
-        <field name="name">nqi.mt_starting.list</field>
-        <field name="model">sn.wsd.nqi.mt_starting</field>
+        <field name="name">nqi.mt.starting.list</field>
+        <field name="model">sn.wsd.nqi.mt.starting</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -1152,8 +1166,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_starting_form" model="ir.ui.view">
-        <field name="name">nqi.mt_starting.form</field>
-        <field name="model">sn.wsd.nqi.mt_starting</field>
+        <field name="name">nqi.mt.starting.form</field>
+        <field name="model">sn.wsd.nqi.mt.starting</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -1180,6 +1194,7 @@
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -1192,8 +1207,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_starting_search" model="ir.ui.view">
-        <field name="name">nqi.mt_starting.search</field>
-        <field name="model">sn.wsd.nqi.mt_starting</field>
+        <field name="name">nqi.mt.starting.search</field>
+        <field name="model">sn.wsd.nqi.mt.starting</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -1206,7 +1221,7 @@
     </record>
     <record id="action_nqi_mt_starting" model="ir.actions.act_window">
         <field name="name">MT_STARTING_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_starting</field>
+        <field name="res_model">sn.wsd.nqi.mt.starting</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -1217,8 +1232,8 @@
               sequence="150"/>
 
     <record id="view_nqi_mt_time_error_list" model="ir.ui.view">
-        <field name="name">nqi.mt_time_error.list</field>
-        <field name="model">sn.wsd.nqi.mt_time_error</field>
+        <field name="name">nqi.mt.time.error.list</field>
+        <field name="model">sn.wsd.nqi.mt.time.error</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -1233,8 +1248,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_time_error_form" model="ir.ui.view">
-        <field name="name">nqi.mt_time_error.form</field>
-        <field name="model">sn.wsd.nqi.mt_time_error</field>
+        <field name="name">nqi.mt.time.error.form</field>
+        <field name="model">sn.wsd.nqi.mt.time.error</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -1254,6 +1269,7 @@
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -1266,8 +1282,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_time_error_search" model="ir.ui.view">
-        <field name="name">nqi.mt_time_error.search</field>
-        <field name="model">sn.wsd.nqi.mt_time_error</field>
+        <field name="name">nqi.mt.time.error.search</field>
+        <field name="model">sn.wsd.nqi.mt.time.error</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -1280,7 +1296,7 @@
     </record>
     <record id="action_nqi_mt_time_error" model="ir.actions.act_window">
         <field name="name">MT_TIME_ERROR_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_time_error</field>
+        <field name="res_model">sn.wsd.nqi.mt.time.error</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -1291,8 +1307,8 @@
               sequence="160"/>
 
     <record id="view_nqi_mt_ts_list" model="ir.ui.view">
-        <field name="name">nqi.mt_ts.list</field>
-        <field name="model">sn.wsd.nqi.mt_ts</field>
+        <field name="name">nqi.mt.ts.list</field>
+        <field name="model">sn.wsd.nqi.mt.ts</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -1307,8 +1323,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_ts_form" model="ir.ui.view">
-        <field name="name">nqi.mt_ts.form</field>
-        <field name="model">sn.wsd.nqi.mt_ts</field>
+        <field name="name">nqi.mt.ts.form</field>
+        <field name="model">sn.wsd.nqi.mt.ts</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -1338,6 +1354,7 @@
                             <field name="fee"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -1350,8 +1367,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_ts_search" model="ir.ui.view">
-        <field name="name">nqi.mt_ts.search</field>
-        <field name="model">sn.wsd.nqi.mt_ts</field>
+        <field name="name">nqi.mt.ts.search</field>
+        <field name="model">sn.wsd.nqi.mt.ts</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -1364,7 +1381,7 @@
     </record>
     <record id="action_nqi_mt_ts" model="ir.actions.act_window">
         <field name="name">MT_TS_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_ts</field>
+        <field name="res_model">sn.wsd.nqi.mt.ts</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -1375,8 +1392,8 @@
               sequence="170"/>
 
     <record id="view_nqi_mt_volt_list" model="ir.ui.view">
-        <field name="name">nqi.mt_volt.list</field>
-        <field name="model">sn.wsd.nqi.mt_volt</field>
+        <field name="name">nqi.mt.volt.list</field>
+        <field name="model">sn.wsd.nqi.mt.volt</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -1391,8 +1408,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_volt_form" model="ir.ui.view">
-        <field name="name">nqi.mt_volt.form</field>
-        <field name="model">sn.wsd.nqi.mt_volt</field>
+        <field name="name">nqi.mt.volt.form</field>
+        <field name="model">sn.wsd.nqi.mt.volt</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -1414,6 +1431,7 @@
                             <field name="cause"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -1426,8 +1444,8 @@
         </field>
     </record>
     <record id="view_nqi_mt_volt_search" model="ir.ui.view">
-        <field name="name">nqi.mt_volt.search</field>
-        <field name="model">sn.wsd.nqi.mt_volt</field>
+        <field name="name">nqi.mt.volt.search</field>
+        <field name="model">sn.wsd.nqi.mt.volt</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -1440,7 +1458,7 @@
     </record>
     <record id="action_nqi_mt_volt" model="ir.actions.act_window">
         <field name="name">MT_VOLT_CONC</field>
-        <field name="res_model">sn.wsd.nqi.mt_volt</field>
+        <field name="res_model">sn.wsd.nqi.mt.volt</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -1451,8 +1469,8 @@
               sequence="180"/>
 
     <record id="view_nqi_ot_other_list" model="ir.ui.view">
-        <field name="name">nqi.ot_other.list</field>
-        <field name="model">sn.wsd.nqi.ot_other</field>
+        <field name="name">nqi.ot.other.list</field>
+        <field name="model">sn.wsd.nqi.ot.other</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -1467,8 +1485,8 @@
         </field>
     </record>
     <record id="view_nqi_ot_other_form" model="ir.ui.view">
-        <field name="name">nqi.ot_other.form</field>
-        <field name="model">sn.wsd.nqi.ot_other</field>
+        <field name="name">nqi.ot.other.form</field>
+        <field name="model">sn.wsd.nqi.ot.other</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -1488,6 +1506,7 @@
                             <field name="cause"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -1500,8 +1519,8 @@
         </field>
     </record>
     <record id="view_nqi_ot_other_search" model="ir.ui.view">
-        <field name="name">nqi.ot_other.search</field>
-        <field name="model">sn.wsd.nqi.ot_other</field>
+        <field name="name">nqi.ot.other.search</field>
+        <field name="model">sn.wsd.nqi.ot.other</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -1514,7 +1533,7 @@
     </record>
     <record id="action_nqi_ot_other" model="ir.actions.act_window">
         <field name="name">OT_OTHER_CONC</field>
-        <field name="res_model">sn.wsd.nqi.ot_other</field>
+        <field name="res_model">sn.wsd.nqi.ot.other</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -1525,8 +1544,8 @@
               sequence="190"/>
 
     <record id="view_nqi_tt_consist_list" model="ir.ui.view">
-        <field name="name">nqi.tt_consist.list</field>
-        <field name="model">sn.wsd.nqi.tt_consist</field>
+        <field name="name">nqi.tt.consist.list</field>
+        <field name="model">sn.wsd.nqi.tt.consist</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -1541,8 +1560,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_consist_form" model="ir.ui.view">
-        <field name="name">nqi.tt_consist.form</field>
-        <field name="model">sn.wsd.nqi.tt_consist</field>
+        <field name="name">nqi.tt.consist.form</field>
+        <field name="model">sn.wsd.nqi.tt.consist</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -1582,6 +1601,7 @@
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -1594,8 +1614,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_consist_search" model="ir.ui.view">
-        <field name="name">nqi.tt_consist.search</field>
-        <field name="model">sn.wsd.nqi.tt_consist</field>
+        <field name="name">nqi.tt.consist.search</field>
+        <field name="model">sn.wsd.nqi.tt.consist</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -1608,7 +1628,7 @@
     </record>
     <record id="action_nqi_tt_consist" model="ir.actions.act_window">
         <field name="name">TT_CONSIST_CONC</field>
-        <field name="res_model">sn.wsd.nqi.tt_consist</field>
+        <field name="res_model">sn.wsd.nqi.tt.consist</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -1619,8 +1639,8 @@
               sequence="200"/>
 
     <record id="view_nqi_tt_demand_list" model="ir.ui.view">
-        <field name="name">nqi.tt_demand.list</field>
-        <field name="model">sn.wsd.nqi.tt_demand</field>
+        <field name="name">nqi.tt.demand.list</field>
+        <field name="model">sn.wsd.nqi.tt.demand</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -1635,8 +1655,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_demand_form" model="ir.ui.view">
-        <field name="name">nqi.tt_demand.form</field>
-        <field name="model">sn.wsd.nqi.tt_demand</field>
+        <field name="name">nqi.tt.demand.form</field>
+        <field name="model">sn.wsd.nqi.tt.demand</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -1675,6 +1695,7 @@
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -1687,8 +1708,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_demand_search" model="ir.ui.view">
-        <field name="name">nqi.tt_demand.search</field>
-        <field name="model">sn.wsd.nqi.tt_demand</field>
+        <field name="name">nqi.tt.demand.search</field>
+        <field name="model">sn.wsd.nqi.tt.demand</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -1701,7 +1722,7 @@
     </record>
     <record id="action_nqi_tt_demand" model="ir.actions.act_window">
         <field name="name">TT_DEMAND_CONC</field>
-        <field name="res_model">sn.wsd.nqi.tt_demand</field>
+        <field name="res_model">sn.wsd.nqi.tt.demand</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -1712,8 +1733,8 @@
               sequence="210"/>
 
     <record id="view_nqi_tt_eq_list" model="ir.ui.view">
-        <field name="name">nqi.tt_eq.list</field>
-        <field name="model">sn.wsd.nqi.tt_eq</field>
+        <field name="name">nqi.tt.eq.list</field>
+        <field name="model">sn.wsd.nqi.tt.eq</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -1728,8 +1749,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_eq_form" model="ir.ui.view">
-        <field name="name">nqi.tt_eq.form</field>
-        <field name="model">sn.wsd.nqi.tt_eq</field>
+        <field name="name">nqi.tt.eq.form</field>
+        <field name="model">sn.wsd.nqi.tt.eq</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -1754,6 +1775,7 @@
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -1766,8 +1788,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_eq_search" model="ir.ui.view">
-        <field name="name">nqi.tt_eq.search</field>
-        <field name="model">sn.wsd.nqi.tt_eq</field>
+        <field name="name">nqi.tt.eq.search</field>
+        <field name="model">sn.wsd.nqi.tt.eq</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -1780,7 +1802,7 @@
     </record>
     <record id="action_nqi_tt_eq" model="ir.actions.act_window">
         <field name="name">TT_EQ_CONC</field>
-        <field name="res_model">sn.wsd.nqi.tt_eq</field>
+        <field name="res_model">sn.wsd.nqi.tt.eq</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -1791,8 +1813,8 @@
               sequence="220"/>
 
     <record id="view_nqi_tt_error_list" model="ir.ui.view">
-        <field name="name">nqi.tt_error.list</field>
-        <field name="model">sn.wsd.nqi.tt_error</field>
+        <field name="name">nqi.tt.error.list</field>
+        <field name="model">sn.wsd.nqi.tt.error</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -1807,8 +1829,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_error_form" model="ir.ui.view">
-        <field name="name">nqi.tt_error.form</field>
-        <field name="model">sn.wsd.nqi.tt_error</field>
+        <field name="name">nqi.tt.error.form</field>
+        <field name="model">sn.wsd.nqi.tt.error</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -1843,6 +1865,7 @@
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -1855,8 +1878,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_error_search" model="ir.ui.view">
-        <field name="name">nqi.tt_error.search</field>
-        <field name="model">sn.wsd.nqi.tt_error</field>
+        <field name="name">nqi.tt.error.search</field>
+        <field name="model">sn.wsd.nqi.tt.error</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -1869,7 +1892,7 @@
     </record>
     <record id="action_nqi_tt_error" model="ir.actions.act_window">
         <field name="name">TT_ERROR_CONC</field>
-        <field name="res_model">sn.wsd.nqi.tt_error</field>
+        <field name="res_model">sn.wsd.nqi.tt.error</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -1880,8 +1903,8 @@
               sequence="230"/>
 
     <record id="view_nqi_tt_event_record_list" model="ir.ui.view">
-        <field name="name">nqi.tt_event_record.list</field>
-        <field name="model">sn.wsd.nqi.tt_event_record</field>
+        <field name="name">nqi.tt.event.record.list</field>
+        <field name="model">sn.wsd.nqi.tt.event.record</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -1896,8 +1919,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_event_record_form" model="ir.ui.view">
-        <field name="name">nqi.tt_event_record.form</field>
-        <field name="model">sn.wsd.nqi.tt_event_record</field>
+        <field name="name">nqi.tt.event.record.form</field>
+        <field name="model">sn.wsd.nqi.tt.event.record</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -1925,6 +1948,7 @@
                             <field name="ir_pules"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -1937,8 +1961,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_event_record_search" model="ir.ui.view">
-        <field name="name">nqi.tt_event_record.search</field>
-        <field name="model">sn.wsd.nqi.tt_event_record</field>
+        <field name="name">nqi.tt.event.record.search</field>
+        <field name="model">sn.wsd.nqi.tt.event.record</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -1951,7 +1975,7 @@
     </record>
     <record id="action_nqi_tt_event_record" model="ir.actions.act_window">
         <field name="name">TT_EVENT_RECORD_CONC</field>
-        <field name="res_model">sn.wsd.nqi.tt_event_record</field>
+        <field name="res_model">sn.wsd.nqi.tt.event.record</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -1962,8 +1986,8 @@
               sequence="240"/>
 
     <record id="view_nqi_tt_fee_list" model="ir.ui.view">
-        <field name="name">nqi.tt_fee.list</field>
-        <field name="model">sn.wsd.nqi.tt_fee</field>
+        <field name="name">nqi.tt.fee.list</field>
+        <field name="model">sn.wsd.nqi.tt.fee</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -1978,8 +2002,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_fee_form" model="ir.ui.view">
-        <field name="name">nqi.tt_fee.form</field>
-        <field name="model">sn.wsd.nqi.tt_fee</field>
+        <field name="name">nqi.tt.fee.form</field>
+        <field name="model">sn.wsd.nqi.tt.fee</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -2003,6 +2027,7 @@
                             <field name="both_way_power_flag_id"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -2015,8 +2040,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_fee_search" model="ir.ui.view">
-        <field name="name">nqi.tt_fee.search</field>
-        <field name="model">sn.wsd.nqi.tt_fee</field>
+        <field name="name">nqi.tt.fee.search</field>
+        <field name="model">sn.wsd.nqi.tt.fee</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -2029,7 +2054,7 @@
     </record>
     <record id="action_nqi_tt_fee" model="ir.actions.act_window">
         <field name="name">TT_FEE_CONC</field>
-        <field name="res_model">sn.wsd.nqi.tt_fee</field>
+        <field name="res_model">sn.wsd.nqi.tt.fee</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -2040,8 +2065,8 @@
               sequence="250"/>
 
     <record id="view_nqi_tt_max_demandvalue_list" model="ir.ui.view">
-        <field name="name">nqi.tt_max_demandvalue.list</field>
-        <field name="model">sn.wsd.nqi.tt_max_demandvalue</field>
+        <field name="name">nqi.tt.max.demandvalue.list</field>
+        <field name="model">sn.wsd.nqi.tt.max.demandvalue</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -2056,8 +2081,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_max_demandvalue_form" model="ir.ui.view">
-        <field name="name">nqi.tt_max_demandvalue.form</field>
-        <field name="model">sn.wsd.nqi.tt_max_demandvalue</field>
+        <field name="name">nqi.tt.max.demandvalue.form</field>
+        <field name="model">sn.wsd.nqi.tt.max.demandvalue</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -2080,6 +2105,7 @@
                             <field name="both_way_power_flag_id"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -2092,8 +2118,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_max_demandvalue_search" model="ir.ui.view">
-        <field name="name">nqi.tt_max_demandvalue.search</field>
-        <field name="model">sn.wsd.nqi.tt_max_demandvalue</field>
+        <field name="name">nqi.tt.max.demandvalue.search</field>
+        <field name="model">sn.wsd.nqi.tt.max.demandvalue</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -2106,7 +2132,7 @@
     </record>
     <record id="action_nqi_tt_max_demandvalue" model="ir.actions.act_window">
         <field name="name">TT_MAX_DEMANDVALUE_CONC</field>
-        <field name="res_model">sn.wsd.nqi.tt_max_demandvalue</field>
+        <field name="res_model">sn.wsd.nqi.tt.max.demandvalue</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -2117,8 +2143,8 @@
               sequence="260"/>
 
     <record id="view_nqi_tt_max_demand_err_list" model="ir.ui.view">
-        <field name="name">nqi.tt_max_demand_err.list</field>
-        <field name="model">sn.wsd.nqi.tt_max_demand_err</field>
+        <field name="name">nqi.tt.max.demand.err.list</field>
+        <field name="model">sn.wsd.nqi.tt.max.demand.err</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -2133,8 +2159,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_max_demand_err_form" model="ir.ui.view">
-        <field name="name">nqi.tt_max_demand_err.form</field>
-        <field name="model">sn.wsd.nqi.tt_max_demand_err</field>
+        <field name="name">nqi.tt.max.demand.err.form</field>
+        <field name="model">sn.wsd.nqi.tt.max.demand.err</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -2161,6 +2187,7 @@
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -2173,8 +2200,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_max_demand_err_search" model="ir.ui.view">
-        <field name="name">nqi.tt_max_demand_err.search</field>
-        <field name="model">sn.wsd.nqi.tt_max_demand_err</field>
+        <field name="name">nqi.tt.max.demand.err.search</field>
+        <field name="model">sn.wsd.nqi.tt.max.demand.err</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -2187,7 +2214,7 @@
     </record>
     <record id="action_nqi_tt_max_demand_err" model="ir.actions.act_window">
         <field name="name">TT_MAX_DEMAND_ERR_CONC</field>
-        <field name="res_model">sn.wsd.nqi.tt_max_demand_err</field>
+        <field name="res_model">sn.wsd.nqi.tt.max.demand.err</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -2198,8 +2225,8 @@
               sequence="270"/>
 
     <record id="view_nqi_tt_overload_list" model="ir.ui.view">
-        <field name="name">nqi.tt_overload.list</field>
-        <field name="model">sn.wsd.nqi.tt_overload</field>
+        <field name="name">nqi.tt.overload.list</field>
+        <field name="model">sn.wsd.nqi.tt.overload</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -2214,8 +2241,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_overload_form" model="ir.ui.view">
-        <field name="name">nqi.tt_overload.form</field>
-        <field name="model">sn.wsd.nqi.tt_overload</field>
+        <field name="name">nqi.tt.overload.form</field>
+        <field name="model">sn.wsd.nqi.tt.overload</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -2247,6 +2274,7 @@
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -2259,8 +2287,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_overload_search" model="ir.ui.view">
-        <field name="name">nqi.tt_overload.search</field>
-        <field name="model">sn.wsd.nqi.tt_overload</field>
+        <field name="name">nqi.tt.overload.search</field>
+        <field name="model">sn.wsd.nqi.tt.overload</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -2273,7 +2301,7 @@
     </record>
     <record id="action_nqi_tt_overload" model="ir.actions.act_window">
         <field name="name">TT_OVERLOAD_CONC</field>
-        <field name="res_model">sn.wsd.nqi.tt_overload</field>
+        <field name="res_model">sn.wsd.nqi.tt.overload</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -2284,8 +2312,8 @@
               sequence="280"/>
 
     <record id="view_nqi_tt_power_measure_list" model="ir.ui.view">
-        <field name="name">nqi.tt_power_measure.list</field>
-        <field name="model">sn.wsd.nqi.tt_power_measure</field>
+        <field name="name">nqi.tt.power.measure.list</field>
+        <field name="model">sn.wsd.nqi.tt.power.measure</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -2300,8 +2328,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_power_measure_form" model="ir.ui.view">
-        <field name="name">nqi.tt_power_measure.form</field>
-        <field name="model">sn.wsd.nqi.tt_power_measure</field>
+        <field name="name">nqi.tt.power.measure.form</field>
+        <field name="model">sn.wsd.nqi.tt.power.measure</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -2332,6 +2360,7 @@
                             <field name="both_way_power_flag_id"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -2344,8 +2373,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_power_measure_search" model="ir.ui.view">
-        <field name="name">nqi.tt_power_measure.search</field>
-        <field name="model">sn.wsd.nqi.tt_power_measure</field>
+        <field name="name">nqi.tt.power.measure.search</field>
+        <field name="model">sn.wsd.nqi.tt.power.measure</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -2358,7 +2387,7 @@
     </record>
     <record id="action_nqi_tt_power_measure" model="ir.actions.act_window">
         <field name="name">TT_POWER_MEASURE_CONC</field>
-        <field name="res_model">sn.wsd.nqi.tt_power_measure</field>
+        <field name="res_model">sn.wsd.nqi.tt.power.measure</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -2369,8 +2398,8 @@
               sequence="290"/>
 
     <record id="view_nqi_tt_standard_list" model="ir.ui.view">
-        <field name="name">nqi.tt_standard.list</field>
-        <field name="model">sn.wsd.nqi.tt_standard</field>
+        <field name="name">nqi.tt.standard.list</field>
+        <field name="model">sn.wsd.nqi.tt.standard</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -2385,8 +2414,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_standard_form" model="ir.ui.view">
-        <field name="name">nqi.tt_standard.form</field>
-        <field name="model">sn.wsd.nqi.tt_standard</field>
+        <field name="name">nqi.tt.standard.form</field>
+        <field name="model">sn.wsd.nqi.tt.standard</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -2410,6 +2439,7 @@
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -2422,8 +2452,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_standard_search" model="ir.ui.view">
-        <field name="name">nqi.tt_standard.search</field>
-        <field name="model">sn.wsd.nqi.tt_standard</field>
+        <field name="name">nqi.tt.standard.search</field>
+        <field name="model">sn.wsd.nqi.tt.standard</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -2436,7 +2466,7 @@
     </record>
     <record id="action_nqi_tt_standard" model="ir.actions.act_window">
         <field name="name">TT_STANDARD_CONC</field>
-        <field name="res_model">sn.wsd.nqi.tt_standard</field>
+        <field name="res_model">sn.wsd.nqi.tt.standard</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>
@@ -2447,8 +2477,8 @@
               sequence="300"/>
 
     <record id="view_nqi_tt_variation_list" model="ir.ui.view">
-        <field name="name">nqi.tt_variation.list</field>
-        <field name="model">sn.wsd.nqi.tt_variation</field>
+        <field name="name">nqi.tt.variation.list</field>
+        <field name="model">sn.wsd.nqi.tt.variation</field>
         <field name="arch" type="xml">
             <list decoration-warning="missing_count &gt; 0">
                 <field name="test_result_id"/>
@@ -2463,8 +2493,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_variation_form" model="ir.ui.view">
-        <field name="name">nqi.tt_variation.form</field>
-        <field name="model">sn.wsd.nqi.tt_variation</field>
+        <field name="name">nqi.tt.variation.form</field>
+        <field name="model">sn.wsd.nqi.tt.variation</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -2502,6 +2532,7 @@
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -2514,8 +2545,8 @@
         </field>
     </record>
     <record id="view_nqi_tt_variation_search" model="ir.ui.view">
-        <field name="name">nqi.tt_variation.search</field>
-        <field name="model">sn.wsd.nqi.tt_variation</field>
+        <field name="name">nqi.tt.variation.search</field>
+        <field name="model">sn.wsd.nqi.tt.variation</field>
         <field name="arch" type="xml">
             <search>
                 <field name="serial_no"/>
@@ -2528,7 +2559,7 @@
     </record>
     <record id="action_nqi_tt_variation" model="ir.actions.act_window">
         <field name="name">TT_VARIATION_CONC</field>
-        <field name="res_model">sn.wsd.nqi.tt_variation</field>
+        <field name="res_model">sn.wsd.nqi.tt.variation</field>
         <field name="view_mode">list,form</field>
         <field name='context'>{'search_default_filter_recent': 1}</field>
     </record>

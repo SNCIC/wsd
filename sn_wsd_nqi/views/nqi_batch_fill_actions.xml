@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_nqi_fit_component_bind_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_fit_component_bind"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.fit.component.bind', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_fit_meter_info_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_fit_meter_info"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.fit.meter.info', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_fit_meter_mounting_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_fit_meter_mounting"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.fit.meter.mounting', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_fit_pcb_mounting_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_fit_pcb_mounting"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.fit.pcb.mounting', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_fit_pcb_serial_bind_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_fit_pcb_serial_bind"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.fit.pcb.serial.bind', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_aoi_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_aoi"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.aoi', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_basicerr_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_basicerr"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.basicerr', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_const_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_const"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.const', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_creeping_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_creeping"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.creeping', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_dayerr_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_dayerr"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.dayerr', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_demandvalue_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_demandvalue"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.demandvalue', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_esam_read_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_esam_read"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.esam.read', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_function_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_function"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.function', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_hutchison_combina_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_hutchison_combina"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.hutchison.combina', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_intuit_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_intuit"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.intuit', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_mounting_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_mounting"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.mounting', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_parameter_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_parameter"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.parameter', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_rfid_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_rfid"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.rfid', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_single_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_single"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.single', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_starting_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_starting"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.starting', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_time_error_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_time_error"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.time.error', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_ts_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_ts"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.ts', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_mt_volt_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_mt_volt"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.mt.volt', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_ot_other_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_ot_other"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.ot.other', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_tt_consist_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_tt_consist"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.tt.consist', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_tt_demand_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_tt_demand"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.tt.demand', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_tt_eq_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_tt_eq"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.tt.eq', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_tt_error_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_tt_error"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.tt.error', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_tt_event_record_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_tt_event_record"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.tt.event.record', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_tt_fee_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_tt_fee"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.tt.fee', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_tt_max_demand_err_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_tt_max_demand_err"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.tt.max.demand.err', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_tt_max_demandvalue_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_tt_max_demandvalue"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.tt.max.demandvalue', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_tt_overload_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_tt_overload"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.tt.overload', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_tt_power_measure_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_tt_power_measure"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.tt.power.measure', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_tt_standard_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_tt_standard"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.tt.standard', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+    <record id="action_nqi_tt_variation_batch_fill" model="ir.actions.server">
+        <field name="name">Batch Fill Missing Columns</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_tt_variation"/>
+        <field name="state">code</field>
+        <field name="code">action = {'type': 'ir.actions.act_window', 'res_model': 'sn.wsd.nqi.batch.fill', 'view_mode': 'form', 'target': 'new', 'context': {'default_target_model': 'sn.wsd.nqi.tt.variation', 'active_ids': env.context.get('active_ids')}}</field>
+    </record>
+</odoo>

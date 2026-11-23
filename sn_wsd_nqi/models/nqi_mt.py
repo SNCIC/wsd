@@ -2,11 +2,11 @@
 build_tmp/nqi_explore/gen_models.py and fields.json)."""
 from odoo import fields, models
 
-class Nqi(models.Model):
+class NqiAoi(models.Model):
     """NQI MT_AOI_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_aoi'
+    _name = 'sn.wsd.nqi.mt.aoi'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Aoi'
     _rec_name = 'pcb_code'
 
     NQI_REQUIRED = (
@@ -28,11 +28,11 @@ class Nqi(models.Model):
         'unique(company_id, pcb_code, detect_date)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiBasicerr(models.Model):
     """NQI MT_BASICERR_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_basicerr'
+    _name = 'sn.wsd.nqi.mt.basicerr'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Basicerr'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -108,11 +108,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiConst(models.Model):
     """NQI MT_CONST_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_const'
+    _name = 'sn.wsd.nqi.mt.const'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Const'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -178,11 +178,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiCreeping(models.Model):
     """NQI MT_CREEPING_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_creeping'
+    _name = 'sn.wsd.nqi.mt.creeping'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Creeping'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -228,11 +228,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiDayerr(models.Model):
     """NQI MT_DAYERR_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_dayerr'
+    _name = 'sn.wsd.nqi.mt.dayerr'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Dayerr'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -271,11 +271,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiDemandvalue(models.Model):
     """NQI MT_DEMANDVALUE_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_demandvalue'
+    _name = 'sn.wsd.nqi.mt.demandvalue'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Demandvalue'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -339,11 +339,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiEsamRead(models.Model):
     """NQI MT_ESAM_READ_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_esam_read'
+    _name = 'sn.wsd.nqi.mt.esam.read'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Esam Read'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -386,11 +386,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiFunction(models.Model):
     """NQI MT_FUNCTION_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_function'
+    _name = 'sn.wsd.nqi.mt.function'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Function'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -412,11 +412,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiHutchisonCombina(models.Model):
     """NQI MT_HUTCHISON_COMBINA_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_hutchison_combina'
+    _name = 'sn.wsd.nqi.mt.hutchison.combina'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Hutchison Combina'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -492,11 +492,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiIntuit(models.Model):
     """NQI MT_INTUIT_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_intuit'
+    _name = 'sn.wsd.nqi.mt.intuit'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Intuit'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -522,11 +522,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiMounting(models.Model):
     """NQI MT_MOUNTING_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_mounting'
+    _name = 'sn.wsd.nqi.mt.mounting'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Mounting'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -558,11 +558,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, pcb_code, detect_date)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiParameter(models.Model):
     """NQI MT_PARAMETER_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_parameter'
+    _name = 'sn.wsd.nqi.mt.parameter'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Parameter'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -593,11 +593,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiRfid(models.Model):
     """NQI MT_RFID_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_rfid'
+    _name = 'sn.wsd.nqi.mt.rfid'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Rfid'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -620,11 +620,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiSingle(models.Model):
     """NQI MT_SINGLE_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_single'
+    _name = 'sn.wsd.nqi.mt.single'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Single'
     _rec_name = 'pcb_code'
 
     NQI_REQUIRED = (
@@ -650,11 +650,11 @@ class Nqi(models.Model):
         'unique(company_id, pcb_code, detect_date)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiStarting(models.Model):
     """NQI MT_STARTING_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_starting'
+    _name = 'sn.wsd.nqi.mt.starting'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Starting'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -702,11 +702,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiTimeError(models.Model):
     """NQI MT_TIME_ERROR_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_time_error'
+    _name = 'sn.wsd.nqi.mt.time.error'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Time Error'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -730,11 +730,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiTs(models.Model):
     """NQI MT_TS_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_ts'
+    _name = 'sn.wsd.nqi.mt.ts'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Ts'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -772,11 +772,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiVolt(models.Model):
     """NQI MT_VOLT_CONC mirror."""
-    _name = 'sn.wsd.nqi.mt_volt'
+    _name = 'sn.wsd.nqi.mt.volt'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Volt'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -801,11 +801,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiOther(models.Model):
     """NQI OT_OTHER_CONC mirror."""
-    _name = 'sn.wsd.nqi.ot_other'
+    _name = 'sn.wsd.nqi.ot.other'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Other'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -828,11 +828,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, pcb_code)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiConsist(models.Model):
     """NQI TT_CONSIST_CONC mirror."""
-    _name = 'sn.wsd.nqi.tt_consist'
+    _name = 'sn.wsd.nqi.tt.consist'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Consist'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -912,11 +912,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiDemand(models.Model):
     """NQI TT_DEMAND_CONC mirror."""
-    _name = 'sn.wsd.nqi.tt_demand'
+    _name = 'sn.wsd.nqi.tt.demand'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Demand'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -998,11 +998,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiEq(models.Model):
     """NQI TT_EQ_CONC mirror."""
-    _name = 'sn.wsd.nqi.tt_eq'
+    _name = 'sn.wsd.nqi.tt.eq'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Eq'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -1044,11 +1044,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiError(models.Model):
     """NQI TT_ERROR_CONC mirror."""
-    _name = 'sn.wsd.nqi.tt_error'
+    _name = 'sn.wsd.nqi.tt.error'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Error'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -1118,11 +1118,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiEventRecord(models.Model):
     """NQI TT_EVENT_RECORD_CONC mirror."""
-    _name = 'sn.wsd.nqi.tt_event_record'
+    _name = 'sn.wsd.nqi.tt.event.record'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Event Record'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -1170,11 +1170,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiFee(models.Model):
     """NQI TT_FEE_CONC mirror."""
-    _name = 'sn.wsd.nqi.tt_fee'
+    _name = 'sn.wsd.nqi.tt.fee'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Fee'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -1222,11 +1222,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiMaxDemandvalue(models.Model):
     """NQI TT_MAX_DEMANDVALUE_CONC mirror."""
-    _name = 'sn.wsd.nqi.tt_max_demandvalue'
+    _name = 'sn.wsd.nqi.tt.max.demandvalue'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Max Demandvalue'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -1268,11 +1268,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiMaxDemandErr(models.Model):
     """NQI TT_MAX_DEMAND_ERR_CONC mirror."""
-    _name = 'sn.wsd.nqi.tt_max_demand_err'
+    _name = 'sn.wsd.nqi.tt.max.demand.err'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Max Demand Err'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -1326,11 +1326,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiOverload(models.Model):
     """NQI TT_OVERLOAD_CONC mirror."""
-    _name = 'sn.wsd.nqi.tt_overload'
+    _name = 'sn.wsd.nqi.tt.overload'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Overload'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -1390,11 +1390,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiPowerMeasure(models.Model):
     """NQI TT_POWER_MEASURE_CONC mirror."""
-    _name = 'sn.wsd.nqi.tt_power_measure'
+    _name = 'sn.wsd.nqi.tt.power.measure'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Power Measure'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -1456,11 +1456,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiStandard(models.Model):
     """NQI TT_STANDARD_CONC mirror."""
-    _name = 'sn.wsd.nqi.tt_standard'
+    _name = 'sn.wsd.nqi.tt.standard'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Standard'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (
@@ -1492,11 +1492,11 @@ class Nqi(models.Model):
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
 
-class Nqi(models.Model):
+class NqiVariation(models.Model):
     """NQI TT_VARIATION_CONC mirror."""
-    _name = 'sn.wsd.nqi.tt_variation'
+    _name = 'sn.wsd.nqi.tt.variation'
     _inherit = ['sn.wsd.nqi.staging.mixin']
-    _description = 'NQI '
+    _description = 'NQI Variation'
     _rec_name = 'serial_no'
 
     NQI_REQUIRED = (

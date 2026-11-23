@@ -32,6 +32,7 @@
                             <field name="operator_code"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -109,6 +110,7 @@
                             <field name="supply_date"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -181,6 +183,7 @@
                             <field name="file_url"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -254,6 +257,7 @@
                             <field name="test_result"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
@@ -324,6 +328,7 @@
                             <field name="solution"/>
                         </group>
                         <group string="Envelope">
+                            <field name="missing_fields" readonly="1"/>
                             <field name="enterprise_code"/>
                             <field name="nqi_write_date"/>
                             <field name="handle_flag"/>
