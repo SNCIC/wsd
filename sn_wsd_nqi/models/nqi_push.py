@@ -56,8 +56,8 @@ class NqiStagingMixinPush(models.AbstractModel):
         for name, field in self._fields.items():
             if not field.store or name in _NQI_SKIPPED_COLUMNS:
                 continue
-            if field.type == 'many2one':
-                continue  # anchors and dictionary pointers stay out
+            if field.type in ('many2one', 'one2many', 'many2many'):
+                continue  # anchors, dictionary pointers and chatter rels
             value = self[name]
             if name == 'nqi_write_date':
                 value = value or fields.Datetime.now().strftime(

@@ -1,6 +1,6 @@
 """Generated from the NQI data model V2.1 docx (see
 build_tmp/nqi_explore/gen_models.py and fields.json)."""
-from odoo import fields, models
+from odoo import api, fields, models
 
 class NqiAoi(models.Model):
     """NQI MT_AOI_CONC mirror."""
@@ -104,6 +104,42 @@ class NqiBasicerr(models.Model):
     err_up = fields.Char()
     err_down = fields.Char()
 
+    @api.onchange('both_way_power_flag_id')
+    def _onchange_both_way_power_flag_id(self):
+        for record in self:
+            record.both_way_power_flag = (record.both_way_power_flag_id.code_id
+                or '')
+
+    @api.onchange('iabc_id')
+    def _onchange_iabc_id(self):
+        for record in self:
+            record.iabc = (record.iabc_id.code_id
+                or '')
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('load_voltage_id')
+    def _onchange_load_voltage_id(self):
+        for record in self:
+            record.load_voltage = (record.load_voltage_id.code_id
+                or '')
+
+    @api.onchange('freq_id')
+    def _onchange_freq_id(self):
+        for record in self:
+            record.freq = (record.freq_id.code_id
+                or '')
+
+    @api.onchange('pf_id')
+    def _onchange_pf_id(self):
+        for record in self:
+            record.pf = (record.pf_id.code_id
+                or '')
+
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
@@ -174,6 +210,36 @@ class NqiConst(models.Model):
         ondelete='restrict')
     read_type_code = fields.Char()
 
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('both_way_power_flag_id')
+    def _onchange_both_way_power_flag_id(self):
+        for record in self:
+            record.both_way_power_flag = (record.both_way_power_flag_id.code_id
+                or '')
+
+    @api.onchange('pf_id')
+    def _onchange_pf_id(self):
+        for record in self:
+            record.pf = (record.pf_id.code_id
+                or '')
+
+    @api.onchange('control_method_id')
+    def _onchange_control_method_id(self):
+        for record in self:
+            record.control_method = (record.control_method_id.code_id
+                or '')
+
+    @api.onchange('read_type_code_id')
+    def _onchange_read_type_code_id(self):
+        for record in self:
+            record.read_type_code = (record.read_type_code_id.code_id
+                or '')
+
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
@@ -223,6 +289,24 @@ class NqiCreeping(models.Model):
     test_time = fields.Char()
     real_test_time = fields.Char()
     conc_code = fields.Char()
+
+    @api.onchange('load_voltage_id')
+    def _onchange_load_voltage_id(self):
+        for record in self:
+            record.load_voltage = (record.load_voltage_id.code_id
+                or '')
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('both_way_power_flag_id')
+    def _onchange_both_way_power_flag_id(self):
+        for record in self:
+            record.both_way_power_flag = (record.both_way_power_flag_id.code_id
+                or '')
 
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
@@ -335,6 +419,36 @@ class NqiDemandvalue(models.Model):
     err_dowm = fields.Char()
     conc_code = fields.Char()
 
+    @api.onchange('both_way_power_flag_id')
+    def _onchange_both_way_power_flag_id(self):
+        for record in self:
+            record.both_way_power_flag = (record.both_way_power_flag_id.code_id
+                or '')
+
+    @api.onchange('voltage_id')
+    def _onchange_voltage_id(self):
+        for record in self:
+            record.voltage = (record.voltage_id.code_id
+                or '')
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('pf_id')
+    def _onchange_pf_id(self):
+        for record in self:
+            record.pf = (record.pf_id.code_id
+                or '')
+
+    @api.onchange('control_method_id')
+    def _onchange_control_method_id(self):
+        for record in self:
+            record.control_method = (record.control_method_id.code_id
+                or '')
+
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
@@ -381,6 +495,24 @@ class NqiEsamRead(models.Model):
     test_item = fields.Char()
     test_method_differ = fields.Char()
     trip_delay_time = fields.Char()
+
+    @api.onchange('load_voltage_id')
+    def _onchange_load_voltage_id(self):
+        for record in self:
+            record.load_voltage = (record.load_voltage_id.code_id
+                or '')
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('pf_id')
+    def _onchange_pf_id(self):
+        for record in self:
+            record.pf = (record.pf_id.code_id
+                or '')
 
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
@@ -488,6 +620,30 @@ class NqiHutchisonCombina(models.Model):
     value_conc_code = fields.Char()
     conc_code = fields.Char()
 
+    @api.onchange('both_way_power_flag_id')
+    def _onchange_both_way_power_flag_id(self):
+        for record in self:
+            record.both_way_power_flag = (record.both_way_power_flag_id.code_id
+                or '')
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('pf_id')
+    def _onchange_pf_id(self):
+        for record in self:
+            record.pf = (record.pf_id.code_id
+                or '')
+
+    @api.onchange('control_method_id')
+    def _onchange_control_method_id(self):
+        for record in self:
+            record.control_method = (record.control_method_id.code_id
+                or '')
+
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
@@ -588,6 +744,12 @@ class NqiParameter(models.Model):
         domain="[('code_type', '=', 'TEST_RESULT')]",
         ondelete='restrict')
     conc_code = fields.Char()
+
+    @api.onchange('conc_code_id')
+    def _onchange_conc_code_id(self):
+        for record in self:
+            record.conc_code = (record.conc_code_id.code_id
+                or '')
 
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date)',
@@ -698,6 +860,24 @@ class NqiStarting(models.Model):
     start_current = fields.Char()
     conc_code = fields.Char()
 
+    @api.onchange('load_voltage_id')
+    def _onchange_load_voltage_id(self):
+        for record in self:
+            record.load_voltage = (record.load_voltage_id.code_id
+                or '')
+
+    @api.onchange('both_way_power_flag_id')
+    def _onchange_both_way_power_flag_id(self):
+        for record in self:
+            record.both_way_power_flag = (record.both_way_power_flag_id.code_id
+                or '')
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
@@ -767,6 +947,12 @@ class NqiTs(models.Model):
     err_dowm = fields.Char()
     ts_real_time = fields.Char()
     fee = fields.Char()
+
+    @api.onchange('volt_id')
+    def _onchange_volt_id(self):
+        for record in self:
+            record.volt = (record.volt_id.code_id
+                or '')
 
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
@@ -908,6 +1094,30 @@ class NqiConsist(models.Model):
     int_twice_err = fields.Char()
     conc_code = fields.Char()
 
+    @api.onchange('both_way_power_flag_id')
+    def _onchange_both_way_power_flag_id(self):
+        for record in self:
+            record.both_way_power_flag = (record.both_way_power_flag_id.code_id
+                or '')
+
+    @api.onchange('load_voltage_id')
+    def _onchange_load_voltage_id(self):
+        for record in self:
+            record.load_voltage = (record.load_voltage_id.code_id
+                or '')
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('pf_id')
+    def _onchange_pf_id(self):
+        for record in self:
+            record.pf = (record.pf_id.code_id
+                or '')
+
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
@@ -994,6 +1204,36 @@ class NqiDemand(models.Model):
     int_convert_err = fields.Char()
     conc_code = fields.Char()
 
+    @api.onchange('both_way_power_flag_id')
+    def _onchange_both_way_power_flag_id(self):
+        for record in self:
+            record.both_way_power_flag = (record.both_way_power_flag_id.code_id
+                or '')
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('voltage_id')
+    def _onchange_voltage_id(self):
+        for record in self:
+            record.voltage = (record.voltage_id.code_id
+                or '')
+
+    @api.onchange('freq_id')
+    def _onchange_freq_id(self):
+        for record in self:
+            record.freq = (record.freq_id.code_id
+                or '')
+
+    @api.onchange('pf_id')
+    def _onchange_pf_id(self):
+        for record in self:
+            record.pf = (record.pf_id.code_id
+                or '')
+
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
@@ -1039,6 +1279,18 @@ class NqiEq(models.Model):
         ondelete='restrict')
     pf = fields.Char()
     conc_code = fields.Char()
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('pf_id')
+    def _onchange_pf_id(self):
+        for record in self:
+            record.pf = (record.pf_id.code_id
+                or '')
 
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
@@ -1114,6 +1366,30 @@ class NqiError(models.Model):
     int_twice_err = fields.Char()
     conc_code = fields.Char()
 
+    @api.onchange('both_way_power_flag_id')
+    def _onchange_both_way_power_flag_id(self):
+        for record in self:
+            record.both_way_power_flag = (record.both_way_power_flag_id.code_id
+                or '')
+
+    @api.onchange('load_voltage_id')
+    def _onchange_load_voltage_id(self):
+        for record in self:
+            record.load_voltage = (record.load_voltage_id.code_id
+                or '')
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('pf_id')
+    def _onchange_pf_id(self):
+        for record in self:
+            record.pf = (record.pf_id.code_id
+                or '')
+
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
@@ -1165,6 +1441,18 @@ class NqiEventRecord(models.Model):
     err_down = fields.Char()
     conc_code = fields.Char()
     ir_pules = fields.Char()
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('pf_id')
+    def _onchange_pf_id(self):
+        for record in self:
+            record.pf = (record.pf_id.code_id
+                or '')
 
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
@@ -1218,6 +1506,30 @@ class NqiFee(models.Model):
         ondelete='restrict')
     both_way_power_flag = fields.Char()
 
+    @api.onchange('pf_id')
+    def _onchange_pf_id(self):
+        for record in self:
+            record.pf = (record.pf_id.code_id
+                or '')
+
+    @api.onchange('cur_phase_code_id')
+    def _onchange_cur_phase_code_id(self):
+        for record in self:
+            record.cur_phase_code = (record.cur_phase_code_id.code_id
+                or '')
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('both_way_power_flag_id')
+    def _onchange_both_way_power_flag_id(self):
+        for record in self:
+            record.both_way_power_flag = (record.both_way_power_flag_id.code_id
+                or '')
+
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
         'Natural key must be unique per company.')
@@ -1263,6 +1575,24 @@ class NqiMaxDemandvalue(models.Model):
         domain="[('code_type', '=', 'METER_PARA_POWER_FLAG')]",
         ondelete='restrict')
     both_way_power_flag = fields.Char()
+
+    @api.onchange('cur_phase_code_id')
+    def _onchange_cur_phase_code_id(self):
+        for record in self:
+            record.cur_phase_code = (record.cur_phase_code_id.code_id
+                or '')
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('both_way_power_flag_id')
+    def _onchange_both_way_power_flag_id(self):
+        for record in self:
+            record.both_way_power_flag = (record.both_way_power_flag_id.code_id
+                or '')
 
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
@@ -1321,6 +1651,30 @@ class NqiMaxDemandErr(models.Model):
     avg_err = fields.Char()
     int_convert_err = fields.Char()
     conc_code = fields.Char()
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('load_voltage_id')
+    def _onchange_load_voltage_id(self):
+        for record in self:
+            record.load_voltage = (record.load_voltage_id.code_id
+                or '')
+
+    @api.onchange('freq_id')
+    def _onchange_freq_id(self):
+        for record in self:
+            record.freq = (record.freq_id.code_id
+                or '')
+
+    @api.onchange('pf_id')
+    def _onchange_pf_id(self):
+        for record in self:
+            record.pf = (record.pf_id.code_id
+                or '')
 
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
@@ -1385,6 +1739,24 @@ class NqiOverload(models.Model):
     avg_err = fields.Char()
     int_converter_err = fields.Char()
     conc_code = fields.Char()
+
+    @api.onchange('load_voltage_id')
+    def _onchange_load_voltage_id(self):
+        for record in self:
+            record.load_voltage = (record.load_voltage_id.code_id
+                or '')
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('pf_id')
+    def _onchange_pf_id(self):
+        for record in self:
+            record.pf = (record.pf_id.code_id
+                or '')
 
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
@@ -1451,6 +1823,30 @@ class NqiPowerMeasure(models.Model):
         domain="[('code_type', '=', 'METER_PARA_POWER_FLAG')]",
         ondelete='restrict')
     both_way_power_flag = fields.Char()
+
+    @api.onchange('cur_phase_code_id')
+    def _onchange_cur_phase_code_id(self):
+        for record in self:
+            record.cur_phase_code = (record.cur_phase_code_id.code_id
+                or '')
+
+    @api.onchange('pf_id')
+    def _onchange_pf_id(self):
+        for record in self:
+            record.pf = (record.pf_id.code_id
+                or '')
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('both_way_power_flag_id')
+    def _onchange_both_way_power_flag_id(self):
+        for record in self:
+            record.both_way_power_flag = (record.both_way_power_flag_id.code_id
+                or '')
 
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',
@@ -1571,6 +1967,36 @@ class NqiVariation(models.Model):
     variation_err = fields.Char()
     int_variation_err = fields.Char()
     conc_code = fields.Char()
+
+    @api.onchange('both_way_power_flag_id')
+    def _onchange_both_way_power_flag_id(self):
+        for record in self:
+            record.both_way_power_flag = (record.both_way_power_flag_id.code_id
+                or '')
+
+    @api.onchange('load_voltage_id')
+    def _onchange_load_voltage_id(self):
+        for record in self:
+            record.load_voltage = (record.load_voltage_id.code_id
+                or '')
+
+    @api.onchange('load_current_id')
+    def _onchange_load_current_id(self):
+        for record in self:
+            record.load_current = (record.load_current_id.code_id
+                or '')
+
+    @api.onchange('iabc_id')
+    def _onchange_iabc_id(self):
+        for record in self:
+            record.iabc = (record.iabc_id.code_id
+                or '')
+
+    @api.onchange('pf_id')
+    def _onchange_pf_id(self):
+        for record in self:
+            record.pf = (record.pf_id.code_id
+                or '')
 
     _natural_key_uniq = models.Constraint(
         'unique(company_id, serial_no, detect_date, para_index, detect_item_point)',

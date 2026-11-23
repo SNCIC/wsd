@@ -9,6 +9,10 @@ class TestNqiEnvelope(TransactionCase):
         return self.env['sn.wsd.nqi.rd.product.info'].create(vals)
 
     def _create_config(self):
+        existing = self.env['sn.wsd.nqi.config'].search([
+            ('company_id', '=', self.env.company.id)], limit=1)
+        if existing:
+            return existing
         return self.env['sn.wsd.nqi.config'].create({
             'company_id': self.env.company.id,
             'enterprise_code': '88888',
@@ -44,6 +48,9 @@ class TestNqiEnvelope(TransactionCase):
         self.assertEqual(row.missing_count, 1)
 
     def test_mark_to_push_requires_config_and_completeness(self):
+        # drop any pre-existing config (e.g. created via the UI) so the
+        # no-config phase is testable; rolled back on teardown
+        self.env['sn.wsd.nqi.config'].search([]).unlink()
         complete_vals = {
             'product_code': 'P-3',
             'product_type': 'DDSU666',

@@ -14,10 +14,20 @@ class TestNqiPush(TransactionCase):
             'product_design_basis': 'GB/T 17215',
         })
 
+    def _config(self, **extra):
+        config = self.env['sn.wsd.nqi.config'].search([
+            ('company_id', '=', self.env.company.id)], limit=1)
+        if not config:
+            config = self.env['sn.wsd.nqi.config'].create({
+                'company_id': self.env.company.id,
+                'enterprise_code': '88888',
+            })
+        if extra:
+            config.write(extra)
+        return config
+
     def test_payload_keys_mirror_docx_columns(self):
-        self.env['sn.wsd.nqi.config'].create({
-            'enterprise_code': '88888',
-        })
+        self._config()
         row = self._product_row('PAY-1')
         payload = row._nqi_payload()
         self.assertEqual(payload['PRODUCT_CODE'], 'PAY-1')
@@ -31,9 +41,7 @@ class TestNqiPush(TransactionCase):
         self.assertNotIn('PUSH_STATE', payload)
 
     def test_withdraw_and_pushed_freeze(self):
-        self.env['sn.wsd.nqi.config'].create({
-            'enterprise_code': '88888',
-        })
+        self._config()
         row = self._product_row('PAY-2')
         row.action_mark_to_push()
         self.assertEqual(row.push_state, 'to_push')
@@ -48,10 +56,7 @@ class TestNqiPush(TransactionCase):
             row.unlink()
 
     def test_push_without_api_leaves_rows_pending(self):
-        self.env['sn.wsd.nqi.config'].create({
-            'enterprise_code': '88888',
-            # no api_base_url: transport not configured
-        })
+        self._config()  # no api_base_url: transport not configured
         row = self._product_row('PAY-3')
         row.action_mark_to_push()
         message = self.env['sn.wsd.nqi.worker'].run_push(

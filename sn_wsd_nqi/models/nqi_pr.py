@@ -1,6 +1,6 @@
 """Generated from the NQI data model V2.1 docx (see
 build_tmp/nqi_explore/gen_models.py and fields.json)."""
-from odoo import fields, models
+from odoo import api, fields, models
 
 class NqiBiddingInfo(models.Model):
     """NQI PR_BIDDING_INFO mirror."""
@@ -38,6 +38,12 @@ class NqiBiddingInfo(models.Model):
     hardware_version = fields.Char()
     product_detail_code = fields.Char()
     internal_control_code = fields.Char()
+
+    @api.onchange('bidding_party_a_id')
+    def _onchange_bidding_party_a_id(self):
+        for record in self:
+            record.bidding_party_a = (record.bidding_party_a_id.code_id
+                or '')
 
 class NqiBiddingChange(models.Model):
     """NQI PR_BIDDING_CHANGE_RECOND mirror."""

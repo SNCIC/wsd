@@ -36,6 +36,7 @@
                             <field name="device_name"/>
                             <field name="device_type"/>
                             <field name="type_id"/>
+                            <field name="type"/>
                             <field name="property_right_type"/>
                             <field name="file_url"/>
                             <field name="device_status"/>
@@ -472,6 +473,7 @@
                     <group>
                         <group string="NQI Columns">
                             <field name="enterprise_type_id"/>
+                            <field name="enterprise_type"/>
                             <field name="file_url"/>
                             <field name="create_company"/>
                             <field name="create_year"/>

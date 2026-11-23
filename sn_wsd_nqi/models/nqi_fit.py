@@ -1,6 +1,6 @@
 """Generated from the NQI data model V2.1 docx (see
 build_tmp/nqi_explore/gen_models.py and fields.json)."""
-from odoo import fields, models
+from odoo import api, fields, models
 
 class NqiMeterInfo(models.Model):
     """NQI FIT_METER_INFO mirror."""
@@ -66,6 +66,12 @@ class NqiPcbMounting(models.Model):
     operator_code = fields.Char()
     detect_date = fields.Char(index=True)
 
+    @api.onchange('procedure_code_id')
+    def _onchange_procedure_code_id(self):
+        for record in self:
+            record.procedure_code = (record.procedure_code_id.code_id
+                or '')
+
 class NqiMeterMounting(models.Model):
     """NQI FIT_METER_MOUNTING_MAKE mirror."""
     _name = 'sn.wsd.nqi.fit.meter.mounting'
@@ -93,6 +99,12 @@ class NqiMeterMounting(models.Model):
     device_code = fields.Char()
     operator_code = fields.Char()
     detect_date = fields.Char(index=True)
+
+    @api.onchange('procedure_code_id')
+    def _onchange_procedure_code_id(self):
+        for record in self:
+            record.procedure_code = (record.procedure_code_id.code_id
+                or '')
 
 class NqiComponentBind(models.Model):
     """NQI FIT_METER_COMPONENT_BIND mirror."""

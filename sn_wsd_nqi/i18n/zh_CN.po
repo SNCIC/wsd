@@ -9468,3 +9468,2083 @@ msgstr "销售订单 %s 名下未找到制造订单（请检查 MTO 链）。"
 #: code:addons/sn_wsd_nqi/models/*.py:0
 msgid "NQI push transport is not configured yet."
 msgstr "NQI 推送传输尚未配置。"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_batch_fill_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_batch_fill_form
+msgid "Batch Fill"
+msgstr "批量填充"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_batch_fill_form
+msgid "Apply"
+msgstr "应用"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_config__auth_type
+msgid "None"
+msgstr "无"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_config__auth_type
+msgid "Bearer Token"
+msgstr "Bearer 令牌"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_config__auth_type
+msgid "API Key"
+msgstr "API 密钥"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_config__auth_type
+msgid "Basic Auth"
+msgstr "Basic 认证"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_field_mapping__source_kind
+msgid "Test Detail Project Name"
+msgstr "检定明细项目名"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_field_mapping__source_kind
+msgid "Result Payload Key"
+msgstr "结果载荷键"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_field_mapping__source_kind
+msgid "Result Header Attribute"
+msgstr "结果主行属性"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_field_mapping__source_kind
+msgid "Fixed Value"
+msgstr "固定值"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_push_log__state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_push_log__state
+msgid "Done"
+msgstr "已完成"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_push_log__state
+msgid "Pending"
+msgstr "待处理"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_push_log__state
+msgid "Success"
+msgstr "成功"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_push_log__state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_push_log__state
+msgid "Skipped"
+msgstr "跳过"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_push_log__state
+msgid "Complete"
+msgstr "完整"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_push_log__state
+msgid "Missing Columns"
+msgstr "缺列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_push_log__state
+msgid "No Rows"
+msgstr "无行"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup__state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup__state
+msgid "Done"
+msgstr "已完成"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup__state
+msgid "Pending"
+msgstr "待处理"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup__state
+msgid "Success"
+msgstr "成功"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup__state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup__state
+msgid "Skipped"
+msgstr "跳过"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup__state
+msgid "Complete"
+msgstr "完整"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup__state
+msgid "Missing Columns"
+msgstr "缺列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup__state
+msgid "No Rows"
+msgstr "无行"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup_line__state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup_line__state
+msgid "Done"
+msgstr "已完成"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup_line__state
+msgid "Pending"
+msgstr "待处理"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup_line__state
+msgid "Success"
+msgstr "成功"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup_line__state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup_line__state
+msgid "Skipped"
+msgstr "跳过"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup_line__state
+msgid "Complete"
+msgstr "完整"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup_line__state
+msgid "Missing Columns"
+msgstr "缺列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_checkup_line__state
+msgid "No Rows"
+msgstr "无行"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_product_template__nqi_product_kind
+msgid "PCB Board"
+msgstr "单板"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_product_template__nqi_product_kind
+msgid "Complete Meter"
+msgstr "整机"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_product_product__nqi_product_kind
+msgid "PCB Board"
+msgstr "单板"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_product_product__nqi_product_kind
+msgid "Complete Meter"
+msgstr "整机"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_info__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_info__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_info__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_info__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_info__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_detail__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_detail__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_detail__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_detail__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_detail__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_test_report__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_test_report__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_test_report__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_test_report__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_test_report__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_project__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_project__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_project__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_project__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_project__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_project_detail__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_project_detail__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_project_detail__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_project_detail__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_project_detail__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_component_list__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_component_list__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_component_list__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_component_list__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_component_list__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_project_change__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_project_change__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_project_change__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_project_change__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_project_change__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_component_change__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_component_change__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_component_change__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_component_change__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_rd_component_change__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_bidding_info__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_bidding_info__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_bidding_info__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_bidding_info__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_bidding_info__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_bidding_change__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_bidding_change__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_bidding_change__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_bidding_change__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_bidding_change__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_purchase_plan__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_purchase_plan__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_purchase_plan__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_purchase_plan__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_purchase_plan__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_arrive_batch__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_arrive_batch__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_arrive_batch__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_arrive_batch__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_arrive_batch__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_test_result__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_test_result__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_test_result__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_test_result__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_test_result__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_unqualified__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_unqualified__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_unqualified__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_unqualified__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pr_unqualified__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_plan__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_plan__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_plan__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_plan__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_plan__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_plan_detail__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_plan_detail__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_plan_detail__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_plan_detail__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_plan_detail__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_process__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_process__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_process__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_process__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_process__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_procedure__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_procedure__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_procedure__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_procedure__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_procedure__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_env_temp_hum__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_env_temp_hum__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_env_temp_hum__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_env_temp_hum__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_env_temp_hum__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_unqualified__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_unqualified__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_unqualified__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_unqualified__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pt_unqualified__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_meter_info__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_meter_info__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_meter_info__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_meter_info__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_meter_info__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_pcb_mounting__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_pcb_mounting__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_pcb_mounting__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_pcb_mounting__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_pcb_mounting__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_meter_mounting__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_meter_mounting__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_meter_mounting__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_meter_mounting__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_meter_mounting__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_component_bind__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_component_bind__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_component_bind__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_component_bind__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_component_bind__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_pcb_serial_bind__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_pcb_serial_bind__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_pcb_serial_bind__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_pcb_serial_bind__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_fit_pcb_serial_bind__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_box_bind__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_box_bind__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_box_bind__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_box_bind__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_box_bind__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_supply_batch__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_supply_batch__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_supply_batch__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_supply_batch__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_supply_batch__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_supply_test__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_supply_test__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_supply_test__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_supply_test__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_supply_test__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_spot_check__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_spot_check__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_spot_check__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_spot_check__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_spot_check__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_recall__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_recall__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_recall__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_recall__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_sp_recall__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_device__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_device__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_device__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_device__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_device__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_person__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_person__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_person__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_person__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_person__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_staff__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_staff__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_staff__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_staff__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_staff__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_achievement__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_achievement__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_achievement__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_achievement__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_achievement__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_capacity__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_capacity__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_capacity__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_capacity__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_capacity__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_as_mgt__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_as_mgt__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_as_mgt__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_as_mgt__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_as_mgt__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_as_agreement__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_as_agreement__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_as_agreement__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_as_agreement__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_as_agreement__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_standard_setting__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_standard_setting__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_standard_setting__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_standard_setting__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_standard_setting__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_rb__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_rb__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_rb__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_rb__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_rb__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_qi__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_qi__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_qi__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_qi__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_qi__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_supplier_score__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_supplier_score__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_supplier_score__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_supplier_score__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_et_supplier_score__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pub_file__push_state
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pub_file__push_state
+msgid "To Push"
+msgstr "待推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pub_file__push_state
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pub_file__push_state
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,selection:sn_wsd_nqi.field_sn_wsd_nqi_pub_file__push_state
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_code_type)_code_type_uniq
+msgid "A code type can only be declared once."
+msgstr "代码类型只能声明一次。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_code_type_code_uniq
+msgid "A code id must be unique inside its code type."
+msgstr "代码编号在其代码类型内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_code)_code_uniq
+msgid "Component code must be unique."
+msgstr "元器件编码必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_company_id)_company_uniq
+msgid "Only one NQI integration config per company."
+msgstr "每家公司只能有一条 NQI 对接配置。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_company_id_natural_key_uniq
+msgid "Natural key must be unique per company."
+msgstr "自然键在公司内必须唯一。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_company_id_output_history_uniq
+msgid "One mirror row per output pass event."
+msgstr "每次产出过站事件只生成一条镜像行。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_company_id_history_uniq
+msgid "One mirror row per station pass event."
+msgstr "每次过站事件只生成一条镜像行。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_company_id_binding_uniq
+msgid "One mirror row per serial binding event."
+msgstr "每次 SN 绑定事件只生成一条镜像行。"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.constraint,message:sn_wsd_nqi.constraint_company_id_component_binding_uniq
+msgid "One mirror row per component binding event."
+msgstr "每次元器件绑定事件只生成一条镜像行。"

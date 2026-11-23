@@ -112,11 +112,17 @@
                             <field name="para_index"/>
                             <field name="detect_item_point"/>
                             <field name="both_way_power_flag_id"/>
+                            <field name="both_way_power_flag"/>
                             <field name="iabc_id"/>
+                            <field name="iabc"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="load_voltage_id"/>
+                            <field name="load_voltage"/>
                             <field name="freq_id"/>
+                            <field name="freq"/>
                             <field name="pf_id"/>
+                            <field name="pf"/>
                             <field name="detect_circle"/>
                             <field name="simpling"/>
                             <field name="error_number"/>
@@ -202,7 +208,9 @@
                             <field name="para_index"/>
                             <field name="detect_item_point"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="both_way_power_flag_id"/>
+                            <field name="both_way_power_flag"/>
                             <field name="real_pules"/>
                             <field name="start_reading"/>
                             <field name="end_reading"/>
@@ -218,10 +226,13 @@
                             <field name="qualified_pules"/>
                             <field name="divide_electric_quantity"/>
                             <field name="pf_id"/>
+                            <field name="pf"/>
                             <field name="control_method_id"/>
+                            <field name="control_method"/>
                             <field name="conc_code"/>
                             <field name="ir_last_reading"/>
                             <field name="read_type_code_id"/>
+                            <field name="read_type_code"/>
                         </group>
                         <group string="Envelope">
                             <field name="missing_fields" readonly="1"/>
@@ -298,9 +309,12 @@
                             <field name="para_index"/>
                             <field name="detect_item_point"/>
                             <field name="load_voltage_id"/>
+                            <field name="load_voltage"/>
                             <field name="pules"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="both_way_power_flag_id"/>
+                            <field name="both_way_power_flag"/>
                             <field name="test_time"/>
                             <field name="real_test_time"/>
                             <field name="conc_code"/>
@@ -474,10 +488,15 @@
                             <field name="clear_data_rst"/>
                             <field name="value_conc_code"/>
                             <field name="both_way_power_flag_id"/>
+                            <field name="both_way_power_flag"/>
                             <field name="voltage_id"/>
+                            <field name="voltage"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="pf_id"/>
+                            <field name="pf"/>
                             <field name="control_method_id"/>
+                            <field name="control_method"/>
                             <field name="err_up"/>
                             <field name="err_dowm"/>
                             <field name="conc_code"/>
@@ -558,8 +577,11 @@
                             <field name="detect_item_point"/>
                             <field name="conc_code"/>
                             <field name="load_voltage_id"/>
+                            <field name="load_voltage"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="pf_id"/>
+                            <field name="pf"/>
                             <field name="test_item"/>
                             <field name="test_method_differ"/>
                             <field name="trip_delay_time"/>
@@ -713,10 +735,14 @@
                             <field name="para_index"/>
                             <field name="detect_item_point"/>
                             <field name="both_way_power_flag_id"/>
+                            <field name="both_way_power_flag"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="pf_id"/>
+                            <field name="pf"/>
                             <field name="fee_ratio"/>
                             <field name="control_method_id"/>
+                            <field name="control_method"/>
                             <field name="ir_time"/>
                             <field name="ir_reading"/>
                             <field name="err_down"/>
@@ -969,6 +995,7 @@
                             <field name="operator_code"/>
                             <field name="detect_date"/>
                             <field name="conc_code_id"/>
+                            <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
                             <field name="missing_fields" readonly="1"/>
@@ -1199,9 +1226,12 @@
                             <field name="para_index"/>
                             <field name="detect_item_point"/>
                             <field name="load_voltage_id"/>
+                            <field name="load_voltage"/>
                             <field name="pules"/>
                             <field name="both_way_power_flag_id"/>
+                            <field name="both_way_power_flag"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="test_time"/>
                             <field name="real_test_time"/>
                             <field name="start_current"/>
@@ -1360,6 +1390,7 @@
                             <field name="ts_err_conc_code"/>
                             <field name="conc_code"/>
                             <field name="volt_id"/>
+                            <field name="volt"/>
                             <field name="ts_way"/>
                             <field name="start_time"/>
                             <field name="ts_start_time"/>
@@ -1598,9 +1629,13 @@
                             <field name="para_index"/>
                             <field name="detect_item_point"/>
                             <field name="both_way_power_flag_id"/>
+                            <field name="both_way_power_flag"/>
                             <field name="load_voltage_id"/>
+                            <field name="load_voltage"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="pf_id"/>
+                            <field name="pf"/>
                             <field name="pules"/>
                             <field name="simpling"/>
                             <field name="all_error"/>
@@ -1704,11 +1739,16 @@
                             <field name="clear_data_rst"/>
                             <field name="period_conc_code"/>
                             <field name="both_way_power_flag_id"/>
+                            <field name="both_way_power_flag"/>
                             <field name="control_method"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="voltage_id"/>
+                            <field name="voltage"/>
                             <field name="freq_id"/>
+                            <field name="freq"/>
                             <field name="pf_id"/>
+                            <field name="pf"/>
                             <field name="err_up"/>
                             <field name="err_dowm"/>
                             <field name="int_convert_err"/>
@@ -1792,7 +1832,9 @@
                             <field name="surplus_eq"/>
                             <field name="curr_elec_price"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="pf_id"/>
+                            <field name="pf"/>
                             <field name="conc_code"/>
                         </group>
                         <group string="Envelope">
@@ -1870,9 +1912,13 @@
                             <field name="para_index"/>
                             <field name="detect_item_point"/>
                             <field name="both_way_power_flag_id"/>
+                            <field name="both_way_power_flag"/>
                             <field name="load_voltage_id"/>
+                            <field name="load_voltage"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="pf_id"/>
+                            <field name="pf"/>
                             <field name="pules"/>
                             <field name="simpling"/>
                             <field name="once_err"/>
@@ -1961,7 +2007,9 @@
                             <field name="para_index"/>
                             <field name="detect_item_point"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="pf_id"/>
+                            <field name="pf"/>
                             <field name="simpling"/>
                             <field name="overload_time"/>
                             <field name="recover_time"/>
@@ -2046,9 +2094,13 @@
                             <field name="detect_item_point"/>
                             <field name="conc_code"/>
                             <field name="pf_id"/>
+                            <field name="pf"/>
                             <field name="cur_phase_code_id"/>
+                            <field name="cur_phase_code"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="both_way_power_flag_id"/>
+                            <field name="both_way_power_flag"/>
                         </group>
                         <group string="Envelope">
                             <field name="missing_fields" readonly="1"/>
@@ -2126,8 +2178,11 @@
                             <field name="detect_item_point"/>
                             <field name="conc_code"/>
                             <field name="cur_phase_code_id"/>
+                            <field name="cur_phase_code"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="both_way_power_flag_id"/>
+                            <field name="both_way_power_flag"/>
                         </group>
                         <group string="Envelope">
                             <field name="missing_fields" readonly="1"/>
@@ -2204,9 +2259,13 @@
                             <field name="para_index"/>
                             <field name="detect_item_point"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="load_voltage_id"/>
+                            <field name="load_voltage"/>
                             <field name="freq_id"/>
+                            <field name="freq"/>
                             <field name="pf_id"/>
+                            <field name="pf"/>
                             <field name="error"/>
                             <field name="avg_err"/>
                             <field name="int_convert_err"/>
@@ -2287,8 +2346,11 @@
                             <field name="para_index"/>
                             <field name="detect_item_point"/>
                             <field name="load_voltage_id"/>
+                            <field name="load_voltage"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="pf_id"/>
+                            <field name="pf"/>
                             <field name="pules"/>
                             <field name="simpling"/>
                             <field name="overload_time"/>
@@ -2376,6 +2438,7 @@
                             <field name="detect_item_point"/>
                             <field name="conc_code"/>
                             <field name="cur_phase_code_id"/>
+                            <field name="cur_phase_code"/>
                             <field name="consist_down"/>
                             <field name="consist_up"/>
                             <field name="volt_ratio"/>
@@ -2384,8 +2447,11 @@
                             <field name="simpling_space"/>
                             <field name="simpling"/>
                             <field name="pf_id"/>
+                            <field name="pf"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="both_way_power_flag_id"/>
+                            <field name="both_way_power_flag"/>
                         </group>
                         <group string="Envelope">
                             <field name="missing_fields" readonly="1"/>
@@ -2542,10 +2608,15 @@
                             <field name="para_index"/>
                             <field name="detect_item_point"/>
                             <field name="both_way_power_flag_id"/>
+                            <field name="both_way_power_flag"/>
                             <field name="load_voltage_id"/>
+                            <field name="load_voltage"/>
                             <field name="load_current_id"/>
+                            <field name="load_current"/>
                             <field name="iabc_id"/>
+                            <field name="iabc"/>
                             <field name="pf_id"/>
+                            <field name="pf"/>
                             <field name="detect_circle"/>
                             <field name="simpling"/>
                             <field name="wait_time"/>

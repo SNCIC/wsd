@@ -35,6 +35,7 @@
                             <field name="product_type"/>
                             <field name="product_name"/>
                             <field name="product_categid_id"/>
+                            <field name="product_categid"/>
                             <field name="product_design_basis"/>
                             <field name="remarks"/>
                         </group>
@@ -113,6 +114,7 @@
                             <field name="product_code"/>
                             <field name="development_project_no"/>
                             <field name="product_spec_id"/>
+                            <field name="product_spec"/>
                             <field name="rated_voltage"/>
                             <field name="min_current"/>
                             <field name="turn_current"/>
@@ -124,7 +126,9 @@
                             <field name="lcd_decimal_digits"/>
                             <field name="local_comm_type"/>
                             <field name="remote_comm_type_id"/>
+                            <field name="remote_comm_type"/>
                             <field name="rate_control_type_id"/>
+                            <field name="rate_control_type"/>
                             <field name="technology_rules"/>
                             <field name="file_url"/>
                             <field name="remarks"/>
@@ -204,6 +208,7 @@
                             <field name="development_project_no"/>
                             <field name="test_report_code"/>
                             <field name="test_type_id"/>
+                            <field name="test_type"/>
                             <field name="test_organization"/>
                             <field name="report_date"/>
                             <field name="report_valid_date"/>

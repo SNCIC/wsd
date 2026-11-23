@@ -1,6 +1,6 @@
 """Generated from the NQI data model V2.1 docx (see
 build_tmp/nqi_explore/gen_models.py and fields.json)."""
-from odoo import fields, models
+from odoo import api, fields, models
 
 class NqiDevice(models.Model):
     """NQI ET_DEVICE_INFO mirror."""
@@ -44,6 +44,12 @@ class NqiDevice(models.Model):
     buy_date = fields.Char()
     device_maker = fields.Char()
     test_num = fields.Char()
+
+    @api.onchange('type_id')
+    def _onchange_type_id(self):
+        for record in self:
+            record.type = (record.type_id.code_id
+                or '')
 
 class NqiPerson(models.Model):
     """NQI ET_PERSON_INFO mirror."""
@@ -171,6 +177,12 @@ class NqiAsAgreement(models.Model):
     create_company = fields.Char()
     create_year = fields.Char()
     bidding_company = fields.Char()
+
+    @api.onchange('enterprise_type_id')
+    def _onchange_enterprise_type_id(self):
+        for record in self:
+            record.enterprise_type = (record.enterprise_type_id.code_id
+                or '')
 
 class NqiStandardSetting(models.Model):
     """NQI ET_STANDARD_SETTING_INFO mirror."""

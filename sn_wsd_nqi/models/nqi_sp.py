@@ -1,6 +1,6 @@
 """Generated from the NQI data model V2.1 docx (see
 build_tmp/nqi_explore/gen_models.py and fields.json)."""
-from odoo import fields, models
+from odoo import api, fields, models
 
 class NqiBoxBind(models.Model):
     """NQI SP_BOX_METER_BIND mirror."""

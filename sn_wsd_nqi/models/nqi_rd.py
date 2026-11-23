@@ -1,6 +1,6 @@
 """Generated from the NQI data model V2.1 docx (see
 build_tmp/nqi_explore/gen_models.py and fields.json)."""
-from odoo import fields, models
+from odoo import api, fields, models
 
 class NqiProductInfo(models.Model):
     """NQI RD_PRODUCT_INFO mirror."""
@@ -30,6 +30,12 @@ class NqiProductInfo(models.Model):
     product_categid = fields.Char()
     product_design_basis = fields.Char()
     remarks = fields.Text()
+
+    @api.onchange('product_categid_id')
+    def _onchange_product_categid_id(self):
+        for record in self:
+            record.product_categid = (record.product_categid_id.code_id
+                or '')
 
     _natural_key_uniq = models.Constraint(
         'unique(company_id, product_code)',
@@ -94,6 +100,24 @@ class NqiProductDetail(models.Model):
     file_url = fields.Char()
     remarks = fields.Text()
 
+    @api.onchange('product_spec_id')
+    def _onchange_product_spec_id(self):
+        for record in self:
+            record.product_spec = (record.product_spec_id.code_id
+                or '')
+
+    @api.onchange('remote_comm_type_id')
+    def _onchange_remote_comm_type_id(self):
+        for record in self:
+            record.remote_comm_type = (record.remote_comm_type_id.code_id
+                or '')
+
+    @api.onchange('rate_control_type_id')
+    def _onchange_rate_control_type_id(self):
+        for record in self:
+            record.rate_control_type = (record.rate_control_type_id.code_id
+                or '')
+
 class NqiProductTestReport(models.Model):
     """NQI RD_PRODUCT_TEST_REPORT mirror."""
     _name = 'sn.wsd.nqi.rd.product.test.report'
@@ -126,6 +150,12 @@ class NqiProductTestReport(models.Model):
     report_date = fields.Char()
     report_valid_date = fields.Char()
     witness_material_url = fields.Char()
+
+    @api.onchange('test_type_id')
+    def _onchange_test_type_id(self):
+        for record in self:
+            record.test_type = (record.test_type_id.code_id
+                or '')
 
 class NqiProject(models.Model):
     """NQI RD_PROJECT mirror."""

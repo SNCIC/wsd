@@ -182,7 +182,9 @@
                         <group string="NQI Columns">
                             <field name="plan_code"/>
                             <field name="bidding_party_a_id"/>
+                            <field name="bidding_party_a"/>
                             <field name="meter_producing_process_code_id"/>
+                            <field name="meter_producing_process_code"/>
                             <field name="module_type"/>
                             <field name="plan_num"/>
                             <field name="finish_num"/>
@@ -252,6 +254,7 @@
                     <group>
                         <group string="NQI Columns">
                             <field name="procedure_code_id"/>
+                            <field name="procedure_code"/>
                             <field name="plan_code"/>
                             <field name="procedure_name"/>
                         </group>
@@ -322,6 +325,7 @@
                     <group>
                         <group string="NQI Columns">
                             <field name="procedure_code_id"/>
+                            <field name="procedure_code"/>
                             <field name="place"/>
                             <field name="temperature"/>
                             <field name="humidity"/>

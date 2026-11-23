@@ -13,7 +13,7 @@ class NqiExportController(http.Controller):
     def export_json(self, model_name, ids=None, **kwargs):
         if not model_name.startswith('sn.wsd.nqi.'):
             raise AccessError(_('Unknown NQI model.'))
-        if not request.env.user.has_group('sn_wsd_nqi.group_user'):
+        if not request.env.user.has_group('sn_wsd_nqi.group_nqi_user'):
             raise AccessError(_('NQI user group required.'))
         model = request.env[model_name].sudo()
         domain = [('company_id', 'in', request.env.companies.ids)]

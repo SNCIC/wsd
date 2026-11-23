@@ -1,6 +1,6 @@
 """Generated from the NQI data model V2.1 docx (see
 build_tmp/nqi_explore/gen_models.py and fields.json)."""
-from odoo import fields, models
+from odoo import api, fields, models
 
 class NqiPlan(models.Model):
     """NQI PT_PRODUCTION_PLAN mirror."""
@@ -84,6 +84,18 @@ class NqiProcess(models.Model):
     finish_num = fields.Char()
     excepiton_handle = fields.Char()
 
+    @api.onchange('bidding_party_a_id')
+    def _onchange_bidding_party_a_id(self):
+        for record in self:
+            record.bidding_party_a = (record.bidding_party_a_id.code_id
+                or '')
+
+    @api.onchange('meter_producing_process_code_id')
+    def _onchange_meter_producing_process_code_id(self):
+        for record in self:
+            record.meter_producing_process_code = (record.meter_producing_process_code_id.code_id
+                or '')
+
 class NqiProcedure(models.Model):
     """NQI PT_PRODUCTION_PROCEDURE mirror."""
     _name = 'sn.wsd.nqi.pt.procedure'
@@ -104,6 +116,12 @@ class NqiProcedure(models.Model):
     procedure_code = fields.Char()
     plan_code = fields.Char(index=True)
     procedure_name = fields.Char()
+
+    @api.onchange('procedure_code_id')
+    def _onchange_procedure_code_id(self):
+        for record in self:
+            record.procedure_code = (record.procedure_code_id.code_id
+                or '')
 
 class NqiEnvTempHum(models.Model):
     """NQI PT_ENV_TEMP_HUM mirror."""
@@ -129,6 +147,12 @@ class NqiEnvTempHum(models.Model):
     humidity = fields.Char()
     file_url = fields.Char()
     read_date = fields.Char()
+
+    @api.onchange('procedure_code_id')
+    def _onchange_procedure_code_id(self):
+        for record in self:
+            record.procedure_code = (record.procedure_code_id.code_id
+                or '')
 
 class NqiUnqualified(models.Model):
     """NQI PT_UNQUALIFIED_CONTROL mirror."""
