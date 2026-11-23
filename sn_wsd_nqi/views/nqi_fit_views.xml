@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_nqi_fit_meter_info_list" model="ir.ui.view">
+        <field name="name">nqi.fit.meter.info.list</field>
+        <field name="model">sn.wsd.nqi.fit.meter.info</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="serial_identity_id"/>
+                <field name="serial_no"/>
+                <field name="make_plan_no"/>
+                <field name="assets_code"/>
+                <field name="barcode"/>
+                <field name="meter_no"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_fit_meter_info_form" model="ir.ui.view">
+        <field name="name">nqi.fit.meter.info.form</field>
+        <field name="model">sn.wsd.nqi.fit.meter.info</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Bring-in Anchor">
+                            <field name="serial_identity_id"/>
+                        </group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="make_plan_no"/>
+                            <field name="assets_code"/>
+                            <field name="barcode"/>
+                            <field name="meter_no"/>
+                            <field name="software_version"/>
+                            <field name="out_factory_supply"/>
+                            <field name="conc_code"/>
+                            <field name="test_date"/>
+                            <field name="status"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_fit_meter_info_search" model="ir.ui.view">
+        <field name="name">nqi.fit.meter.info.search</field>
+        <field name="model">sn.wsd.nqi.fit.meter.info</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_fit_meter_info" model="ir.actions.act_window">
+        <field name="name">FIT_METER_INFO</field>
+        <field name="res_model">sn.wsd.nqi.fit.meter.info</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_fit_meter_info_entry"
+              name="FIT_METER_INFO"
+              parent="menu_nqi_process"
+              action="action_nqi_fit_meter_info"
+              sequence="10"/>
+
+    <record id="view_nqi_fit_pcb_mounting_list" model="ir.ui.view">
+        <field name="name">nqi.fit.pcb.mounting.list</field>
+        <field name="model">sn.wsd.nqi.fit.pcb.mounting</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="pcb_code"/>
+                <field name="module_type"/>
+                <field name="make_plan_code"/>
+                <field name="para_index"/>
+                <field name="device_code"/>
+                <field name="operator_code"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_fit_pcb_mounting_form" model="ir.ui.view">
+        <field name="name">nqi.fit.pcb.mounting.form</field>
+        <field name="model">sn.wsd.nqi.fit.pcb.mounting</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="NQI Columns">
+                            <field name="pcb_code"/>
+                            <field name="module_type"/>
+                            <field name="make_plan_code"/>
+                            <field name="para_index"/>
+                            <field name="procedure_code_id"/>
+                            <field name="device_code"/>
+                            <field name="operator_code"/>
+                            <field name="detect_date"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_fit_pcb_mounting_search" model="ir.ui.view">
+        <field name="name">nqi.fit.pcb.mounting.search</field>
+        <field name="model">sn.wsd.nqi.fit.pcb.mounting</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="pcb_code"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_fit_pcb_mounting" model="ir.actions.act_window">
+        <field name="name">FIT_PCB_MOUNTING_MAKE</field>
+        <field name="res_model">sn.wsd.nqi.fit.pcb.mounting</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_fit_pcb_mounting_entry"
+              name="FIT_PCB_MOUNTING_MAKE"
+              parent="menu_nqi_process"
+              action="action_nqi_fit_pcb_mounting"
+              sequence="20"/>
+
+    <record id="view_nqi_fit_meter_mounting_list" model="ir.ui.view">
+        <field name="name">nqi.fit.meter.mounting.list</field>
+        <field name="model">sn.wsd.nqi.fit.meter.mounting</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="serial_no"/>
+                <field name="make_plan_code"/>
+                <field name="para_index"/>
+                <field name="device_code"/>
+                <field name="operator_code"/>
+                <field name="detect_date"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_fit_meter_mounting_form" model="ir.ui.view">
+        <field name="name">nqi.fit.meter.mounting.form</field>
+        <field name="model">sn.wsd.nqi.fit.meter.mounting</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="NQI Columns">
+                            <field name="serial_no"/>
+                            <field name="make_plan_code"/>
+                            <field name="para_index"/>
+                            <field name="procedure_code_id"/>
+                            <field name="device_code"/>
+                            <field name="operator_code"/>
+                            <field name="detect_date"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_fit_meter_mounting_search" model="ir.ui.view">
+        <field name="name">nqi.fit.meter.mounting.search</field>
+        <field name="model">sn.wsd.nqi.fit.meter.mounting</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_fit_meter_mounting" model="ir.actions.act_window">
+        <field name="name">FIT_METER_MOUNTING_MAKE</field>
+        <field name="res_model">sn.wsd.nqi.fit.meter.mounting</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_fit_meter_mounting_entry"
+              name="FIT_METER_MOUNTING_MAKE"
+              parent="menu_nqi_process"
+              action="action_nqi_fit_meter_mounting"
+              sequence="30"/>
+
+    <record id="view_nqi_fit_component_bind_list" model="ir.ui.view">
+        <field name="name">nqi.fit.component.bind.list</field>
+        <field name="model">sn.wsd.nqi.fit.component.bind</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="pcb_code"/>
+                <field name="module_type"/>
+                <field name="plan_code"/>
+                <field name="component_code"/>
+                <field name="make_batch_no"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_fit_component_bind_form" model="ir.ui.view">
+        <field name="name">nqi.fit.component.bind.form</field>
+        <field name="model">sn.wsd.nqi.fit.component.bind</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="NQI Columns">
+                            <field name="pcb_code"/>
+                            <field name="module_type"/>
+                            <field name="plan_code"/>
+                            <field name="component_code"/>
+                            <field name="make_batch_no"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_fit_component_bind_search" model="ir.ui.view">
+        <field name="name">nqi.fit.component.bind.search</field>
+        <field name="model">sn.wsd.nqi.fit.component.bind</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="pcb_code"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_fit_component_bind" model="ir.actions.act_window">
+        <field name="name">FIT_METER_COMPONENT_BIND</field>
+        <field name="res_model">sn.wsd.nqi.fit.component.bind</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_fit_component_bind_entry"
+              name="FIT_METER_COMPONENT_BIND"
+              parent="menu_nqi_process"
+              action="action_nqi_fit_component_bind"
+              sequence="40"/>
+
+    <record id="view_nqi_fit_pcb_serial_bind_list" model="ir.ui.view">
+        <field name="name">nqi.fit.pcb.serial.bind.list</field>
+        <field name="model">sn.wsd.nqi.fit.pcb.serial.bind</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="missing_count &gt; 0">
+                <field name="plan_code"/>
+                <field name="serial_no"/>
+                <field name="pcb_code"/>
+                <field name="module_type"/>
+                <field name="missing_count" optional="hide"/>
+                <field name="push_state" widget="badge" decoration-info="push_state == 'to_push'" decoration-success="push_state == 'pushed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_nqi_fit_pcb_serial_bind_form" model="ir.ui.view">
+        <field name="name">nqi.fit.pcb.serial.bind.form</field>
+        <field name="model">sn.wsd.nqi.fit.pcb.serial.bind</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="push_state" widget="statusbar" statusbar_visible="draft,to_push,pushed"/>
+                    <button name="action_mark_to_push" type="object" string="Mark to Push" class="oe_highlight" invisible="push_state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="NQI Columns">
+                            <field name="plan_code"/>
+                            <field name="serial_no"/>
+                            <field name="pcb_code"/>
+                            <field name="module_type"/>
+                        </group>
+                        <group string="Envelope">
+                            <field name="enterprise_code"/>
+                            <field name="nqi_write_date"/>
+                            <field name="handle_flag"/>
+                            <field name="handle_date"/>
+                            <field name="notice_no"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_nqi_fit_pcb_serial_bind_search" model="ir.ui.view">
+        <field name="name">nqi.fit.pcb.serial.bind.search</field>
+        <field name="model">sn.wsd.nqi.fit.pcb.serial.bind</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
+                <group>
+                    <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_nqi_fit_pcb_serial_bind" model="ir.actions.act_window">
+        <field name="name">FIT_PCB_SERIAL_BIND</field>
+        <field name="res_model">sn.wsd.nqi.fit.pcb.serial.bind</field>
+        <field name="view_mode">list,form</field>
+        <field name='context'>{'search_default_filter_recent': 1}</field>
+    </record>
+    <menuitem id="menu_nqi_fit_pcb_serial_bind_entry"
+              name="FIT_PCB_SERIAL_BIND"
+              parent="menu_nqi_process"
+              action="action_nqi_fit_pcb_serial_bind"
+              sequence="50"/>
+
+</odoo>

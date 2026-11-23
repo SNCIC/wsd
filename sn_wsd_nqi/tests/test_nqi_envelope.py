@@ -95,3 +95,54 @@ class TestNqiEnvelope(TransactionCase):
         product.unlink()
         self.assertFalse(row.product_id)
         self.assertEqual(row.product_code, 'DDS-2')
+
+    def _plan_products(self):
+        machine = self.env['product.product'].search([
+            ('nqi_product_kind', '=', 'machine')], limit=1)
+        board = self.env['product.product'].search([
+            ('nqi_product_kind', '=', 'board')], limit=1)
+        return machine, board
+
+    def test_plan_expand_details_per_manufacturing_order(self):
+        machine, board = self._plan_products()
+        if not machine or not board:
+            self.skipTest('needs one machine-kind and one board-kind product')
+        order = self.env['sale.order'].create({
+            'partner_id': self.env.ref('base.res_partner_2').id,
+        })
+        self.env['sale.order.line'].create({
+            'order_id': order.id,
+            'product_id': machine.id,
+        })
+        Production = self.env['mrp.production']
+        Production.create({
+            'product_id': machine.id,
+            'product_qty': 100,
+            'origin': order.name,
+            'x_sn_segment_start': '100000000001',
+            'x_sn_segment_end': '100000000100',
+        })
+        Production.create({
+            'product_id': board.id,
+            'product_qty': 100,
+            'origin': order.name,
+            'x_sn_segment_start': '200000000001',
+            'x_sn_segment_end': '200000000100',
+        })
+        plan = self.env['sn.wsd.nqi.pt.plan'].create({
+            'sale_order_id': order.id,
+        })
+        plan.action_expand_details()
+        self.assertEqual(len(plan.detail_ids), 2)
+        by_type = {detail.type: detail for detail in plan.detail_ids}
+        self.assertEqual(by_type['01'].count, '100')
+        self.assertEqual(by_type['01'].start_serial_no, '100000000001')
+        self.assertEqual(by_type['02'].start_serial_no, '200000000001')
+        # expansion is repeatable without duplicating lines
+        plan.action_expand_details()
+        self.assertEqual(len(plan.detail_ids), 2)
+
+    def test_plan_expand_requires_sales_order(self):
+        plan = self.env['sn.wsd.nqi.pt.plan'].create({})
+        with self.assertRaises(UserError):
+            plan.action_expand_details()

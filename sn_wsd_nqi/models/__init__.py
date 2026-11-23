@@ -5,5 +5,9 @@ from . import nqi_staging_mixin
 from . import nqi_rd
 from . import nqi_pr
 from . import nqi_et
+from . import nqi_pt
+from . import nqi_fit
+from . import nqi_sp
+from . import nqi_plan_expand
 from . import nqi_bring_in
 from . import product
