@@ -1,5 +1,5 @@
 from odoo.exceptions import UserError
-from odoo.tests import TransactionCase
+from odoo.tests import Form, TransactionCase
 
 
 class TestNqiEnvelope(TransactionCase):
@@ -71,3 +71,27 @@ class TestNqiEnvelope(TransactionCase):
         # complete row passes the gate
         row.action_mark_to_push()
         self.assertEqual(row.push_state, 'to_push')
+
+    def test_bring_in_fills_initial_values_only(self):
+        product = self.env['product.product'].create({
+            'name': 'Meter X', 'default_code': 'DDS-1',
+        })
+        with Form(self.env['sn.wsd.nqi.rd.product.info']) as form:
+            form.product_id = product
+            # bring-in fired: initial values from the anchor
+            self.assertEqual(form.product_code, 'DDS-1')
+            self.assertEqual(form.product_name, 'Meter X')
+            # user input is never overwritten by bring-in
+            form.product_name = 'Custom Name'
+
+    def test_anchor_unlink_keeps_row_and_snapshot(self):
+        product = self.env['product.product'].create({
+            'name': 'Meter Y', 'default_code': 'DDS-2',
+        })
+        row = self.env['sn.wsd.nqi.rd.product.info'].create({
+            'product_id': product.id,
+            'product_code': 'DDS-2',
+        })
+        product.unlink()
+        self.assertFalse(row.product_id)
+        self.assertEqual(row.product_code, 'DDS-2')
