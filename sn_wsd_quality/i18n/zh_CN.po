@@ -3066,6 +3066,11 @@ msgid "Prepared by:"
 msgstr "制单："
 
 #. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "Preview Inspection Record"
+msgstr "预览检验记录"
+
+#. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_stock_picking_form_iqc
 msgid "Print Inspection Request"
 msgstr "打印送检单"
@@ -5187,6 +5192,11 @@ msgstr "来料检验测量向导行"
 #: model:ir.actions.report,name:sn_wsd_quality.action_report_iqc_inspection
 msgid "Incoming Inspection Record"
 msgstr "来料检验记录"
+
+#. module: sn_wsd_quality
+#: model:ir.actions.report,name:sn_wsd_quality.action_report_iqc_inspection_preview
+msgid "Incoming Inspection Record (Preview)"
+msgstr "来料检验记录（预览）"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_oqc_full_close_wizard__inspected_qty

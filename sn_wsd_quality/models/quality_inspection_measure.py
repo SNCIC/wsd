@@ -352,6 +352,17 @@ class QualityInspection(models.Model):
             '                    .sn-iqc-record %s' % (rule % values)
             for rule in rules)
 
+    def action_preview_iqc_record(self):
+        """Show the incoming inspection record in the browser, before printing.
+
+        The html report carries the same template as the printed record, so the
+        preview is the sheet itself and not a summary of it.
+        """
+        self.ensure_one()
+        return self.env.ref(
+            'sn_wsd_quality.action_report_iqc_inspection_preview'
+        ).report_action(self, config=False)
+
     def _get_iqc_manufacturer_supplier_lines(self):
         """Names printed on the maker line, one entry per printed line.
 

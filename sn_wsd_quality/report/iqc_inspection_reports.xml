@@ -28,4 +28,19 @@
         <field name="paperformat_id" ref="sn_wsd_quality.paperformat_iqc_inspection"/>
         <field name="print_report_name">'Incoming Inspection Record - %s' % (object.name)</field>
     </record>
+
+    <!-- The same sheet, rendered in the browser only: the preview action of the
+         incoming inspection form, so the record is read before the paper is
+         used. It keeps the report name and the paper format of the printed
+         record: the Print button of the preview asks for the pdf of that same
+         name, and both documents must stay one sheet. -->
+    <record id="action_report_iqc_inspection_preview" model="ir.actions.report">
+        <field name="name">Incoming Inspection Record (Preview)</field>
+        <field name="model">sn.wsd.quality.inspection</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">sn_wsd_quality.report_iqc_inspection</field>
+        <field name="report_file">sn_wsd_quality.report_iqc_inspection</field>
+        <field name="paperformat_id" ref="sn_wsd_quality.paperformat_iqc_inspection"/>
+        <field name="print_report_name">'Incoming Inspection Record - %s' % (object.name)</field>
+    </record>
 </odoo>

@@ -28,6 +28,16 @@
                        grows into the room that is left over, and nothing is
                        pushed onto a second page. */
                     .sn-iqc-record { page-break-inside: avoid; }
+                    /* The html preview opens the sheet in the backend iframe,
+                       where no paper format is applied: the record keeps the
+                       width of the printable area of A4 (210mm less the 10mm
+                       margins), so the preview reads like the page wkhtmltopdf
+                       prints instead of stretching across the window. */
+                    body.o_in_iframe .sn-iqc-record {
+                        width: 190mm;
+                        margin: 0 auto;
+                        background: #fff;
+                    }
                     /* Block heights are applied as symmetric cell padding by
                        the markup (see REPORT_HEIGHT_MM of the report helper):
                        wkhtmltopdf sizes a row from its content, and symmetric
