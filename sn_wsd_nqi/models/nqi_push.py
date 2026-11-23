@@ -32,9 +32,11 @@ class NqiStagingMixinPush(models.AbstractModel):
     _description = 'NQI Staging Envelope (push)'
 
     def write(self, vals):
-        # pushed rows are frozen: trace-only
-        if self.filtered(lambda r: r.push_state == 'pushed'):
-            raise UserError(_('Pushed rows are read-only.'))
+        # pushed rows are frozen: trace-only (the gateway callback is
+        # the one system path allowed to touch them, via context flag)
+        if not self.env.context.get('nqi_system_write'):
+            if self.filtered(lambda r: r.push_state == 'pushed'):
+                raise UserError(_('Pushed rows are read-only.'))
         return super().write(vals)
 
     def unlink(self):
@@ -116,6 +118,43 @@ class NqiPushLog(models.Model):
     error_text = fields.Text(string='Error')
     retry_count = fields.Integer(string='Retry Count', default=0)
     pushed_at = fields.Datetime(string='Pushed At', readonly=True)
+    callback_flag = fields.Selection(
+        [('1', 'Success'), ('0', 'Failure')], string='Callback Flag',
+        readonly=True, index=True)
+    callback_msg = fields.Text(string='Callback Message', readonly=True)
+    callback_at = fields.Datetime(string='Callback At', readonly=True)
+
+    @api.model
+    def process_callback(self, notice_no, return_flag, return_msg=''):
+        """Apply an asynchronous gateway callback (by notice number).
+
+        Success stamps the rows as platform-processed (HANDLE_FLAG 1);
+        failure flags them abnormal (HANDLE_FLAG 3) and reopens them as
+        failed so the withdraw-fix-repush flow applies.
+        """
+        log = self.search([('id', '=', int(notice_no))], limit=1)
+        if not log:
+            raise UserError(_('Unknown notice number %s.', notice_no))
+        now = fields.Datetime.now()
+        log.write({
+            'callback_flag': return_flag,
+            'callback_msg': return_msg or '',
+            'callback_at': now,
+        })
+        model = self.env[log.model_name].sudo().with_context(
+            nqi_system_write=True)
+        rows = model.browse(
+            [int(x) for x in log.row_ids.split(',') if x.strip()])
+        handle_date = now.strftime('%Y-%m-%d %H:%M:%S')
+        if str(return_flag) == '1':
+            rows.write({'handle_flag': '1', 'handle_date': handle_date})
+        else:
+            rows.write({
+                'push_state': 'failed',
+                'handle_flag': '3',
+                'handle_date': handle_date,
+            })
+        return True
 
     def action_retry(self):
         worker = self.env['sn.wsd.nqi.worker'].sudo()

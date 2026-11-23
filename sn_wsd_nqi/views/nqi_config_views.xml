@@ -19,6 +19,7 @@
                             <field name="auth_type"/>
                             <field name="api_token" password="True"
                                    invisible="auth_type == 'none'"/>
+                            <field name="callback_token" password="True"/>
                             <field name="timeout_sec"/>
                             <field name="retry_times"/>
                         </group>
