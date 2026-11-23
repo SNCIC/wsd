@@ -76,14 +76,18 @@ class NqiStagingMixin(models.AbstractModel):
         Writes bypass the public ``write`` (hook would no-op anyway: the
         bookkeeping columns are not in NQI_REQUIRED).
         """
+        groups = {}
         for record in self:
-            missing = record._nqi_missing_columns()
-            if (missing != (record.missing_fields or [])
+            missing = tuple(record._nqi_missing_columns())
+            if (list(missing) != (record.missing_fields or [])
                     or record.missing_count != len(missing)):
-                super(NqiStagingMixin, record).write({
-                    'missing_fields': missing,
-                    'missing_count': len(missing),
-                })
+                key = (missing, len(missing))
+                groups[key] = groups.get(key, record.browse()) | record
+        for (missing, count), records in groups.items():
+            super(NqiStagingMixin, records).write({
+                'missing_fields': list(missing),
+                'missing_count': count,
+            })
         return True
 
     @api.model_create_multi

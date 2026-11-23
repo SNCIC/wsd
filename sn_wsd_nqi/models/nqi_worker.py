@@ -59,6 +59,35 @@ class NqiWorker(models.Model):
         param = self.env['ir.config_parameter'].sudo()
         param.set_param('sn_wsd_nqi.watermark.%s' % key, str(value))
 
+    @api.model
+    def run_birth_queue(self, batch_size=500):
+        """Dequeue birth events and run the (batched) birth functions."""
+        if not self._try_lock('nqi_birth_queue'):
+            return 'birth queue already running'
+        try:
+            Queue = self.env['sn.wsd.nqi.birth.queue'].sudo()
+            rows = Queue.search([], order='id asc', limit=batch_size)
+            for row in rows:
+                sources = self.env[row.source_model].sudo().browse(
+                    row.source_ids or []).exists()
+                if row.source_model == 'sn.wsd.serial.operation.history':
+                    self.env['sn.wsd.nqi.fit.meter.info'].sudo(
+                    )._nqi_birth_from_history(sources)
+                    self.env['sn.wsd.nqi.fit.pcb.mounting'].sudo(
+                    )._nqi_birth_mounting(sources)
+                    self.env['sn.wsd.nqi.fit.meter.mounting'].sudo(
+                    )._nqi_birth_mounting(sources)
+                elif row.source_model == 'sn.wsd.serial.binding':
+                    self.env['sn.wsd.nqi.fit.pcb.serial.bind'].sudo(
+                    )._nqi_birth_from_bindings(sources)
+                elif row.source_model == 'sn.wsd.meter.component.binding':
+                    self.env['sn.wsd.nqi.fit.component.bind'].sudo(
+                    )._nqi_birth_from_component_bindings(sources)
+                row.unlink()
+            return 'birth queue processed %d events' % len(rows)
+        finally:
+            self._unlock('nqi_birth_queue')
+
     # ----- enrichment ----------------------------------------------------
 
     @api.model

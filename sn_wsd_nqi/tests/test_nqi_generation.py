@@ -2,7 +2,10 @@ from odoo.tests import TransactionCase
 
 
 class TestNqiGeneration(TransactionCase):
-    """Birth hooks: tolerant, idempotent, correct axis routing."""
+    """Birth pipeline: enqueue on event, dequeue via the worker."""
+
+    def _drain(self):
+        self.env['sn.wsd.nqi.worker'].run_birth_queue()
 
     def _mes_order(self):
         return self.env['sn.wsd.mes.order'].search([
@@ -37,6 +40,7 @@ class TestNqiGeneration(TransactionCase):
         sn = self._identity('126110003901')
         self._history(order, sn)
         self._history(order, sn)  # replay: different event, same SN
+        self._drain()
         assets = self.env['sn.wsd.nqi.fit.meter.info'].search([
             ('serial_no', '=', '126110003901')])
         self.assertEqual(len(assets), 1)
@@ -49,6 +53,7 @@ class TestNqiGeneration(TransactionCase):
         order.product_id.product_tmpl_id.nqi_product_kind = 'board'
         sn = self._identity('226110003902')
         self._history(order, sn, output=False)
+        self._drain()
         board_rows = self.env['sn.wsd.nqi.fit.pcb.mounting'].search([
             ('pcb_code', '=', '226110003902')])
         machine_rows = self.env['sn.wsd.nqi.fit.meter.mounting'].search([
@@ -64,6 +69,7 @@ class TestNqiGeneration(TransactionCase):
             'bound_serial_identity_id': machine_sn.id,
             'binding_type': 'machine',
         })
+        self._drain()
         bridges = self.env['sn.wsd.nqi.fit.pcb.serial.bind'].search([
             ('serial_no', '=', '126110003903'),
             ('pcb_code', '=', '226110003903')])

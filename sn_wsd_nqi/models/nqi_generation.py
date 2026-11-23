@@ -6,6 +6,7 @@ watermark cron worker (nqi_worker). Idempotency uses event anchors
 (one mirror row per source event, unique constraint on the anchor), so
 replayed events and cron/hook races collapse to a single row.
 """
+import json
 import logging
 
 from odoo import api, fields, models
@@ -13,6 +14,19 @@ from odoo import api, fields, models
 _logger = logging.getLogger(__name__)
 
 DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+
+# bare-INSERT enqueue for the hot path (see hook docstring): no ORM
+# machinery, no flush pull-forward of the pending pass rows
+_ENQUEUE_SQL = (
+    "INSERT INTO sn_wsd_nqi_birth_queue "
+    "(company_id, source_model, source_ids, create_uid, create_date, "
+    " write_uid, write_date) VALUES (%s, %s, %s, %s, "
+    "now() AT TIME ZONE 'UTC', %s, now() AT TIME ZONE 'UTC')")
+
+
+def _enqueue_birth(cr, uid, company_id, source_model, source_ids):
+    cr.execute(_ENQUEUE_SQL, (
+        company_id, source_model, json.dumps(source_ids), uid, uid))
 
 
 def _fmt(dt):
@@ -172,6 +186,51 @@ class NqiFitMountingBirthMachine(models.Model):
             'sn.wsd.nqi.fit.meter.mounting', records)
 
 
+class NqiFitBridgeBirthFromQueue(models.Model):
+    _inherit = 'sn.wsd.nqi.fit.pcb.serial.bind'
+
+    @api.model
+    def _nqi_birth_from_bindings(self, records):
+        helpers = self.env['sn.wsd.nqi.generation.mixin']
+        batch = []
+        for record in records.sudo():
+            if record.binding_type != 'machine':
+                continue
+            board_sn = record.serial_identity_id
+            machine_sn = record.bound_serial_identity_id
+            if not board_sn or not machine_sn:
+                continue
+            batch.append({
+                'company_id': record.company_id.id,
+                'binding_id': record.id,
+                'serial_no': machine_sn.name,
+                'pcb_code': board_sn.name,
+            })
+        helpers._nqi_create_batch_if_new(
+            'sn.wsd.nqi.fit.pcb.serial.bind', batch, 'binding_id')
+
+
+class NqiFitComponentBirthFromQueue(models.Model):
+    _inherit = 'sn.wsd.nqi.fit.component.bind'
+
+    @api.model
+    def _nqi_birth_from_component_bindings(self, records):
+        helpers = self.env['sn.wsd.nqi.generation.mixin']
+        batch = []
+        for record in records.sudo():
+            parent = record.serial_identity_id
+            if not parent:
+                continue
+            batch.append({
+                'company_id': record.company_id.id,
+                'component_binding_id': record.id,
+                'pcb_code': parent.name,
+            })
+        helpers._nqi_create_batch_if_new(
+            'sn.wsd.nqi.fit.component.bind', batch,
+            'component_binding_id')
+
+
 class SerialOperationHistoryNqi(models.Model):
     _inherit = 'sn.wsd.serial.operation.history'
 
@@ -181,14 +240,12 @@ class SerialOperationHistoryNqi(models.Model):
         if self.env.context.get('nqi_skip_birth'):
             return records
         try:
-            self.env['sn.wsd.nqi.fit.meter.info'].sudo(
-            )._nqi_birth_from_history(records)
-            self.env['sn.wsd.nqi.fit.pcb.mounting'].sudo(
-            )._nqi_birth_mounting(records)
-            self.env['sn.wsd.nqi.fit.meter.mounting'].sudo(
-            )._nqi_birth_mounting(records)
+            # raw INSERT on the hot path: an ORM create here pulls the
+            # pending pass-row flushes into the transaction and costs
+            # ~0.5ms/pass; the queue row needs none of that machinery
+            _enqueue_birth(self.env.cr, self.env.uid, records[0].company_id.id, 'sn.wsd.serial.operation.history', records.ids)
         except Exception as exc:  # noqa: BLE001 -- never break a pass
-            _logger.warning('NQI station-pass birth failed: %s', exc)
+            _logger.warning('NQI birth enqueue failed: %s', exc)
         return records
 
 
@@ -211,25 +268,9 @@ class SerialBindingNqi(models.Model):
     def create(self, vals_list):
         records = super().create(vals_list)
         try:
-            helpers = self.env['sn.wsd.nqi.generation.mixin'].sudo()
-            for record in records.sudo():
-                if record.binding_type != 'machine':
-                    continue
-                board_sn = record.serial_identity_id
-                machine_sn = record.bound_serial_identity_id
-                if not board_sn or not machine_sn:
-                    continue
-                helpers._nqi_create_if_new(
-                    'sn.wsd.nqi.fit.pcb.serial.bind',
-                    {
-                        'company_id': record.company_id.id,
-                        'binding_id': record.id,
-                        'serial_no': machine_sn.name,
-                        'pcb_code': board_sn.name,
-                    },
-                    'binding_id')
+            _enqueue_birth(self.env.cr, self.env.uid, records[0].company_id.id, 'sn.wsd.serial.binding', records.ids)
         except Exception as exc:  # noqa: BLE001
-            _logger.warning('NQI binding birth failed: %s', exc)
+            _logger.warning('NQI binding enqueue failed: %s', exc)
         return records
 
 
@@ -252,19 +293,7 @@ class MeterComponentBindingNqi(models.Model):
     def create(self, vals_list):
         records = super().create(vals_list)
         try:
-            helpers = self.env['sn.wsd.nqi.generation.mixin'].sudo()
-            for record in records.sudo():
-                parent = record.serial_identity_id
-                if not parent:
-                    continue
-                helpers._nqi_create_if_new(
-                    'sn.wsd.nqi.fit.component.bind',
-                    {
-                        'company_id': record.company_id.id,
-                        'component_binding_id': record.id,
-                        'pcb_code': parent.name,
-                    },
-                    'component_binding_id')
+            _enqueue_birth(self.env.cr, self.env.uid, records[0].company_id.id, 'sn.wsd.meter.component.binding', records.ids)
         except Exception as exc:  # noqa: BLE001
-            _logger.warning('NQI component-binding birth failed: %s', exc)
+            _logger.warning('NQI component-binding enqueue failed: %s', exc)
         return records

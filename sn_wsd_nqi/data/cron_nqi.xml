@@ -30,5 +30,15 @@
             <field name="interval_type">hours</field>
             <field name="active" eval="False"/>
         </record>
+
+        <record id="ir_cron_nqi_birth_queue" model="ir.cron">
+            <field name="name">NQI: Process Birth Queue</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_worker"/>
+            <field name="state">code</field>
+            <field name="code">model.run_birth_queue()</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="False"/>
+        </record>
     </data>
 </odoo>
