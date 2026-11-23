@@ -6,8 +6,8 @@
     'category': 'Purchase/Purchase',
     'depends': ['sn_wsd_code_rule', 'contacts', 'purchase', 'account'],
     'data': [
-        'security/ir.model.access.csv',
         'security/supplier_finance_security.xml',
+        'security/ir.model.access.csv',
         'data/supplier_code_data.xml',
         'views/supplier_group_views.xml',
         'views/res_partner_views.xml',
