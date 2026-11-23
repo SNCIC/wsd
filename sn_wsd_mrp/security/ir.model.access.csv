@@ -70,4 +70,9 @@ access_sn_wsd_process_section_manager,sn.wsd.process.section manager,model_sn_ws
 access_sn_wsd_mes_order_stats_user,sn.wsd.mes.order.stats user,model_sn_wsd_mes_order_stats,mrp.group_mrp_user,1,0,0,0
 access_purchase_order_mes_user,purchase.order mes user,purchase.model_purchase_order,mrp.group_mrp_user,1,0,0,0
 access_purchase_order_line_mes_user,purchase.order.line mes user,purchase.model_purchase_order_line,mrp.group_mrp_user,1,0,0,0
-access_stock_lot_mes_user,stock.lot mes user,stock.model_stock_lot,mrp.group_mrp_user,1,0,0,0
+access_stock_lot_mes_user,stock.lot mes user,stock.model_stock_lot,mrp.group_mrp_user,1,1,1,0
+access_stock_picking_mes_user,stock.picking mes user,stock.model_stock_picking,mrp.group_mrp_user,1,1,1,0
+access_stock_move_mes_user,stock.move mes user,stock.model_stock_move,mrp.group_mrp_user,1,1,1,0
+access_stock_move_line_mes_user,stock.move.line mes user,stock.model_stock_move_line,mrp.group_mrp_user,1,1,1,0
+access_stock_picking_type_mes_user,stock.picking.type mes user,stock.model_stock_picking_type,mrp.group_mrp_user,1,0,0,0
+access_stock_warehouse_mes_user,stock.warehouse mes user,stock.model_stock_warehouse,mrp.group_mrp_user,1,0,0,0
