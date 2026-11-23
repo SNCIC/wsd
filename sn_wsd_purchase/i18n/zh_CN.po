@@ -1017,3 +1017,15 @@ msgstr "%(receipt)s 的 %(product)s 只剩 %(available)s 可开票。"
 #: code:addons/sn_wsd_purchase/models/0.py:0
 msgid "Vendor Bill"
 msgstr "供应商账单"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/0.py:0
+msgid "The selected receipt lines have nothing left to bill."
+msgstr "所选的入库明细没有可开票数量。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/0.py:0
+msgid "Select the receipt lines of a single vendor."
+msgstr "请选择同一供应商的入库明细。"

@@ -9,8 +9,12 @@
         <field name="arch" type="xml">
             <list string="Receipt Lines to Bill" create="false" edit="false">
                 <header>
+                    <button name="action_sn_open_bill_wizard" type="object"
+                            string="Create Vendor Bill" class="btn-primary"
+                            groups="purchase.group_purchase_user"/>
                     <button name="action_sn_close_billing" type="object"
-                            string="Close Billing"/>
+                            string="Close Billing"
+                            groups="purchase.group_purchase_user"/>
                 </header>
                 <field name="picking_id"/>
                 <field name="date" optional="show"/>

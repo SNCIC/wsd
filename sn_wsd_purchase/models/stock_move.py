@@ -122,6 +122,29 @@ class StockMove(models.Model):
                 lambda move: move.state != 'cancel').mapped('name')
             move.sn_bill_names = ', '.join(sorted({name for name in names if name}))
 
+    def action_sn_open_bill_wizard(self):
+        """Open the billing wizard on the receipt lines selected in the list."""
+        moves = self.filtered(
+            lambda move: move.state == 'done' and move.sn_to_bill_qty > 0)
+        if not moves:
+            raise UserError(_("The selected receipt lines have nothing left to bill."))
+        partners = moves.picking_id.partner_id
+        if len(partners) != 1:
+            raise UserError(_("Select the receipt lines of a single vendor."))
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Create Vendor Bill'),
+            'res_model': 'sn.vendor.bill.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_partner_id': partners.id,
+                'default_picking_ids': [(6, 0, moves.picking_id.ids)],
+                'default_date_mode': 'custom',
+                'default_include_open_from_previous_periods': False,
+            },
+        }
+
     def action_sn_close_billing(self):
         """Stop billing the selected receipt lines without billing them.
 
