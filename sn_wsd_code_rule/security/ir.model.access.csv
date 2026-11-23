@@ -6,3 +6,6 @@ access_sn_code_rule_segment_user,sn.code.rule.segment user,model_sn_code_rule_se
 access_sn_code_counter_system,sn.code.counter system,model_sn_code_counter,base.group_system,1,1,1,1
 access_sn_code_counter_user,sn.code.counter user,model_sn_code_counter,mrp.group_mrp_user,1,0,0,0
 access_sn_code_rule_preview,sn.code.rule.preview,model_sn_code_rule_preview,mrp.group_mrp_user,1,1,1,1
+access_sn_code_rule_stock_user,sn.code.rule stock user,model_sn_code_rule,stock.group_stock_user,1,0,0,0
+access_sn_code_rule_segment_stock_user,sn.code.rule.segment stock user,model_sn_code_rule_segment,stock.group_stock_user,1,0,0,0
+access_sn_code_counter_stock_user,sn.code.counter stock user,model_sn_code_counter,stock.group_stock_user,1,0,0,0
