@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_nqi_push_log_list" model="ir.ui.view">
+        <field name="name">nqi.push.log.list</field>
+        <field name="model">sn.wsd.nqi.push.log</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="create_date" string="Time"/>
+                <field name="model_name"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'success'"
+                       decoration-danger="state == 'failed'"
+                       decoration-info="state == 'pending'"/>
+                <field name="retry_count"/>
+                <field name="pushed_at" optional="hide"/>
+                <field name="error_text" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_nqi_push_log_form" model="ir.ui.view">
+        <field name="name">nqi.push.log.form</field>
+        <field name="model">sn.wsd.nqi.push.log</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_retry" type="object"
+                            string="Retry" class="oe_highlight"
+                            invisible="state not in ('failed', 'skipped')"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="model_name"/>
+                            <field name="row_ids"/>
+                            <field name="state"/>
+                            <field name="retry_count"/>
+                        </group>
+                        <group>
+                            <field name="pushed_at"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Payload">
+                        <field name="payload" readonly="1" nolabel="1" colspan="2"/>
+                    </group>
+                    <group string="Error" invisible="not error_text">
+                        <field name="error_text" nolabel="1" colspan="2"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_nqi_push_log" model="ir.actions.act_window">
+        <field name="name">NQI Push Logs</field>
+        <field name="res_model">sn.wsd.nqi.push.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_nqi_to_push_assets" model="ir.actions.act_window">
+        <field name="name">To Push (Assets)</field>
+        <field name="res_model">sn.wsd.nqi.fit.meter.info</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_to_push': 1}</field>
+    </record>
+
+    <record id="action_nqi_run_push" model="ir.actions.server">
+        <field name="name">Run Push Batch</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_worker"/>
+        <field name="state">code</field>
+        <field name="code">
+message = model.run_push()
+</field>
+    </record>
+
+    <menuitem id="menu_nqi_push_log_entry"
+              name="Push Logs"
+              parent="menu_nqi_push_center"
+              action="action_nqi_push_log"
+              sequence="30"/>
+    <menuitem id="menu_nqi_to_push_entry"
+              name="To Push (Assets)"
+              parent="menu_nqi_push_center"
+              action="action_nqi_to_push_assets"
+              sequence="40"/>
+    <menuitem id="menu_nqi_run_push_entry"
+              name="Run Push Batch"
+              parent="menu_nqi_push_center"
+              action="action_nqi_run_push"
+              sequence="50"/>
+</odoo>

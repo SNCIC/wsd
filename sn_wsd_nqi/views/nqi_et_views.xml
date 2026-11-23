@@ -66,6 +66,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="device_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
                 <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
                 <group>
                     <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
@@ -135,6 +136,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="person_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
                 <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
                 <group>
                     <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
@@ -213,6 +215,7 @@
         <field name="model">sn.wsd.nqi.et.staff</field>
         <field name="arch" type="xml">
             <search>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
                 <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
                 <group>
                     <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
@@ -287,6 +290,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="product_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
                 <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
                 <group>
                     <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
@@ -352,6 +356,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="product_type"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
                 <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
                 <group>
                     <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
@@ -421,6 +426,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="file_url"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
                 <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
                 <group>
                     <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
@@ -491,6 +497,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="create_company"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
                 <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
                 <group>
                     <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
@@ -560,6 +567,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="standard_name"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
                 <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
                 <group>
                     <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
@@ -631,6 +639,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="make_year"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
                 <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
                 <group>
                     <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
@@ -700,6 +709,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="improvement_project"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
                 <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
                 <group>
                     <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
@@ -767,6 +777,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="supplie_enterprise_code"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
                 <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
                 <group>
                     <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>
@@ -844,6 +855,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="file_name"/>
+                <filter name="to_push" string="To Push" domain="[('push_state', '=', 'to_push')]"/>
                 <filter name="filter_missing" string="Missing Data" domain="[('missing_count', '>', 0)]"/>
                 <group>
                     <filter name="group_by_state" string="Push State" context="{'group_by': 'push_state'}"/>

@@ -23,6 +23,7 @@
         'views/nqi_plan_expand_views.xml',
         'views/nqi_field_mapping_views.xml',
         'views/nqi_checkup_views.xml',
+        'views/nqi_push_views.xml',
         'wizard/nqi_batch_fill_views.xml',
         'views/nqi_batch_fill_actions.xml',
         'data/cron_nqi.xml',
