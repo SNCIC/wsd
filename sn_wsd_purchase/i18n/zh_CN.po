@@ -1093,3 +1093,13 @@ msgstr "币种"
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard_line__wizard_id
 msgid "Wizard"
 msgstr "向导"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_move__sn_receipt_date
+msgid "Receipt Validation Date"
+msgstr "到货验证日期"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_search
+msgid "Receipt Month"
+msgstr "到货月份"

@@ -18,7 +18,7 @@
                 </header>
                 <field name="picking_id"/>
                 <field name="sn_picking_partner_id" optional="show"/>
-                <field name="date" optional="show"/>
+                <field name="sn_receipt_date" optional="show"/>
                 <field name="product_id"/>
                 <field name="quantity" string="Received Quantity"/>
                 <field name="sn_invoiced_qty" optional="show"/>
@@ -43,6 +43,7 @@
                 <field name="product_id"/>
                 <field name="purchase_line_id"/>
                 <field name="sn_picking_partner_id" string="Vendor"/>
+                <field name="sn_receipt_date"/>
                 <filter name="filter_to_bill" string="To Bill"
                         domain="[('sn_bill_status', '=', 'to_bill')]"/>
                 <filter name="filter_partial" string="Partially Billed"
@@ -56,6 +57,8 @@
                 <group>
                     <filter name="group_vendor" string="Vendor"
                             context="{'group_by': 'sn_picking_partner_id'}"/>
+                    <filter name="group_receipt_month" string="Receipt Month"
+                            context="{'group_by': 'sn_receipt_date:month'}"/>
                     <filter name="group_product" string="Product"
                             context="{'group_by': 'product_id'}"/>
                     <filter name="group_status" string="Billing Status"
@@ -73,8 +76,10 @@
             Command.create({'view_mode': 'list', 'view_id': ref('view_sn_stock_move_billable_list')})]"/>
         <field name="search_view_id" ref="view_sn_stock_move_billable_search"/>
         <field name="domain">[('state', '=', 'done'), ('purchase_line_id', '!=', False),
-            ('sn_to_bill_qty', '&gt;', 0), ('picking_id.picking_type_id.code', '=', 'incoming')]</field>
-        <field name="context">{'search_default_filter_to_bill': 1}</field>
+            ('picking_id.picking_type_id.code', '=', 'incoming')]</field>
+        <field name="context">{'search_default_filter_to_bill': 1,
+            'search_default_group_vendor': 1,
+            'search_default_group_receipt_month': 1}</field>
     </record>
 
     <menuitem id="menu_sn_stock_move_billable"

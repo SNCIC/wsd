@@ -52,6 +52,13 @@ class StockMove(models.Model):
         readonly=True,
         help="Vendor of the receipt the line belongs to.",
     )
+    sn_receipt_date = fields.Datetime(
+        string='Receipt Validation Date',
+        related='picking_id.date_done',
+        store=True,
+        readonly=True,
+        help="Date the receipt was validated, used to bill the lines of a month.",
+    )
     sn_billing_closed = fields.Boolean(
         string='Billing Closed',
         copy=False,
