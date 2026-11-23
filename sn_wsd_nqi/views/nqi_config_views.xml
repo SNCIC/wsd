@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_nqi_config_form" model="ir.ui.view">
+        <field name="name">nqi.config.form</field>
+        <field name="model">sn.wsd.nqi.config</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="active" invisible="1"/>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <group>
+                        <group string="Enterprise Identity">
+                            <field name="company_id" options="{'no_create': True}"/>
+                            <field name="name" invisible="1"/>
+                            <field name="enterprise_code"/>
+                        </group>
+                        <group string="Push API">
+                            <field name="api_base_url" placeholder="https://..."/>
+                            <field name="auth_type"/>
+                            <field name="api_token" password="True"
+                                   invisible="auth_type == 'none'"/>
+                            <field name="timeout_sec"/>
+                            <field name="retry_times"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_nqi_config_list" model="ir.ui.view">
+        <field name="name">nqi.config.list</field>
+        <field name="model">sn.wsd.nqi.config</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="company_id"/>
+                <field name="enterprise_code"/>
+                <field name="api_base_url"/>
+                <field name="auth_type"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_nqi_config" model="ir.actions.act_window">
+        <field name="name">NQI Integration Config</field>
+        <field name="res_model">sn.wsd.nqi.config</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create the NQI integration config for your company
+            </p>
+            <p>
+                Enterprise code is stamped on every mirror row; push API
+                parameters feed the transport adapter once the interface
+                spec is published.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_nqi_config_entry"
+              name="Integration Config"
+              parent="menu_nqi_config"
+              action="action_nqi_config"
+              sequence="10"/>
+</odoo>
