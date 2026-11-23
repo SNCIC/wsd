@@ -1,4 +1,5 @@
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class ResPartner(models.Model):
@@ -9,6 +10,43 @@ class ResPartner(models.Model):
         index=True, ondelete='restrict',
         help='Group the contact is a supplier of. Its code prefixes the '
              'supplier code generated when the reference is left empty.')
+
+    sn_can_edit_supplier_finance = fields.Boolean(
+        string='Can Edit Supplier Finance',
+        compute='_compute_sn_can_edit_supplier_finance',
+        help='Technical field telling the form whether the user may change the '
+             'vendor payment terms and the vendor bank accounts.')
+
+    @api.depends_context('uid')
+    def _compute_sn_can_edit_supplier_finance(self):
+        allowed = self.env.user.has_group(
+            'sn_wsd_partner.group_supplier_finance_editor')
+        for partner in self:
+            partner.sn_can_edit_supplier_finance = allowed
+
+    def _sn_check_supplier_finance_rights(self):
+        """Raise when the user may not edit the finance data of a supplier."""
+        if self.env.su or self.env.context.get('sn_skip_supplier_finance_check'):
+            return
+        if self.env.user.has_group('sn_wsd_partner.group_supplier_finance_editor'):
+            return
+        raise UserError(_(
+            "You are not allowed to change the payment terms or the bank "
+            "accounts of a vendor. Ask a purchase manager or an accountant."))
+
+    def write(self, vals):
+        if 'property_supplier_payment_term_id' in vals and not (
+            self.env.su
+            or self.env.context.get('sn_skip_supplier_finance_check')
+            or self.env.user.has_group('sn_wsd_partner.group_supplier_finance_editor')
+        ):
+            new_term_id = vals['property_supplier_payment_term_id'] or False
+            changed = any(
+                partner.property_supplier_payment_term_id.id != new_term_id
+                for partner in self)
+            if changed:
+                self._sn_check_supplier_finance_rights()
+        return super().write(vals)
 
     @api.model_create_multi
     def create(self, vals_list):

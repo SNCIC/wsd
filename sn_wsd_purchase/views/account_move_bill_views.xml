@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vendor bill side of the receipt billing: the bill reaches its receipts
+         and, behind them, the purchase requests that asked for the goods. -->
+    <record id="view_move_form_vendor_billing" model="ir.ui.view">
+        <field name="name">account.move.form.vendor.billing</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="priority">91</field>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_sn_view_pickings" type="object"
+                        class="oe_stat_button"
+                        icon="fa-truck"
+                        groups="purchase.group_purchase_user"
+                        invisible="not sn_picking_count">
+                    <field name="sn_picking_count" widget="statinfo" string="Receipts"/>
+                </button>
+                <button name="action_sn_view_purchase_requests" type="object"
+                        class="oe_stat_button"
+                        icon="fa-tasks"
+                        groups="purchase.group_purchase_user"
+                        invisible="not sn_purchase_request_count">
+                    <field name="sn_purchase_request_count" widget="statinfo"
+                           string="Purchase Requests"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']/list[@name='journal_items']/field[@name='product_id']"
+                   position="after">
+                <field name="sn_picking_id" optional="show" readonly="1"/>
+                <field name="sn_purchase_request_names" optional="hide" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

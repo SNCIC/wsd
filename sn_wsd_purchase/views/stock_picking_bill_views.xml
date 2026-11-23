@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vendor billing of the purchase receipts: the transfer shows whether its
+         received quantity is already billed, and hands the receipt to the
+         billing wizard. -->
+    <record id="view_stock_picking_form_vendor_billing" model="ir.ui.view">
+        <field name="name">stock.picking.form.vendor.billing</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="priority">91</field>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="sn_bill_status" invisible="1"/>
+                <button name="action_sn_create_bill" type="object"
+                        string="Create Vendor Bill"
+                        class="btn-primary"
+                        groups="purchase.group_purchase_user"
+                        invisible="state != 'done' or sn_bill_status not in ['to_bill', 'partial']"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_sn_view_bills" type="object"
+                        class="oe_stat_button"
+                        icon="fa-pencil-square-o"
+                        groups="purchase.group_purchase_user"
+                        invisible="not sn_bill_count">
+                    <field name="sn_bill_count" widget="statinfo" string="Vendor Bills"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="sn_bill_status" readonly="1" invisible="not sn_bill_status"/>
+            </xpath>
+            <xpath expr="//field[@name='move_ids']/list/field[@name='quantity']" position="after">
+                <field name="sn_invoiced_qty" optional="show" readonly="1"/>
+                <field name="sn_to_bill_qty" optional="show" readonly="1"/>
+                <field name="sn_bill_status" optional="show" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="vpicktree_vendor_billing" model="ir.ui.view">
+        <field name="name">stock.picking.list.vendor.billing</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="priority">91</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="sn_bill_status" optional="show" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

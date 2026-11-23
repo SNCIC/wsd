@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Receipt lines waiting for a vendor bill. The list is the entry point of
+         the monthly or cumulative billing: filter by vendor and period, then
+         open the wizard on the selection. -->
+    <record id="view_sn_stock_move_billable_list" model="ir.ui.view">
+        <field name="name">sn.stock.move.billable.list</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <list string="Receipt Lines to Bill" create="false" edit="false">
+                <header>
+                    <button name="action_sn_close_billing" type="object"
+                            string="Close Billing"/>
+                </header>
+                <field name="picking_id"/>
+                <field name="date" optional="show"/>
+                <field name="product_id"/>
+                <field name="quantity" string="Received Quantity"/>
+                <field name="sn_invoiced_qty" optional="show"/>
+                <field name="sn_to_bill_qty"/>
+                <field name="sn_bill_status"
+                       decoration-success="sn_bill_status == 'billed'"
+                       decoration-muted="sn_bill_status == 'closed'"
+                       decoration-info="sn_bill_status == 'partial'"/>
+                <field name="sn_bill_names" optional="show"/>
+                <field name="purchase_line_id" optional="show"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_stock_move_billable_search" model="ir.ui.view">
+        <field name="name">sn.stock.move.billable.search</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <search string="Receipt Lines to Bill">
+                <field name="picking_id"/>
+                <field name="product_id"/>
+                <field name="purchase_line_id"/>
+                <field name="partner_id" string="Vendor"/>
+                <filter name="filter_to_bill" string="To Bill"
+                        domain="[('sn_bill_status', '=', 'to_bill')]"/>
+                <filter name="filter_partial" string="Partially Billed"
+                        domain="[('sn_bill_status', '=', 'partial')]"/>
+                <filter name="filter_billed" string="Billed"
+                        domain="[('sn_bill_status', '=', 'billed')]"/>
+                <filter name="filter_closed" string="Billing Closed"
+                        domain="[('sn_bill_status', '=', 'closed')]"/>
+                <separator/>
+                <filter name="filter_done" string="Done" domain="[('state', '=', 'done')]"/>
+                <group>
+                    <filter name="group_vendor" string="Vendor"
+                            context="{'group_by': 'picking_id'}"/>
+                    <filter name="group_product" string="Product"
+                            context="{'group_by': 'product_id'}"/>
+                    <filter name="group_status" string="Billing Status"
+                            context="{'group_by': 'sn_bill_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_stock_move_billable" model="ir.actions.act_window">
+        <field name="name">Receipt Lines to Bill</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_ids" eval="[Command.clear(),
+            Command.create({'view_mode': 'list', 'view_id': ref('view_sn_stock_move_billable_list')})]"/>
+        <field name="search_view_id" ref="view_sn_stock_move_billable_search"/>
+        <field name="domain">[('state', '=', 'done'), ('purchase_line_id', '!=', False),
+            ('sn_to_bill_qty', '&gt;', 0), ('picking_id.picking_type_id.code', '=', 'incoming')]</field>
+        <field name="context">{'search_default_filter_to_bill': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Every purchase receipt is billed
+            </p>
+            <p>
+                Receipt lines appear here once the transfer is validated. Select
+                the lines of the period and create the vendor bill of the
+                received quantities.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_sn_stock_move_billable"
+              name="Receipt Lines to Bill"
+              parent="purchase.menu_procurement_management"
+              action="action_sn_stock_move_billable"
+              sequence="8"
+              groups="purchase.group_purchase_user"/>
+</odoo>

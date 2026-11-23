@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_sale_order_purchase_user,sale.order purchase user,sale.model_sale_order,purchase.group_purchase_user,1,0,0,0
 access_sale_order_purchase_manager,sale.order purchase manager,sale.model_sale_order,purchase.group_purchase_manager,1,0,0,0
+access_sn_vendor_bill_wizard_user,sn.vendor.bill.wizard purchase user,model_sn_vendor_bill_wizard,purchase.group_purchase_user,1,1,1,1
+access_sn_vendor_bill_wizard_line_user,sn.vendor.bill.wizard.line purchase user,model_sn_vendor_bill_wizard_line,purchase.group_purchase_user,1,1,1,1

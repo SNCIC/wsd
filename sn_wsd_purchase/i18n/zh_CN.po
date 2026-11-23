@@ -785,3 +785,235 @@ msgstr "批量打印外购退料单（ESC/P）"
 #: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
 msgid "Total:"
 msgstr "合计："
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_move__sn_bill_line_ids
+msgid "Bill Lines"
+msgstr "账单明细"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_move__sn_invoiced_qty
+msgid "Billed Quantity"
+msgstr "已开票数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_move__sn_to_bill_qty
+msgid "Quantity to Bill"
+msgstr "未开票数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_move__sn_bill_status
+msgid "Billing Status"
+msgstr "开票状态"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_move__sn_bill_names
+msgid "Vendor Bills"
+msgstr "供应商账单"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_move__sn_billing_closed
+msgid "Billing Closed"
+msgstr "开票已关闭"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_move__sn_billing_close_date
+msgid "Billing Close Date"
+msgstr "开票关闭日期"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_move__sn_billing_close_user_id
+msgid "Billing Closed by"
+msgstr "开票关闭人"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_picking__sn_bill_count
+msgid "Vendor Bill Count"
+msgstr "账单数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_account_move__sn_picking_ids
+msgid "Receipts"
+msgstr "入库单"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_account_move__sn_picking_count
+msgid "Receipt Count"
+msgstr "入库单数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_account_move__sn_purchase_request_ids
+msgid "Purchase Requests"
+msgstr "请购单"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_account_move__sn_purchase_request_count
+msgid "Purchase Request Count"
+msgstr "请购单数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_account_move_line__sn_stock_move_id
+msgid "Receipt Move"
+msgstr "入库明细"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__stock_move__sn_bill_status__to_bill
+msgid "To Bill"
+msgstr "待开票"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__stock_move__sn_bill_status__partial
+msgid "Partially Billed"
+msgstr "部分开票"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__stock_move__sn_bill_status__billed
+msgid "Billed"
+msgstr "已开票"
+
+#. module: sn_wsd_purchase
+#: model:ir.model,name:sn_wsd_purchase.model_sn_vendor_bill_wizard
+msgid "Vendor Bill from Receipts"
+msgstr "按入库单开票"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard__partner_id
+msgid "Vendor"
+msgstr "供应商"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard__date_mode
+msgid "Period"
+msgstr "期间"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__sn_vendor_bill_wizard__date_mode__current_month
+msgid "Current Month"
+msgstr "本月"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__sn_vendor_bill_wizard__date_mode__last_month
+msgid "Last Month"
+msgstr "上月"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__sn_vendor_bill_wizard__date_mode__open
+msgid "All Open Receipts"
+msgstr "全部未开票"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__sn_vendor_bill_wizard__date_mode__custom
+msgid "Custom Period"
+msgstr "自定义期间"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard__date_from
+msgid "Start Date"
+msgstr "开始日期"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard__date_to
+msgid "End Date"
+msgstr "结束日期"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard__include_open_from_previous_periods
+msgid "Include Open Receipts of Previous Periods"
+msgstr "包含以前期间的未开票入库"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard__line_ids
+msgid "Receipt Lines"
+msgstr "入库明细"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard_line__selected
+msgid "Select"
+msgstr "选择"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard_line__date_done
+msgid "Receipt Date"
+msgstr "入库日期"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard_line__subtotal
+msgid "Subtotal"
+msgstr "小计"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_stock_picking_form_vendor_billing
+msgid "Create Vendor Bill"
+msgstr "生成供应商账单"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_vendor_bill_wizard_form
+msgid "Reload Receipts"
+msgstr "重新加载入库单"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_vendor_bill_wizard_form
+msgid "Leave empty to use the period"
+msgstr "留空则按期间取数"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.actions.act_window,name:sn_wsd_purchase.action_sn_stock_move_billable
+msgid "Receipt Lines to Bill"
+msgstr "待开票入库明细"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_list
+msgid "Close Billing"
+msgstr "关闭开票"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_search
+msgid "Done"
+msgstr "已完成"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_search
+msgid "Group By"
+msgstr "分组"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/0.py:0
+msgid "Only done receipt lines can be closed for billing."
+msgstr "只有已完成的入库明细可以关闭开票。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/0.py:0
+msgid "The billed quantity of %(product)s exceeds the received quantity of %(receipt)s."
+msgstr "%(product)s 的开票数量超过 %(receipt)s 的入库数量。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/0.py:0
+msgid "Select at least one receipt line to bill."
+msgstr "请至少选择一条入库明细生成账单。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/0.py:0
+msgid "The selected receipt lines belong to several companies."
+msgstr "所选入库明细属于多个公司。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/0.py:0
+msgid "The selected receipt lines are ordered in several currencies."
+msgstr "所选入库明细的采购订单使用多个币种。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/0.py:0
+msgid "%(product)s of %(receipt)s has only %(available)s left to bill."
+msgstr "%(receipt)s 的 %(product)s 只剩 %(available)s 可开票。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/0.py:0
+msgid "Vendor Bill"
+msgstr "供应商账单"

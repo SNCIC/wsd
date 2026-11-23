@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Billing wizard: the receipts of a period (or the receipts picked in the
+         list) are collected with the quantity still to bill, the user adjusts
+         the quantity or the price and the vendor bill is created from the
+         selection. -->
+    <record id="view_sn_vendor_bill_wizard_form" model="ir.ui.view">
+        <field name="name">sn.vendor.bill.wizard.form</field>
+        <field name="model">sn.vendor.bill.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Vendor Bill">
+                <field name="currency_id" invisible="1"/>
+                <group>
+                    <group>
+                        <field name="partner_id" options="{'no_create': True}"/>
+                        <field name="date_mode"/>
+                        <field name="date_from" invisible="date_mode == 'open'"/>
+                        <field name="date_to" invisible="date_mode == 'open'"/>
+                        <field name="include_open_from_previous_periods"
+                               invisible="date_mode == 'open'"/>
+                    </group>
+                    <group>
+                        <field name="picking_ids" widget="many2many_tags"
+                               placeholder="Leave empty to use the period"
+                               options="{'no_create': True}"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="bill_amount"/>
+                    </group>
+                </group>
+                <field name="line_ids">
+                    <list editable="bottom" create="false">
+                        <field name="selected"/>
+                        <field name="picking_id" readonly="1"/>
+                        <field name="date_done" readonly="1"/>
+                        <field name="purchase_order_id" readonly="1"/>
+                        <field name="purchase_request_names" readonly="1"/>
+                        <field name="product_id" readonly="1"/>
+                        <field name="product_uom_id" readonly="1" groups="uom.group_uom"/>
+                        <field name="received_qty"/>
+                        <field name="to_bill_qty"/>
+                        <field name="quantity"/>
+                        <field name="price_unit"/>
+                        <field name="subtotal" sum="Total"/>
+                    </list>
+                </field>
+                <footer>
+                    <button name="action_create_bill" type="object"
+                            string="Create Vendor Bill" class="btn-primary"/>
+                    <button name="action_load_lines" type="object"
+                            string="Reload Receipts"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

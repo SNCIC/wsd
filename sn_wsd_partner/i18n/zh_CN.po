@@ -131,3 +131,30 @@ msgid ""
 "serial, and every group counts its own: the fees group issues 10.xxx, its "
 "other-fees sub-group 10.002.xxx."
 msgstr "供应商编码用其分组的完整编号加流水号组成，各分组各自计数：费用组为 10.xxx，其下的其他费用子分组为 10.002.xxx。"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_res_partner__sn_can_edit_supplier_finance
+msgid "Can Edit Supplier Finance"
+msgstr "可维护供应商财务信息"
+
+#. module: sn_wsd_partner
+#: model_terms:ir.actions.act_window,name:sn_wsd_partner.action_sn_partner_bank_accounts
+msgid "Bank Accounts"
+msgstr "银行账号"
+
+#. module: sn_wsd_partner
+#: model:res.groups,name:sn_wsd_partner.group_supplier_finance_editor
+msgid "Supplier Finance Editor"
+msgstr "供应商财务信息维护"
+
+#. module: sn_wsd_partner
+#. odoo-python
+#: code:addons/sn_wsd_partner/models/0.py:0
+msgid "You are not allowed to change the payment terms or the bank accounts of a vendor. Ask a purchase manager or an accountant."
+msgstr "您无权修改供应商的付款条件或银行账号，请联系采购经理或财务人员。"
+
+#. module: sn_wsd_partner
+#. odoo-python
+#: code:addons/sn_wsd_partner/models/0.py:0
+msgid "You are not allowed to change the bank accounts of a vendor. Ask a purchase manager or an accountant."
+msgstr "您无权修改供应商的银行账号，请联系采购经理或财务人员。"
