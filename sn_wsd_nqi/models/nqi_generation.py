@@ -46,9 +46,35 @@ class NqiGenerationIdempotency(models.AbstractModel):
             return target.browse()
 
     @api.model
+    def _nqi_create_batch_if_new(self, model_name, vals_list, key_field):
+        """Batched idempotent create: one pre-filter search, one multi
+        insert, one savepoint; a rare race falls back to row-by-row
+        skipping (constraint collapses duplicates)."""
+        if not vals_list:
+            return self.env[model_name]
+        target = self.env[model_name].sudo()
+        keys = [vals[key_field] for vals in vals_list]
+        existing = set(target.search(
+            [(key_field, 'in', keys)]).mapped(key_field))
+        todo = [vals for vals in vals_list
+                if vals[key_field] not in existing]
+        if not todo:
+            return target.browse()
+        try:
+            with self.env.cr.savepoint():
+                return target.create(todo)
+        except Exception:  # noqa: BLE001 -- race: retry row by row
+            created = target.browse()
+            for vals in todo:
+                created |= self._nqi_create_if_new(
+                    model_name, vals, key_field)
+            return created
+
+    @api.model
     def _nqi_birth_mounting_rows(self, model_name, records):
         """One process row per judged station pass, axis by product kind."""
         board = model_name == 'sn.wsd.nqi.fit.pcb.mounting'
+        batch = []
         for record in records.sudo():
             order = record.mes_order_id
             sn = record.serial_identity_id
@@ -68,8 +94,9 @@ class NqiGenerationIdempotency(models.AbstractModel):
                 'detect_date': _fmt(record.out_date or record.in_date),
             }
             values['pcb_code' if board else 'serial_no'] = sn.name
-            self._nqi_create_if_new(model_name, values,
-                                    'operation_history_id')
+            batch.append(values)
+        self._nqi_create_batch_if_new(
+            model_name, batch, 'operation_history_id')
 
 
 class NqiFitMeterInfoBirth(models.Model):
@@ -87,6 +114,7 @@ class NqiFitMeterInfoBirth(models.Model):
     def _nqi_birth_from_history(self, records):
         """Asset rows born when a machine-kind SN passes its output op."""
         helpers = self.env['sn.wsd.nqi.generation.mixin']
+        batch = []
         for record in records.sudo():
             order = record.mes_order_id
             if not order or record.result != 'ok':
@@ -100,15 +128,14 @@ class NqiFitMeterInfoBirth(models.Model):
             sn = record.serial_identity_id
             if not sn:
                 continue
-            helpers._nqi_create_if_new(
-                'sn.wsd.nqi.fit.meter.info',
-                {
-                    'company_id': record.company_id.id,
-                    'operation_history_id': record.id,
-                    'serial_no': sn.name,
-                    'status': '1',
-                },
-                'operation_history_id')
+            batch.append({
+                'company_id': record.company_id.id,
+                'operation_history_id': record.id,
+                'serial_no': sn.name,
+                'status': '1',
+            })
+        helpers._nqi_create_batch_if_new(
+            'sn.wsd.nqi.fit.meter.info', batch, 'operation_history_id')
 
 
 class NqiFitMountingBirthBoard(models.Model):

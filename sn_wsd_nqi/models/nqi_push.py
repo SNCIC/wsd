@@ -8,6 +8,7 @@ adding a mirror column needs no push-code change (design decision 10).
 """
 import json
 import logging
+import uuid
 from datetime import datetime
 
 from odoo import _, api, fields, models
@@ -117,6 +118,12 @@ class NqiPushLog(models.Model):
         string='State', default='pending', required=True, index=True)
     error_text = fields.Text(string='Error')
     retry_count = fields.Integer(string='Retry Count', default=0)
+    notice_no = fields.Char(
+        string='Notice No', index=True, copy=False,
+        default=lambda self: str(uuid.uuid4()),
+        help='UUID notice number: stamped on every pushed row and echoed '
+             'by the gateway callback as noticeNo - the callback lookup '
+             'key (fits the NQI VARCHAR(40)).')
     pushed_at = fields.Datetime(string='Pushed At', readonly=True)
     callback_flag = fields.Selection(
         [('1', 'Success'), ('0', 'Failure')], string='Callback Flag',
@@ -132,7 +139,7 @@ class NqiPushLog(models.Model):
         failure flags them abnormal (HANDLE_FLAG 3) and reopens them as
         failed so the withdraw-fix-repush flow applies.
         """
-        log = self.search([('id', '=', int(notice_no))], limit=1)
+        log = self.search([('notice_no', '=', str(notice_no))], limit=1)
         if not log:
             raise UserError(_('Unknown notice number %s.', notice_no))
         now = fields.Datetime.now()
@@ -386,7 +393,7 @@ class NqiWorkerPush(models.AbstractModel):
             config = self.env['sn.wsd.nqi.config'].sudo().search(
                 [('company_id', '=', rows[0].company_id.id)], limit=1)
             self.env['sn.wsd.nqi.transport'].send(
-                config, {rows._name: rows}, log.id)
+                config, {rows._name: rows}, log.notice_no)
         except Exception as exc:  # noqa: BLE001 -- log and keep rows
             log.write({
                 'state': 'failed',
@@ -396,6 +403,6 @@ class NqiWorkerPush(models.AbstractModel):
             _logger.warning('NQI push batch %s failed: %s', log.id, exc)
             return False
         log.write({'state': 'success', 'pushed_at': fields.Datetime.now()})
-        # notice_no carries the batch id for the async gateway callback
-        rows.write({'push_state': 'pushed', 'notice_no': str(log.id)})
+        # notice_no carries the batch UUID for the async gateway callback
+        rows.write({'push_state': 'pushed', 'notice_no': log.notice_no})
         return True

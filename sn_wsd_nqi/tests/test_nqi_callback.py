@@ -17,13 +17,13 @@ class TestNqiCallback(TransactionCase):
             'row_ids': str(row.id),
             'state': 'success',
         })
-        row.write({'push_state': 'pushed', 'notice_no': str(log.id)})
+        row.write({'push_state': 'pushed', 'notice_no': log.notice_no})
         return row, log
 
     def test_success_callback_marks_processed(self):
         row, log = self._pushed_row_and_log()
         self.env['sn.wsd.nqi.push.log'].process_callback(
-            log.id, '1', '上传成功！')
+            log.notice_no, '1', '上传成功！')
         self.assertEqual(row.handle_flag, '1')  # 处理完成
         self.assertTrue(row.handle_date)
         self.assertEqual(row.push_state, 'pushed')
@@ -33,7 +33,7 @@ class TestNqiCallback(TransactionCase):
     def test_failure_callback_reopens_rows(self):
         row, log = self._pushed_row_and_log()
         self.env['sn.wsd.nqi.push.log'].process_callback(
-            log.id, '0',
+            log.notice_no, '0',
             '生产企业编号 ENTERPRISE_CODE 字段有误，应为 11059')
         self.assertEqual(row.handle_flag, '3')  # 异常
         self.assertEqual(row.push_state, 'failed')  # withdraw-fix-repush
@@ -50,4 +50,4 @@ class TestNqiCallback(TransactionCase):
     def test_unknown_notice_rejected(self):
         with self.assertRaises(UserError):
             self.env['sn.wsd.nqi.push.log'].process_callback(
-                999999, '1', 'x')
+                '00000000-0000-0000-0000-000000000000', '1', 'x')

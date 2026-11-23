@@ -6,6 +6,7 @@
         <field name="arch" type="xml">
             <list>
                 <field name="create_date" string="Time"/>
+                <field name="notice_no" optional="show"/>
                 <field name="model_name"/>
                 <field name="state" widget="badge"
                        decoration-success="state == 'success'"
@@ -31,6 +32,7 @@
                 <sheet>
                     <group>
                         <group>
+                            <field name="notice_no"/>
                             <field name="model_name"/>
                             <field name="row_ids"/>
                             <field name="state"/>
