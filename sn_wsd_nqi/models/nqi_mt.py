@@ -17,7 +17,7 @@ class NqiAoi(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     pcb_code = fields.Char(index=True)
     module_type = fields.Char()
     detect_date = fields.Char(index=True)
@@ -59,7 +59,7 @@ class NqiBasicerr(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -163,7 +163,7 @@ class NqiConst(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -265,7 +265,7 @@ class NqiCreeping(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -336,7 +336,7 @@ class NqiDayerr(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -375,7 +375,7 @@ class NqiDemandvalue(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -471,7 +471,7 @@ class NqiEsamRead(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -534,7 +534,7 @@ class NqiFunction(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     function_type = fields.Char()
@@ -579,7 +579,7 @@ class NqiHutchisonCombina(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -666,7 +666,7 @@ class NqiIntuit(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -696,7 +696,7 @@ class NqiMounting(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     pcb_code = fields.Char(index=True)
     module_type = fields.Char()
@@ -732,7 +732,7 @@ class NqiParameter(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     plan_code = fields.Char(index=True)
     serial_no = fields.Char(index=True)
     test_type = fields.Char()
@@ -771,7 +771,7 @@ class NqiRfid(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     rfid_code = fields.Char()
@@ -799,7 +799,7 @@ class NqiSingle(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     pcb_code = fields.Char(index=True)
     module_type = fields.Char()
     detect_date = fields.Char(index=True)
@@ -834,7 +834,7 @@ class NqiStarting(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -899,7 +899,7 @@ class NqiTimeError(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -927,7 +927,7 @@ class NqiTs(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -974,7 +974,7 @@ class NqiVolt(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     detect_item_point = fields.Char()
@@ -1003,7 +1003,7 @@ class NqiOther(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     pcb_code = fields.Char(index=True)
     test_name = fields.Char()
@@ -1051,7 +1051,7 @@ class NqiConsist(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -1158,7 +1158,7 @@ class NqiDemand(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -1260,7 +1260,7 @@ class NqiEq(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -1328,7 +1328,7 @@ class NqiError(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -1419,7 +1419,7 @@ class NqiEventRecord(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -1479,7 +1479,7 @@ class NqiFee(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -1554,7 +1554,7 @@ class NqiMaxDemandvalue(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -1622,7 +1622,7 @@ class NqiMaxDemandErr(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -1709,7 +1709,7 @@ class NqiOverload(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -1790,7 +1790,7 @@ class NqiPowerMeasure(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -1873,7 +1873,7 @@ class NqiStandard(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()
@@ -1923,7 +1923,7 @@ class NqiVariation(models.Model):
 
     test_result_id = fields.Many2one(
         'sn.wsd.mes.test.result', string='MES Test Result',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     detect_date = fields.Char(index=True)
     para_index = fields.Char()

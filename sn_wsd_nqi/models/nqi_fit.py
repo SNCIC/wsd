@@ -20,7 +20,7 @@ class NqiMeterInfo(models.Model):
 
     serial_identity_id = fields.Many2one(
         'sn.wsd.serial.identity', string='SN Identity',
-        ondelete='set null', index=True, tracking=True)
+        ondelete='set null', index=True)
     serial_no = fields.Char(index=True)
     make_plan_no = fields.Char()
     assets_code = fields.Char()
