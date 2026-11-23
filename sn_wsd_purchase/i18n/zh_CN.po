@@ -247,6 +247,7 @@ msgstr "含税金额"
 
 #. module: sn_wsd_purchase
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard__bill_amount
 msgid "Total"
 msgstr "含税合计"
 
@@ -335,6 +336,7 @@ msgstr "不含税单价"
 #. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
 #: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard_line__price_unit
 msgid "Unit Price"
 msgstr "含税单价"
 
@@ -424,6 +426,8 @@ msgstr "预计到货日期"
 #. module: sn_wsd_purchase
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_list
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__received_qty
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_list
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard_line__received_qty
 msgid "Received Quantity"
 msgstr "收货数量"
 
@@ -513,6 +517,8 @@ msgstr "申请日期"
 #. module: sn_wsd_purchase
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_search
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard_line__product_id
 msgid "Product"
 msgstr "产品"
 
@@ -601,6 +607,8 @@ msgstr "补收货"
 
 #. module: sn_wsd_purchase
 #: code:addons/sn_wsd_purchase/models/purchase_order.py:0
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_account_move_line__sn_picking_id
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard_line__picking_id
 msgid "Receipt"
 msgstr "收货单"
 
@@ -793,26 +801,40 @@ msgstr "账单明细"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_move__sn_invoiced_qty
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_vendor_bill_wizard_form
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard_line__quantity
 msgid "Billed Quantity"
 msgstr "已开票数量"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_move__sn_to_bill_qty
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_vendor_bill_wizard_form
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard_line__to_bill_qty
 msgid "Quantity to Bill"
 msgstr "未开票数量"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_move__sn_bill_status
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_list
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_picking__sn_bill_status
 msgid "Billing Status"
 msgstr "开票状态"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_move__sn_bill_names
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_stock_picking_form_vendor_billing
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_picking__sn_bill_ids
 msgid "Vendor Bills"
 msgstr "供应商账单"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_move__sn_billing_closed
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__stock_move__sn_bill_status__closed
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__stock_picking__sn_bill_status__closed
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_search
 msgid "Billing Closed"
 msgstr "开票已关闭"
 
@@ -833,6 +855,8 @@ msgstr "账单数量"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_account_move__sn_picking_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_move_form_vendor_billing
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard__picking_ids
 msgid "Receipts"
 msgstr "入库单"
 
@@ -843,6 +867,9 @@ msgstr "入库单数量"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_account_move__sn_purchase_request_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_move_form_vendor_billing
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_account_move_line__sn_purchase_request_names
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard_line__purchase_request_names
 msgid "Purchase Requests"
 msgstr "请购单"
 
@@ -853,21 +880,28 @@ msgstr "请购单数量"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_account_move_line__sn_stock_move_id
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard_line__move_id
 msgid "Receipt Move"
 msgstr "入库明细"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__stock_move__sn_bill_status__to_bill
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_search
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__stock_picking__sn_bill_status__to_bill
 msgid "To Bill"
 msgstr "待开票"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__stock_move__sn_bill_status__partial
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_search
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__stock_picking__sn_bill_status__partial
 msgid "Partially Billed"
 msgstr "部分开票"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__stock_move__sn_bill_status__billed
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_search
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__stock_picking__sn_bill_status__billed
 msgid "Billed"
 msgstr "已开票"
 
@@ -878,6 +912,7 @@ msgstr "按入库单开票"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard__partner_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_search
 msgid "Vendor"
 msgstr "供应商"
 
@@ -923,6 +958,7 @@ msgstr "包含以前期间的未开票入库"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_vendor_bill_wizard_form
 msgid "Receipt Lines"
 msgstr "入库明细"
 
@@ -943,6 +979,8 @@ msgstr "小计"
 
 #. module: sn_wsd_purchase
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_stock_picking_form_vendor_billing
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_vendor_bill_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_list
 msgid "Create Vendor Bill"
 msgstr "生成供应商账单"
 
@@ -957,7 +995,10 @@ msgid "Leave empty to use the period"
 msgstr "留空则按期间取数"
 
 #. module: sn_wsd_purchase
-#: model_terms:ir.actions.act_window,name:sn_wsd_purchase.action_sn_stock_move_billable
+#: model:ir.actions.act_window,name:sn_wsd_purchase.action_sn_stock_move_billable
+#: model:ir.ui.menu,name:sn_wsd_purchase.menu_sn_stock_move_billable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_search
 msgid "Receipt Lines to Bill"
 msgstr "待开票入库明细"
 
@@ -1029,3 +1070,25 @@ msgstr "所选的入库明细没有可开票数量。"
 #: code:addons/sn_wsd_purchase/models/0.py:0
 msgid "Select the receipt lines of a single vendor."
 msgstr "请选择同一供应商的入库明细。"
+
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard_line__product_uom_id
+msgid "Unit of Measure"
+msgstr "计量单位"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard__currency_id
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard_line__currency_id
+msgid "Currency"
+msgstr "币种"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_sn_vendor_bill_wizard_line__wizard_id
+msgid "Wizard"
+msgstr "向导"
