@@ -131,15 +131,165 @@ class NqiPushLog(models.Model):
 
 class NqiTransportStub(models.AbstractModel):
     _name = 'sn.wsd.nqi.transport'
-    _description = 'NQI Push Transport (stub)'
+    _description = 'NQI Push Transport'
+
+    # gateway upload interface (NQI 数据上传接口 V1):
+    #   POST {base_url}/interface/nqi/uploadData
+    #   {"serviceName", "methodName": "getData", "noticeNo",
+    #    "data": [{"table", "recond": [row dicts]}]}
+    # note the spec's literal key "recond" (not "record") and the
+    # ~1000-rows-per-request cap; responses are async - successes and
+    # failures come back later via a noticeNo-keyed callback.
+    UPLOAD_PATH = '/interface/nqi/uploadData'
+    ROWS_PER_REQUEST = 900
+
+    SERVICE_BY_GROUP = {
+        'rd': 'rdService',
+        'pr': 'prService',
+        'pt': 'ptService',
+        'fit': 'ptService',
+        'mt': 'ptService',
+        'tt': 'ptService',
+        'ot': 'ptService',
+        'sp': 'spService',
+        'et': 'etService',
+        'pub': 'etService',
+    }
+
+    MODEL_TABLE = {
+        'sn.wsd.nqi.et.achievement': 'ET_ACHIEVEMENT_INFO',
+        'sn.wsd.nqi.et.as.agreement': 'ET_AS_AGREEMENT_INFO',
+        'sn.wsd.nqi.et.as.mgt': 'ET_AS_MGT_INFO',
+        'sn.wsd.nqi.et.capacity': 'ET_CAPACITY_INFO',
+        'sn.wsd.nqi.et.device': 'ET_DEVICE_INFO',
+        'sn.wsd.nqi.et.person': 'ET_PERSON_INFO',
+        'sn.wsd.nqi.et.qi': 'ET_QI_INFO',
+        'sn.wsd.nqi.et.rb': 'ET_RB_INFO',
+        'sn.wsd.nqi.et.staff': 'ET_STAFF_INFO',
+        'sn.wsd.nqi.et.standard.setting': 'ET_STANDARD_SETTING_INFO',
+        'sn.wsd.nqi.et.supplier.score': 'ET_SUPPLYER_SCORE_INFO',
+        'sn.wsd.nqi.fit.component.bind': 'FIT_METER_COMPONENT_BIND',
+        'sn.wsd.nqi.fit.meter.info': 'FIT_METER_INFO',
+        'sn.wsd.nqi.fit.meter.mounting': 'FIT_METER_MOUNTING_MAKE',
+        'sn.wsd.nqi.fit.pcb.mounting': 'FIT_PCB_MOUNTING_MAKE',
+        'sn.wsd.nqi.fit.pcb.serial.bind': 'FIT_PCB_SERIAL_BIND',
+        'sn.wsd.nqi.pr.arrive.batch': 'PR_COMPONENT_ARRIVE_BATCH',
+        'sn.wsd.nqi.pr.bidding.change': 'PR_BIDDING_CHANGE_RECOND',
+        'sn.wsd.nqi.pr.bidding.info': 'PR_BIDDING_INFO',
+        'sn.wsd.nqi.pr.purchase.plan': 'PR_COMPONENT_PURCHASE_PLAN',
+        'sn.wsd.nqi.pr.test.result': 'PR_COMPONENT_TEST_RESULT',
+        'sn.wsd.nqi.pr.unqualified': 'PR_UNQUALIFIED_CONTROL',
+        'sn.wsd.nqi.pt.env.temp.hum': 'PT_ENV_TEMP_HUM',
+        'sn.wsd.nqi.pt.plan': 'PT_PRODUCTION_PLAN',
+        'sn.wsd.nqi.pt.plan.detail': 'PT_PRODUCTION_DETAIL_PLAN',
+        'sn.wsd.nqi.pt.procedure': 'PT_PRODUCTION_PROCEDURE',
+        'sn.wsd.nqi.pt.process': 'PT_PRODUCTION_PROCESS',
+        'sn.wsd.nqi.pt.unqualified': 'PT_UNQUALIFIED_CONTROL',
+        'sn.wsd.nqi.pub.file': 'PUB_FILE_INFO',
+        'sn.wsd.nqi.rd.component.change': 'RD_COMPONENT_CHANGE_RECORD',
+        'sn.wsd.nqi.rd.component.list': 'RD_COMPONENT_DETAIL_LIST',
+        'sn.wsd.nqi.rd.product.detail': 'RD_PRODUCT_DETAIL',
+        'sn.wsd.nqi.rd.product.info': 'RD_PRODUCT_INFO',
+        'sn.wsd.nqi.rd.product.test.report': 'RD_PRODUCT_TEST_REPORT',
+        'sn.wsd.nqi.rd.project': 'RD_PROJECT',
+        'sn.wsd.nqi.rd.project.change': 'RD_PROJECT_CHANGE_RECOND',
+        'sn.wsd.nqi.rd.project.detail': 'RD_PROJECT_DETAIL',
+        'sn.wsd.nqi.sp.box.bind': 'SP_BOX_METER_BIND',
+        'sn.wsd.nqi.sp.meter.recall': 'SP_METER_RECALL',
+        'sn.wsd.nqi.sp.spot.check': 'SP_SPOT_CHECK_RECORD',
+        'sn.wsd.nqi.sp.supply.batch': 'SP_SUPPLY_BATCH',
+        'sn.wsd.nqi.sp.supply.test': 'SP_SUPPLY_TEST',
+    }
 
     @api.model
-    def send(self, config, batch):
-        """Send one batch of payloads. The interface spec arrives later:
-        implement this method (base_url / auth_type / token / timeout /
-        retry come from the config row) - nothing else changes."""
-        raise NotImplementedError(
-            'NQI push transport is not configured yet.')
+    def _table_for(self, model_name):
+        if model_name in self.MODEL_TABLE:
+            return self.MODEL_TABLE[model_name]
+        # testing tables follow the mechanical rule
+        suffix = model_name.replace('sn.wsd.nqi.', '')
+        return suffix.upper().replace('.', '_') + '_CONC'
+
+    @api.model
+    def _service_for(self, model_name):
+        # sn.wsd.nqi.<group>.<entity...>
+        group = model_name.split('.', 3)[3].split('.')[0]
+        return self.SERVICE_BY_GROUP.get(group, 'ptService')
+
+    @api.model
+    def build_request(self, notice_no, payloads_by_model):
+        """Assemble the gateway request body.
+
+        ``payloads_by_model``: {model_name: [payload dict, ...]}.
+        Every row gets a batch-unique ID and its NOTICE_NO stamped.
+        """
+        data = []
+        for model_name, rows in sorted(payloads_by_model.items()):
+            if not rows:
+                continue
+            table_rows = []
+            for index, row in enumerate(rows, start=1):
+                record = {'ID': str(index)}
+                record.update(row)
+                record['NOTICE_NO'] = str(notice_no)
+                table_rows.append(record)
+            data.append({
+                'table': self._table_for(model_name),
+                'recond': table_rows,  # literal spec key
+            })
+        if not data:
+            return None
+        return {
+            'serviceName': self._service_for(
+                next(iter(payloads_by_model))),
+            'methodName': 'getData',
+            'noticeNo': str(notice_no),
+            'data': data,
+        }
+
+    @api.model
+    def _post(self, config, body):
+        import requests
+        url = config.api_base_url.rstrip('/') + self.UPLOAD_PATH
+        headers = {'Content-Type': 'application/json'}
+        if config.auth_type == 'bearer' and config.api_token:
+            headers['Authorization'] = 'Bearer %s' % config.api_token
+        elif config.auth_type == 'api_key' and config.api_token:
+            headers['X-API-Key'] = config.api_token
+        response = requests.post(
+            url, json=body, headers=headers, timeout=config.timeout_sec)
+        response.raise_for_status()
+        result = response.json()
+        if str(result.get('return_flag')) != '1':
+            raise UserError(_(
+                'Gateway rejected the batch: %s',
+                result.get('return_msg', 'unknown error')))
+        return result
+
+    @api.model
+    def send(self, config, rows_by_model, notice_no):
+        """Upload rows in ~1000-record requests; returns request count.
+
+        rows_by_model: {model_name: [recordset rows]} - payloads are
+        built here so every request carries fresh WRITE_DATE values.
+        """
+        payloads = {
+            model: [row._nqi_payload() for row in rows]
+            for model, rows in rows_by_model.items() if rows}
+        if not payloads:
+            return 0
+        # flatten for chunking, then regroup per request
+        flat = [(model, row) for model, rows in payloads.items()
+                for row in rows]
+        requests_count = 0
+        for start in range(0, len(flat), self.ROWS_PER_REQUEST):
+            chunk = flat[start:start + self.ROWS_PER_REQUEST]
+            grouped = {}
+            for model, row in chunk:
+                grouped.setdefault(model, []).append(row)
+            body = self.build_request(notice_no, grouped)
+            self._post(config, body)
+            requests_count += 1
+        return requests_count
 
 
 class NqiWorkerPush(models.AbstractModel):
@@ -197,7 +347,7 @@ class NqiWorkerPush(models.AbstractModel):
             config = self.env['sn.wsd.nqi.config'].sudo().search(
                 [('company_id', '=', rows[0].company_id.id)], limit=1)
             self.env['sn.wsd.nqi.transport'].send(
-                config, [row._nqi_payload() for row in rows])
+                config, {rows._name: rows}, log.id)
         except Exception as exc:  # noqa: BLE001 -- log and keep rows
             log.write({
                 'state': 'failed',
@@ -207,5 +357,6 @@ class NqiWorkerPush(models.AbstractModel):
             _logger.warning('NQI push batch %s failed: %s', log.id, exc)
             return False
         log.write({'state': 'success', 'pushed_at': fields.Datetime.now()})
-        rows.write({'push_state': 'pushed'})
+        # notice_no carries the batch id for the async gateway callback
+        rows.write({'push_state': 'pushed', 'notice_no': str(log.id)})
         return True
