@@ -1068,7 +1068,7 @@ msgstr "修复时间"
 #. module: sn_wsd_nqi
 #: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_fit_meter_info
 msgid "NQI Meter Info"
-msgstr "【*】电能表资产信息表"
+msgstr "电能表资产信息表"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_fit_meter_info__serial_no
@@ -1248,7 +1248,7 @@ msgstr "元器件生产批次号"
 #. module: sn_wsd_nqi
 #: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_fit_pcb_serial_bind
 msgid "NQI Pcb Serial Bind"
-msgstr "【*】电能表PCB板号和厂内编码绑定表"
+msgstr "电能表PCB板号和厂内编码绑定表"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_fit_pcb_serial_bind__plan_code
@@ -1269,6 +1269,2516 @@ msgstr "PCB板号"
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_fit_pcb_serial_bind__module_type
 msgid "Module type"
 msgstr "模块类型"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_mounting
+msgid "NQI Mounting"
+msgstr "生产检测综合结论表"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__pcb_code
+msgid "Pcb code"
+msgstr "PCB板号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__module_type
+msgid "Module type"
+msgstr "模块类型"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__make_plan_code
+msgid "Make plan code"
+msgstr "计划单号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__device_code
+msgid "Device code"
+msgstr "设备编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__operator_code
+msgid "Operator code"
+msgstr "操作人员编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__position_no
+msgid "Position no"
+msgstr "工位号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__test_type
+msgid "Test type"
+msgstr "检测类型"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__test_project
+msgid "Test project"
+msgstr "检测项目"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__test_result
+msgid "Test result"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__cause
+msgid "Cause"
+msgstr "不合格原因"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_aoi
+msgid "NQI Aoi"
+msgstr "PCB光学检测表"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__pcb_code
+msgid "Pcb code"
+msgstr "PCB板号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__module_type
+msgid "Module type"
+msgstr "模块类型"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__cause
+msgid "Cause"
+msgstr "不合格原因"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_single
+msgid "NQI Single"
+msgstr "PCB检测表"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__pcb_code
+msgid "Pcb code"
+msgstr "PCB板号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__module_type
+msgid "Module type"
+msgstr "模块类型"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__test_project
+msgid "Test project"
+msgstr "检测项目"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__test_data
+msgid "Test data"
+msgstr "检测数据"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__cause
+msgid "Cause"
+msgstr "不合格原因"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_intuit
+msgid "NQI Intuit"
+msgstr "外观检查结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__para_index
+msgid "Para index"
+msgstr "检定序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__detect_content
+msgid "Detect content"
+msgstr "检查内容"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_volt
+msgid "NQI Volt"
+msgstr "交流耐压测试"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__detect_item_point
+msgid "Detect item point"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__volt_test_value
+msgid "Volt test value"
+msgstr "测试耐压值"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__test_time
+msgid "Test time"
+msgstr "测试时长"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__cause
+msgid "Cause"
+msgstr "不合格原因"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_starting
+msgid "NQI Starting"
+msgstr "起动试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__load_voltage_id
+msgid "Load Voltage"
+msgstr "电压负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__load_voltage
+msgid "Load voltage"
+msgstr "电压负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__pules
+msgid "Pules"
+msgstr "圈数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__both_way_power_flag_id
+msgid "Both Way Power Flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__both_way_power_flag
+msgid "Both way power flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__test_time
+msgid "Test time"
+msgstr "测试时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__real_test_time
+msgid "Real test time"
+msgstr "实际时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__start_current
+msgid "Start current"
+msgstr "起动电流"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_creeping
+msgid "NQI Creeping"
+msgstr "潜动试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__load_voltage_id
+msgid "Load Voltage"
+msgstr "电压负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__load_voltage
+msgid "Load voltage"
+msgstr "电压负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__pules
+msgid "Pules"
+msgstr "圈数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__both_way_power_flag_id
+msgid "Both Way Power Flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__both_way_power_flag
+msgid "Both way power flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__test_time
+msgid "Test time"
+msgstr "测试时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__real_test_time
+msgid "Real test time"
+msgstr "实际时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_const
+msgid "NQI Const"
+msgstr "电能表常数试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__both_way_power_flag_id
+msgid "Both Way Power Flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__both_way_power_flag
+msgid "Both way power flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__real_pules
+msgid "Real pules"
+msgstr "实际脉冲数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__start_reading
+msgid "Start reading"
+msgstr "起始度数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__end_reading
+msgid "End reading"
+msgstr "结束度数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__diff_reading
+msgid "Diff reading"
+msgstr "走字差值"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__standard_reading
+msgid "Standard reading"
+msgstr "标准表度数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__error
+msgid "Error"
+msgstr "误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__err_down
+msgid "Err down"
+msgstr "误差下限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__err_up
+msgid "Err up"
+msgstr "误差上限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__const_err
+msgid "Const err"
+msgstr "常数误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__volt
+msgid "Volt"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__fee_start_time
+msgid "Fee start time"
+msgstr "费率起始时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__fee_ratio
+msgid "Fee ratio"
+msgstr "费率"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__qualified_pules
+msgid "Qualified pules"
+msgstr "合格脉冲数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__divide_electric_quantity
+msgid "Divide electric quantity"
+msgstr "总分电量值"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__pf_id
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__pf
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__control_method_id
+msgid "Control Method"
+msgstr "控制方式"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__control_method
+msgid "Control method"
+msgstr "控制方式"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__ir_last_reading
+msgid "Ir last reading"
+msgstr "装拆起始度数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__read_type_code_id
+msgid "Read Type Code"
+msgstr "示数类型"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__read_type_code
+msgid "Read type code"
+msgstr "示数类型"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_hutchison_combina
+msgid "NQI Hutchison Combina"
+msgstr "计度器总电能示值组合误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__both_way_power_flag_id
+msgid "Both Way Power Flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__both_way_power_flag
+msgid "Both way power flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__pf_id
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__pf
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__fee_ratio
+msgid "Fee ratio"
+msgstr "费率"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__control_method_id
+msgid "Control Method"
+msgstr "控制方式"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__control_method
+msgid "Control method"
+msgstr "控制方式"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__ir_time
+msgid "Ir time"
+msgstr "走字时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__ir_reading
+msgid "Ir reading"
+msgstr "走字度数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__err_down
+msgid "Err down"
+msgstr "误差下限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__err_up
+msgid "Err up"
+msgstr "误差上限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__voltage
+msgid "Voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__total_reading_err
+msgid "Total reading err"
+msgstr "总分电量值差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__total_increment
+msgid "Total increment"
+msgstr "总示值增量"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__sumer_all_increment
+msgid "Sumer all increment"
+msgstr "各费率示值增量和"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__sharp_increment
+msgid "Sharp increment"
+msgstr "尖示值增量"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__peak_increment
+msgid "Peak increment"
+msgstr "峰示值增量"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__flat_increment
+msgid "Flat increment"
+msgstr "平示值增量"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__valley_increment
+msgid "Valley increment"
+msgstr "谷示值增量"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__value_conc_code
+msgid "Value conc code"
+msgstr "示值组合误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_dayerr
+msgid "NQI Dayerr"
+msgstr "日计时误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__sec_piles
+msgid "Sec piles"
+msgstr "秒脉冲频率"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__test_time
+msgid "Test time"
+msgstr "测试时长"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__simpling
+msgid "Simpling"
+msgstr "采样次数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__err_abs
+msgid "Err abs"
+msgstr "误差限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__load_voltage
+msgid "Load voltage"
+msgstr "电压负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__error
+msgid "Error"
+msgstr "误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__avg_err
+msgid "Avg err"
+msgstr "平均误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__int_convert_err
+msgid "Int convert err"
+msgstr "化整误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_basicerr
+msgid "NQI Basicerr"
+msgstr "基本误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__both_way_power_flag_id
+msgid "Both Way Power Flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__both_way_power_flag
+msgid "Both way power flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__iabc_id
+msgid "Iabc"
+msgstr "电流相别"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__iabc
+msgid "Iabc"
+msgstr "电流相别"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__load_voltage_id
+msgid "Load Voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__load_voltage
+msgid "Load voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__freq_id
+msgid "Freq"
+msgstr "频率（单位Hz）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__freq
+msgid "Freq"
+msgstr "频率（单位Hz）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__pf_id
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__pf
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__detect_circle
+msgid "Detect circle"
+msgstr "检测脉冲数（圈数）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__simpling
+msgid "Simpling"
+msgstr "采样次数（误差次数）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__error_number
+msgid "Error number"
+msgstr "误差采样序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__error
+msgid "Error"
+msgstr "实际误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__ave_err
+msgid "Ave err"
+msgstr "误差平均值"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__int_convert_err
+msgid "Int convert err"
+msgstr "误差化整值"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__err_up
+msgid "Err up"
+msgstr "误差上限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__err_down
+msgid "Err down"
+msgstr "误差下限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_ts
+msgid "NQI Ts"
+msgstr "时段投切误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__ts_err_conc_code
+msgid "Ts err conc code"
+msgstr "投切误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__conc_code
+msgid "Conc code"
+msgstr "结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__volt_id
+msgid "Volt"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__volt
+msgid "Volt"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__ts_way
+msgid "Ts way"
+msgstr "实现方式"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__start_time
+msgid "Start time"
+msgstr "时段起始时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__ts_start_time
+msgid "Ts start time"
+msgstr "测试起始时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__ts_err
+msgid "Ts err"
+msgstr "误差限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__err_up
+msgid "Err up"
+msgstr "误差上限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__err_dowm
+msgid "Err dowm"
+msgstr "误差下限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__ts_real_time
+msgid "Ts real time"
+msgstr "实际投切时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__fee
+msgid "Fee"
+msgstr "费率"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_function
+msgid "NQI Function"
+msgstr "功能检测"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__function_type
+msgid "Function type"
+msgstr "功能类型"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_esam_read
+msgid "NQI Esam Read"
+msgstr "费控试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__load_voltage_id
+msgid "Load Voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__load_voltage
+msgid "Load voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__pf_id
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__pf
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__test_item
+msgid "Test item"
+msgstr "试验项目"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__test_method_differ
+msgid "Test method differ"
+msgstr "试验方法"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__trip_delay_time
+msgid "Trip delay time"
+msgstr "跳闸延时时间秒"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_rfid
+msgid "NQI Rfid"
+msgstr "电子标签检测表"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__rfid_code
+msgid "Rfid code"
+msgstr "电子标签条码"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__cause
+msgid "Cause"
+msgstr "不合格原因"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_demandvalue
+msgid "NQI Demandvalue"
+msgstr "需量示值误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__demand_period
+msgid "Demand period"
+msgstr "需量周期时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__demand_time
+msgid "Demand time"
+msgstr "滑差时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__demand_interval
+msgid "Demand interval"
+msgstr "滑差次数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__real_demand
+msgid "Real demand"
+msgstr "实际需量"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__real_period
+msgid "Real period"
+msgstr "实际周期"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__demand_value_err
+msgid "Demand value err"
+msgstr "需量示值误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__demand_standard
+msgid "Demand standard"
+msgstr "标准表需量值"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__demand_value_err_abs
+msgid "Demand value err abs"
+msgstr "需量示值误差限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__clear_data_rst
+msgid "Clear data rst"
+msgstr "需量清零结果"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__value_conc_code
+msgid "Value conc code"
+msgstr "示值误差结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__both_way_power_flag_id
+msgid "Both Way Power Flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__both_way_power_flag
+msgid "Both way power flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__voltage_id
+msgid "Voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__voltage
+msgid "Voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__pf_id
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__pf
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__control_method_id
+msgid "Control Method"
+msgstr "控制方法"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__control_method
+msgid "Control method"
+msgstr "控制方法"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__err_up
+msgid "Err up"
+msgstr "误差上限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__err_dowm
+msgid "Err dowm"
+msgstr "误差下限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_time_error
+msgid "NQI Time Error"
+msgstr "时钟示值误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__conc_code
+msgid "Conc code"
+msgstr "结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_tt_standard
+msgid "NQI Standard"
+msgstr "规约一致性检查"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__data_flag
+msgid "Data flag"
+msgstr "数据标识码"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__detect_basis
+msgid "Detect basis"
+msgstr "判定依据"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__setting_value
+msgid "Setting value"
+msgstr "设定值"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__read_value
+msgid "Read value"
+msgstr "读取值"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_tt_error
+msgid "NQI Error"
+msgstr "误差变差试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__both_way_power_flag_id
+msgid "Both Way Power Flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__both_way_power_flag
+msgid "Both way power flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__load_voltage_id
+msgid "Load Voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__load_voltage
+msgid "Load voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__pf_id
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__pf
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__pules
+msgid "Pules"
+msgstr "圈数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__simpling
+msgid "Simpling"
+msgstr "采样次数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__once_err
+msgid "Once err"
+msgstr "一次误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__avg_once_err
+msgid "Avg once err"
+msgstr "平均误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__int_once_err
+msgid "Int once err"
+msgstr "化整误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__twice_err
+msgid "Twice err"
+msgstr "二次误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__avg_twice_err
+msgid "Avg twice err"
+msgstr "二次平均误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__error
+msgid "Error"
+msgstr "误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__err_down
+msgid "Err down"
+msgstr "误差下限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__err_up
+msgid "Err up"
+msgstr "误差上限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__int_twice_err
+msgid "Int twice err"
+msgstr "二次化整误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_tt_consist
+msgid "NQI Consist"
+msgstr "误差一致性试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__both_way_power_flag_id
+msgid "Both Way Power Flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__both_way_power_flag
+msgid "Both way power flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__load_voltage_id
+msgid "Load Voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__load_voltage
+msgid "Load voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__pf_id
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__pf
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__pules
+msgid "Pules"
+msgstr "圈数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__simpling
+msgid "Simpling"
+msgstr "采样次数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__all_error
+msgid "All error"
+msgstr "误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__avg_error
+msgid "Avg error"
+msgstr "误差平均"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__int_convert_err
+msgid "Int convert err"
+msgstr "化整误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__all_avg_error
+msgid "All avg error"
+msgstr "所有表位平均误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__all_int_error
+msgid "All int error"
+msgstr "所有表位化整值平均误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__error
+msgid "Error"
+msgstr "误差变差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__err_down
+msgid "Err down"
+msgstr "误差下限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__err_up
+msgid "Err up"
+msgstr "误差上限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__once_err
+msgid "Once err"
+msgstr "一次误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__avg_once_err
+msgid "Avg once err"
+msgstr "平均误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__int_once_err
+msgid "Int once err"
+msgstr "化整误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__twice_err
+msgid "Twice err"
+msgstr "二次误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__avg_twice_err
+msgid "Avg twice err"
+msgstr "二次平均误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__int_twice_err
+msgid "Int twice err"
+msgstr "二次化整误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_tt_variation
+msgid "NQI Variation"
+msgstr "负载电流升降变差试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__both_way_power_flag_id
+msgid "Both Way Power Flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__both_way_power_flag
+msgid "Both way power flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__load_voltage_id
+msgid "Load Voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__load_voltage
+msgid "Load voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__iabc_id
+msgid "Iabc"
+msgstr "电流相别"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__iabc
+msgid "Iabc"
+msgstr "电流相别"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__pf_id
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__pf
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__detect_circle
+msgid "Detect circle"
+msgstr "检测圈数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__simpling
+msgid "Simpling"
+msgstr "采样次数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__wait_time
+msgid "Wait time"
+msgstr "升降电流等待时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__up_err1
+msgid "Up err1"
+msgstr "升流误差1"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__up_err2
+msgid "Up err2"
+msgstr "升流误差2"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__avg_up_err
+msgid "Avg up err"
+msgstr "升流误差平均"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__int_up_err
+msgid "Int up err"
+msgstr "升流化整误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__down_err1
+msgid "Down err1"
+msgstr "降流误差1"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__down_err2
+msgid "Down err2"
+msgstr "降流误差2"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__avg_down_err
+msgid "Avg down err"
+msgstr "降流误差平均"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__int_down_err
+msgid "Int down err"
+msgstr "降流化整误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__variation_err
+msgid "Variation err"
+msgstr "升降变差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__int_variation_err
+msgid "Int variation err"
+msgstr "升降化整变差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_tt_overload
+msgid "NQI Overload"
+msgstr "电流过载试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__load_voltage_id
+msgid "Load Voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__load_voltage
+msgid "Load voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__pf_id
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__pf
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__pules
+msgid "Pules"
+msgstr "圈数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__simpling
+msgid "Simpling"
+msgstr "采样次数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__overload_time
+msgid "Overload time"
+msgstr "过载时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__wait_time
+msgid "Wait time"
+msgstr "恢复等待时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__error
+msgid "Error"
+msgstr "误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__err_down
+msgid "Err down"
+msgstr "误差下限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__err_up
+msgid "Err up"
+msgstr "误差上限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__avg_err
+msgid "Avg err"
+msgstr "平均误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__int_converter_err
+msgid "Int converter err"
+msgstr "化整误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_tt_max_demand_err
+msgid "NQI Max Demand Err"
+msgstr "最大需量误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__load_voltage_id
+msgid "Load Voltage"
+msgstr "电压负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__load_voltage
+msgid "Load voltage"
+msgstr "电压负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__freq_id
+msgid "Freq"
+msgstr "频率（单位Hz）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__freq
+msgid "Freq"
+msgstr "频率（单位Hz）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__pf_id
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__pf
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__error
+msgid "Error"
+msgstr "误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__avg_err
+msgid "Avg err"
+msgstr "平均误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__int_convert_err
+msgid "Int convert err"
+msgstr "化整误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_tt_eq
+msgid "NQI Eq"
+msgstr "剩余电量递减试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__total_eq
+msgid "Total eq"
+msgstr "总电量"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__surplus_eq
+msgid "Surplus eq"
+msgstr "剩余电量"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__curr_elec_price
+msgid "Curr elec price"
+msgstr "当前电价"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__pf_id
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__pf
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__conc_code
+msgid "Conc code"
+msgstr "结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_tt_fee
+msgid "NQI Fee"
+msgstr "费率和时段功能"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__pf_id
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__pf
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__cur_phase_code_id
+msgid "Cur Phase Code"
+msgstr "电流相别"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__cur_phase_code
+msgid "Cur phase code"
+msgstr "电流相别"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__both_way_power_flag_id
+msgid "Both Way Power Flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__both_way_power_flag
+msgid "Both way power flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_tt_power_measure
+msgid "NQI Power Measure"
+msgstr "电能计量功能"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__cur_phase_code_id
+msgid "Cur Phase Code"
+msgstr "电流相别"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__cur_phase_code
+msgid "Cur phase code"
+msgstr "电流相别"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__consist_down
+msgid "Consist down"
+msgstr "误差一致性下限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__consist_up
+msgid "Consist up"
+msgstr "误差一致性上限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__volt_ratio
+msgid "Volt ratio"
+msgstr "电压比例"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__err_down
+msgid "Err down"
+msgstr "误差下限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__err_up
+msgid "Err up"
+msgstr "误差上限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__simpling_space
+msgid "Simpling space"
+msgstr "采样间隔"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__simpling
+msgid "Simpling"
+msgstr "采样次数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__pf_id
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__pf
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__both_way_power_flag_id
+msgid "Both Way Power Flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__both_way_power_flag
+msgid "Both way power flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_tt_demand
+msgid "NQI Demand"
+msgstr "需量周期误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__demand_period
+msgid "Demand period"
+msgstr "需量周期时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__demand_time
+msgid "Demand time"
+msgstr "滑差时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__demand_interval
+msgid "Demand interval"
+msgstr "滑差次数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__real_demand
+msgid "Real demand"
+msgstr "实际需量"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__real_period
+msgid "Real period"
+msgstr "实际周期"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__demand_period_err
+msgid "Demand period err"
+msgstr "需量周期误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__demand_standard
+msgid "Demand standard"
+msgstr "标准表需量值"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__demand_period_err_abs
+msgid "Demand period err abs"
+msgstr "需量周期误差限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__clear_data_rst
+msgid "Clear data rst"
+msgstr "需量清零结果"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__period_conc_code
+msgid "Period conc code"
+msgstr "需量周期误差结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__both_way_power_flag_id
+msgid "Both Way Power Flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__both_way_power_flag
+msgid "Both way power flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__control_method
+msgid "Control method"
+msgstr "控制方法"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__voltage_id
+msgid "Voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__voltage
+msgid "Voltage"
+msgstr "电压"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__freq_id
+msgid "Freq"
+msgstr "频率（单位Hz）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__freq
+msgid "Freq"
+msgstr "频率（单位Hz）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__pf_id
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__pf
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__err_up
+msgid "Err up"
+msgstr "误差上限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__err_dowm
+msgid "Err dowm"
+msgstr "误差下限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__int_convert_err
+msgid "Int convert err"
+msgstr "化整误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_tt_max_demandvalue
+msgid "NQI Max Demandvalue"
+msgstr "最大需量功能"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__detect_item_point
+msgid "Detect item point"
+msgstr "检定点序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__cur_phase_code_id
+msgid "Cur Phase Code"
+msgstr "电流相别"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__cur_phase_code
+msgid "Cur phase code"
+msgstr "电流相别"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__both_way_power_flag_id
+msgid "Both Way Power Flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__both_way_power_flag
+msgid "Both way power flag"
+msgstr "功率方向"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_tt_event_record
+msgid "NQI Event Record"
+msgstr "事件记录功能"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__detect_date
+msgid "Detect date"
+msgstr "检定时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__para_index
+msgid "Para index"
+msgstr "序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__detect_item_point
+msgid "Detect item point"
+msgstr "检定点的序号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__load_current_id
+msgid "Load Current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__load_current
+msgid "Load current"
+msgstr "电流负载"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__pf_id
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__pf
+msgid "Pf"
+msgstr "功率因数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__simpling
+msgid "Simpling"
+msgstr "采样次数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__overload_time
+msgid "Overload time"
+msgstr "过载时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__recover_time
+msgid "Recover time"
+msgstr "恢复等待时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__err_up
+msgid "Err up"
+msgstr "误差上限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__err_down
+msgid "Err down"
+msgstr "误差下限"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__ir_pules
+msgid "Ir pules"
+msgstr "脉冲数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_ot_other
+msgid "NQI Other"
+msgstr "其他检测表"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__pcb_code
+msgid "Pcb code"
+msgstr "PCB板号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__test_name
+msgid "Test name"
+msgstr "检测项目"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__conc_code
+msgid "Conc code"
+msgstr "检测结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__cause
+msgid "Cause"
+msgstr "不合格原因"
+
+#. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_mt_parameter
+msgid "NQI Parameter"
+msgstr "参数检验记录表"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__plan_code
+msgid "Plan code"
+msgstr "计划单号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__serial_no
+msgid "Serial no"
+msgstr "厂内编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__test_type
+msgid "Test type"
+msgstr "检验类型"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__test_name
+msgid "Test name"
+msgstr "检测项名称"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__operator_code
+msgid "Operator code"
+msgstr "测试人员"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__detect_date
+msgid "Detect date"
+msgstr "测试时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__conc_code_id
+msgid "Conc Code"
+msgstr "结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__conc_code
+msgid "Conc code"
+msgstr "结论"
 
 #. module: sn_wsd_nqi
 #: model:ir.model,name:sn_wsd_nqi.sn_wsd_nqi_sp_box_bind
@@ -3111,6 +5621,1556 @@ msgid "Missing Count"
 msgstr "缺失列数"
 
 #. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_mounting__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_aoi__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_single__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_intuit__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_volt__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_starting__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_creeping__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_hutchison_combina__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_function__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_esam_read__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_rfid__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_demandvalue__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_time_error__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_standard__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_error__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_overload__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demand_err__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_eq__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_fee__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_power_measure__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_demand__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_max_demandvalue__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_event_record__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_ot_other__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__enterprise_code
+msgid "Enterprise Code"
+msgstr "企业编号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__nqi_write_date
+msgid "NQI Write Date"
+msgstr "写入时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__handle_flag
+msgid "Handle Flag"
+msgstr "处理标记"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__handle_date
+msgid "Handle Date"
+msgstr "处理时间"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__notice_no
+msgid "Notice No"
+msgstr "通知号"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__push_state
+msgid "Push State"
+msgstr "推送状态"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__missing_fields
+msgid "Missing Fields"
+msgstr "缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_parameter__missing_count
+msgid "Missing Count"
+msgstr "缺失列数"
+
+#. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_sp_box_bind__company_id
 msgid "Company"
 msgstr "公司"
@@ -4433,12 +8493,12 @@ msgstr "批量填充缺失列"
 #. module: sn_wsd_nqi
 #: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_fit_meter_info_entry
 msgid "FIT_METER_INFO"
-msgstr "【*】电能表资产信息表"
+msgstr "电能表资产信息表"
 
 #. module: sn_wsd_nqi
 #: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_fit_meter_info
 msgid "FIT_METER_INFO"
-msgstr "【*】电能表资产信息表"
+msgstr "电能表资产信息表"
 
 #. module: sn_wsd_nqi
 #: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_fit_meter_info_batch_fill
@@ -4493,15 +8553,480 @@ msgstr "批量填充缺失列"
 #. module: sn_wsd_nqi
 #: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_fit_pcb_serial_bind_entry
 msgid "FIT_PCB_SERIAL_BIND"
-msgstr "【*】电能表PCB板号和厂内编码绑定表"
+msgstr "电能表PCB板号和厂内编码绑定表"
 
 #. module: sn_wsd_nqi
 #: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_fit_pcb_serial_bind
 msgid "FIT_PCB_SERIAL_BIND"
-msgstr "【*】电能表PCB板号和厂内编码绑定表"
+msgstr "电能表PCB板号和厂内编码绑定表"
 
 #. module: sn_wsd_nqi
 #: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_fit_pcb_serial_bind_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_mounting_entry
+msgid "MT_MOUNTING_CONC"
+msgstr "生产检测综合结论表"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_mounting
+msgid "MT_MOUNTING_CONC"
+msgstr "生产检测综合结论表"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_mounting_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_aoi_entry
+msgid "MT_AOI_CONC"
+msgstr "PCB光学检测表"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_aoi
+msgid "MT_AOI_CONC"
+msgstr "PCB光学检测表"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_aoi_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_single_entry
+msgid "MT_SINGLE_CONC"
+msgstr "PCB检测表"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_single
+msgid "MT_SINGLE_CONC"
+msgstr "PCB检测表"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_single_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_intuit_entry
+msgid "MT_INTUIT_CONC"
+msgstr "外观检查结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_intuit
+msgid "MT_INTUIT_CONC"
+msgstr "外观检查结论"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_intuit_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_volt_entry
+msgid "MT_VOLT_CONC"
+msgstr "交流耐压测试"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_volt
+msgid "MT_VOLT_CONC"
+msgstr "交流耐压测试"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_volt_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_starting_entry
+msgid "MT_STARTING_CONC"
+msgstr "起动试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_starting
+msgid "MT_STARTING_CONC"
+msgstr "起动试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_starting_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_creeping_entry
+msgid "MT_CREEPING_CONC"
+msgstr "潜动试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_creeping
+msgid "MT_CREEPING_CONC"
+msgstr "潜动试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_creeping_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_const_entry
+msgid "MT_CONST_CONC"
+msgstr "电能表常数试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_const
+msgid "MT_CONST_CONC"
+msgstr "电能表常数试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_const_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_hutchison_combina_entry
+msgid "MT_HUTCHISON_COMBINA_CONC"
+msgstr "计度器总电能示值组合误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_hutchison_combina
+msgid "MT_HUTCHISON_COMBINA_CONC"
+msgstr "计度器总电能示值组合误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_hutchison_combina_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_dayerr_entry
+msgid "MT_DAYERR_CONC"
+msgstr "日计时误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_dayerr
+msgid "MT_DAYERR_CONC"
+msgstr "日计时误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_dayerr_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_basicerr_entry
+msgid "MT_BASICERR_CONC"
+msgstr "基本误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_basicerr
+msgid "MT_BASICERR_CONC"
+msgstr "基本误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_basicerr_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_ts_entry
+msgid "MT_TS_CONC"
+msgstr "时段投切误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_ts
+msgid "MT_TS_CONC"
+msgstr "时段投切误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_ts_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_function_entry
+msgid "MT_FUNCTION_CONC"
+msgstr "功能检测"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_function
+msgid "MT_FUNCTION_CONC"
+msgstr "功能检测"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_function_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_esam_read_entry
+msgid "MT_ESAM_READ_CONC"
+msgstr "费控试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_esam_read
+msgid "MT_ESAM_READ_CONC"
+msgstr "费控试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_esam_read_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_rfid_entry
+msgid "MT_RFID_CONC"
+msgstr "电子标签检测表"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_rfid
+msgid "MT_RFID_CONC"
+msgstr "电子标签检测表"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_rfid_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_demandvalue_entry
+msgid "MT_DEMANDVALUE_CONC"
+msgstr "需量示值误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_demandvalue
+msgid "MT_DEMANDVALUE_CONC"
+msgstr "需量示值误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_demandvalue_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_time_error_entry
+msgid "MT_TIME_ERROR_CONC"
+msgstr "时钟示值误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_time_error
+msgid "MT_TIME_ERROR_CONC"
+msgstr "时钟示值误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_time_error_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_tt_standard_entry
+msgid "TT_STANDARD_CONC"
+msgstr "规约一致性检查"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_standard
+msgid "TT_STANDARD_CONC"
+msgstr "规约一致性检查"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_standard_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_tt_error_entry
+msgid "TT_ERROR_CONC"
+msgstr "误差变差试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_error
+msgid "TT_ERROR_CONC"
+msgstr "误差变差试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_error_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_tt_consist_entry
+msgid "TT_CONSIST_CONC"
+msgstr "误差一致性试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_consist
+msgid "TT_CONSIST_CONC"
+msgstr "误差一致性试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_consist_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_tt_variation_entry
+msgid "TT_VARIATION_CONC"
+msgstr "负载电流升降变差试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_variation
+msgid "TT_VARIATION_CONC"
+msgstr "负载电流升降变差试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_variation_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_tt_overload_entry
+msgid "TT_OVERLOAD_CONC"
+msgstr "电流过载试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_overload
+msgid "TT_OVERLOAD_CONC"
+msgstr "电流过载试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_overload_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_tt_max_demand_err_entry
+msgid "TT_MAX_DEMAND_ERR_CONC"
+msgstr "最大需量误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_max_demand_err
+msgid "TT_MAX_DEMAND_ERR_CONC"
+msgstr "最大需量误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_max_demand_err_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_tt_eq_entry
+msgid "TT_EQ_CONC"
+msgstr "剩余电量递减试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_eq
+msgid "TT_EQ_CONC"
+msgstr "剩余电量递减试验"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_eq_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_tt_fee_entry
+msgid "TT_FEE_CONC"
+msgstr "费率和时段功能"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_fee
+msgid "TT_FEE_CONC"
+msgstr "费率和时段功能"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_fee_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_tt_power_measure_entry
+msgid "TT_POWER_MEASURE_CONC"
+msgstr "电能计量功能"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_power_measure
+msgid "TT_POWER_MEASURE_CONC"
+msgstr "电能计量功能"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_power_measure_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_tt_demand_entry
+msgid "TT_DEMAND_CONC"
+msgstr "需量周期误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_demand
+msgid "TT_DEMAND_CONC"
+msgstr "需量周期误差"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_demand_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_tt_max_demandvalue_entry
+msgid "TT_MAX_DEMANDVALUE_CONC"
+msgstr "最大需量功能"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_max_demandvalue
+msgid "TT_MAX_DEMANDVALUE_CONC"
+msgstr "最大需量功能"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_max_demandvalue_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_tt_event_record_entry
+msgid "TT_EVENT_RECORD_CONC"
+msgstr "事件记录功能"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_event_record
+msgid "TT_EVENT_RECORD_CONC"
+msgstr "事件记录功能"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_event_record_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_ot_other_entry
+msgid "OT_OTHER_CONC"
+msgstr "其他检测表"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_ot_other
+msgid "OT_OTHER_CONC"
+msgstr "其他检测表"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_ot_other_batch_fill
+msgid "Batch Fill Missing Columns"
+msgstr "批量填充缺失列"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_mt_parameter_entry
+msgid "MT_PARAMETER_CONC"
+msgstr "参数检验记录表"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_parameter
+msgid "MT_PARAMETER_CONC"
+msgstr "参数检验记录表"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_parameter_batch_fill
 msgid "Batch Fill Missing Columns"
 msgstr "批量填充缺失列"
 
