@@ -7,6 +7,21 @@
                 <span t-esc="data.material_specification"/>
             </td>
         </xpath>
+
+        <!-- Name the quantity cell of the standard template so the fraction
+             columns land right before it. -->
+        <xpath expr="//tr[@t-name='mrp.BomOverviewLine']/td[hasclass('text-end')][not(@t-if)][not(@name)]" position="attributes">
+            <attribute name="name">td_mrp_bom_qty</attribute>
+        </xpath>
+
+        <xpath expr="//td[@name='td_mrp_bom_qty']" position="before">
+            <td class="text-end">
+                <t t-esc="formatFloat(data.qty_numerator, {'digits': [false, precision], 'trailingZeros': false})"/>
+            </td>
+            <td class="text-end">
+                <t t-esc="data.qty_denominator === false ? '' : data.qty_denominator"/>
+            </td>
+        </xpath>
     </t>
 
 </templates>

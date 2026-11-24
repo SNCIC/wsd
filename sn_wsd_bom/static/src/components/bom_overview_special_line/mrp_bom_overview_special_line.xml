@@ -5,6 +5,13 @@
         <xpath expr="//td[@name='td_mrp_bom']" position="after">
             <td t-if="showSpecification"/>
         </xpath>
+
+        <!-- Operations and by-products have no usage fraction: keep the empty
+             cells so the row stays aligned with the columns of the table. -->
+        <xpath expr="//td[@name='quantity']" position="before">
+            <td/>
+            <td/>
+        </xpath>
     </t>
 
 </templates>

@@ -6,12 +6,30 @@
             <th t-if="showSpecification">Specification</th>
         </xpath>
 
+        <!-- The quantity column has no name in the standard template. Name it
+             first so the usage fraction columns can be inserted right before
+             it, whatever the other modules add on its left. -->
+        <xpath expr="//th[@t-attf-colspan]" position="attributes">
+            <attribute name="name">th_mrp_bom_qty</attribute>
+        </xpath>
+
+        <xpath expr="//th[@name='th_mrp_bom_qty']" position="before">
+            <th class="text-end"
+                title="Component usage of the BOM line in the unit of measure of the line.">Numerator</th>
+            <th class="text-end"
+                title="Component usage of the BOM line in the unit of measure of the line.">Denominator</th>
+        </xpath>
+
         <xpath expr="//td[@name='td_mrp_bom_f']" position="after">
             <td t-if="showSpecification"/>
+            <td class="text-end"/>
+            <td class="text-end"/>
         </xpath>
 
         <xpath expr="//td[@name='td_mrp_bom_b']" position="after">
             <td t-if="showSpecification"/>
+            <td class="text-end"/>
+            <td class="text-end"/>
         </xpath>
     </t>
 

@@ -1,13 +1,19 @@
 from odoo import api, models
+from odoo.addons.sn_wsd_mrp.models.mrp_bom_line_qty import fraction_from_qty
 
 
 class ReportMrpReportBomStructure(models.AbstractModel):
-    """Show the material specification of the products in the BoM overview.
+    """Show the material specification and the usage fraction of the BoM lines.
 
     The overview and its PDF export render the same data, so the specification
     is carried by every BOM and component line. The column is only displayed
     when at least one line of the structure has a specification, the way the
     attachments column behaves.
+
+    The usage of a component is expressed by the ERP as a numerator over a
+    denominator, which is the source of the quantity. Both values are carried
+    by every BOM and component line and shown as their own columns, right
+    before the quantity they expand to.
     """
 
     _inherit = 'report.mrp.report_bom_structure'
@@ -40,6 +46,10 @@ class ReportMrpReportBomStructure(models.AbstractModel):
         )
         bom_product = res.get('product') or bom.product_tmpl_id.product_variant_id
         res['material_specification'] = bom_product.product_tmpl_id.material_specification or ''
+        # The top-level product is not a component line and has no usage
+        # fraction. A sub-BoM keeps the fraction of the line it is reached by.
+        res['qty_numerator'] = bom_line.qty_numerator if bom_line else False
+        res['qty_denominator'] = bom_line.qty_denominator if bom_line else False
         return res
 
     @api.model
@@ -50,12 +60,15 @@ class ReportMrpReportBomStructure(models.AbstractModel):
             product_info, ignore_stock,
         )
         res['material_specification'] = bom_line.product_id.material_specification or ''
+        res['qty_numerator'] = bom_line.qty_numerator
+        res['qty_denominator'] = bom_line.qty_denominator
         return res
 
     @api.model
     def _get_bom_array_lines(self, data, level, unfolded_ids, unfolded, parent_unfolded=True):
         lines = super()._get_bom_array_lines(data, level, unfolded_ids, unfolded, parent_unfolded)
         self._set_line_specifications(lines, 0, data)
+        self._set_line_fractions(lines, 0, data)
         return lines
 
     @api.model
@@ -73,4 +86,35 @@ class ReportMrpReportBomStructure(models.AbstractModel):
             position += 1
             if component.get('components'):
                 position = self._set_line_specifications(lines, position, component)
+        return position
+
+    @api.model
+    def _merge_components(self, component_1, component_2):
+        """Recompute the usage fraction when two lines are merged.
+
+        The overview merges the components sharing the same product and unit of
+        measure and sums their quantity, so the fraction of the first line alone
+        would not match the merged quantity any more.
+        """
+        super()._merge_components(component_1, component_2)
+        if component_1.get('qty_numerator'):
+            component_1['qty_numerator'], component_1['qty_denominator'] = fraction_from_qty(
+                component_1['quantity'])
+
+    @api.model
+    def _set_line_fractions(self, lines, position, data):
+        """Copy the usage fraction of each component on its flat PDF line.
+
+        Same cursor rule as ``_set_line_specifications``: the parent builds one
+        line per component, directly followed by the lines of the components of
+        that sub-BOM. The operations and byproducts rows have no fraction.
+        """
+        for component in data.get('components', []):
+            if position >= len(lines):
+                return position
+            lines[position]['qty_numerator'] = component.get('qty_numerator')
+            lines[position]['qty_denominator'] = component.get('qty_denominator')
+            position += 1
+            if component.get('components'):
+                position = self._set_line_fractions(lines, position, component)
         return position

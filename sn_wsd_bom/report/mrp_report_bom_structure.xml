@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Material specification column of the BoM overview PDF export. The
-         screen report is rendered by the OWL components instead. -->
+    <!-- Material specification and usage fraction columns of the BoM overview
+         PDF export. The screen report is rendered by the OWL components
+         instead. -->
     <template id="report_mrp_bom_inherit_sn_wsd_bom" inherit_id="mrp.report_mrp_bom">
         <xpath expr="//th[@name='th_mrp_bom_h']" position="after">
             <th t-if="data['has_specifications']">Specification</th>
@@ -13,12 +14,38 @@
             </td>
         </xpath>
 
+        <!-- Name the standard quantity column so the fraction columns can be
+             inserted right before it, whatever the other modules add on its
+             left. -->
+        <xpath expr="//th[normalize-space(text())='Quantity']" position="attributes">
+            <attribute name="name">th_mrp_bom_qty</attribute>
+        </xpath>
+
+        <xpath expr="//th[@name='th_mrp_bom_qty']" position="before">
+            <th class="text-end">Numerator</th>
+            <th class="text-end">Denominator</th>
+        </xpath>
+
+        <xpath expr="//td[contains(@t-options, 'float')][hasclass('text-end')][not(@name)][not(@t-if)]" position="attributes">
+            <attribute name="name">td_mrp_bom_qty</attribute>
+        </xpath>
+
+        <!-- The top-level product is not a component line: no fraction. -->
+        <xpath expr="//td[@name='td_mrp_bom_qty']" position="before">
+            <td class="text-end"/>
+            <td class="text-end"/>
+        </xpath>
+
         <xpath expr="//td[@name='td_mrp_bom_f']" position="after">
             <td t-if="data['has_specifications']"/>
+            <td class="text-end"/>
+            <td class="text-end"/>
         </xpath>
 
         <xpath expr="//td[@name='td_mrp_bom_byproducts_f']" position="after">
             <td t-if="data['has_specifications']"/>
+            <td class="text-end"/>
+            <td class="text-end"/>
         </xpath>
     </template>
 
@@ -26,6 +53,19 @@
         <xpath expr="//td[@name='td_mrp_code']" position="after">
             <td t-if="data['has_specifications']">
                 <span t-esc="l.get('material_specification', '')"/>
+            </td>
+        </xpath>
+
+        <xpath expr="//td[hasclass('text-end')][not(@t-if)][not(@name)]" position="attributes">
+            <attribute name="name">td_mrp_bom_qty_line</attribute>
+        </xpath>
+
+        <xpath expr="//td[@name='td_mrp_bom_qty_line']" position="before">
+            <td class="text-end">
+                <t t-if="l.get('qty_numerator')" t-esc="l['qty_numerator']" t-options='{"widget": "float", "decimal_precision": "Product Unit"}'/>
+            </td>
+            <td class="text-end">
+                <t t-if="l.get('qty_denominator')" t-esc="l['qty_denominator']" t-options='{"widget": "float", "precision": 0}'/>
             </td>
         </xpath>
     </template>
