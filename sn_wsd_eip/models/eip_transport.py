@@ -1,3 +1,4 @@
+import datetime
 import json
 import secrets
 import string
@@ -109,8 +110,39 @@ class EipTransport(models.AbstractModel):
             return ''
         status = str(value).strip()
         if status.isdigit():
-            status = status.zfill(5)
-        return status
+            return status.zfill(5)
+        try:
+            # a float literal such as 0.0 or 0E-15 (parse_float keeps text)
+            return str(int(float(status))).zfill(5)
+        except (TypeError, ValueError):
+            return status
+
+    @api.model
+    def _eip_parse_date(self, text):
+        """``yyyy-MM-dd`` as sent by the platform -> Date, or False."""
+        try:
+            return datetime.datetime.strptime(
+                str(text).strip()[:10], '%Y-%m-%d').date()
+        except (TypeError, ValueError):
+            return False
+
+    @api.model
+    def _eip_beijing_to_utc(self, value):
+        """Beijing wall-clock naive datetime -> UTC naive datetime (the
+        ORM storage form)."""
+        return EIP_TIMEZONE.localize(value).astimezone(pytz.utc).replace(
+            tzinfo=None)
+
+    @api.model
+    def _eip_parse_datetime(self, text):
+        """``yyyy-MM-dd HH:mm:ss`` (Beijing) as sent by the platform ->
+        UTC naive datetime, or False."""
+        try:
+            naive = datetime.datetime.strptime(
+                str(text).strip()[:19], '%Y-%m-%d %H:%M:%S')
+        except (TypeError, ValueError):
+            return False
+        return self._eip_beijing_to_utc(naive)
 
     @api.model
     def _eip_to_int(self, value):
@@ -148,7 +180,9 @@ class EipTransport(models.AbstractModel):
                 error='HTTP %s: %s' % (http_status, snippet),
                 retryable=http_status >= 500)
         try:
-            payload = json.loads(raw)
+            # parse_float=str keeps the literal text of decimal numbers
+            # (amounts such as 200.50, long IDs) instead of a float
+            payload = json.loads(raw, parse_float=str)
         except (TypeError, ValueError):
             return dict(result, error='Non-JSON response: %s' % snippet,
                         retryable=True)

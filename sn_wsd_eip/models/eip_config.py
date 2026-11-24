@@ -51,7 +51,9 @@ class EipConfig(models.Model):
              'capped at 1000.')
     pull_daily_limit = fields.Integer(
         string='Pull Daily Limit', default=100, required=True,
-        help='Maximum pull requests per Beijing day.')
+        help='Maximum purchase-order pull requests per Beijing day, '
+             'manual and scheduled pulls alike; 0 = unlimited (e.g. on '
+             'the test environment).')
     pull_overlap_hours = fields.Integer(
         string='Pull Overlap (hours)', default=24, required=True,
         help='Hours re-pulled before the watermark to catch late '

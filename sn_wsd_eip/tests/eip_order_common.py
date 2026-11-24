@@ -7,6 +7,7 @@ import json
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from unittest.mock import patch
 
 from odoo.tests import TransactionCase
 
@@ -26,6 +27,16 @@ def eip_envelope(data=None, status='00000', message='ok', successful=True,
     }
 
 
+def eip_page(rows, page_num, page_size, page_count, total, **extra):
+    """A purchase-order pull answer: the rows of one page plus the
+    nested paging block the spec samples show."""
+    return eip_envelope(
+        data=rows,
+        pageInfo={'pageNum': page_num, 'pageSize': page_size,
+                  'pageCount': page_count, 'total': total},
+        **extra)
+
+
 class _FakeEipHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
@@ -43,7 +54,7 @@ class _FakeEipHandler(BaseHTTPRequestHandler):
             'json': body,
             'raw': raw,
         })
-        http_status, payload, delay = server.next_response()
+        http_status, payload, delay = server.next_response(server.requests[-1])
         if delay:
             time.sleep(delay)
         if isinstance(payload, bytes):
@@ -84,16 +95,38 @@ class FakeEipServer:
     def __init__(self):
         self.requests = []
         self._responses = collections.deque()
+        self._responder = None
         self._httpd = None
         self._thread = None
         self.url = ''
+
+    def reset(self):
+        """Drop queued responses, the responder and the recorded
+        requests: tests share one server for the whole class."""
+        self.requests.clear()
+        self._responses.clear()
+        self._responder = None
 
     def enqueue(self, payload=None, http_status=200, delay=0.0):
         if payload is None:
             payload = eip_envelope()
         self._responses.append((http_status, payload, delay))
 
-    def next_response(self):
+    def set_responder(self, responder):
+        """Answer every request with ``responder(request)`` instead of
+        the queue: return a payload / bytes, or a tuple (http_status,
+        payload[, delay]). Used when the answer depends on the request
+        (paging)."""
+        self._responder = responder
+
+    def next_response(self, request):
+        if self._responder is not None:
+            response = self._responder(request)
+            if isinstance(response, tuple):
+                if len(response) == 3:
+                    return response
+                return response[0], response[1], 0.0
+            return 200, response, 0.0
         if self._responses:
             return self._responses.popleft()
         return 200, eip_envelope(), 0.0
@@ -131,6 +164,15 @@ class EipOrderCase(TransactionCase):
 
     def setUp(self):
         super().setUp()
+        self.server.reset()
+        # The pull loop commits before each request (count-before-send).
+        # The test framework forbids commits inside a test: flush
+        # instead, the loop logic is otherwise unchanged.
+        patcher = patch.object(
+            type(self.env['sn.wsd.eip.config']), '_eip_pull_commit',
+            lambda config: config.env.flush_all())
+        patcher.start()
+        self.addCleanup(patcher.stop)
         # The DB admin speaks zh_CN while the assertions expect the
         # English source strings: pin the language for the test.
         self.env = self.env(context=dict(self.env.context, lang='en_US'))

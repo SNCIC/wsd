@@ -23,3 +23,11 @@ access_sn_wsd_eip_push_log_user,sn.wsd.eip.push.log user,model_sn_wsd_eip_push_l
 access_sn_wsd_eip_push_log_manager,sn.wsd.eip.push.log manager,model_sn_wsd_eip_push_log,mrp.group_mrp_manager,1,1,1,1
 access_sn_wsd_eip_pull_log_user,sn.wsd.eip.pull.log user,model_sn_wsd_eip_pull_log,mrp.group_mrp_user,1,0,0,0
 access_sn_wsd_eip_pull_log_manager,sn.wsd.eip.pull.log manager,model_sn_wsd_eip_pull_log,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_eip_purchase_order_user,sn.wsd.eip.purchase.order user,model_sn_wsd_eip_purchase_order,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_eip_purchase_order_manager,sn.wsd.eip.purchase.order manager,model_sn_wsd_eip_purchase_order,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_eip_purchase_order_line_user,sn.wsd.eip.purchase.order.line user,model_sn_wsd_eip_purchase_order_line,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_eip_purchase_order_line_manager,sn.wsd.eip.purchase.order.line manager,model_sn_wsd_eip_purchase_order_line,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_eip_pull_state_user,sn.wsd.eip.pull.state user,model_sn_wsd_eip_pull_state,mrp.group_mrp_user,1,0,0,0
+access_sn_wsd_eip_pull_state_manager,sn.wsd.eip.pull.state manager,model_sn_wsd_eip_pull_state,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_eip_pull_wizard_user,sn.wsd.eip.pull.wizard user,model_sn_wsd_eip_pull_wizard,mrp.group_mrp_user,1,1,1,1
+access_sn_wsd_eip_pull_wizard_manager,sn.wsd.eip.pull.wizard manager,model_sn_wsd_eip_pull_wizard,mrp.group_mrp_manager,1,1,1,1

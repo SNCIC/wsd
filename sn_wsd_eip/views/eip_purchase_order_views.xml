@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Purchase order lines: the working list, grouped by order -->
+    <record id="view_eip_purchase_order_line_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.purchase.order.line.list</field>
+        <field name="model">sn.wsd.eip.purchase.order.line</field>
+        <field name="arch" type="xml">
+            <list create="0" delete="0">
+                <header>
+                    <button name="%(action_eip_pull_wizard)d" type="action"
+                            string="Pull Purchase Orders" class="btn-primary"/>
+                </header>
+                <field name="po_item_no"/>
+                <field name="material_code"/>
+                <field name="material_desc"/>
+                <field name="amount"/>
+                <field name="mat_code" optional="hide"/>
+                <field name="mat_med_name" optional="show"/>
+                <field name="prj_name" optional="hide"/>
+                <field name="buyer_name" optional="hide"/>
+                <field name="con_code" optional="hide"/>
+                <field name="pkg_no" optional="hide"/>
+                <field name="modify_time" optional="hide"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_purchase_order_line_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.purchase.order.line.form</field>
+        <field name="model">sn.wsd.eip.purchase.order.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="order_id" readonly="1"/>
+                            <span class="text-muted"> / <field name="po_item_no" readonly="1"/></span>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Line Item">
+                            <field name="po_item_id"/>
+                            <field name="material_code"/>
+                            <field name="material_desc"/>
+                            <field name="amount"/>
+                            <field name="serial_number"/>
+                            <field name="fixed_tech_id"/>
+                            <field name="pkg_no"/>
+                            <field name="modify_time"/>
+                        </group>
+                        <group string="Grid Material Classes">
+                            <field name="mat_code"/>
+                            <field name="mat_max_code"/>
+                            <field name="mat_med_code"/>
+                            <field name="mat_min_code"/>
+                            <field name="mat_max_name"/>
+                            <field name="mat_med_name"/>
+                            <field name="mat_min_name"/>
+                        </group>
+                    </group>
+                    <group string="Contract">
+                        <group>
+                            <field name="po_no"/>
+                            <field name="con_code"/>
+                            <field name="con_name"/>
+                            <field name="seller_con_code"/>
+                            <field name="con_type"/>
+                            <field name="bid_bat_code"/>
+                            <field name="seller_sign_time"/>
+                        </group>
+                        <group>
+                            <field name="buyer_code"/>
+                            <field name="buyer_name"/>
+                            <field name="prj_code"/>
+                            <field name="prj_name"/>
+                        </group>
+                    </group>
+                    <group string="Fixed ID Description">
+                        <field name="ext_des" colspan="2" nolabel="1"/>
+                    </group>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_purchase_order_line_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.purchase.order.line.search</field>
+        <field name="model">sn.wsd.eip.purchase.order.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="po_no"/>
+                <field name="po_item_no"/>
+                <field name="po_item_id"/>
+                <field name="material_code" filter_domain="['|', ('material_code', 'ilike', self), ('material_desc', 'ilike', self)]"/>
+                <field name="con_code"/>
+                <field name="buyer_name" filter_domain="['|', ('buyer_name', 'ilike', self), ('buyer_code', 'ilike', self)]"/>
+                <field name="order_id"/>
+                <filter name="group_order" string="Purchase Order"
+                        context="{'group_by': 'order_id'}"/>
+                <filter name="group_buyer" string="Purchaser"
+                        context="{'group_by': 'buyer_name'}"/>
+                <separator/>
+                <filter name="group_contract" string="Contract No."
+                        context="{'group_by': 'con_code'}"/>
+                <filter name="group_modify_date" string="Updated (Platform)"
+                        context="{'group_by': 'modify_time:day'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_purchase_order_line" model="ir.actions.act_window">
+        <field name="name">Grid Purchase Orders</field>
+        <field name="res_model">sn.wsd.eip.purchase.order.line</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_group_order': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No grid purchase order pulled yet
+            </p>
+            <p>
+                Purchase orders issued by ECP are pulled from the EIP
+                platform with the button above or by the scheduled job.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_eip_purchase_order"
+              name="Grid Purchase Orders"
+              parent="menu_eip_order_data"
+              action="action_eip_purchase_order_line"
+              sequence="10"/>
+
+    <!-- Purchase order header -->
+    <record id="view_eip_purchase_order_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.purchase.order.list</field>
+        <field name="model">sn.wsd.eip.purchase.order</field>
+        <field name="arch" type="xml">
+            <list create="0" delete="0">
+                <field name="po_no"/>
+                <field name="con_code"/>
+                <field name="con_name" optional="show"/>
+                <field name="buyer_name" optional="show"/>
+                <field name="seller_sign_time" optional="hide"/>
+                <field name="con_type" optional="hide"/>
+                <field name="bid_bat_code" optional="hide"/>
+                <field name="line_count"/>
+                <field name="modify_time" optional="hide"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_purchase_order_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.purchase.order.form</field>
+        <field name="model">sn.wsd.eip.purchase.order</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="po_no"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="con_code"/>
+                            <field name="con_name"/>
+                            <field name="seller_con_code"/>
+                            <field name="seller_sign_time"/>
+                            <field name="con_type"/>
+                            <field name="bid_bat_code"/>
+                        </group>
+                        <group>
+                            <field name="buyer_code"/>
+                            <field name="buyer_name"/>
+                            <field name="line_count"/>
+                            <field name="modify_time"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Purchase Order Lines" name="lines">
+                            <field name="line_ids" readonly="1">
+                                <list create="0" delete="0">
+                                    <field name="po_item_no"/>
+                                    <field name="po_item_id"/>
+                                    <field name="material_code"/>
+                                    <field name="material_desc"/>
+                                    <field name="amount"/>
+                                    <field name="mat_code" optional="hide"/>
+                                    <field name="mat_med_name" optional="hide"/>
+                                    <field name="prj_name" optional="hide"/>
+                                    <field name="modify_time" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_purchase_order_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.purchase.order.search</field>
+        <field name="model">sn.wsd.eip.purchase.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="po_no"/>
+                <field name="con_code"/>
+                <field name="con_name"/>
+                <field name="buyer_name"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_purchase_order" model="ir.actions.act_window">
+        <field name="name">Grid Purchase Orders (Headers)</field>
+        <field name="res_model">sn.wsd.eip.purchase.order</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_eip_purchase_order_header"
+              name="Grid Purchase Orders (Headers)"
+              parent="menu_eip_order_data"
+              action="action_eip_purchase_order"
+              sequence="11"/>
+
+</odoo>
