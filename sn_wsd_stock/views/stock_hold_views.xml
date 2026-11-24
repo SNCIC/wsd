@@ -87,7 +87,7 @@
                 <field name="lot_id"/>
                 <field name="origin"/>
                 <separator/>
-                <filter name="filter_active" string="Active" domain="[('state', '=', 'active')]"/>
+                <filter name="filter_active" string="Held" domain="[('state', '=', 'active')]"/>
                 <filter name="filter_released" string="Released" domain="[('state', '=', 'released')]"/>
                 <separator/>
                 <filter name="filter_blocked" string="Blocked" domain="[('hold_type', '=', 'blocked')]"/>

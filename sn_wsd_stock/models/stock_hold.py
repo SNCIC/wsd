@@ -27,7 +27,11 @@ class SnWsdStockHold(models.Model):
     _order = 'hold_date desc, id desc'
 
     name = fields.Char(
-        string='Reference', default='/', copy=False, readonly=True, index=True,
+        string='Hold Reference',
+        default='/',
+        copy=False,
+        readonly=True,
+        index=True,
     )
     company_id = fields.Many2one(
         comodel_name='res.company',
@@ -68,7 +72,7 @@ class SnWsdStockHold(models.Model):
              "applies to the whole material.",
     )
     state = fields.Selection(
-        selection=[('active', 'Active'), ('released', 'Released')],
+        selection=[('active', 'Held'), ('released', 'Released')],
         string='Status',
         required=True,
         default='active',

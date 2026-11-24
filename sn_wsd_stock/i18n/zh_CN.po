@@ -1882,12 +1882,15 @@ msgstr "封存范围"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_hold__lot_id
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__sn_wsd_stock_hold__target_type__lot
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_stock_hold_search
 msgid "Batch/Serial"
 msgstr "批次/序列号"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_hold__product_id
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__sn_wsd_stock_hold__target_type__product
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_stock_hold_search
 msgid "Material"
 msgstr "物料"
 
@@ -1984,6 +1987,8 @@ msgstr "正常"
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__sn_hold_state
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_product_template__sn_hold_state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_production_lot_form_quality_hold
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.product_template_form_quality_hold
 msgid "Quality Hold"
 msgstr "质量封存"
 
@@ -2025,6 +2030,7 @@ msgid "Why the goods can be used again"
 msgstr "可恢复使用的原因"
 
 #. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_stock_hold
 #: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_stock_hold
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_stock_hold_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_stock_hold_search
@@ -2123,3 +2129,28 @@ msgstr "该物料已被禁用。"
 #: code:addons/sn_wsd_stock/models/product_template.py:0
 msgid "The selected materials are not held."
 msgstr "所选物料未封存。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_hold__name
+msgid "Hold Reference"
+msgstr "封存单号"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__sn_wsd_stock_hold__state__active
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_stock_hold_search
+msgid "Held"
+msgstr "封存中"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.actions.act_window,help:sn_wsd_stock.action_sn_wsd_stock_hold
+msgid "No quality hold"
+msgstr "暂无封存单"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.actions.act_window,help:sn_wsd_stock.action_sn_wsd_stock_hold
+msgid ""
+"A hold seals a batch or disables a material that carries a quality risk: the "
+"goods stay in stock and traceable, but no delivery or production flow can use "
+"them until the hold is released."
+msgstr ""
+"封存会把有质量隐患的批次隔离，或禁用整个物料：物品仍留在库存中并可追溯，但在解封之前，任何发货或生产流程都不能使用它们。"
