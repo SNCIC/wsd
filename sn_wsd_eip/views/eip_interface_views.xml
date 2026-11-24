@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_eip_interface_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.interface.list</field>
+        <field name="model">sn.wsd.eip.interface</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="path"/>
+                <field name="direction"/>
+                <field name="operatetype_add" optional="hide"/>
+                <field name="operatetype_update" optional="hide"/>
+                <field name="operatetype_query" optional="hide"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_interface_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.interface.form</field>
+        <field name="model">sn.wsd.eip.interface</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="active" invisible="1"/>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active == False"/>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="path" placeholder="/api/supplier-so"/>
+                            <field name="direction"/>
+                        </group>
+                        <group>
+                            <field name="operatetype_add"/>
+                            <field name="operatetype_update"/>
+                            <field name="operatetype_query"/>
+                            <field name="sequence"/>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_interface_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.interface.search</field>
+        <field name="model">sn.wsd.eip.interface</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="path"/>
+                <filter string="Archived" name="filter_archived"
+                        domain="[('active', '=', False)]"/>
+                <group>
+                    <filter name="group_by_direction" string="Direction"
+                            context="{'group_by': 'direction'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_interface" model="ir.actions.act_window">
+        <field name="name">EIP Interfaces</field>
+        <field name="res_model">sn.wsd.eip.interface</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No EIP interface yet
+            </p>
+            <p>
+                The spec's 11 interfaces come preset; operation-type
+                literals are maintained here so header casing can be
+                adjusted during joint testing without a code change.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_eip_interface"
+              name="Interfaces"
+              parent="menu_eip_config"
+              action="action_eip_interface"
+              sequence="20"/>
+</odoo>

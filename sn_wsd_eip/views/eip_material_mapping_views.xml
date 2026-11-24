@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_eip_material_mapping_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.material.mapping.list</field>
+        <field name="model">sn.wsd.eip.material.mapping</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="eip_material_code"/>
+                <field name="material_code"/>
+                <field name="material_name" optional="show"/>
+                <field name="material_unit" optional="show"/>
+                <field name="material_desc" optional="hide"/>
+                <field name="product_model" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_material_mapping_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.material.mapping.form</field>
+        <field name="model">sn.wsd.eip.material.mapping</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="company_id" options="{'no_create': True}"/>
+                            <field name="eip_material_code"/>
+                            <field name="material_code"/>
+                        </group>
+                        <group>
+                            <field name="material_name"/>
+                            <field name="material_unit"/>
+                            <field name="material_desc"/>
+                            <field name="product_model"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_material_mapping_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.material.mapping.search</field>
+        <field name="model">sn.wsd.eip.material.mapping</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="eip_material_code"/>
+                <field name="material_code"/>
+                <field name="material_name"/>
+                <field name="company_id"/>
+                <group>
+                    <filter name="group_by_company" string="Company"
+                            context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_material_mapping" model="ir.actions.act_window">
+        <field name="name">EIP Material Mappings</field>
+        <field name="res_model">sn.wsd.eip.material.mapping</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No EIP material mapping yet
+            </p>
+            <p>
+                Map EIP material codes to our code, name, unit and
+                description; creating production orders from purchase
+                order lines falls back to this table.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_eip_material_mapping"
+              name="Material Mappings"
+              parent="menu_eip_config"
+              action="action_eip_material_mapping"
+              sequence="60"/>
+</odoo>

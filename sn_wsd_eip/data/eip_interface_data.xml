@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The 11 interfaces of the EIP order-push spec V8.0.14:
+         1 pull (grid purchase orders) + 10 push. Operation-type
+         literals are explicit so a re-install never drifts. -->
+    <data noupdate="1">
+        <record id="interface_purchase_order" model="sn.wsd.eip.interface">
+            <field name="name">Grid Purchase Orders</field>
+            <field name="code">purchase_order</field>
+            <field name="path">/api/supplier-send</field>
+            <field name="direction">pull</field>
+            <field name="operatetype_add">ADD</field>
+            <field name="operatetype_update">UPDATE</field>
+            <field name="operatetype_query">QUERY</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="interface_sale_order" model="sn.wsd.eip.interface">
+            <field name="name">Sales Orders</field>
+            <field name="code">sale_order</field>
+            <field name="path">/api/supplier-so</field>
+            <field name="direction">push</field>
+            <field name="operatetype_add">ADD</field>
+            <field name="operatetype_update">UPDATE</field>
+            <field name="operatetype_query">QUERY</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="interface_production_order" model="sn.wsd.eip.interface">
+            <field name="name">Production Orders</field>
+            <field name="code">production_order</field>
+            <field name="path">/api/supplier-ipo</field>
+            <field name="direction">push</field>
+            <field name="operatetype_add">ADD</field>
+            <field name="operatetype_update">UPDATE</field>
+            <field name="operatetype_query">QUERY</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="interface_work_order" model="sn.wsd.eip.interface">
+            <field name="name">Work Orders</field>
+            <field name="code">work_order</field>
+            <field name="path">/api/Eipsupplier-wo</field>
+            <field name="direction">push</field>
+            <field name="operatetype_add">ADD</field>
+            <field name="operatetype_update">UPDATE</field>
+            <field name="operatetype_query">QUERY</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="interface_schedule" model="sn.wsd.eip.interface">
+            <field name="name">Production Schedules</field>
+            <field name="code">schedule</field>
+            <field name="path">/api/supplier-production-schedule</field>
+            <field name="direction">push</field>
+            <field name="operatetype_add">ADD</field>
+            <field name="operatetype_update">UPDATE</field>
+            <field name="operatetype_query">QUERY</field>
+            <field name="sequence">50</field>
+        </record>
+        <record id="interface_process_work" model="sn.wsd.eip.interface">
+            <field name="name">Process Work Reports</field>
+            <field name="code">process_work</field>
+            <field name="path">/api/supplier-process-work</field>
+            <field name="direction">push</field>
+            <field name="operatetype_add">ADD</field>
+            <field name="operatetype_update">UPDATE</field>
+            <field name="operatetype_query">QUERY</field>
+            <field name="sequence">60</field>
+        </record>
+        <record id="interface_raw_inventory" model="sn.wsd.eip.interface">
+            <field name="name">Key Raw Material Inventory</field>
+            <field name="code">raw_inventory</field>
+            <field name="path">/api/eipmatinventory</field>
+            <field name="direction">push</field>
+            <field name="operatetype_add">ADD</field>
+            <field name="operatetype_update">UPDATE</field>
+            <field name="operatetype_query">QUERY</field>
+            <field name="sequence">70</field>
+        </record>
+        <record id="interface_entity" model="sn.wsd.eip.interface">
+            <field name="name">Entity IDs</field>
+            <field name="code">entity</field>
+            <field name="path">/api/entity-maintenance</field>
+            <field name="direction">push</field>
+            <field name="operatetype_add">ADD</field>
+            <field name="operatetype_update">UPDATE</field>
+            <field name="operatetype_query">QUERY</field>
+            <field name="sequence">80</field>
+        </record>
+        <record id="interface_supply_note" model="sn.wsd.eip.interface">
+            <field name="name">Supply Notes</field>
+            <field name="code">supply_note</field>
+            <field name="path">/api/supply-add</field>
+            <field name="direction">push</field>
+            <field name="operatetype_add">ADD</field>
+            <field name="operatetype_update">UPDATE</field>
+            <field name="operatetype_query">QUERY</field>
+            <field name="sequence">90</field>
+        </record>
+        <record id="interface_spare_inventory" model="sn.wsd.eip.interface">
+            <field name="name">Spare Parts Inventory</field>
+            <field name="code">spare_inventory</field>
+            <field name="path">/api/eip_spare_product</field>
+            <field name="direction">push</field>
+            <field name="operatetype_add">ADD</field>
+            <field name="operatetype_update">UPDATE</field>
+            <field name="operatetype_query">QUERY</field>
+            <field name="sequence">100</field>
+        </record>
+        <record id="interface_finished_inventory" model="sn.wsd.eip.interface">
+            <field name="name">Finished Goods Inventory</field>
+            <field name="code">finished_inventory</field>
+            <field name="path">/api/eip-prod-store</field>
+            <field name="direction">push</field>
+            <field name="operatetype_add">ADD</field>
+            <field name="operatetype_update">UPDATE</field>
+            <field name="operatetype_query">QUERY</field>
+            <field name="sequence">110</field>
+        </record>
+    </data>
+</odoo>

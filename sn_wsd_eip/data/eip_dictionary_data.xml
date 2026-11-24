@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Category / subclass dictionaries shipped with the EIP
+         order-push spec appendix. The Chinese names are the exact
+         platform-issued data (the only Chinese allowed in source,
+         same precedent as the NQI dictionaries). -->
+    <data noupdate="1">
+        <record id="category_10" model="sn.wsd.eip.category">
+            <field name="code">10</field>
+            <field name="name">线缆</field>
+        </record>
+        <record id="category_20" model="sn.wsd.eip.category">
+            <field name="code">20</field>
+            <field name="name">线圈</field>
+        </record>
+        <record id="category_30" model="sn.wsd.eip.category">
+            <field name="code">30</field>
+            <field name="name">表计</field>
+        </record>
+        <record id="category_40" model="sn.wsd.eip.category">
+            <field name="code">40</field>
+            <field name="name">开关</field>
+        </record>
+        <record id="category_50" model="sn.wsd.eip.category">
+            <field name="code">50</field>
+            <field name="name">二次</field>
+        </record>
+        <record id="category_60" model="sn.wsd.eip.category">
+            <field name="code">60</field>
+            <field name="name">铁塔</field>
+        </record>
+        <record id="category_70" model="sn.wsd.eip.category">
+            <field name="code">70</field>
+            <field name="name">抽水蓄能</field>
+        </record>
+        <record id="category_80" model="sn.wsd.eip.category">
+            <field name="code">80</field>
+            <field name="name">配变</field>
+        </record>
+        <record id="category_90" model="sn.wsd.eip.category">
+            <field name="code">90</field>
+            <field name="name">开关柜</field>
+        </record>
+        <record id="category_100" model="sn.wsd.eip.category">
+            <field name="code">100</field>
+            <field name="name">低压线缆</field>
+        </record>
+
+        <record id="subclass_10001" model="sn.wsd.eip.subclass">
+            <field name="code">10001</field>
+            <field name="name">中压电缆</field>
+            <field name="category_id" ref="category_10"/>
+        </record>
+        <record id="subclass_10002" model="sn.wsd.eip.subclass">
+            <field name="code">10002</field>
+            <field name="name">高压电缆</field>
+            <field name="category_id" ref="category_10"/>
+        </record>
+        <record id="subclass_10003" model="sn.wsd.eip.subclass">
+            <field name="code">10003</field>
+            <field name="name">导线</field>
+            <field name="category_id" ref="category_10"/>
+        </record>
+        <record id="subclass_10004" model="sn.wsd.eip.subclass">
+            <field name="code">10004</field>
+            <field name="name">OPGW-OPPC光缆</field>
+            <field name="category_id" ref="category_10"/>
+        </record>
+        <record id="subclass_10005" model="sn.wsd.eip.subclass">
+            <field name="code">10005</field>
+            <field name="name">ADSS光缆</field>
+            <field name="category_id" ref="category_10"/>
+        </record>
+        <record id="subclass_20001" model="sn.wsd.eip.subclass">
+            <field name="code">20001</field>
+            <field name="name">变压器</field>
+            <field name="category_id" ref="category_20"/>
+        </record>
+        <record id="subclass_20002" model="sn.wsd.eip.subclass">
+            <field name="code">20002</field>
+            <field name="name">电抗器</field>
+            <field name="category_id" ref="category_20"/>
+        </record>
+        <record id="subclass_20003" model="sn.wsd.eip.subclass">
+            <field name="code">20003</field>
+            <field name="name">电流互感器</field>
+            <field name="category_id" ref="category_20"/>
+        </record>
+        <record id="subclass_20004" model="sn.wsd.eip.subclass">
+            <field name="code">20004</field>
+            <field name="name">电压互感器</field>
+            <field name="category_id" ref="category_20"/>
+        </record>
+        <record id="subclass_20005" model="sn.wsd.eip.subclass">
+            <field name="code">20005</field>
+            <field name="name">避雷器</field>
+            <field name="category_id" ref="category_20"/>
+        </record>
+        <record id="subclass_30001" model="sn.wsd.eip.subclass">
+            <field name="code">30001</field>
+            <field name="name">采集器</field>
+            <field name="category_id" ref="category_30"/>
+        </record>
+        <record id="subclass_30002" model="sn.wsd.eip.subclass">
+            <field name="code">30002</field>
+            <field name="name">电能表</field>
+            <field name="category_id" ref="category_30"/>
+        </record>
+        <record id="subclass_30003" model="sn.wsd.eip.subclass">
+            <field name="code">30003</field>
+            <field name="name">无人机</field>
+            <field name="category_id" ref="category_30"/>
+        </record>
+        <record id="subclass_30004" model="sn.wsd.eip.subclass">
+            <field name="code">30004</field>
+            <field name="name">机器人</field>
+            <field name="category_id" ref="category_30"/>
+        </record>
+        <record id="subclass_30005" model="sn.wsd.eip.subclass">
+            <field name="code">30005</field>
+            <field name="name">充电设备</field>
+            <field name="category_id" ref="category_30"/>
+        </record>
+        <record id="subclass_40001" model="sn.wsd.eip.subclass">
+            <field name="code">40001</field>
+            <field name="name">组合电器</field>
+            <field name="category_id" ref="category_40"/>
+        </record>
+        <record id="subclass_40002" model="sn.wsd.eip.subclass">
+            <field name="code">40002</field>
+            <field name="name">断路器</field>
+            <field name="category_id" ref="category_40"/>
+        </record>
+        <record id="subclass_40003" model="sn.wsd.eip.subclass">
+            <field name="code">40003</field>
+            <field name="name">电容器</field>
+            <field name="category_id" ref="category_40"/>
+        </record>
+        <record id="subclass_50001" model="sn.wsd.eip.subclass">
+            <field name="code">50001</field>
+            <field name="name">继保安稳</field>
+            <field name="category_id" ref="category_50"/>
+        </record>
+        <record id="subclass_50002" model="sn.wsd.eip.subclass">
+            <field name="code">50002</field>
+            <field name="name">监控设备</field>
+            <field name="category_id" ref="category_50"/>
+        </record>
+        <record id="subclass_50003" model="sn.wsd.eip.subclass">
+            <field name="code">50003</field>
+            <field name="name">玻璃绝缘子</field>
+            <field name="category_id" ref="category_50"/>
+        </record>
+        <record id="subclass_50004" model="sn.wsd.eip.subclass">
+            <field name="code">50004</field>
+            <field name="name">瓷绝缘子</field>
+            <field name="category_id" ref="category_50"/>
+        </record>
+        <record id="subclass_50005" model="sn.wsd.eip.subclass">
+            <field name="code">50005</field>
+            <field name="name">复合绝缘子</field>
+            <field name="category_id" ref="category_50"/>
+        </record>
+        <record id="subclass_60001" model="sn.wsd.eip.subclass">
+            <field name="code">60001</field>
+            <field name="name">角钢塔</field>
+            <field name="category_id" ref="category_60"/>
+        </record>
+        <record id="subclass_60002" model="sn.wsd.eip.subclass">
+            <field name="code">60002</field>
+            <field name="name">钢管塔</field>
+            <field name="category_id" ref="category_60"/>
+        </record>
+        <record id="subclass_60003" model="sn.wsd.eip.subclass">
+            <field name="code">60003</field>
+            <field name="name">钢管杆</field>
+            <field name="category_id" ref="category_60"/>
+        </record>
+        <record id="subclass_70001" model="sn.wsd.eip.subclass">
+            <field name="code">70001</field>
+            <field name="name">线棒</field>
+            <field name="category_id" ref="category_70"/>
+        </record>
+        <record id="subclass_70002" model="sn.wsd.eip.subclass">
+            <field name="code">70002</field>
+            <field name="name">定子冲片</field>
+            <field name="category_id" ref="category_70"/>
+        </record>
+        <record id="subclass_70003" model="sn.wsd.eip.subclass">
+            <field name="code">70003</field>
+            <field name="name">转子磁极</field>
+            <field name="category_id" ref="category_70"/>
+        </record>
+        <record id="subclass_70004" model="sn.wsd.eip.subclass">
+            <field name="code">70004</field>
+            <field name="name">转轮</field>
+            <field name="category_id" ref="category_70"/>
+        </record>
+        <record id="subclass_70005" model="sn.wsd.eip.subclass">
+            <field name="code">70005</field>
+            <field name="name">水轮机轴</field>
+            <field name="category_id" ref="category_70"/>
+        </record>
+        <record id="subclass_70006" model="sn.wsd.eip.subclass">
+            <field name="code">70006</field>
+            <field name="name">球阀</field>
+            <field name="category_id" ref="category_70"/>
+        </record>
+        <record id="subclass_80001" model="sn.wsd.eip.subclass">
+            <field name="code">80001</field>
+            <field name="name">配电变压器</field>
+            <field name="category_id" ref="category_80"/>
+        </record>
+        <record id="subclass_90001" model="sn.wsd.eip.subclass">
+            <field name="code">90001</field>
+            <field name="name">10kV开关柜</field>
+            <field name="category_id" ref="category_90"/>
+        </record>
+        <record id="subclass_100001" model="sn.wsd.eip.subclass">
+            <field name="code">100001</field>
+            <field name="name">低压电缆</field>
+            <field name="category_id" ref="category_100"/>
+        </record>
+        <record id="subclass_100002" model="sn.wsd.eip.subclass">
+            <field name="code">100002</field>
+            <field name="name">导地线</field>
+            <field name="category_id" ref="category_100"/>
+        </record>
+    </data>
+</odoo>
