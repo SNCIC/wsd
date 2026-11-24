@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-24 05:23+0000\n"
-"PO-Revision-Date: 2026-11-24 05:23+0000\n"
+"POT-Creation-Date: 2026-11-24 06:22+0000\n"
+"PO-Revision-Date: 2026-11-24 06:22+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgstr "%(field)s 不属于接口 %(code)s。"
 #. module: sn_wsd_eip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_interface_form
 msgid "/api/supplier-so"
-msgstr "/api/supplier-so"
+msgstr ""
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_production_order__ipo_type
@@ -725,13 +725,6 @@ msgid "Diff"
 msgstr "差量"
 
 #. module: sn_wsd_eip
-#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__update_mode
-msgid ""
-"Diff sends only changed fields on UPDATE; Full always sends the complete "
-"envelope."
-msgstr "差量：UPDATE 只发有变化的字段；全量：每次都发完整报文。"
-
-#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__direction
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_interface_search
 msgid "Direction"
@@ -860,7 +853,7 @@ msgstr "耗时（毫秒）"
 #. module: sn_wsd_eip
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_root
 msgid "EIP"
-msgstr "EIP"
+msgstr ""
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__check_time
@@ -1376,6 +1369,19 @@ msgid "Full"
 msgstr "全量"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__update_mode
+msgid ""
+"Full (default): every UPDATE carries the complete envelope with the current "
+"values, empty fields as blank strings -- no field is ever omitted. Diff: "
+"only changed fields carry values, unchanged fields go blank and a cleared "
+"field goes as the string \"null\" (use it when a field has to be cleared on "
+"the platform)."
+msgstr ""
+"全量（默认）：每次 UPDATE "
+"都带完整报文与当前真实值，空字段传空字符串——不隐藏任何字段。差量：只给有变化的字段传值，没变的传空串，清空的字段传字符串 "
+"\"null\"（需要在平台清空字段时使用）。"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_finished_inventory_line__data_source__1
 msgid "Gateway"
 msgstr "网关"
@@ -1496,7 +1502,7 @@ msgstr "被推单据的可读键（单号）。"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result_detail__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_serial_operation_history__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_production_order__po_item_id
@@ -2068,7 +2074,7 @@ msgstr "产品型号规格"
 #. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record_line__item_result__ng
 msgid "NG"
-msgstr "NG"
+msgstr ""
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_category__name
@@ -2238,7 +2244,7 @@ msgstr "该生产工单所属生产订单的单号。"
 #. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record_line__item_result__ok
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_work_order__entity_code
@@ -3336,7 +3342,7 @@ msgstr "行数"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__serial_identity_id
 msgid "SN"
-msgstr "SN"
+msgstr ""
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__sn_name
@@ -4129,7 +4135,7 @@ msgstr "对接配置"
 #. module: sn_wsd_eip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_config_form
 msgid "https://host:port"
-msgstr "https://host:port"
+msgstr ""
 
 #. module: sn_wsd_eip
 #. odoo-python
