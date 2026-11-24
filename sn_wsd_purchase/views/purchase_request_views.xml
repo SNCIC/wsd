@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Business closing of a request line, the way the vendor system closes
+         the lines of a purchase request: a line whose quantity is not needed
+         anymore is closed, so the purchase wizard does not order it again. The
+         quantity already ordered keeps being received. -->
+    <record id="purchase_request_form_business_close" model="ir.ui.view">
+        <field name="name">purchase.request.form.business.close</field>
+        <field name="model">purchase.request</field>
+        <field name="inherit_id" ref="purchase_request.view_purchase_request_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='line_ids']/list" position="attributes">
+                <attribute name="decoration-muted">cancelled or sn_business_closed</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/list/field[@name='product_id']" position="attributes">
+                <attribute name="readonly">sn_business_closed</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/list/field[@name='name']" position="attributes">
+                <attribute name="readonly">sn_business_closed</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/list/field[@name='product_qty']" position="attributes">
+                <attribute name="readonly">sn_business_closed</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/list/field[@name='date_required']" position="attributes">
+                <attribute name="readonly">sn_business_closed</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/list/field[@name='estimated_cost']" position="attributes">
+                <attribute name="readonly">sn_business_closed</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/list/field[@name='purchased_qty']" position="after">
+                <field name="sn_business_closed" column_invisible="1"/>
+                <field name="sn_business_close_status" widget="badge"
+                       decoration-success="sn_business_close_status == 'normal'"
+                       decoration-muted="sn_business_close_status == 'closed'"/>
+                <field name="sn_business_close_user_id" optional="hide"/>
+                <field name="sn_business_close_date" optional="hide"/>
+                <field name="sn_business_close_qty" optional="hide"/>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/list/button[@name='action_show_details']" position="before">
+                <button name="action_sn_close_business" type="object" icon="fa-ban"
+                        title="Close Business" groups="purchase.group_purchase_user"
+                        invisible="sn_business_closed or cancelled or request_state not in ['approved', 'in_progress']"/>
+                <button name="action_sn_reopen_business" type="object" icon="fa-undo"
+                        title="Reopen Business" groups="purchase.group_purchase_user"
+                        invisible="not sn_business_closed"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase_request_line_form_business_close" model="ir.ui.view">
+        <field name="name">purchase.request.line.form.business.close</field>
+        <field name="model">purchase.request.line</field>
+        <field name="inherit_id" ref="purchase_request.purchase_request_line_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/field[@name='request_state']" position="before">
+                <button name="action_sn_close_business" type="object"
+                        string="Close Business" class="btn-primary"
+                        groups="purchase.group_purchase_user"
+                        invisible="sn_business_closed or cancelled or request_state not in ['approved', 'in_progress']"/>
+                <button name="action_sn_reopen_business" type="object"
+                        string="Reopen Business"
+                        groups="purchase.group_purchase_user"
+                        invisible="not sn_business_closed"/>
+            </xpath>
+            <xpath expr="//group[@name='quantities']" position="after">
+                <group name="business_closing" string="Business Closing">
+                    <group>
+                        <field name="sn_business_closed" readonly="1"/>
+                        <field name="sn_business_close_status" widget="badge"
+                               decoration-success="sn_business_close_status == 'normal'"
+                               decoration-muted="sn_business_close_status == 'closed'"/>
+                        <field name="sn_business_close_user_id"/>
+                        <field name="sn_business_close_date"/>
+                        <field name="sn_business_close_qty"/>
+                    </group>
+                    <group>
+                        <field name="sn_business_close_reason"
+                               readonly="not sn_business_closed"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

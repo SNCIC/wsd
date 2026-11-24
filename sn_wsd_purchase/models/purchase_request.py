@@ -1,7 +1,8 @@
 from collections import defaultdict
 
 from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools import float_compare
 
 
 class PurchaseRequestLine(models.Model):
@@ -107,6 +108,48 @@ class PurchaseRequestLine(models.Model):
     # flagged as locked), so the selection is rebuilt with that value. A value
     # missing from the selection makes the web client fail to render the field.
     purchase_state = fields.Selection(selection='_selection_purchase_state')
+    sn_business_closed = fields.Boolean(
+        string='Business Closed',
+        copy=False,
+        tracking=True,
+        help="Set when the quantity left to purchase is not needed anymore. "
+             "The line leaves the purchasing pool and the quantity already "
+             "ordered keeps being received.",
+    )
+    sn_business_close_status = fields.Selection(
+        selection=[
+            ('normal', 'Normal'),
+            ('closed', 'Business Closed'),
+        ],
+        string='Business Closed Status',
+        compute='_compute_sn_business_close_status',
+        store=True,
+        readonly=True,
+        help="Business closing state of the line, the one the vendor system "
+             "reports as the business close status.",
+    )
+    sn_business_close_date = fields.Date(
+        string='Business Close Date',
+        copy=False,
+        readonly=True,
+    )
+    sn_business_close_user_id = fields.Many2one(
+        comodel_name='res.users',
+        string='Business Closed by',
+        copy=False,
+        readonly=True,
+    )
+    sn_business_close_qty = fields.Float(
+        string='Quantity Closed',
+        digits='Product Unit of Measure',
+        copy=False,
+        readonly=True,
+        help="Quantity left to purchase when the line was business closed.",
+    )
+    sn_business_close_reason = fields.Text(
+        string='Business Close Reason',
+        copy=False,
+    )
 
     _check_approved_qty = models.Constraint(
         'CHECK(approved_qty >= 0 AND approved_qty <= product_qty)',
@@ -211,10 +254,33 @@ class PurchaseRequestLine(models.Model):
             return 'draft'
         return False
 
-    @api.depends('approved_qty', 'purchased_qty')
+    @api.depends('approved_qty', 'purchased_qty', 'sn_business_closed')
     def _compute_approved_pending_qty(self):
+        # A business closed line is not purchased anymore: the quantity left to
+        # buy is reported as zero, so the reports and the purchase wizard
+        # agree with the closing.
         for line in self:
+            if line.sn_business_closed:
+                line.approved_pending_qty = 0.0
+                continue
             line.approved_pending_qty = max(line.approved_qty - line.purchased_qty, 0.0)
+
+    @api.depends('sn_business_closed')
+    def _compute_qty_to_buy(self):
+        # The pending quantity of the module drives its "to buy" filters; a
+        # business closed line must not show up as a line still to purchase.
+        super()._compute_qty_to_buy()
+        for line in self:
+            if line.sn_business_closed:
+                line.qty_to_buy = False
+                line.pending_qty_to_receive = 0.0
+
+    @api.depends('sn_business_closed')
+    def _compute_sn_business_close_status(self):
+        for line in self:
+            line.sn_business_close_status = (
+                'closed' if line.sn_business_closed else 'normal'
+            )
 
     @api.depends(
         'purchase_request_allocation_ids',
@@ -551,6 +617,12 @@ class PurchaseRequestLine(models.Model):
         return quantities
 
     def write(self, vals):
+        if set(vals) & {'product_id', 'product_qty', 'product_uom_id'}:
+            closed = self.filtered('sn_business_closed')
+            if closed:
+                raise ValidationError(
+                    _('Reopen the business closed line before changing its product or quantity.')
+                )
         if 'product_qty' in vals and 'approved_qty' not in vals:
             vals = dict(vals)
             vals['approved_qty'] = vals['product_qty']
@@ -561,6 +633,65 @@ class PurchaseRequestLine(models.Model):
                         _('Approved quantity can only be changed before the request is approved.')
                     )
         return super().write(vals)
+
+    def _sn_is_purchase_complete(self):
+        """Whether the line is served, business closing taken into account.
+
+        A business closed line is never received in full: the quantity left to
+        purchase is not ordered anymore, so the line is served once the
+        quantity ordered for it is received.
+        """
+        self.ensure_one()
+        target = self.purchased_qty if self.sn_business_closed else self.product_qty
+        uom = self.product_uom_id or self.product_id.uom_id
+        return float_compare(
+            self.qty_done,
+            target,
+            precision_rounding=uom.rounding or 0.01,
+        ) >= 0
+
+    def action_sn_close_business(self):
+        """Stop purchasing the quantity left on the selected lines.
+
+        The lines leave the purchasing pool the way they do in the vendor
+        system this module follows: the quantity already ordered keeps being
+        received and billed, only the quantity left to purchase is dropped.
+        """
+        closable = self.filtered(
+            lambda line: not line.sn_business_closed
+            and not line.cancelled
+            and line.request_state in ('approved', 'in_progress')
+        )
+        if not closable:
+            raise UserError(
+                _('Only open lines of an approved or in-progress request can be business closed.')
+            )
+        fully_received = closable.filtered(
+            lambda line: line.product_qty and line.qty_done >= line.product_qty
+        )
+        if fully_received:
+            raise UserError(_('Lines already fully received cannot be business closed.'))
+        for line in closable:
+            line.write({
+                'sn_business_closed': True,
+                'sn_business_close_date': fields.Date.context_today(line),
+                'sn_business_close_user_id': line.env.user.id,
+                'sn_business_close_qty': line.approved_pending_qty,
+            })
+        return True
+
+    def action_sn_reopen_business(self):
+        """Put the selected lines back into the purchasing pool."""
+        reopened = self.filtered('sn_business_closed')
+        if not reopened:
+            raise UserError(_('The selected lines are not business closed.'))
+        reopened.write({
+            'sn_business_closed': False,
+            'sn_business_close_date': False,
+            'sn_business_close_user_id': False,
+            'sn_business_close_qty': 0.0,
+        })
+        return True
 
     def action_open_request(self):
         """Open the purchase request of the line.
@@ -602,9 +733,44 @@ class PurchaseRequestLineMakePurchaseOrder(models.TransientModel):
     _inherit = 'purchase.request.line.make.purchase.order'
 
     @api.model
+    def _sn_open_lines(self, request_line_ids):
+        """Request lines the wizard may purchase, business closed ones left out.
+
+        The module brings every selected line into the wizard without checking
+        whether the line can still be ordered. A business closed line must not
+        be ordered again: it is dropped from the selection here, before the
+        module validates and prepares the items.
+        """
+        lines = self.env['purchase.request.line'].browse(request_line_ids)
+        open_lines = lines.filtered(lambda line: not line.sn_business_closed)
+        if lines and not open_lines:
+            raise UserError(
+                _('The selected purchase request lines are business closed and cannot be purchased.')
+            )
+        return open_lines
+
+    @api.model
+    def get_items(self, request_line_ids):
+        return super().get_items(self._sn_open_lines(request_line_ids).ids)
+
+    @api.model
+    def _check_valid_request_line(self, request_line_ids):
+        closed = self.env['purchase.request.line'].browse(
+            request_line_ids
+        ).filtered('sn_business_closed')
+        if closed:
+            raise UserError(
+                _(
+                    'Purchase request line %(line)s is business closed and cannot be purchased.',
+                    line=closed[0].product_id.display_name or closed[0].name,
+                )
+            )
+        return super()._check_valid_request_line(request_line_ids)
+
+    @api.model
     def _prepare_item(self, line):
         item = super()._prepare_item(line)
-        item['product_qty'] = line.approved_pending_qty
+        item['product_qty'] = 0.0 if line.sn_business_closed else line.approved_pending_qty
         return item
 
     @api.model
@@ -645,3 +811,21 @@ class PurchaseRequest(models.Model):
         if rule:
             return rule.render(proxy)
         return self.env['ir.sequence'].next_by_code('purchase.request')
+
+    def _auto_set_done(self):
+        """Complete the request once every line is served.
+
+        The module compares the received quantity with the requested one, which
+        a business closed line never reaches: the quantity left to purchase is
+        not ordered anymore. Such a line is served as soon as the quantity
+        ordered for it is received, so the closing does not keep the request
+        open forever.
+        """
+        for request in self.filtered(
+            lambda rec: rec.state in ('approved', 'in_progress')
+        ):
+            active_lines = request.line_ids.filtered(lambda line: not line.cancelled)
+            if active_lines and all(
+                line._sn_is_purchase_complete() for line in active_lines
+            ):
+                request.button_done()

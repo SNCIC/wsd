@@ -1103,3 +1103,120 @@ msgstr "到货验证日期"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_stock_move_billable_search
 msgid "Receipt Month"
 msgstr "到货月份"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__sn_business_closed
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__purchase_request_line__sn_business_close_status__closed
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+msgid "Business Closed"
+msgstr "业务关闭"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__sn_business_closed
+msgid "Set when the quantity left to purchase is not needed anymore. The line leaves the purchasing pool and the quantity already ordered keeps being received."
+msgstr "采购数量不再需要时设置。该明细行退出采购范围，已下单数量继续收货。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__sn_business_close_status
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+msgid "Business Closed Status"
+msgstr "业务关闭状态"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__sn_business_close_status
+msgid "Business closing state of the line, the one the vendor system reports as the business close status."
+msgstr "明细行的业务关闭状态，与外围系统的业务关闭状态一致。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__purchase_request_line__sn_business_close_status__normal
+msgid "Normal"
+msgstr "正常"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__sn_business_close_date
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+msgid "Business Close Date"
+msgstr "关闭日期"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__sn_business_close_user_id
+msgid "Business Closed by"
+msgstr "关闭人"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__sn_business_close_qty
+msgid "Quantity Closed"
+msgstr "关闭数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__sn_business_close_qty
+msgid "Quantity left to purchase when the line was business closed."
+msgstr "业务关闭时剩余未采购的数量。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__sn_business_close_reason
+msgid "Business Close Reason"
+msgstr "关闭原因"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_request_form_business_close
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_request_line_form_business_close
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_list
+msgid "Close Business"
+msgstr "业务关闭"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_request_form_business_close
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_request_line_form_business_close
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_list
+msgid "Reopen Business"
+msgstr "业务反关闭"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_request_line_form_business_close
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_form
+msgid "Business Closing"
+msgstr "业务关闭"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+msgid "Not Business Closed"
+msgstr "未业务关闭"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/purchase_request.py:0
+msgid "Reopen the business closed line before changing its product or quantity."
+msgstr "请先反关闭该业务关闭的明细行，再修改物料或数量。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/purchase_request.py:0
+msgid "Only open lines of an approved or in-progress request can be business closed."
+msgstr "只有已审核或执行中的请购单中未关闭的明细行才能业务关闭。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/purchase_request.py:0
+msgid "Lines already fully received cannot be business closed."
+msgstr "已全部收料的明细行不能业务关闭。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/purchase_request.py:0
+msgid "The selected lines are not business closed."
+msgstr "所选明细行未业务关闭。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/purchase_request.py:0
+msgid "The selected purchase request lines are business closed and cannot be purchased."
+msgstr "所选请购明细行已业务关闭，无法采购。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/purchase_request.py:0
+msgid "Purchase request line %(line)s is business closed and cannot be purchased."
+msgstr "请购明细行 %(line)s 已业务关闭，无法采购。"
