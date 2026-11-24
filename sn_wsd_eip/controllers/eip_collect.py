@@ -1,7 +1,10 @@
 """Gateway-facing endpoints of the production-data collection service.
 
 Contract (fixed, the EIP gateway depends on it -- do not translate):
-    POST /api/eip/collect/<code>   body: {"amount": <positive int>}
+    POST /api/eip/collect/<code>
+    amount (positive int): in the JSON body {"amount": N} or on the
+        query string ?amount=N (the spec shows the parameter but not
+        where it rides -- both are accepted, body wins)
     reply (HTTP 200, the spec status field carries the outcome):
         {"status": 0, "message": "", "supplierCode": "...", "data": [...]}
     failures use the same shape with "status": 1 and an English message.
@@ -33,11 +36,15 @@ class EipCollectController(http.Controller):
         try:
             body = json.loads(request.httprequest.get_data() or b'{}')
         except (json.JSONDecodeError, UnicodeDecodeError):
-            return self._error(code, None,
-                               'invalid json body, expected utf-8 json')
-        if not isinstance(body, dict):
+            body = None  # tolerate: the amount may ride the query string
+        if body is not None and not isinstance(body, dict):
             return self._error(code, None, 'json body must be an object')
-        amount = body.get('amount')
+        amount = body.get('amount') if isinstance(body, dict) else None
+        if amount is None and kwargs.get('amount') is not None:
+            try:
+                amount = int(str(kwargs['amount']).strip())
+            except (TypeError, ValueError):
+                amount = None
         if isinstance(amount, bool) \
                 or not isinstance(amount, int) or amount < 1:
             return self._error(

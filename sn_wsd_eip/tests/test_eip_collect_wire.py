@@ -23,12 +23,20 @@ class TestEipCollectWire(HttpCase):
         return self.url_open(
             path, data=data, headers={'Content-Type': 'application/json'})
 
-    def test_10_rejects_non_json_body(self):
+    def test_10_rejects_non_json_body_without_amount(self):
+        # a garbage body falls through to the amount check: with no
+        # query amount either, the answer is the amount error
         res = self._post(raw='not-json')
         self.assertEqual(res.status_code, 200)
         body = res.json()
         self.assertEqual(body['status'], 1)
-        self.assertIn('json', body['message'])
+        self.assertIn('amount', body['message'])
+        # with a valid query amount the fetch proceeds (the garbage
+        # body is tolerated, the code lookup decides the outcome)
+        res = self._post(path='/api/eip/collect/9999?amount=5',
+                         raw='not-json')
+        self.assertEqual(res.json()['status'], 1)
+        self.assertIn('unknown or disabled', res.json()['message'])
 
     def test_20_rejects_bad_amount(self):
         for payload in ({}, {'amount': 0}, {'amount': 'ten'},
@@ -50,3 +58,14 @@ class TestEipCollectWire(HttpCase):
         self.assertTrue(log)
         self.assertEqual(log.state, 'error')
         self.assertIn('unknown or disabled', log.error_message)
+
+    def test_40_amount_on_the_query_string(self):
+        """?amount=N rides the URL when the body carries nothing."""
+        res = self._post(path='/api/eip/collect/9999?amount=5')
+        self.assertEqual(res.status_code, 200)
+        body = res.json()
+        self.assertEqual(body['status'], 1)
+        self.assertIn('unknown or disabled', body['message'])
+        res = self._post(path='/api/eip/collect/9999?amount=ten')
+        self.assertEqual(res.json()['status'], 1)
+        self.assertIn('amount', res.json()['message'])
