@@ -1,6 +1,7 @@
 from . import finished_goods_sn
 from . import incoming_material_label
 from . import issue_material_label
+from . import product_product
 from . import product_template
 from . import stock_hold
 from . import stock_location
