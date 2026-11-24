@@ -19,6 +19,7 @@
         'views/eip_value_mapping_views.xml',
         'data/cron_eip.xml',
         'data/cron_eip_order.xml',
+        'data/eip_sequence_data.xml',
         'data/eip_interface_data.xml',
         'data/eip_dictionary_data.xml',
     ],

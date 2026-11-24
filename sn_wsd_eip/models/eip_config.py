@@ -100,3 +100,13 @@ class EipConfig(models.Model):
                 'Maintain it under EIP > Configuration first.',
                 company.display_name))
         return config
+
+    @api.model
+    def _eip_default(self, field_name):
+        """Value of ``field_name`` on the current company's active
+        config (a default for the business forms), or False. Never
+        raises: usable as a field default."""
+        config = self.search([
+            ('company_id', '=', self.env.company.id),
+            ('active', '=', True)], limit=1)
+        return config[field_name] if config else False

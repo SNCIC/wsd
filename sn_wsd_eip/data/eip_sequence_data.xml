@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Document numbers of the pushed documents. One shared sequence
+         per document type; a company-specific sequence with the same
+         code takes precedence for that company. -->
+    <data noupdate="1">
+        <record id="seq_eip_production_order" model="ir.sequence">
+            <field name="name">EIP Production Order</field>
+            <field name="code">sn.wsd.eip.production.order</field>
+            <field name="prefix">IPO</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>
