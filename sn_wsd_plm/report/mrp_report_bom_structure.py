@@ -8,13 +8,14 @@ class ReportMrpReport_Bom_Structure(models.AbstractModel):
 
     def _get_pdf_doc(self, bom_id, data, quantity, product_variant_id=None):
         doc = super()._get_pdf_doc(bom_id, data, quantity, product_variant_id)
-        doc['has_ecos'] = bool(data and data.get('has_ecos'))
+        # The BoM version and ECO columns of the overview stay hidden.
+        doc['has_ecos'] = False
         return doc
 
     def _get_report_data(self, bom_id, searchQty=0, searchVariant=False):
         res = super()._get_report_data(bom_id, searchQty, searchVariant)
-        if self.env.user.has_group('sn_wsd_plm.group_plm_user'):
-            res['has_ecos'] = bool(res['lines']['has_ecos'])
+        # The BoM version and ECO columns of the overview stay hidden.
+        res['has_ecos'] = False
         return res
 
     def _get_bom_data(self, bom, warehouse, product=False, line_qty=False, bom_line=False, level=0, parent_bom=False, parent_product=False, index=0, product_info=False, ignore_stock=False, simulated_leaves_per_workcenter=False):

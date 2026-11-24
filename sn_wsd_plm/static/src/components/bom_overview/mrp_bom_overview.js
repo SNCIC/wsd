@@ -4,12 +4,7 @@ import { BomOverviewComponent } from "@mrp/components/bom_overview/mrp_bom_overv
 patch(BomOverviewComponent.prototype, {
     setup() {
         super.setup();
+        // The BoM version and ECO columns of the overview stay hidden.
         this.state.showOptions.ecos = false;
-    },
-
-    async getBomData() {
-        const bomData = await super.getBomData();
-        this.state.showOptions.ecos = bomData['has_ecos'];
-        return bomData;
     },
 });
