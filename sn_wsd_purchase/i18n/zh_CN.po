@@ -145,22 +145,30 @@ msgid "Buyer:"
 msgstr "买方："
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
 msgid "Supplier:"
 msgstr "供方："
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
 msgid "Address:"
 msgstr "地址："
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
 msgid "Phone:"
 msgstr "电话："
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
 msgid "Bank:"
 msgstr "开户行："
 
@@ -170,17 +178,23 @@ msgid "Account:"
 msgstr "账号："
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
 msgid "Signing Date:"
 msgstr "签订日期："
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
 msgid "Signing Location:"
 msgstr "签订地点："
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
 msgid "Contract No.:"
 msgstr "合同号："
 
@@ -218,8 +232,10 @@ msgid "Specification"
 msgstr "产品规格"
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order_line__brand_id
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
 msgid "Brand"
 msgstr "品牌"
 
@@ -252,13 +268,17 @@ msgid "Total"
 msgstr "含税合计"
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
 msgid "Untaxed Amount"
 msgstr "不含税金额"
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
 msgid "2. Technical Requirements"
 msgstr "二、技术要求"
 
@@ -315,9 +335,11 @@ msgid "of"
 msgstr "页，共"
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_list
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__tax_included_unit_price
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
 msgid "Tax Included Unit Price"
 msgstr "含税单价"
 
@@ -341,9 +363,11 @@ msgid "Unit Price"
 msgstr "含税单价"
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_list
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__tax_included_amount
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
 msgid "Tax Included Amount"
 msgstr "含税金额"
 
@@ -454,7 +478,9 @@ msgid "Contract Attached"
 msgstr "合同已上传"
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
 msgid "VAT Amount"
 msgstr "增值税额"
 
@@ -1220,3 +1246,289 @@ msgstr "所选请购明细行已业务关闭，无法采购。"
 #: code:addons/sn_wsd_purchase/models/purchase_request.py:0
 msgid "Purchase request line %(line)s is business closed and cannot be purchased."
 msgstr "请购明细行 %(line)s 已业务关闭，无法采购。"
+
+#. module: sn_wsd_purchase
+#: model:ir.actions.report,name:sn_wsd_purchase.action_report_purchase_contract_default_docx
+msgid "Default Purchase Contract (Word)"
+msgstr "默认采购合同（Word）"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
+msgid "Purchase and Sales Contract"
+msgstr "购销合同"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
+msgid "Purchaser:"
+msgstr "需方："
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
+msgid "Account No.:"
+msgstr "账号："
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
+msgid "Other remarks:"
+msgstr "其它说明："
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
+msgid "Total Amount (incl. 13% VAT)"
+msgstr "合计金额（含13%增值税）"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
+msgid "(Seal)"
+msgstr "（盖章）"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
+msgid "Authorized Representative:"
+msgstr "委托代理人："
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_docx.py:0
+msgid "Page %s of %s"
+msgstr "第%s页，共%s页"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "The Buyer and the Supplier, in accordance with the principles of equality and mutual benefit, equivalent exchange and unanimity through consultation, hereby agree on the purchase and supply of the products as follows:"
+msgstr "供需双方本着“平等互利、等价有偿、协商一致”的原则，现就有关产品的采购和供应，达成如下协议。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "1. List of the Purchased Products"
+msgstr "一、采购产品的明细表"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "The quality standard of the products shall, in principle, comply with the national, the industrial and the local standards. Where the parties have special requirements on the quality or the technology of the products, those requirements shall be defined in an annex; where there is no special requirement, the standards above apply. Where the parties need to confirm samples, the samples may be sealed jointly by both parties and kept sealed by both parties and by a third party."
+msgstr "该产品质量标准符合国家标准、行业标准、地方标准为原则。若双方对产品质量、技术有特殊要求的，应以附件形式明确；无特别要求的，按上述标准执行。同时，若双方需确认样品的，可采取双方共同封样确认并双方、第三方处进行封样保留。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "3. Delivery Date:"
+msgstr "三、交货日期："
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "The Supplier undertakes to deliver the products on"
+msgstr "供方承诺"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "Year"
+msgstr "年"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "Month"
+msgstr "月"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "Day"
+msgstr "日"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "(the date on which the products pass the incoming inspection prevails)."
+msgstr "交付该批物料。（以产品到货验收合格时间为准）"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "4. Delivery and Assumption of Risk"
+msgstr "四、交货及风险承担"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "The place of delivery is No. 181, Shiyi Road, Economic Development Zone, Yueqing City, Zhejiang Province, and the risk passes once the products reach the place designated by the Buyer and pass its inspection. The delivery note and the factory inspection report shall be provided on delivery, and any transport cost incurred in the process shall be borne by the Supplier."
+msgstr "交货地点为浙江省乐清市经济开发区十一路181号，且风险自到达指定地点，并经过需方验收合格后转移。交货时应提供送货单和出厂检验报告，期间产生运输费用的，由供方承担。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "5. Inspection"
+msgstr "五、验收方式"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "The inspection period for the quantity and the appearance of the products shall be at least 3 working days, and the inspection period for the quality of the products shall be at least 15 working days. In addition, the quality guarantee period shall be at least 1 year from the date of acceptance. During the guarantee period, for any quality problem that is not attributable to the Buyer, the Supplier shall compensate the Buyer for its losses - where the loss is hard to determine, the compensation shall be at least 5,000 yuan - and shall be liable for the repair, the replacement and the return of the goods, all costs of which shall be borne by the Supplier. Where the Buyer raises the issue through the contact details or the agent stated in this contract, the Supplier shall reply within 2 days."
+msgstr "产品数量、外观检验期限不少于3个工作日，产品质量检验期限不少于15个工作日。另外，产品质量保证期不低于1年，自验收合格之日起算，且在质量保证期内，非可归责于需方的原因出现的产品质量问题，供方应当赔偿需方损失（损失难以确定的，赔偿金额不少于5000元），并需承担维修、更换、退货等责任，产生的全部费用由供方承担，需方通过本合同载明的供方联系方式或代理人提出的，供方应在2日内给予回复。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "6. Settlement and Payment"
+msgstr "六、结算与付款"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "1. The parties shall settle and confirm the value of the goods of the week or of the delivery before the 10th day of the month following the month of the payment, or within 7 working days after each delivery;"
+msgstr "1、双方于货款次月10日前/每次到货后7个工作日内，结账确认该周账/次内货值；"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "2. Time of payment: according to the payment term agreed by the parties;"
+msgstr "2、付款时间：以双方约定的账期支付；"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "3. Method of payment: bank transfer or acceptance bill;"
+msgstr "3、付款方式：银行汇款/承兑汇票；"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "4. The Supplier issuing a lawful invoice in full and in advance is a precondition for the payment of the Buyer, and the Supplier shall issue its invoice before the 25th day of the month following the month in which the Buyer receives the goods."
+msgstr "4、供方先行足额开具合法的发票，系需方付款的先决条件，且供方应当在需方收到货物次月25日前开具其发票。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "7. Liability for Breach of Contract"
+msgstr "七、违约责任"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "1. In case of late delivery by the Supplier, including the case where the goods fail the inspection and are returned, replaced or repaired, the Supplier shall, in addition to compensating all the losses of the Buyer, such as a line stop or a failure to deliver to the customer of the Buyer in time, pay the Buyer liquidated damages for the delay, calculated at 0.05% per day on the value of the goods not yet delivered; where the delivery is more than 20 days late, the Buyer has the right to terminate the contract;"
+msgstr "1、供方迟延交货（包含因为货物验收不合格，进行退、换、修的情形），除应当赔偿需方的一切损失（如停线或不能及时向需方客户交货物的情形），还应当向需方支付迟延交付的违约金，以应交未交货物货值为基数，按0.05%/日的比例计算，逾期交货超过20日的，需方有权解除合同；"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "2. The Supplier must guarantee that the products covered by this contract are genuine original products of the brand agreed by the parties. In case of counterfeit, shoddy or unqualified products, the Buyer has the right to terminate the contract unilaterally, to stop the payment and to recover all the payment already made; the Supplier shall compensate the Buyer for all the economic losses arising therefrom and shall pay the Buyer liquidated damages of no less than 25% of the total value of the goods;"
+msgstr "2、供方必须保证本合同涉及产品为双方约定品牌的原厂正品，如果出现假冒伪劣或质量不合格产品，需方有权选择单方解除合同，停止支付并索回已支付的全部货款，由供方赔偿需方因此产生的一切经济损失，且供方还应当向需方支付不少于货值总金额25%的违约金；"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "3. Where the Supplier has to take back the goods because of a failed inspection, a termination of the contract or any other reason, it shall take back the goods returned by the Buyer within three days after receiving the notice of the Buyer; otherwise it shall pay the Buyer a storage fee, which, where hard to determine, shall be calculated at 100 yuan per day, and where this is more than 15 days late, the Supplier shall be deemed to have waived the ownership of the goods and the Buyer has the right to dispose of them;"
+msgstr "3、因产品验收不合格、合同解除等原因，供方应当提回货物的，应当在收到需方通知后三日内提回需方退回的货物，否则应当向需方支付保管费，保管费难以确认的，按100元/日计算，逾期超过15日的，视为供方放弃货物所有权，需方有权自行处置；"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "4. Except as otherwise agreed in this contract, where the Supplier has an amount to refund but fails to do so, it shall refund within three days after receiving the notice of the Buyer; otherwise it shall pay the Buyer liquidated damages or occupation fees calculated at 0.05% per day on the amount to be refunded."
+msgstr "4、除本合同另外约定的情形外，供方有应退未退款项的，应当在收到需方通知后三日内退还，否则应当以应退未退款项为基数按0.05%/日的比例计算违约金或占有使用费并向需方支付。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "8. Disputes Arising from the Performance"
+msgstr "八、执行本合同发生纠纷"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "Any dispute arising from the performance of this contract shall be settled by the parties through timely consultation; where the consultation fails, the dispute shall be filed with the people's court of the place where the Buyer is located. At the same time, the costs incurred by the observant party to protect its lawful rights shall be borne by the breaching party, including but not limited to the attorney fee, the litigation fee, the preservation fee, the guarantee fee, the travel expense, the lost working time and the meal expense. The basic information of the parties and the agents stated in this contract also serve as the valid contact information and contact persons of the parties for the performance of this contract, and any change shall be notified in writing within three days."
+msgstr "执行本合同发生纠纷，当事人双方应当及时协商解决，协商不成时，向需方所在地人民法院提出诉讼。同时，守约方为维护合法权而支出的费用，由违约方一并承担，该费用的范围包括但不限于律师费、诉讼费、保全费、保函费、差旅费、误工费、伙食费等。本合同载明的双方基本信息及代理人，亦作为双方就本合同履行事宜有效的联系信息及联络人，如有变更需在三日内以书面方式通知。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "9. Effectiveness of this Contract"
+msgstr "九、本合同自签订之日起生效"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "This contract takes effect from the date of signing and is valid for two years. Upon expiry, the Buyer may decide whether to extend it for one more year. The faxes and the scanned copies of the contract confirmed by the Buyer in a certain way are valid, and a handwritten part shall not be altered a second time, otherwise it shall be deemed invalid."
+msgstr "本合同自签订之日起生效，有效期为二年。到期后，由需方选择是否再行延期一年。合同经需方以一定方式确认的传真、扫描件均有效，手工填写处不得二次涂改，否则视为无效。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/ir_actions_report.py:0
+msgid "The DOCX export requires the python-docx library. Install it on the server: pip install python-docx"
+msgstr "DOCX 导出需要 python-docx 库，请在服务器上安装：pip install python-docx"
+
+#. module: sn_wsd_purchase
+#: model:ir.actions.report,name:sn_wsd_purchase.action_report_purchase_contract_docx
+msgid "Xinpeng Purchase Contract (Word)"
+msgstr "信平采购合同（Word）"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "The products shall be accepted according to the technical agreement and the drawings signed by the two parties; where there is no special agreement, the national and the industrial standards apply."
+msgstr "按照供需双方签订的技术协议、产品图纸验收要求，如无特殊约定按国家标准、行业标准验收。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "4. Place of Performance: the place of performance of this contract is Yueqing City, Zhejiang Province."
+msgstr "四、履约地：本合同的履约地为浙江省乐清市。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "5. Place of Delivery: □ the warehouse of the Buyer □ the forwarding office. The delivery note and the factory inspection report shall be provided on delivery."
+msgstr "五、交货地点：□需方仓库　□托运部。交货时应提供送货单和出厂检验报告。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "6. Inspection: the goods shall be inspected within 3 days after arrival; any doubt shall be raised to the Supplier within 10 days, and the Supplier shall reply within 2 days."
+msgstr "六、验收方式：货到3天内验收，如有疑问10日内向供方提出；供方应在2日内给予回复。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "7. Method of Payment: ____ monthly settlement / ____ telegraphic transfer / ____ acceptance bill (Buyer); the invoice of a monthly settlement shall be provided before the 25th day of the month following the arrival."
+msgstr "七、付款方式：____月结/____电汇/____承兑汇票（需方）；月结发票应在到货后次月25日前提供。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "8. Liability for Breach of Contract:"
+msgstr "八、违约责任："
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "1. The Supplier must guarantee that the products covered by this contract are genuine products of the brand agreed by the parties. In case of counterfeit, shoddy or unqualified products, the Buyer has the right to terminate the contract unilaterally, to stop the payment and to recover the payment already made; the Supplier shall compensate the Buyer for all the economic losses arising therefrom;"
+msgstr "1、供方必须保证本合同涉及产品为双方约定品牌的正品，如果出现假冒伪劣或质量不合格产品，需方有权选择单方解除合同，停止支付并索回已支付的货款，由供方赔偿需方因此产生的一切经济损失；"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "2. Where a quality problem or a defect of the products supplied by the Supplier, or a delay of the delivery, causes any economic loss to the Buyer, such as a line stop or a failure to deliver to the customer of the Buyer in time, the Supplier shall be liable for the compensation;"
+msgstr "2、由于供方供应的产品质量出现问题或瑕疵或交货延迟，致使需方待置信或不能及时向客户交货而造成的一切经济损失，应由供方负责赔偿；"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "3. Any dispute arising from the performance of this contract shall be settled by the parties through timely consultation; where the consultation fails, the dispute shall be filed with the people's court of the place where the Buyer is located."
+msgstr "3、执行本合同发生纠纷，当事人双方应当及时协商解决，协商不成时，向需方所在地人民法院提起诉讼。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/purchase_contract_document.py:0
+msgid "9. Validity of the Contract: this contract takes effect from the date of signing and is valid for one year. The faxes and the scanned copies of the contract confirmed by the Buyer in a certain way are valid, and a handwritten part shall not be altered a second time, otherwise it shall be deemed invalid."
+msgstr "九、合同有效期：本合同自签订之日起生效，有效期为一年。经需方以一定方式确认的传真、扫描件均有效，手工填写处不得二次涂改，否则视为无效。"

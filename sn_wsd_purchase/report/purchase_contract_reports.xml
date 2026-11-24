@@ -25,4 +25,33 @@
         <field name="binding_type">report</field>
         <field name="binding_view_types">list,form</field>
     </record>
+
+    <!-- Editable Word copy of the two contracts above: the purchasing team
+         retypes a value in Word and prints the file. The report type is handled
+         by models/ir_actions_report.py, which picks the flavour of the contract
+         from the report name, and downloaded by
+         static/src/js/office_report_handler.js. -->
+    <record id="action_report_purchase_contract_default_docx" model="ir.actions.report">
+        <field name="name">Default Purchase Contract (Word)</field>
+        <field name="model">purchase.order</field>
+        <field name="report_type">docx</field>
+        <field name="report_name">sn_wsd_purchase.report_purchase_contract_default_docx</field>
+        <field name="report_file">sn_wsd_purchase.report_purchase_contract_default_docx</field>
+        <field name="print_report_name">'Default Purchase Contract - %s' % (object.contract_number or object.name)</field>
+        <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+        <field name="binding_type">report</field>
+        <field name="binding_view_types">list,form</field>
+    </record>
+
+    <record id="action_report_purchase_contract_docx" model="ir.actions.report">
+        <field name="name">Xinpeng Purchase Contract (Word)</field>
+        <field name="model">purchase.order</field>
+        <field name="report_type">docx</field>
+        <field name="report_name">sn_wsd_purchase.report_purchase_contract_docx</field>
+        <field name="report_file">sn_wsd_purchase.report_purchase_contract_docx</field>
+        <field name="print_report_name">'Xinpeng Purchase Contract - %s' % (object.contract_number or object.name)</field>
+        <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+        <field name="binding_type">report</field>
+        <field name="binding_view_types">list,form</field>
+    </record>
 </odoo>
