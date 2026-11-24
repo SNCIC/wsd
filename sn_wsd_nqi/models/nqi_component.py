@@ -6,7 +6,9 @@ class NqiComponent(models.Model):
     public info workbook. Component codes are referenced by the meter
     component binding table and the purchase chapter rows."""
     _name = 'sn.wsd.nqi.component'
+    _inherit = ['sn.wsd.nqi.dictionary.mixin']
     _description = 'NQI Component Info'
+    _nqi_import_key = ('code',)
     _order = 'code, id'
     _rec_name = 'name'
 

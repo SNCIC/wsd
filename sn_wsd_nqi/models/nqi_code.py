@@ -6,7 +6,9 @@ class NqiCodeSort(models.Model):
     NQI-issued public info workbook. Global reference data, shared
     across companies (no company_id, like other plain dictionaries)."""
     _name = 'sn.wsd.nqi.code.sort'
+    _inherit = ['sn.wsd.nqi.dictionary.mixin']
     _description = 'NQI Code Sort'
+    _nqi_import_key = ('code_type',)
     _order = 'code_sort_id, id'
     _rec_name = 'name'
 
@@ -26,7 +28,9 @@ class NqiCode(models.Model):
     NQI-issued public info workbook. Every P_CODE-typed mirror column
     points here with a domain on ``code_type``."""
     _name = 'sn.wsd.nqi.code'
+    _inherit = ['sn.wsd.nqi.dictionary.mixin']
     _description = 'NQI Code'
+    _nqi_import_key = ('code_type', 'code_id')
     _order = 'code_type, code_id, id'
 
     code_id = fields.Char(string='Code ID', required=True, index=True)

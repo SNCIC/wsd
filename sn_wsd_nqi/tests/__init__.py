@@ -5,3 +5,4 @@ from . import test_nqi_push
 from . import test_nqi_transport
 from . import test_nqi_callback
 from . import test_nqi_fullflow
+from . import test_nqi_dictionary

@@ -31,7 +31,9 @@ class NqiConfig(models.Model):
         [('none', 'None'), ('bearer', 'Bearer Token'),
          ('api_key', 'API Key'), ('basic', 'Basic Auth')],
         string='Auth Type', default='bearer', required=True)
-    api_token = fields.Char(string='API Token', copy=False)
+    api_token = fields.Char(
+        string='API Token', copy=False,
+        groups='sn_wsd_nqi.group_nqi_manager')
     timeout_sec = fields.Integer(
         string='Timeout (seconds)', default=30, required=True)
     retry_times = fields.Integer(
