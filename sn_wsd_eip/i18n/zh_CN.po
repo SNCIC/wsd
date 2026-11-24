@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 09:17+0000\n"
-"PO-Revision-Date: 2026-11-02 09:17+0000\n"
+"POT-Creation-Date: 2026-11-24 05:23+0000\n"
+"PO-Revision-Date: 2026-11-24 05:23+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -28,10 +28,110 @@ msgid "%(field)s does not belong to interface %(code)s."
 msgstr "%(field)s 不属于接口 %(code)s。"
 
 #. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_interface_form
+msgid "/api/supplier-so"
+msgstr "/api/supplier-so"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_production_order__ipo_type
+msgid "0 is the default value and can be ignored."
+msgstr "0 为缺省值，可以无视。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__po_item_no
+msgid "0010, 0020, 0030... for the first, second, third line."
+msgstr "0010、0020、0030 分别对应第一行、第二行、第三行。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_purchase_order__con_type
+msgid "1 standard contract, 2 framework stock, 3 purchase supply note."
+msgstr "1 标准合同；2 协议库存；3 采购供货单。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_production_order__data_type
+msgid ""
+"1: the line ID field holds a grid purchase order line ID; 2: it holds the "
+"sales order number."
+msgstr "1：行项目 ID 字段存国网采购订单行项目 ID；2：存销售订单号。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_supply_note
+msgid ""
+"A contract / supply note received outside ECP; on a\n"
+"                successful push the platform returns the line IDs."
+msgstr "合同/供货单未在 ECP 流转时收到的供货信息；推送成功后平台返回行项目 ID。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_next_attempt_at
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_next_attempt_at
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_next_attempt_at
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_next_attempt_at
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_next_attempt_at
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_push_queue__next_attempt_at
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_next_attempt_at
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_next_attempt_at
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_next_attempt_at
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_next_attempt_at
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_next_attempt_at
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_next_attempt_at
+msgid "A pending row is claimed only after this instant."
+msgstr "待推送行到这一时刻之后才会被认领。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_synced
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_synced
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_synced
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_synced
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_synced
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_synced
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_synced
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_synced
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_synced
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_synced
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_synced
+msgid ""
+"A push already succeeded: the next one is an UPDATE and the keys locating "
+"the document can no longer change."
+msgstr "已推送成功过：下次推送是 UPDATE，且定位键不能再改。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__active
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__active
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__active
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__active
 msgid "Active"
 msgstr "启用"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__actual_period
+msgid "Actual Duration"
+msgstr "实际工期"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__actual_finish_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__actual_finish_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__actual_finish_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__actual_finish_date
+msgid "Actual Finish"
+msgstr "实际完成日期"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__actual_finish_time
+msgid "Actual Finish Time"
+msgstr "实际结束时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__actual_start_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__actual_start_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__actual_start_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__actual_start_date
+msgid "Actual Start"
+msgstr "实际开始日期"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__actual_start_time
+msgid "Actual Start Time"
+msgstr "实际开始时间"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__actual_value
@@ -61,6 +161,10 @@ msgid "Allowable Error"
 msgstr "允许误差"
 
 #. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_config_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_config_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_interface_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_interface_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_operation_mapping_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_value_mapping_form
 msgid "Archived"
@@ -71,6 +175,22 @@ msgstr "已归档"
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__asset_management_no
 msgid "Asset Management No"
 msgstr "资产管理编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_retry_count
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_retry_count
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_retry_count
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_retry_count
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_retry_count
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_push_queue__retry_count
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_retry_count
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_retry_count
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_retry_count
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_retry_count
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_retry_count
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_retry_count
+msgid "Automatic retries already used by this row."
+msgstr "该队列行已用掉的自动重试次数。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__average_error
@@ -85,10 +205,85 @@ msgid "Average Error Type"
 msgstr "平均误差类型"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__base_url
+msgid "Base URL"
+msgstr "接口根地址"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory_line__product_lot
+msgid "Batch No."
+msgstr "批次号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory_line__product_amount
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory_line__product_amount
+msgid "Batch Remaining Quantity"
+msgstr "当前批次剩余数量"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__line_ids
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_finished_inventory_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_spare_inventory_form
+msgid "Batches"
+msgstr "批次"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__current_value
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__current_value
 msgid "Battery Current (uA)"
 msgstr "电池电流（μA）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pull_state__calls_date
+msgid "Beijing calendar day of the counter."
+msgstr "计数所属的北京时间自然日。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__bid_bat_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__bid_bat_code
+msgid "Bidding Batch No."
+msgstr "招标批次号"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_push.py:0
+msgid ""
+"Cannot change %s: the document was already pushed to EIP and these keys "
+"locate it there."
+msgstr "不能修改 %s：单据已推送至 EIP，这些字段是在对端定位它的键。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__cargo_name
+msgid "Cargo Name"
+msgstr "货物名称"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_category
+msgid "Categories"
+msgstr "品类编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_subclass__category_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_subclass_search
+msgid "Category"
+msgstr "品类"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__category_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__category_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__category_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__category_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__category_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__category_id
+msgid "Category Code"
+msgstr "品类编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__default_category_id
+msgid "Category code default on business forms."
+msgstr "业务表单上品类编码的默认值。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__check_duration
@@ -102,17 +297,98 @@ msgid "Check Time"
 msgstr "检验时间"
 
 #. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_preview_form
+msgid "Close"
+msgstr "关闭"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_category__code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_code__code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_subclass__code
+msgid "Code"
+msgstr "编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__company_id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__company_id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__company_id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__company_id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__company_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_config_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_material_mapping_search
 msgid "Company"
 msgstr "公司"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_snapshot
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_snapshot
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_snapshot
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_snapshot
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_snapshot
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_snapshot
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_snapshot
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_snapshot
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_snapshot
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_snapshot
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_snapshot
+msgid ""
+"Complete values at the time of the last successful push; the UPDATE payload "
+"is the difference against it."
+msgstr "上次推送成功时的完整取值；UPDATE 报文按它与当前取值的差异生成。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pull_state__last_run_reason__done
+msgid "Completed"
+msgstr "已完成"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__conclusion
 msgid "Conclusion"
 msgstr "检测结论"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_push_queue__config_id
+msgid ""
+"Config known when the row was queued; the worker resolves the current config"
+" of the document company."
+msgstr "入队时记录的对接配置；worker 会按单据公司重新解析当前配置。"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_config
+msgid "Configuration"
+msgstr "配置"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_config_form
+msgid "Connection"
+msgstr "连接"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__constant_temperature_zone
@@ -121,10 +397,89 @@ msgid "Constant Temperature Zone (C)"
 msgstr "恒温区（℃）"
 
 #. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_purchase_order_line_form
+msgid "Contract"
+msgstr "合同"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__con_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__con_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__con_name
+msgid "Contract Name"
+msgstr "合同名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__con_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__con_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__con_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__con_code
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_purchase_order_line_search
+msgid "Contract No."
+msgstr "合同编号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__seller_con_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__seller_con_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__seller_con_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__seller_con_code
+msgid "Contract No. (Legal System)"
+msgstr "合同编号（国网经法）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__pkg_no
+msgid "Contract Package No."
+msgstr "合同包号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__seller_sign_start_time
+msgid "Contract Signed From"
+msgstr "合同签订起"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__seller_sign_end_time
+msgid "Contract Signed To"
+msgstr "合同签订止"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__seller_sign_time
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__seller_sign_time
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__seller_sign_time
+msgid "Contract Signing Date"
+msgstr "合同签订日期"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__con_type
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__con_type
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__con_type
+msgid "Contract Type"
+msgstr "合同类型"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_purchase_order__seller_con_code
+msgid "Contract number of the State Grid legal system."
+msgstr "国网经法系统的合同编号。"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__cooling_zone
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__cooling_zone
 msgid "Cooling Zone (C)"
 msgstr "冷却区（℃）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__calls_date
+msgid "Counted On"
+msgstr "计数日期"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_process_work__inside_no
+msgid "Counted as 0 by the platform when empty."
+msgstr "供应商没有传时对端默认为 0。"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.server,name:sn_wsd_eip.action_eip_purchase_order_line_queue
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_purchase_order_line_form
+msgid "Create Production Orders"
+msgstr "创建生产订单"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__create_time
@@ -132,20 +487,202 @@ msgid "Create Time"
 msgstr "创建时间"
 
 #. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_form
+msgid "Create Work Order"
+msgstr "创建生产工单"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_production_order
+msgid ""
+"Create one by hand or from a grid purchase order line;\n"
+"                push it to the EIP platform when it is complete."
+msgstr "手工创建或从国网采购订单行创建；填写完整后推送到 EIP 平台。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_work_order
+msgid ""
+"Create one by hand or from a production order; work\n"
+"                orders carry the shop-floor level of the EIP chain."
+msgstr "手工创建或从生产订单创建；生产工单是 EIP 链条上的车间级。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_config
+msgid "Create the EIP integration config for your company"
+msgstr "为本公司创建 EIP 对接配置"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_production_order__ipo_status__1
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_work_order__wo_status__1
+msgid "Created"
+msgstr "创建"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_category__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__create_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__create_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__create_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_code__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_preview__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_subclass__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__create_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__create_uid
 msgid "Created by"
 msgstr "创建人"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_category__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__create_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__create_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__create_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_code__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_preview__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_subclass__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__create_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__create_date
 msgid "Created on"
 msgstr "创建时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_queue_id
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_queue_id
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_queue_id
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_queue_id
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_queue_id
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_queue_id
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_queue_id
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_queue_id
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_queue_id
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_queue_id
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_queue_id
+msgid "Current (or last) queue entry of this document."
+msgstr "该单据当前（或最近）的推送队列行。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pull_state__last_run_reason__quota
+msgid "Daily Limit Reached"
+msgstr "已达当日限额"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_state_form
+msgid "Daily Quota"
+msgstr "当日限额"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_pull.py:0
+msgid ""
+"Daily pull limit reached (%(used)s/%(limit)s). The pull resumes from page "
+"%(page)s."
+msgstr "已达当日拉取限额（%(used)s/%(limit)s），下次从第 %(page)s 页继续。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__owner_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__owner_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__owner_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__owner_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__owner_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__owner_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__owner_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__owner_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__owner_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__owner_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__owner_code
+msgid "Data Owner"
+msgstr "数据拥有方"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_push.py:0
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory_line__data_source
+msgid "Data Source"
+msgstr "数据来源"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__open_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__open_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__open_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__open_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__open_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__open_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__open_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__open_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__open_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__open_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__open_code
+msgid "Data Viewer"
+msgstr "数据可见方"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_production_order__ipo_type__0
+msgid "Default"
+msgstr "缺省"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__default_category_id
+msgid "Default Category"
+msgstr "默认品类编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__default_subclass_id
+msgid "Default Subclass"
+msgstr "默认种类编码"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_config_form
+msgid "Defaults"
+msgstr "默认值"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record__state__delivered
@@ -153,9 +690,19 @@ msgid "Delivered"
 msgstr "已交付"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__due_date
+msgid "Delivery Date"
+msgstr "交付日期"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__device_no
 msgid "Device No"
 msgstr "设备编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__device_no
+msgid "Device No."
+msgstr "设备编号"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__source_kind__device_zone
@@ -173,15 +720,147 @@ msgid "Device report this row was enriched from (report channel)."
 msgstr "该行补挂数据来源的设备报文（报文通道）。"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_config__update_mode__diff
+msgid "Diff"
+msgstr "差量"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__update_mode
+msgid ""
+"Diff sends only changed fields on UPDATE; Full always sends the complete "
+"envelope."
+msgstr "差量：UPDATE 只发有变化的字段；全量：每次都发完整报文。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__direction
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_interface_search
+msgid "Direction"
+msgstr "方向"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__active
+msgid ""
+"Disable instead of deleting: logs must stay able to trace the config a call "
+"was made under."
+msgstr "停用而不是删除：日志要能追溯每次调用当时用的配置。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_interface__active
+msgid "Disabled interfaces are never called."
+msgstr "停用的接口不会被调用。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_category__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_code__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_worker__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_line_mixin__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_mixin__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_preview__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_worker__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_subclass__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_transport__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mixin__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result_detail__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_serial_operation_history__display_name
 msgid "Display Name"
 msgstr "显示名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__document_ref
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_preview__document_ref
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__document_ref
+msgid "Document"
+msgstr "单据"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__res_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__res_id
+msgid "Document ID"
+msgstr "单据 ID"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__model_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__model_name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_queue_search
+msgid "Document Model"
+msgstr "单据模型"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_push_queue.py:0
+msgid "Document deleted."
+msgstr "单据已删除。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__push_batch_size
+msgid "Documents pushed in one queue run, per company."
+msgstr "每家公司每轮队列运行的推送单据数。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_push_queue__state__done
+msgid "Done"
+msgstr "完成"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_entity_id__push_state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_finished_inventory__push_state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_process_work__push_state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_production_order__push_state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_push_mixin__push_state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_raw_inventory__push_state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_sale_order__push_state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_schedule__push_state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_spare_inventory__push_state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_supply_note__push_state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_work_order__push_state__draft
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_search
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__duration_ms
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__duration_ms
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__duration_ms
+msgid "Duration (ms)"
+msgstr "耗时（毫秒）"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_root
+msgid "EIP"
+msgstr "EIP"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__check_time
@@ -199,6 +878,21 @@ msgid "EIP CREATE_TIME: when the row entered the MES."
 msgstr "EIP CREATE_TIME：入 MES 的时间。"
 
 #. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_call_log_mixin
+msgid "EIP Call Log Common Fields"
+msgstr "EIP 调用日志公共字段"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_category
+msgid "EIP Categories"
+msgstr "EIP 品类编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_category
+msgid "EIP Category"
+msgstr "EIP 品类编码"
+
+#. module: sn_wsd_eip
 #: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_pass_record_line
 msgid "EIP Collection Record Line"
 msgstr "EIP 数采记录明细"
@@ -208,12 +902,42 @@ msgstr "EIP 数采记录明细"
 msgid ""
 "EIP DEVICE_NO: device chain -- report device code, else the work-center "
 "equipment code, else the work-center code."
-msgstr ""
+msgstr "EIP DEVICE_NO：设备三级链——报文设备编码，其次工位设备编码，最后工位编码。"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_entity_id
+msgid "EIP Entity ID"
+msgstr "EIP 实物ID"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__eip_field
 msgid "EIP Field"
 msgstr "EIP 字段"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_finished_inventory
+msgid "EIP Finished Goods Inventory"
+msgstr "EIP 产成品库存"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_finished_inventory_line
+msgid "EIP Finished Goods Inventory Line"
+msgstr "EIP 产成品库存明细"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_purchase_order
+msgid "EIP Grid Purchase Order"
+msgstr "EIP 国网采购订单"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_purchase_order_line
+msgid "EIP Grid Purchase Order Line"
+msgstr "EIP 国网采购订单行"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_transport
+msgid "EIP HTTP Transport"
+msgstr "EIP HTTP 传输"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__info_type_code
@@ -227,10 +951,50 @@ msgid "EIP Info Type Code"
 msgstr "EIP 工序编码"
 
 #. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_config.py:0
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_config
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_config
+msgid "EIP Integration Config"
+msgstr "EIP 对接配置"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_interface
+msgid "EIP Interface"
+msgstr "EIP 接口地址"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_interface
+msgid "EIP Interfaces"
+msgstr "EIP 接口地址"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__model_code
 msgid ""
 "EIP MODEL_CODE: product specification, falling back to the drawing number."
-msgstr ""
+msgstr "EIP MODEL_CODE：产品规格型号，为空时取图号。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__eip_material_code
+msgid "EIP Material Code"
+msgstr "EIP 物料编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_material_mapping
+msgid "EIP Material Mapping"
+msgstr "EIP 物料对照"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_material_mapping
+msgid "EIP Material Mappings"
+msgstr "EIP 物料对照"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__status_message
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__status_message
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__status_message
+msgid "EIP Message"
+msgstr "EIP 提示"
 
 #. module: sn_wsd_eip
 #: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_operation_mapping
@@ -248,7 +1012,7 @@ msgstr "EIP 工序编码"
 msgid ""
 "EIP PCB_CODE: the SN itself (empty for 1011, the aging interface has no "
 "board identity)."
-msgstr ""
+msgstr "EIP PCB_CODE：SN 本身（1011 留空，老化接口没有板卡身份）。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__production_order_no
@@ -256,9 +1020,156 @@ msgid "EIP PRODUCTION_ORDER_ID: manufacturing order name snapshot."
 msgstr "EIP PRODUCTION_ORDER_ID：制造订单号快照。"
 
 #. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_value_mixin
+msgid "EIP Payload Value Mixin"
+msgstr "EIP 报文取值 Mixin"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_process_code
+msgid "EIP Process Code"
+msgstr "EIP 工序编码"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_process_code
+msgid "EIP Process Codes"
+msgstr "EIP 工序编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_process_work
+msgid "EIP Process Work Report"
+msgstr "EIP 报工信息"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_production_order
+msgid "EIP Production Order"
+msgstr "EIP 生产订单"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_schedule
+msgid "EIP Production Schedule"
+msgstr "EIP 排产计划"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_pull_log
+msgid "EIP Pull Log"
+msgstr "EIP 拉取日志"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_pull_wizard
+msgid "EIP Pull Purchase Orders Wizard"
+msgstr "EIP 拉取采购订单向导"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_pull_state
+msgid "EIP Purchase Order Pull State"
+msgstr "EIP 采购订单拉取状态"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_pull_worker
+msgid "EIP Purchase Order Pull Worker"
+msgstr "EIP 采购订单拉取服务"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_push_line_mixin
+msgid "EIP Push Line Mixin"
+msgstr "EIP 推送行 Mixin"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_push_log
+msgid "EIP Push Log"
+msgstr "EIP 推送日志"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_push_mixin
+msgid "EIP Push Mixin"
+msgstr "EIP 推送 Mixin"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_push_preview
+msgid "EIP Push Payload Preview"
+msgstr "EIP 报文预览"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_push_queue
+msgid "EIP Push Queue"
+msgstr "EIP 推送队列"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_push_worker
+msgid "EIP Push Queue Worker"
+msgstr "EIP 推送队列服务"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_raw_inventory
+msgid "EIP Raw Material Inventory"
+msgstr "EIP 重点原材料库存"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_raw_inventory_line
+msgid "EIP Raw Material Inventory Line"
+msgstr "EIP 重点原材料库存明细"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_sale_order
+msgid "EIP Sale Order"
+msgstr "EIP 销售订单"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_sale_order_line
+msgid "EIP Sale Order Line"
+msgstr "EIP 销售订单行"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_schedule_process
+msgid "EIP Schedule Process"
+msgstr "EIP 排产计划工序"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_schedule_wo
+msgid "EIP Schedule Work Order"
+msgstr "EIP 排产计划工单"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_spare_inventory
+msgid "EIP Spare Parts Inventory"
+msgstr "EIP 备品备件库存"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_spare_inventory_line
+msgid "EIP Spare Parts Inventory Line"
+msgstr "EIP 备品备件库存明细"
+
+#. module: sn_wsd_eip
 #: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_pass_record
 msgid "EIP Station Pass Collection Record"
 msgstr "EIP 过站数采记录"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__status_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__status_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__status_code
+msgid "EIP Status"
+msgstr "EIP 状态码"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_subclass
+msgid "EIP Subclass"
+msgstr "EIP 种类编码"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_subclass
+msgid "EIP Subclasses"
+msgstr "EIP 种类编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_supply_note
+msgid "EIP Supply Note"
+msgstr "EIP 供货单"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_supply_note_line
+msgid "EIP Supply Note Line"
+msgstr "EIP 供货单行"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__test_code
@@ -275,7 +1186,7 @@ msgstr "EIP TEST_NAME：工序名称。"
 msgid ""
 "EIP UPLOAD_TIME: stamped when the collection system takes the row (pull "
 "endpoint, separate project)."
-msgstr ""
+msgstr "EIP UPLOAD_TIME：被采集系统取走时回填（拉取端点另行立项）。"
 
 #. module: sn_wsd_eip
 #: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_value_mapping
@@ -294,9 +1205,67 @@ msgid "EIP WORK_ORDER_CODE: MES order name snapshot."
 msgstr "EIP WORK_ORDER_CODE：制令单号快照。"
 
 #. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_work_order
+msgid "EIP Work Order"
+msgstr "EIP 生产工单"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_interface.py:0
+msgid "EIP interface \"%s\" is disabled."
+msgstr "EIP 接口\"%s\"已停用。"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_interface.py:0
+msgid "EIP interface \"%s\" is not configured."
+msgstr "EIP 接口\"%s\"未配置。"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.server,name:sn_wsd_eip.ir_cron_eip_daily_inventory_ir_actions_server
+msgid "EIP: Daily Inventory Re-push"
+msgstr "EIP: 库存每日重推"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.server,name:sn_wsd_eip.ir_cron_eip_pull_purchase_order_ir_actions_server
+msgid "EIP: Pull Grid Purchase Orders"
+msgstr "EIP: 拉取国网采购订单"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.server,name:sn_wsd_eip.ir_cron_eip_push_queue_ir_actions_server
+msgid "EIP: Push Queue"
+msgstr "EIP: 推送队列"
+
+#. module: sn_wsd_eip
 #: model:ir.actions.server,name:sn_wsd_eip.ir_cron_eip_value_backfill_ir_actions_server
 msgid "EIP: backfill pending collection values"
 msgstr "EIP：补采待拉取数值"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__end_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__end_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__end_at
+msgid "Ended At"
+msgstr "结束时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__entity_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__entity_no
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__entity_code
+msgid "Entity ID"
+msgstr "实物ID"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_entity_id
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_entity_id
+msgid "Entity IDs"
+msgstr "实物ID"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__entity_status
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_entity_id_search
+msgid "Entity Status"
+msgstr "实物生产状态"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__equipment_id
@@ -304,15 +1273,250 @@ msgid "Equipment"
 msgstr "设备"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__error
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__error
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__error
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_log_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_log_form
+msgid "Error"
+msgstr "错误"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_production_order__ipo_status__4
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_work_order__wo_status__4
+msgid "Factory Test"
+msgstr "出厂试验"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_call_log_mixin__result__failed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_entity_id__push_state__failed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_finished_inventory__push_state__failed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_process_work__push_state__failed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_production_order__push_state__failed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pull_log__result__failed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_push_log__result__failed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_push_mixin__push_state__failed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_push_queue__state__failed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_raw_inventory__push_state__failed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_sale_order__push_state__failed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_schedule__push_state__failed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_spare_inventory__push_state__failed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_supply_note__push_state__failed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_work_order__push_state__failed
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_log_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_log_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_queue_search
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_pull.py:0
+msgid ""
+"Fill at least one condition for a targeted pull, or use the incremental "
+"mode."
+msgstr "定向拉取至少要填一个条件，或改用增量拉取。"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_finished_inventory
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_finished_inventory
+msgid "Finished Goods"
+msgstr "产成品库存"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory_line__inventory_id
+msgid "Finished Product"
+msgstr "产成品"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_first_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_first_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_first_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_first_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_first_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_first_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_first_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_first_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_first_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_first_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_first_push_at
+msgid "First Pushed On"
+msgstr "首次推送时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__pull_start_date
+msgid "First-sync start date; empty = no update-time condition."
+msgstr "首次全量拉取的起始日期；留空 = 不带更新时间条件。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__ext_des
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_purchase_order_line_form
+msgid "Fixed ID Description"
+msgstr "固化ID描述"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__fixed_tech_id
+msgid "Fixed Technical ID"
+msgstr "采购技术固化ID"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_supply_note__con_type__2
+msgid "Framework Stock"
+msgstr "协议库存"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__mat_code
+msgid "From the list the EIP platform provides."
+msgstr "取自 EIP 提供的清单。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_config__update_mode__full
+msgid "Full"
+msgstr "全量"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_finished_inventory_line__data_source__1
+msgid "Gateway"
+msgstr "网关"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_purchase_order_line_form
+msgid "Grid Material Classes"
+msgstr "国网物资分类"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__mat_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__eip_material_code
+msgid "Grid Material Code"
+msgstr "国网侧物资编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__eip_material_desc
+msgid "Grid Material Description"
+msgstr "国网侧物料描述"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__purchase_line_id
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_production_order__data_type__1
+msgid "Grid Purchase Order Line"
+msgstr "国网采购订单行"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__po_item_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__po_item_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__po_item_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__po_item_id
+msgid "Grid Purchase Order Line ID"
+msgstr "国网采购订单行项目 ID"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory_line__po_no
+msgid "Grid Purchase Order No."
+msgstr "国网采购订单编码"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_purchase_order_line
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_purchase_order
+msgid "Grid Purchase Orders"
+msgstr "国网采购订单"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_purchase_order
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_purchase_order_header
+msgid "Grid Purchase Orders (Headers)"
+msgstr "国网采购订单（订单头）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__http_status
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__http_status
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__http_status
+msgid "HTTP Status"
+msgstr "HTTP 状态码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__pull_overlap_hours
+msgid "Hours re-pulled before the watermark to catch late updates."
+msgstr "每次增量向前重复拉取的小时数，用于兜住晚到的更新。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_push_queue__document_ref
+msgid "Human-readable key of the document (order number)."
+msgstr "单据的可读键（单号）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_push_log__document_ref
+msgid "Human-readable key of the pushed document (order number)."
+msgstr "被推单据的可读键（单号）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_category__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory_line__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_code__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_worker__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_line_mixin__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_mixin__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_preview__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_worker__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory_line__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory_line__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_subclass__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_transport__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mixin__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result_detail__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_serial_operation_history__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_production_order__po_item_id
+msgid ""
+"ID EIP generated for the purchase order line (or the supply note line) this "
+"order is produced for."
+msgstr "本订单对应国网采购订单行项目（或供货单行项目）的 EIP 生成 ID。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__po_item_id
+msgid ""
+"ID EIP generated for this line item; the only key the other interfaces use "
+"to link to it."
+msgstr "EIP 为该行项目生成的唯一 ID；其余接口挂接数据的唯一依据。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__eip_item_id
+msgid ""
+"ID EIP generated for this line; usable as the line ID of later interfaces."
+msgstr "EIP 为该行生成的行项目 ID；后续接口推送时可用它挂接。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__info_code
@@ -322,6 +1526,55 @@ msgid ""
 "1006 basic error, 1007 basic error detail, 1008 parameter setting, 1009 "
 "reflow, 1010 wave soldering, 1011 high-temp aging."
 msgstr ""
+"电能表 EIP 规范 v2.0 的 INFO_TYPE_CODE：1001 AOI、1002 耐压、1003 FCT、1004 日计时误差、1005 "
+"电池电流、1006 基本误差、1007 基本误差详情、1008 参数设置、1009 回流焊、1010 波峰焊接、1011 高温老化。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_config_form
+msgid "Identity"
+msgstr "身份"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_entity_id__entity_status__1
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_production_order__ipo_status__3
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_work_order__wo_status__3
+msgid "In Production"
+msgstr "生产中（包含原材料检验）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory_line__batch_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory_line__batch_code
+msgid "Incoming Batch No."
+msgstr "入库批次号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_raw_inventory_form
+msgid "Incoming Batches"
+msgstr "入库批次"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_production_order__ipo_status__2
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_work_order__wo_status__2
+msgid "Incoming Inspection"
+msgstr "原材料检验"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pull_wizard__mode__incremental
+msgid "Incremental"
+msgstr "增量拉取"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_state_form
+msgid "Incremental Window"
+msgstr "增量窗口"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__mode
+msgid ""
+"Incremental runs the same pull as the scheduled job. Targeted pulls what the"
+" conditions below match and leaves the watermark untouched."
+msgstr "增量拉取与定时任务完全相同；定向拉取按下方的条件取数，不影响水位。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__info_type_code
@@ -332,11 +1585,56 @@ msgid "Info Type Code"
 msgstr "工序编码"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__config_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__config_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__config_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__config_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__config_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__config_id
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_config_entry
+msgid "Integration Config"
+msgstr "对接配置"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__interface_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__interface_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__interface_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_preview__interface_name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_log_search
+msgid "Interface"
+msgstr "接口"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__base_url
+msgid "Interface root address, e.g. https://host:port."
+msgstr "接口根地址，如 https://host:port。"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_value_mapping__info_type_code
 msgid ""
 "Interface the mapped EIP field belongs to (see the operation code mapping "
 "for the code list)."
-msgstr ""
+msgstr "映射的 EIP 字段所属接口（编码清单见工序编码映射）。"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_interface
+msgid "Interfaces"
+msgstr "接口地址"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_inventory
+msgid "Inventory Data"
+msgstr "库存数据"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__mat_num
+msgid "Inventory Quantity"
+msgstr "原材料库存数量"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__spare_product_code
+msgid "Issued by the EIP platform; typed by hand."
+msgstr "由 EIP 平台生成；手工填写。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__item_result
@@ -344,18 +1642,194 @@ msgid "Item Result"
 msgstr "单项结果"
 
 #. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_raw_inventory
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_raw_inventory
+msgid "Key Raw Materials"
+msgstr "重点原材料库存"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_production_order__schedule_code
+msgid "Key of the production schedule this order belongs to."
+msgstr "该生产订单所属排产计划的编码。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__last_error
+msgid "Last Error"
+msgstr "最近错误"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_last_error
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_last_error
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_last_error
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_last_error
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_last_error
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_last_error
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_last_error
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_last_error
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_last_error
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_last_error
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_last_error
+msgid "Last Push Error"
+msgstr "最近推送错误"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_last_log_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_last_log_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_last_log_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_last_log_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_last_log_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__log_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_last_log_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_last_log_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_last_log_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_last_log_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_last_log_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_last_log_id
+msgid "Last Push Log"
+msgstr "最近推送日志"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_last_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_last_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_last_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_last_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_last_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_last_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_last_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_last_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_last_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_last_push_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_last_push_at
+msgid "Last Pushed On"
+msgstr "最近推送时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_snapshot
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_snapshot
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_snapshot
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_snapshot
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_snapshot
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_snapshot
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_snapshot
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_snapshot
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_snapshot
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_snapshot
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_snapshot
+msgid "Last Pushed Values"
+msgstr "上次推送快照"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__last_run_at
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_state_form
+msgid "Last Run"
+msgstr "最近一次运行"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__last_run_detail
+msgid "Last Run Detail"
+msgstr "最近运行明细"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_state_search
+msgid "Last Run Failed"
+msgstr "最近运行未完成"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__last_run_pages
+msgid "Last Run Pages"
+msgstr "最近运行页数"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__last_run_reason
+msgid "Last Run Result"
+msgstr "最近运行结果"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__last_run_rows
+msgid "Last Run Rows"
+msgstr "最近运行行数"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__modify_time
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__modify_time
+msgid "Last Updated (Platform)"
+msgstr "平台更新时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_category__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_code__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_preview__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_subclass__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__write_uid
 msgid "Last Updated by"
 msgstr "最后更新人"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_category__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__write_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__write_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__write_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_code__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_preview__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_subclass__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__write_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__write_date
 msgid "Last Updated on"
 msgstr "最后更新时间"
 
@@ -366,14 +1840,40 @@ msgid "Leakage Current (mA)"
 msgstr "漏电流（mA）"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__line_count
+msgid "Line Count"
+msgstr "行项目数"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_purchase_order_line_form
+msgid "Line Item"
+msgstr "行项目"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__po_item_no
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__so_item_no
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__po_item_no
+msgid "Line No."
+msgstr "行项目号"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__line_type
 msgid "Line Type"
 msgstr "行类型"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__line_ids
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__line_ids
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_sale_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_supply_note_form
 msgid "Lines"
 msgstr "明细行"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__data_type
+msgid "Link Type"
+msgstr "数据关联类型"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__lower_limit
@@ -401,6 +1901,14 @@ msgid "Manufacturing Order"
 msgstr "制造订单"
 
 #. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_material_mapping
+msgid ""
+"Map EIP material codes to our code, name, unit and\n"
+"                description; creating production orders from purchase\n"
+"                order lines falls back to this table."
+msgstr "把 EIP 物料编码对照到我们的编码、名称、计量单位与描述；从采购订单行创建生产订单时从这里带出。"
+
+#. module: sn_wsd_eip
 #: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_value_mapping
 msgid ""
 "Map EIP value fields to their source: test detail items by\n"
@@ -421,14 +1929,160 @@ msgstr ""
 "                配码工序的过站将被采集。"
 
 #. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_form
+msgid "Material"
+msgstr "物料"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__materials_batch
+msgid "Material Batch"
+msgstr "物料批次"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__mat_max_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__mat_max_name
+msgid "Material Class"
+msgstr "物资大类名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__mat_max_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__mat_max_code
+msgid "Material Class Code"
+msgstr "物资大类编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__material_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__materials_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__product_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__mat_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__material_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__materials_code
+msgid "Material Code"
+msgstr "厂家物料编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__material_desc
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__materials_desc
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__mat_desc
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__material_desc
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__materials_description
+msgid "Material Description"
+msgstr "厂家物料描述"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__mat_med_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__mat_med_name
+msgid "Material Family"
+msgstr "物资中类名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__mat_med_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__mat_med_code
+msgid "Material Family Code"
+msgstr "物资中类编码"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_material_mapping
+msgid "Material Mappings"
+msgstr "物料对照"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__material_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__materials_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__product_name
+msgid "Material Name"
+msgstr "厂家物料名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__product_amount
+msgid "Material Quantity"
+msgstr "物资数量"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__mat_min_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__mat_min_name
+msgid "Material Type"
+msgstr "物资小类名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__mat_min_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__mat_min_code
+msgid "Material Type Code"
+msgstr "物资小类编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__material_unit
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__materials_unit
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__product_unit
+msgid "Material Unit"
+msgstr "厂家物资单位"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_material_mapping__eip_material_code
+msgid "Material code issued by the EIP platform."
+msgstr "EIP 平台下发的物料编码。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__pull_daily_limit
+msgid ""
+"Maximum purchase-order pull requests per Beijing day, manual and scheduled "
+"pulls alike; 0 = unlimited (e.g. on the test environment)."
+msgstr "每个北京时间自然日允许发出的采购订单拉取请求数，手动与定时共用；0 = 不限制（如测试环境）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_missing
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_missing
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_missing
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_missing
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_missing
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_missing
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_missing
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_missing
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_missing
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_missing
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_missing
+msgid "Missing Required Fields"
+msgstr "缺失必填字段"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_push.py:0
+msgid "Missing required fields: %s"
+msgstr "缺失必填字段：%s"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__mode
+msgid "Mode"
+msgstr "方式"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__model_code
 msgid "Model Code"
 msgstr "规格型号"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__model_spec
+msgid "Model Specification"
+msgstr "产品型号规格"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record_line__item_result__ng
 msgid "NG"
-msgstr ""
+msgstr "NG"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_category__name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_code__name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_subclass__name
+msgid "Name"
+msgstr "名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_supply_note__cargo_name
+msgid "Name of the delivered goods used on the supply note."
+msgstr "供货单或电话沟通中使用的交付货物名称。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__nameplate_code
@@ -437,9 +2091,55 @@ msgid "Nameplate Code"
 msgstr "局编号/铭牌号"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_next_attempt_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_next_attempt_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_next_attempt_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_next_attempt_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_next_attempt_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__next_attempt_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_next_attempt_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_next_attempt_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_next_attempt_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_next_attempt_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_next_attempt_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_next_attempt_at
+msgid "Next Attempt"
+msgstr "下次尝试时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__pending_page
+msgid "Next Page"
+msgstr "断点页码"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_category
+msgid "No EIP category yet"
+msgstr "还没有 EIP 品类编码"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_interface
+msgid "No EIP interface yet"
+msgstr "还没有 EIP 接口地址"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_material_mapping
+msgid "No EIP material mapping yet"
+msgstr "还没有 EIP 物料对照"
+
+#. module: sn_wsd_eip
 #: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_operation_mapping
 msgid "No EIP operation code yet"
 msgstr "暂无 EIP 工序编码"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_process_code
+msgid "No EIP process code yet"
+msgstr "还没有 EIP 工序编码"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_subclass
+msgid "No EIP subclass yet"
+msgstr "还没有 EIP 种类编码"
 
 #. module: sn_wsd_eip
 #: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_value_mapping
@@ -447,6 +2147,80 @@ msgid "No EIP value mapping yet"
 msgstr "暂无 EIP 取值映射"
 
 #. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_config.py:0
+msgid ""
+"No active EIP integration config for company \"%s\". Maintain it under EIP >"
+" Configuration first."
+msgstr "公司\"%s\"没有启用的 EIP 对接配置，请先在 EIP > 配置 下维护。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_entity_id
+msgid "No entity ID yet"
+msgstr "还没有实物ID"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_finished_inventory
+msgid "No finished goods inventory yet"
+msgstr "还没有产成品库存"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_purchase_order_line
+msgid "No grid purchase order pulled yet"
+msgstr "还没有拉取到国网采购订单"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_process_work
+msgid "No process work report yet"
+msgstr "还没有报工信息"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_production_order
+msgid "No production order yet"
+msgstr "还没有生产订单"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_schedule
+msgid "No production schedule yet"
+msgstr "还没有排产计划"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_raw_inventory
+msgid "No raw material inventory yet"
+msgstr "还没有重点原材料库存"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_sale_order
+msgid "No sales order yet"
+msgstr "还没有销售订单"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_spare_inventory
+msgid "No spare parts inventory yet"
+msgstr "还没有备品备件库存"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_supply_note
+msgid "No supply note yet"
+msgstr "还没有供货单"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_work_order
+msgid "No work order yet"
+msgstr "还没有生产工单"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_process_work__wavy_status__0
+msgid "None"
+msgstr "空"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_entity_id__entity_status__0
+msgid "Not Produced"
+msgstr "未生产"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__note
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__note
 msgid "Note"
 msgstr "备注"
@@ -457,15 +2231,111 @@ msgid "Notes"
 msgstr "备注"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_work_order__ipo_no
+msgid "Number of the production order this work order belongs to."
+msgstr "该生产工单所属生产订单的单号。"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record_line__item_result__ok
 msgid "OK"
-msgstr ""
+msgstr "OK"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_work_order__entity_code
+msgid "One entity ID, or a range like 0001-0100 kept continuous."
+msgstr "单个填单个 ID；多个填号段，如 0001-0100 保证连续性。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_entity_id__entity_code
+msgid "One number, or a range like 0001-0100 kept continuous."
+msgstr "单个号码或号段（如 0001-0100 保证连续性）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_process_work__device_no
+msgid "One or more device numbers joined with \"&\"."
+msgstr "一个或多个设备编号用\"&\"拼接。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_config
+msgid ""
+"One row per company: supplier identity, connection\n"
+"                parameters and the push / pull tuning used by every\n"
+"                outbound call."
+msgstr "每家公司一行：供应商身份、连接参数，以及每次外呼使用的推送/拉取参数。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_raw_inventory
+msgid ""
+"One row per key raw material, with its incoming batches\n"
+"                below."
+msgstr "每种重点原材料一行，下面挂入库批次。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_finished_inventory
+msgid ""
+"One row per product (the platform treats the subclass as\n"
+"                the product code), with its batches below."
+msgstr "每种产成品一行（平台把种类编码当作产成品编码），下面挂批次。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_config_company_uniq
+msgid "Only one EIP integration config per company."
+msgstr "每家公司只能有一条 EIP 对接配置。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_pull_state_config_uniq
+msgid "Only one pull state per integration config."
+msgstr "每条对接配置只有一条拉取状态。"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_push_queue.py:0
+msgid "Open the preview from a pushed document."
+msgstr "请从一张单据打开报文预览。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__operatetype_add
+msgid "Operate Type (Add)"
+msgstr "操作类型（新增）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__operatetype_query
+msgid "Operate Type (Query)"
+msgstr "操作类型（查询）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__operatetype_update
+msgid "Operate Type (Update)"
+msgstr "操作类型（更新）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_interface__operatetype_add
+msgid "Operatetype header literal for new records."
+msgstr "新增时发送的 operatetype 请求头字面量。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_interface__operatetype_query
+msgid "Operatetype header literal for queries."
+msgstr "查询时发送的 operatetype 请求头字面量。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_interface__operatetype_update
+msgid "Operatetype header literal for updates."
+msgstr "更新时发送的 operatetype 请求头字面量。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__operation_id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__operation_id
 msgid "Operation"
 msgstr "工序"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__operatetype
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__operatetype
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__operatetype
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_preview__operatetype
+msgid "Operation Type"
+msgstr "操作类型"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__operation_ids
@@ -478,8 +2348,27 @@ msgid ""
 "Operations mapped to this interface code (from the EIP operation code "
 "mapping) -- shown beside the code so the target station is visible while "
 "maintaining value keys."
-msgstr ""
-"按编码反查工序映射得到的工序——维护取值键时直接看到目标工位。"
+msgstr "按编码反查工序映射得到的工序——维护取值键时直接看到目标工位。"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_order_data
+msgid "Order & Business Data"
+msgstr "订单业务数据"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__order_status
+msgid "Order Status"
+msgstr "订单状态"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__ipo_type
+msgid "Order Type"
+msgstr "订单类型"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__amount
+msgid "Ordered Quantity"
+msgstr "采购数量"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__pcb_code
@@ -487,12 +2376,75 @@ msgid "PCB Code"
 msgstr "电路板编号"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_production_order__ipo_status__5
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_work_order__wo_status__5
+msgid "Packed and Stocked"
+msgstr "包装入库"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__page_num
+msgid "Page"
+msgstr "页码"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_config.py:0
+msgid "Page size cannot exceed 1000."
+msgstr "每页条数不能超过 1000。"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_config.py:0
+msgid "Page size must be at least 1."
+msgstr "每页条数至少为 1。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pull_state__pending_page
+msgid "Page the next run resumes from."
+msgstr "下一次运行从这一页继续。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__page_info
+msgid "Paging Info"
+msgstr "分页信息"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_pass_config
+msgid "Pass Data Collection"
+msgstr "过站数采配置"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__history_id
 msgid "Pass History"
 msgstr "过站历史"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__path
+msgid "Path"
+msgstr "路径"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_interface__path
+msgid "Path appended to the config base URL, e.g. /api/supplier-so."
+msgstr "拼在对接配置根地址后的路径，如 /api/supplier-so。"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_push.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_preview_form
+msgid "Payload Preview"
+msgstr "报文预览"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_push.py:0
+msgid "Payload Pushed"
+msgstr "推送成功"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record__state__pending
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_push_queue__state__pending
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_queue_search
 msgid "Pending"
 msgstr "待拉取"
 
@@ -502,13 +2454,105 @@ msgid ""
 "Pending: waiting for the collection system to pull it. Delivered: taken by "
 "the collection system, frozen -- no value extraction runs on a delivered "
 "row."
-msgstr ""
+msgstr "待拉取：等待采集系统取走。已交付：已被采集系统取走并冻结——已交付行不再做取值提取。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_schedule__progress
+msgid "Percentage of completion."
+msgstr "完成百分比。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__subclass_id
+msgid ""
+"Picks the code and the name; the platform treats the subclass as the product"
+" code."
+msgstr "选定种类后带出编码与名称；平台把种类编码当作产成品编码。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_process_work__process_code_id
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_schedule_process__process_code_id
+msgid ""
+"Picks the code; it is copied into the payload key and can also be typed "
+"freely."
+msgstr "选定工序编码；其编码复制进报文键，也可直接手填。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_production_order__purchase_line_id
+msgid "Picks the line; its ID is copied into the payload key."
+msgstr "选定行项目；其 ID 复制进报文键。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_work_order__production_order_id
+msgid "Picks the production order; its number is copied into the payload key."
+msgstr "选定生产订单；其单号复制进报文键。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_work_order_form
+msgid "Plan"
+msgstr "计划"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__plan_period
+msgid "Planned Duration (days)"
+msgstr "计划工期（天数）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__plan_end_time
+msgid "Planned End Time"
+msgstr "计划结束时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__plan_finish_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__plan_finish_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__plan_finish_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__plan_finish_date
+msgid "Planned Finish"
+msgstr "计划完成日期"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__plan_start_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__plan_start_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__plan_start_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__plan_start_date
+msgid "Planned Start"
+msgstr "计划开始日期"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__plan_start_time
+msgid "Planned Start Time"
+msgstr "计划开始时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__plant_name
+msgid "Plant"
+msgstr "生产工厂名称"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__plant_code
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__plant_code
 msgid "Plant Code"
 msgstr "厂内编号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pull_state__last_run_reason__error
+msgid "Platform Error"
+msgstr "对端报错"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_category
+msgid ""
+"Platform-issued category dictionary (10 preset rows);\n"
+"                business forms pick their category code from here."
+msgstr "平台下发的品类字典（预置 10 条）；业务表单的品类编码从这里选。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_subclass
+msgid ""
+"Platform-issued subclass dictionary (36 preset rows)\n"
+"                under its category; business forms pick their subclass\n"
+"                code from here."
+msgstr "平台下发的种类字典（预置 36 条，挂在所属品类下）；业务表单的种类编码从这里选。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__point_time
@@ -522,26 +2566,590 @@ msgid "Preheating Area (C)"
 msgstr "预热区（℃）"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_process_work__wavy_status__1
+msgid "Present"
+msgstr "有"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_entity_id_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_finished_inventory_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_process_work_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_raw_inventory_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_sale_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_schedule_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_spare_inventory_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_supply_note_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_work_order_form
+msgid "Preview Payload"
+msgstr "预览报文"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_process_work_search
+msgid "Process"
+msgstr "工序"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__process_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__process_code_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__process_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__process_code_id
+msgid "Process Code"
+msgstr "工序编码"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_process_code
+msgid "Process Codes"
+msgstr "工序编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__process_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__process_name
+msgid "Process Name"
+msgstr "工序名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__process_no
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__process_route_no
+msgid "Process Route No."
+msgstr "生产工艺路线编码"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_process_work
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_process_work
+msgid "Process Work Reports"
+msgstr "报工信息"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__process_ids
+msgid "Processes"
+msgstr "工序"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_push_queue.py:0
+msgid "Processing error; see server log."
+msgstr "处理出错；详见服务器日志。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__product_code
+msgid "Product Code"
+msgstr "产成品编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__product_id_grp_no
+msgid "Product ID Group"
+msgstr "物资id分组"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__product_id_type
+msgid "Product ID Type"
+msgstr "物资id类型"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__inside_no
+msgid "Product Internal ID"
+msgstr "产品内部ID号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__product_model
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__product_model
+msgid "Product Model"
+msgstr "产品型号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__product_name
+msgid "Product Name"
+msgstr "产成品名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__product_batch_no
+msgid "Production Batch No."
+msgstr "生产批次号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__center
+msgid "Production Center"
+msgstr "生产中心"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_entity_id__entity_status__2
+msgid "Production Finished"
+msgstr "生产完成"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_purchase_order.py:0
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__production_order_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_work_order_search
+msgid "Production Order"
+msgstr "生产订单"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__production_order_no
 msgid "Production Order No"
 msgstr "生产订单编号"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__ipo_no
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__ipo_no
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__ipo_no
+msgid "Production Order No."
+msgstr "生产订单号"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_purchase_order.py:0
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_production_order
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_production_order
+msgid "Production Orders"
+msgstr "生产订单"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_schedule
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_schedule
+msgid "Production Schedules"
+msgstr "排产计划"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__progress
+msgid "Progress"
+msgstr "进度"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__project_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__prj_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__prj_name
 msgid "Project Name"
 msgstr "项目名"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__prj_code
+msgid "Project No."
+msgstr "项目编号"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_value_mapping__source_key
 msgid ""
 "Project name (test detail items) or zone name (device zone packets) to "
 "match."
-msgstr ""
+msgstr "要匹配的项目名（测试明细）或温区名（设备温区包）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__prov_co_code
+msgid "Provincial Company Code"
+msgstr "省公司单位编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__prov_co_name
+msgid "Provincial Company Name"
+msgstr "省公司单位名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_finished_inventory_line__data_source__2
+msgid "Proxy"
+msgstr "代理"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_interface__direction__pull
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_config_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_wizard_form
+msgid "Pull"
+msgstr "拉取"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__pull_daily_limit
+msgid "Pull Daily Limit"
+msgstr "每日拉取限额"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_pull.py:0
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_pull_log
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__pull_log_count
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_pull_log
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_state_form
+msgid "Pull Logs"
+msgstr "拉取日志"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__pull_overlap_hours
+msgid "Pull Overlap (hours)"
+msgstr "增量重叠（小时）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__pull_page_size
+msgid "Pull Page Size"
+msgstr "每页条数"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_pull.py:0
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_pull_wizard
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_state_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_state_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_purchase_order_line_list
+msgid "Pull Purchase Orders"
+msgstr "拉取采购订单"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__pull_start_date
+msgid "Pull Start Date"
+msgstr "首次同步起始日期"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_pull_state
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_pull_state
+msgid "Pull State"
+msgstr "拉取状态"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_pull.py:0
+msgid "Pull completed: %(pages)s page(s), %(rows)s row(s)."
+msgstr "拉取完成：%(pages)s 页，%(rows)s 行。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pull_state__calls_count
+msgid "Pull requests sent on the counted day, manual and scheduled alike."
+msgstr "计数日内发出的拉取请求次数，手动与定时共用。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__order_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_purchase_order_line_search
+msgid "Purchase Order"
+msgstr "采购订单"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__po_item_id
+msgid "Purchase Order Line ID"
+msgstr "采购订单行项目 ID"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_purchase_order_form
+msgid "Purchase Order Lines"
+msgstr "采购订单行项目"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__po_no
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__po_no
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__po_no
+msgid "Purchase Order No."
+msgstr "采购订单编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_supply_note__con_type__3
+msgid "Purchase Supply Note"
+msgstr "采购供货单"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_purchase_order__po_no
+msgid "Purchase order number issued by ECP."
+msgstr "ECP 下发的采购订单编码。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_purchase_order_line
+msgid ""
+"Purchase orders issued by ECP are pulled from the EIP\n"
+"                platform with the button above or by the scheduled job."
+msgstr "ECP 下发的采购订单通过上方按钮或定时任务从 EIP 平台拉取。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_purchase_order_line_search
+msgid "Purchaser"
+msgstr "采购方"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__buyer_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__buyer_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__buyer_code
+msgid "Purchaser Code"
+msgstr "采购方公司编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__purchase_code
+msgid "Purchaser Code (Company)"
+msgstr "采购方公司编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__purchaser_hq_code
+msgid "Purchaser HQ Code"
+msgstr "采购方总部编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__material_code
+msgid "Purchaser Material Code"
+msgstr "采购方物料编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__material_desc
+msgid "Purchaser Material Description"
+msgstr "采购方物料描述"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory_line__purchase_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__buyer_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__buyer_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__buyer_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__purchase_name
+msgid "Purchaser Name"
+msgstr "采购方公司名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__buyer_province
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__buyer_province
+msgid "Purchaser Province"
+msgstr "客户所属省份"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__purchaser_hq_code
+msgid "Purchaser headquarters code stamped on every envelope."
+msgstr "每个报文都带的采购方总部编码。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_interface__direction__push
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_config_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_entity_id_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_finished_inventory_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_process_work_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_raw_inventory_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_sale_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_schedule_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_spare_inventory_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_supply_note_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_work_order_form
+msgid "Push"
+msgstr "推送"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__push_batch_size
+msgid "Push Batch Size"
+msgstr "单次推送条数"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_push_center
+msgid "Push Center"
+msgstr "推送中心"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_push.py:0
+msgid "Push Failed"
+msgstr "推送失败"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_push.py:0
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_push_log
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_log_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_log_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_log_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_log_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_log_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_log_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_log_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_log_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_log_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_log_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_log_count
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_push_log
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_entity_id_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_finished_inventory_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_process_work_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_raw_inventory_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_sale_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_schedule_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_spare_inventory_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_supply_note_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_work_order_form
+msgid "Push Logs"
+msgstr "推送日志"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_push_queue
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_push_queue
+msgid "Push Queue"
+msgstr "推送队列"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_queue_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_queue_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_queue_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_queue_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_queue_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_queue_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_queue_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_queue_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_queue_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_queue_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_queue_id
+msgid "Push Queue Entry"
+msgstr "推送队列行"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__push_state
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__push_state
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__push_state
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__push_state
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_mixin__push_state
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__push_state
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__push_state
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__push_state
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__push_state
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__push_state
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__push_state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_entity_id_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_finished_inventory_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_process_work_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_raw_inventory_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_sale_order_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_schedule_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_spare_inventory_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_supply_note_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_work_order_search
+msgid "Push Status"
+msgstr "推送状态"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_push.py:0
+msgid "Push failed."
+msgstr "推送失败。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_entity_id__push_state__pushed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_finished_inventory__push_state__pushed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_process_work__push_state__pushed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_production_order__push_state__pushed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_push_mixin__push_state__pushed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_raw_inventory__push_state__pushed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_sale_order__push_state__pushed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_schedule__push_state__pushed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_spare_inventory__push_state__pushed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_supply_note__push_state__pushed
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_work_order__push_state__pushed
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_search
+msgid "Pushed"
+msgstr "已推送"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_synced
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_synced
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_synced
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_synced
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_synced
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_synced
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_synced
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_synced
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_synced
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_synced
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_synced
+msgid "Pushed Before"
+msgstr "推送成功过"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_entity_id__push_state__pushing
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_finished_inventory__push_state__pushing
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_process_work__push_state__pushing
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_production_order__push_state__pushing
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_push_mixin__push_state__pushing
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_push_queue__state__pushing
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_raw_inventory__push_state__pushing
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_sale_order__push_state__pushing
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_schedule__push_state__pushing
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_spare_inventory__push_state__pushing
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_supply_note__push_state__pushing
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_work_order__push_state__pushing
+msgid "Pushing"
+msgstr "推送中"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__amount
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__amount
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__amount
+msgid "Quantity"
+msgstr "生产数量"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__filters
+msgid "Query Filters"
+msgstr "查询条件"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.server,name:sn_wsd_eip.action_eip_entity_id_queue
+#: model:ir.actions.server,name:sn_wsd_eip.action_eip_finished_inventory_queue
+#: model:ir.actions.server,name:sn_wsd_eip.action_eip_process_work_queue
+#: model:ir.actions.server,name:sn_wsd_eip.action_eip_production_order_queue
+#: model:ir.actions.server,name:sn_wsd_eip.action_eip_raw_inventory_queue
+#: model:ir.actions.server,name:sn_wsd_eip.action_eip_sale_order_queue
+#: model:ir.actions.server,name:sn_wsd_eip.action_eip_schedule_queue
+#: model:ir.actions.server,name:sn_wsd_eip.action_eip_spare_inventory_queue
+#: model:ir.actions.server,name:sn_wsd_eip.action_eip_supply_note_queue
+#: model:ir.actions.server,name:sn_wsd_eip.action_eip_work_order_queue
+msgid "Queue Push"
+msgstr "加入推送队列"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_entity_id__push_state__to_push
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_finished_inventory__push_state__to_push
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_process_work__push_state__to_push
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_production_order__push_state__to_push
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_push_mixin__push_state__to_push
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_raw_inventory__push_state__to_push
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_sale_order__push_state__to_push
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_schedule__push_state__to_push
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_spare_inventory__push_state__to_push
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_supply_note__push_state__to_push
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_work_order__push_state__to_push
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_search
+msgid "Queued"
+msgstr "待推送"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__raw_line
 msgid "Raw Line"
 msgstr "原始行"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory_line__inventory_id
+msgid "Raw Material"
+msgstr "原材料"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__mat_code
+msgid "Raw Material Code"
+msgstr "原材料编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__mat_description
+msgid "Raw Material Description"
+msgstr "原材料描述"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__mat_name
+msgid "Raw Material Name"
+msgstr "原材料名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__mat_prod_addr
+msgid "Raw Material Origin"
+msgstr "原材料产地"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__mat_unit
+msgid "Raw Material Unit"
+msgstr "原材料单位"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_result_data
+msgid "Raw data returned by the platform on a successful push."
+msgstr "推送成功后平台原始返回串。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__real_error
@@ -550,16 +3158,170 @@ msgid "Real Error"
 msgstr "实际误差"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__received_name
+msgid "Receiver Name"
+msgstr "收货方公司名称"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__record_id
 msgid "Record"
 msgstr "记录"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__product_amount
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__product_amount
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory_line__product_amount
+msgid "Remaining Quantity"
+msgstr "库存剩余数量"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__remark
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__remark
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory_line__remark
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__remark
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory_line__remark
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__remark
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__remark
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__remark
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__remark
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory_line__remark
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__remark
+msgid "Remark"
+msgstr "备注"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_process_work_form
+msgid "Report"
+msgstr "报工内容"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__equipment_id
 msgid ""
 "Report device (M_DEVICE_SN) when known, else the equipment maintained on the"
 " work center."
-msgstr ""
+msgstr "有报文时取报文设备（M_DEVICE_SN），否则取工位上维护的台账设备。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_log_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_log_form
+msgid "Request"
+msgstr "请求"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__request_body
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__request_body
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__request_body
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_preview__body_text
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_preview_form
+msgid "Request Body"
+msgstr "请求体"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__request_headers
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__request_headers
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__request_headers
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_preview__headers_text
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_preview_form
+msgid "Request Headers"
+msgstr "请求头"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_missing
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_missing
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_missing
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_missing
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_missing
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_missing
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_missing
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_missing
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_missing
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_missing
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_missing
+msgid "Required fields still empty for the next push."
+msgstr "下一次推送前仍为空的必填字段。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_production_order__so_item_no
+msgid "Required when the link type is the sales order line."
+msgstr "数据关联类型为\"关联销售订单行项目\"时必填。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__received_name
+msgid "Requiring unit / project unit / receiver."
+msgstr "需求单位/项目单位/收货方。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_log_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_log_form
+msgid "Response"
+msgstr "响应"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__response_body
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__response_body
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__response_body
+msgid "Response Body"
+msgstr "响应体"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__result
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__result
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__result_summary
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__result
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_log_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_log_search
+msgid "Result"
+msgstr "结果"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_retry_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_retry_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_retry_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_retry_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_retry_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__retry_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_retry_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_retry_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_retry_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_retry_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_retry_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_retry_count
+msgid "Retries"
+msgstr "已重试次数"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_entity_id_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_finished_inventory_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_process_work_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_raw_inventory_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_sale_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_schedule_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_spare_inventory_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_supply_note_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_work_order_form
+msgid "Retry"
+msgstr "重试"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__retry_interval_min
+msgid "Retry Interval (minutes)"
+msgstr "重试间隔（分钟）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__retry_times
+msgid "Retry Times"
+msgstr "自动重试次数"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__eip_item_id
+msgid "Returned Line ID"
+msgstr "返回的行项目 ID"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_result_data
+msgid "Returned Line IDs"
+msgstr "返回的行项目 ID"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__route_operation_id
@@ -567,9 +3329,14 @@ msgid "Route Operation"
 msgstr "工序实例"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__row_count
+msgid "Rows"
+msgstr "行数"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__serial_identity_id
 msgid "SN"
-msgstr ""
+msgstr "SN"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__sn_name
@@ -579,9 +3346,104 @@ msgstr "SN（快照）"
 #. module: sn_wsd_eip
 #: model:ir.model,name:sn_wsd_eip.model_sn_wsd_serial_operation_history
 msgid "SN Operation History"
-msgstr "SN 过站历史"
+msgstr "SN 操作历史"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__sale_order_id
+msgid "Sale Order"
+msgstr "销售订单"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__so_no
+msgid "Sale Order No."
+msgstr "销售订单号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__so_status
+msgid "Sale Order Status"
+msgstr "销售订单状态"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_production_order__data_type__2
+msgid "Sales Order Line"
+msgstr "销售订单行项目"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__so_item_no
+msgid "Sales Order Line No."
+msgstr "销售订单行项目号"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_sale_order
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_sale_order
+msgid "Sales Orders"
+msgstr "销售订单"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__schedule_id
+msgid "Schedule"
+msgstr "排产计划"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__batch_code
+msgid "Schedule Batch No."
+msgstr "排产批次号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__schedule_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__schedule_code
+msgid "Schedule Code"
+msgstr "排产计划编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__schedule_amount
+msgid "Scheduled Quantity"
+msgstr "排产数量"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__schedule_wo_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_schedule_wo_form
+msgid "Scheduled Work Order"
+msgstr "排产工单"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__schedule_wo
+msgid "Scheduled Work Order No."
+msgstr "排产工单号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__wo_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_schedule_form
+msgid "Scheduled Work Orders"
+msgstr "排产工单"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_production_order__ipo_type__2
+msgid "Secondary Device"
+msgstr "二次装置"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_production_order__ipo_type__1
+msgid "Secondary Panel Cabinet"
+msgstr "二次屏柜"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_call_log_mixin__result__sending
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pull_log__result__sending
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_push_log__result__sending
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_log_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_log_search
+msgid "Sending"
+msgstr "发送中"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_push.py:0
+msgid "Sent as %s; EIP status %s."
+msgstr "已按 %s 发送；EIP 状态码 %s。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__sequence
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__sequence
 msgid "Sequence"
 msgstr "序号"
@@ -592,10 +3454,28 @@ msgid "Set once a configured extraction pass ran on this row."
 msgstr "该行执行过配置化提取后置位。"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pull_state__pending_end
+msgid ""
+"Set while a window is being pulled (also across several days); cleared once "
+"it is complete."
+msgstr "窗口拉取期间（可跨数日）保持设置；拉完即清空。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__po_item_id
+msgid "Several IDs are joined with \"&\"."
+msgstr "多个 ID 用\"&\"拼接。"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__software_version
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__software_version
 msgid "Software Version"
 msgstr "软件备案号"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_push.py:0
+msgid "Source Data Created Time"
+msgstr "来源数据创建时间"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__source_key
@@ -613,6 +3493,44 @@ msgid "Source pending decision; left empty for now."
 msgstr "来源待定，暂留空。"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory_line__inventory_id
+msgid "Spare Part"
+msgstr "备品备件"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__product_dec
+msgid "Spare Part Description"
+msgstr "备品备件描述"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__spare_product_code
+msgid "Spare Part No."
+msgstr "备品备件编号"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_spare_inventory
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_spare_inventory
+msgid "Spare Parts"
+msgstr "备品备件库存"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_spare_inventory
+msgid ""
+"Spare parts of the finished products, refreshed on the\n"
+"                platform every 24 hours."
+msgstr "产成品的备品备件库存，每 24 小时在平台刷新一次。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_interface__code
+msgid "Stable key used by the code to fetch the interface."
+msgstr "代码按它取接口记录的稳定键。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_supply_note__con_type__1
+msgid "Standard Contract"
+msgstr "标准合同"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__standard_value
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__standard_value
 msgid "Standard Value (C)"
@@ -624,9 +3542,131 @@ msgid "Standard Version"
 msgstr "规范版本号"
 
 #. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_log_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_log_search
+msgid "Start Date"
+msgstr "开始日期"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pull_state__pending_start
+msgid ""
+"Start of a window that is not fully pulled yet; empty means the window was "
+"opened without an update-time condition."
+msgstr "尚未拉完的窗口起点；留空表示该窗口打开时没有带更新时间条件。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pull_state__watermark
+msgid ""
+"Start of the last fully pulled window; the next incremental pull asks for "
+"everything updated since this instant minus the overlap."
+msgstr "上一个完整拉取窗口的起点；下一次增量拉取请求这一时刻（减去重叠小时）以来的全部更新。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__start_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__start_at
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__start_at
+msgid "Started At"
+msgstr "开始时间"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__state
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_queue_search
 msgid "State"
 msgstr "状态"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__ipo_status
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__wo_status
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_form
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_finished_inventory_search
+msgid "Subclass"
+msgstr "种类"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__subclass_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__subclass_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__subclass_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__subclass_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__subclass_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__subclass_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__subclass_id
+msgid "Subclass Code"
+msgstr "种类编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__default_subclass_id
+msgid "Subclass code default on business forms."
+msgstr "业务表单上种类编码的默认值。"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_subclass
+msgid "Subclasses"
+msgstr "种类编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_call_log_mixin__result__success
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pull_log__result__success
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_push_log__result__success
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_log_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_log_search
+msgid "Success"
+msgstr "成功"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__eip_push_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__eip_push_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__eip_push_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__eip_push_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_mixin__eip_push_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__eip_push_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__eip_push_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__eip_push_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__eip_push_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_push_count
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_push_count
+msgid "Successful Pushes"
+msgstr "成功推送次数"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_finished_inventory_line__data_source__0
+msgid "Supplier"
+msgstr "供应商"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__supplier_code
+msgid "Supplier Code"
+msgstr "供应商编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__supplier_name
+msgid "Supplier Name"
+msgstr "供应商名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__supplier_code
+msgid "Supplier code issued by the EIP platform."
+msgstr "EIP 平台下发的供应商编码。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__supply_note_id
+msgid "Supply Note"
+msgstr "供货单"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__supply_no
+msgid "Supply Note No."
+msgstr "采购供货单编号"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_supply_note
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_supply_note
+msgid "Supply Notes"
+msgstr "供货单"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__table_address
@@ -646,6 +3686,21 @@ msgid "Target value column of the collection row."
 msgstr "数采行的目标取值列。"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pull_wizard__mode__targeted
+msgid "Targeted"
+msgstr "定向拉取"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_wizard_form
+msgid "Targeted Conditions"
+msgstr "定向查询条件"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__serial_number
+msgid "Technical Spec Serial No."
+msgstr "技术规范流水号"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__test_code
 msgid "Test Code"
 msgstr "检验流水号"
@@ -663,6 +3718,8 @@ msgid ""
 "(device payload items). Device Zone Packet: match reflow/wave zone names in "
 "the nearest packet."
 msgstr ""
+"测试明细：按项目名匹配 "
+"sn.wsd.mes.test.result.detail（设备报文明细项）。设备温区包：在就近的回流焊/波峰焊包里按温区名匹配。"
 
 #. module: sn_wsd_eip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_value_mapping_search
@@ -686,9 +3743,62 @@ msgid "Testing Voltage (V)"
 msgstr "试验电压（V）"
 
 #. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_material_mapping_company_material_uniq
+msgid "The EIP material code must be unique per company."
+msgstr "同一公司内 EIP 物料编码必须唯一。"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_pull.py:0
+msgid "The EIP platform rejected the pull: %s"
+msgstr "EIP 平台拒绝了本次拉取：%s"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_entity_id
+msgid ""
+"The State Grid asset identity of one unit or a whole\n"
+"                continuous range, tracked with its production status."
+msgstr "国网对单台实物（或整段连续号段）的资产电子编码，随生产状态跟踪。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_category_code_uniq
+msgid "The category code must be unique."
+msgstr "品类编码必须唯一。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__config_id
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pull_log__config_id
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_push_log__config_id
+msgid ""
+"The config the call was made under; archive configs instead of deleting them"
+" so logs keep their trace."
+msgstr "本次调用使用的对接配置；配置请停用不要删除，日志才能追溯。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_entity_id_entity_uniq
+msgid "The entity ID must be unique per company."
+msgstr "同一公司内实物ID必须唯一。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_interface_code_uniq
+msgid "The interface code must be unique."
+msgstr "接口编码必须唯一。"
+
+#. module: sn_wsd_eip
 #: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_value_mapping_mapping_uniq
 msgid "The interface field already has this source mapping."
 msgstr "该接口字段已存在此来源映射。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__product_code
+msgid "The material subclass code of the platform."
+msgstr "即平台的物资种类编码。"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_push_queue.py:0
+msgid "The model %s is not pushed to EIP."
+msgstr "模型 %s 不是推送到 EIP 的单据。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_operation_mapping_operation_uniq
@@ -696,16 +3806,194 @@ msgid "The operation already has an EIP code mapping."
 msgstr "该工序已有 EIP 编码映射。"
 
 #. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_process_code_code_uniq
+msgid "The process code must be unique."
+msgstr "工序编码必须唯一。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_finished_inventory_product_uniq
+msgid "The product code must be unique per company."
+msgstr "同一公司内产成品编码必须唯一。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_production_order_ipo_uniq
+msgid "The production order number must be unique per company."
+msgstr "同一公司内生产订单号必须唯一。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_purchase_order_line_item_uniq
+msgid "The purchase order line ID must be unique per company."
+msgstr "同一公司内采购订单行项目 ID 必须唯一。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_purchase_order_po_uniq
+msgid "The purchase order number must be unique per company."
+msgstr "同一公司内采购订单编码必须唯一。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_raw_inventory_mat_uniq
+msgid "The raw material code must be unique per company."
+msgstr "同一公司内原材料编码必须唯一。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_sale_order_so_uniq
+msgid "The sale order number must be unique per company."
+msgstr "同一公司内销售订单号必须唯一。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_schedule_schedule_uniq
+msgid "The schedule code must be unique per purchase order line."
+msgstr "同一公司内 排产计划编码 + 采购订单行项目 ID 必须唯一。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_schedule
+msgid ""
+"The short-term plan of one grid purchase order line,\n"
+"                with its scheduled work orders and processes below."
+msgstr "一条国网采购订单行项目的短期生产计划，下面挂排产工单与工序。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_spare_inventory_spare_uniq
+msgid "The spare part number must be unique per company."
+msgstr "同一公司内备品备件编号必须唯一。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_process_code
+msgid ""
+"The spec ships no process dictionary: maintain it here;\n"
+"                work reports and schedule process rows pick their\n"
+"                process code from this list or free-type it."
+msgstr "规范没有给工序编码字典：在这里维护；报工与排产计划工序行的工序编码从这里选，也可手填。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_interface
+msgid ""
+"The spec's 11 interfaces come preset; operation-type\n"
+"                literals are maintained here so header casing can be\n"
+"                adjusted during joint testing without a code change."
+msgstr "规范 11 个接口已预置；操作类型字面量在这里维护，联调时改请求头大小写无需改代码。"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__history_id
 msgid ""
 "The station-pass ledger row this collection row was born from; unique anchor"
 " (clear-pass keeps the row, drops the anchor)."
-msgstr ""
+msgstr "本数采行来源的过站台账行；唯一锚点（清除过站保留本行、锚点置空）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_subclass_code_uniq
+msgid "The subclass code must be unique."
+msgstr "种类编码必须唯一。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_sale_order
+msgid ""
+"The supplier-side sales document for grid purchases;\n"
+"                its lines carry the grid purchase order line IDs."
+msgstr "面向国网采购的供应商侧销售订单；行项目上挂国网采购订单行项目 ID。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_supply_note_supply_uniq
+msgid "The supply note number must be unique per company."
+msgstr "同一公司内供货单编号必须唯一。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_work_order_wo_uniq
+msgid "The work order number must be unique per company."
+msgstr "同一公司内生产工单编码必须唯一。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_pass_record_history_uniq
 msgid "This station-pass row is already collected."
 msgstr "该过站历史行已采集。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__timeout_sec
+msgid "Timeout (seconds)"
+msgstr "超时（秒）"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_process_work_form
+msgid "Times"
+msgstr "时间"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_log_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_log_search
+msgid "Today"
+msgstr "今天"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__calls_count
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_state_list
+msgid "Today's Calls"
+msgstr "当日已用次数"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_pull.py:0
+msgid "Today's pull quota is used up: %(used)s/%(limit)s."
+msgstr "今日拉取次数已用完：%(used)s/%(limit)s。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__transno
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__transno
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__transno
+msgid "Transaction Number"
+msgstr "全局交易流水号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__response_body
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pull_log__response_body
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_push_log__response_body
+msgid "Truncated when longer than 50000 characters."
+msgstr "超过 50000 字符时截断保存。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_state_search
+msgid "Unfinished Window"
+msgstr "未完成窗口"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__pending_end
+msgid "Unfinished Window End"
+msgstr "未完成窗口终点"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__pending_start
+msgid "Unfinished Window Start"
+msgstr "未完成窗口起点"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__product_unit
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__unit
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__schedule_unit
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__product_unit
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__meas_unit
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__unit
+msgid "Unit of Measure"
+msgstr "计量单位"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__update_mode
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_config_search
+msgid "Update Mode"
+msgstr "更新报文模式"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_purchase_order_line_search
+msgid "Updated (Platform)"
+msgstr "平台更新时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__modify_start_time
+msgid "Updated From"
+msgstr "更新时间起"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__modify_end_time
+msgid "Updated To"
+msgstr "更新时间止"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__upload_time
@@ -723,10 +4011,25 @@ msgid "Values Extracted"
 msgstr "已执行提取"
 
 #. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_queue_search
+msgid "Waiting for Retry"
+msgstr "等待重试"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__warming_zone
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__warming_zone
 msgid "Warming Zone (C)"
 msgstr "升温区（℃）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__watermark
+msgid "Watermark"
+msgstr "水位"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__wavy_status
+msgid "Wave Information"
+msgstr "波形信息"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__welding_zone
@@ -735,11 +4038,38 @@ msgid "Welding Zone (C)"
 msgstr "焊接区（℃）"
 
 #. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_process_work
+msgid ""
+"What a workstation reported on a work order, pushed to\n"
+"                the EIP platform."
+msgstr "工位针对生产工单填报的完成情况，推送到 EIP 平台。"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__agingroom_temperature
 msgid ""
 "Window average for a quick glance; the pull endpoint ships one data row per "
 "point from the aging lines."
-msgstr ""
+msgstr "台账速览用窗口平均；推送时按老化明细逐点展开成多条 data 行。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_entity_id_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_finished_inventory_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_process_work_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_raw_inventory_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_sale_order_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_schedule_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_spare_inventory_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_supply_note_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_work_order_search
+msgid "With Missing Fields"
+msgstr "有缺失必填"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_process_work__buyer_province
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_sale_order__buyer_province
+msgid "Without the \"province\" suffix."
+msgstr "不带\"省\"字。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__workcenter_id
@@ -747,6 +4077,80 @@ msgid "Work Center"
 msgstr "工位"
 
 #. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_production_order.py:0
+msgid "Work Order"
+msgstr "生产工单"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__work_order_no
 msgid "Work Order No"
 msgstr "工单编号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__wo_no
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__wo_no
+msgid "Work Order No."
+msgstr "生产工单编码"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_work_order
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_work_order
+msgid "Work Orders"
+msgstr "生产工单"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__workshop_name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_process_work_form
+msgid "Workshop"
+msgstr "车间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__workshop_code
+msgid "Workshop Code"
+msgstr "生产车间编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__workshop_id
+msgid "Workshop ID"
+msgstr "生产车间id"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__workshop_name
+msgid "Workshop Name"
+msgstr "生产车间名称"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_pull.py:0
+msgid "config_id"
+msgstr "对接配置"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_config_form
+msgid "https://host:port"
+msgstr "https://host:port"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_purchase_order.py:0
+msgid "id"
+msgstr "ID"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_push.py:0
+msgid "model_name"
+msgstr "单据模型"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__operatetype
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pull_log__operatetype
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_push_log__operatetype
+msgid "operatetype header literal actually sent."
+msgstr "实际发送的 operatetype 请求头字面量。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__pull_page_size
+msgid "pageSize sent to the purchase-order pull interface; capped at 1000."
+msgstr "发送给采购订单拉取接口的 pageSize；上限 1000。"
