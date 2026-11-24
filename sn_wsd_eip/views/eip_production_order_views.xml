@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Production order -->
+    <record id="view_eip_production_order_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.production.order.list</field>
+        <field name="model">sn.wsd.eip.production.order</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="ipo_no"/>
+                <field name="push_state" widget="badge"
+                       decoration-success="push_state == 'pushed'"
+                       decoration-danger="push_state == 'failed'"
+                       decoration-info="push_state == 'pushing'"
+                       decoration-warning="push_state in ('to_push', 'draft')"/>
+                <field name="materials_name" optional="show"/>
+                <field name="amount" optional="show"/>
+                <field name="plan_start_date" optional="hide"/>
+                <field name="plan_finish_date" optional="show"/>
+                <field name="ipo_status" optional="hide"/>
+                <field name="po_item_id" optional="hide"/>
+                <field name="eip_missing" optional="hide"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_production_order_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.production.order.form</field>
+        <field name="model">sn.wsd.eip.production.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_eip_push" type="object"
+                            string="Push" class="btn-primary"/>
+                    <button name="action_eip_retry" type="object"
+                            string="Retry" invisible="push_state != 'failed'"/>
+                    <button name="action_eip_preview" type="object"
+                            string="Preview Payload"/>
+                    <field name="push_state" widget="statusbar"
+                           statusbar_visible="draft,to_push,pushed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_eip_logs" icon="fa-list"
+                                invisible="eip_log_count == 0">
+                            <field name="eip_log_count" widget="statinfo" string="Push Logs"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="ipo_no" readonly="eip_synced"/></h1>
+                    </div>
+                    <group>
+                        <group string="Production Order">
+                            <field name="ipo_type"/>
+                            <field name="category_id"/>
+                            <field name="subclass_id"/>
+                            <field name="schedule_code"/>
+                            <field name="purchase_line_id"/>
+                            <field name="po_item_id" readonly="eip_synced"/>
+                            <field name="data_type" readonly="eip_synced"/>
+                            <field name="so_item_no" invisible="data_type != '2'"/>
+                        </group>
+                        <group string="Material">
+                            <field name="materials_code"/>
+                            <field name="materials_name"/>
+                            <field name="materials_unit"/>
+                            <field name="materials_desc"/>
+                            <field name="amount"/>
+                            <field name="unit"/>
+                            <field name="product_model"/>
+                            <field name="product_id_grp_no"/>
+                            <field name="product_id_type"/>
+                        </group>
+                        <group string="Plan">
+                            <field name="plan_start_date"/>
+                            <field name="plan_finish_date"/>
+                            <field name="actual_start_date"/>
+                            <field name="actual_finish_date"/>
+                        </group>
+                        <group string="Status">
+                            <field name="ipo_status"/>
+                            <field name="plant_name"/>
+                            <field name="workshop_name"/>
+                            <field name="center"/>
+                        </group>
+                    </group>
+                    <group string="Push">
+                        <group>
+                            <field name="eip_missing"/>
+                            <field name="eip_last_error" invisible="not eip_last_error"/>
+                            <field name="eip_last_push_at"/>
+                            <field name="eip_push_count"/>
+                        </group>
+                        <group>
+                            <field name="eip_synced" invisible="1"/>
+                            <field name="eip_retry_count" readonly="1"/>
+                            <field name="eip_next_attempt_at" readonly="1"/>
+                            <field name="owner_code"/>
+                            <field name="open_code"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_production_order_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.production.order.search</field>
+        <field name="model">sn.wsd.eip.production.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="ipo_no"/>
+                <field name="po_item_id"/>
+                <field name="materials_code" filter_domain="['|', ('materials_code', 'ilike', self), ('materials_name', 'ilike', self)]"/>
+                <field name="schedule_code"/>
+                <filter string="Draft" name="filter_draft"
+                        domain="[('push_state', '=', 'draft')]"/>
+                <filter string="Queued" name="filter_to_push"
+                        domain="[('push_state', '=', 'to_push')]"/>
+                <filter string="Pushed" name="filter_pushed"
+                        domain="[('push_state', '=', 'pushed')]"/>
+                <filter string="Failed" name="filter_failed"
+                        domain="[('push_state', '=', 'failed')]"/>
+                <filter string="With Missing Fields" name="filter_missing"
+                        domain="[('eip_missing', '!=', False)]"/>
+                <group>
+                    <filter name="group_by_push_state" string="Push Status"
+                            context="{'group_by': 'push_state'}"/>
+                    <filter name="group_by_category" string="Category"
+                            context="{'group_by': 'category_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_production_order" model="ir.actions.act_window">
+        <field name="name">Production Orders</field>
+        <field name="res_model">sn.wsd.eip.production.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No production order yet
+            </p>
+            <p>
+                Create one by hand or from a grid purchase order line;
+                push it to the EIP platform when it is complete.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_eip_production_order"
+              name="Production Orders"
+              parent="menu_eip_order_data"
+              action="action_eip_production_order"
+              sequence="20"/>
+
+    <!-- Queue the selected orders from the list -->
+    <record id="action_eip_production_order_queue" model="ir.actions.server">
+        <field name="name">Queue Push</field>
+        <field name="model_id" ref="model_sn_wsd_eip_production_order"/>
+        <field name="binding_model_id" ref="model_sn_wsd_eip_production_order"/>
+        <field name="state">code</field>
+        <field name="code">records.action_eip_queue_push()</field>
+    </record>
+
+</odoo>

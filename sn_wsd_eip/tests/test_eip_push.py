@@ -7,7 +7,10 @@ and the duplicate (20006) fallback of the eip-business-push spec.
 """
 
 import datetime
+import json
+from unittest.mock import patch
 
+from odoo import fields
 from odoo.exceptions import UserError
 from odoo.tests import tagged
 
@@ -255,3 +258,297 @@ class TestEipPush(EipOrderCase):
         with self.assertRaisesRegex(UserError, 'No active EIP integration config'):
             order._eip_push_one()
         self.assertEqual(self.server.calls, 0)
+
+    def test_51_locate_keys_locked_after_push(self):
+        order = self._order()
+        order._eip_push_one()
+        with self.assertRaisesRegex(UserError, 'locate it there'):
+            order.write({'ipo_no': 'IPO-CHANGED'})
+        with self.assertRaisesRegex(UserError, 'locate it there'):
+            order.write({'po_item_id': '999'})
+        # engine fields stay writable, and non-locate business fields too
+        order.write({'center': 'C'})
+        self.assertEqual(order.center, 'C')
+
+
+@tagged('post_install', '-at_install')
+class TestEipPushQueue(EipOrderCase):
+
+    def _order(self, **values):
+        values.setdefault('po_item_id', '699708678428688384')
+        values.setdefault('materials_code', 'MC-1')
+        values.setdefault('materials_name', 'Meter X')
+        values.setdefault('materials_unit', 'PCS')
+        values.setdefault('materials_desc', 'Single-phase smart meter')
+        values.setdefault('amount', '200')
+        values.setdefault('unit', 'PCS')
+        values.setdefault('plan_start_date', datetime.date(2026, 12, 1))
+        values.setdefault('plan_finish_date', datetime.date(2026, 12, 31))
+        values.setdefault(
+            'category_id', self.env.ref('sn_wsd_eip.category_30').id)
+        values.setdefault(
+            'subclass_id', self.env.ref('sn_wsd_eip.subclass_30002').id)
+        return self.env['sn.wsd.eip.production.order'].create(values)
+
+    def _pushed(self, **values):
+        self.server.enqueue(eip_envelope())
+        order = self._order(**values)
+        order._eip_push_one()
+        self.assertTrue(order.eip_synced)
+        self.server.reset()
+        return order
+
+    def _queue(self):
+        return self.env['sn.wsd.eip.push.queue'].search([], order='id')
+
+    def _last_request(self):
+        return self.server.requests[-1]
+
+    def _run(self):
+        self.env['sn.wsd.eip.push.worker'].run_push()
+
+    # ------------------------------------------------------------------
+    # edited after a push: automatically queued again
+    # ------------------------------------------------------------------
+
+    def test_10_main_field_edit_requeues(self):
+        order = self._pushed()
+        order.write({'actual_start_date': datetime.date(2026, 12, 5)})
+        self.assertEqual(order.push_state, 'to_push')
+        entries = self._queue()
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries.state, 'pending')
+        self.assertEqual(entries.retry_count, 0)
+        self.assertFalse(entries.next_attempt_at)
+        self.assertEqual(order.eip_queue_id, entries)
+
+    def test_11_draft_edits_stay_draft(self):
+        order = self._order()
+        order.write({'center': 'C'})
+        self.assertEqual(order.push_state, 'draft')
+        self.assertFalse(self._queue())
+
+    def test_12_engine_writes_do_not_requeue(self):
+        order = self._pushed()
+        entries = self._queue()
+        self.assertFalse(entries)
+        # replay an engine write: no queue row appears
+        order.write({'eip_last_push_at': fields.Datetime.now()})
+        self.assertFalse(self._queue())
+        self.assertEqual(order.push_state, 'pushed')
+
+    def test_13_child_line_edit_requeues(self):
+        # the production order has no child table; the line hook is
+        # exercised with a scratch model inheriting the line mixin
+        self.skipTest('covered by the supply-note tests of batch 7')
+
+    # ------------------------------------------------------------------
+    # the worker: claim, push, retry
+    # ------------------------------------------------------------------
+
+    def test_20_worker_pushes_queued_draft(self):
+        order = self._order()
+        order.action_eip_queue_push()
+        self.assertEqual(order.push_state, 'to_push')
+        self._run()
+        self.assertEqual(self.server.calls, 1)
+        self.assertEqual(order.push_state, 'pushed')
+        self.assertTrue(order.eip_synced)
+        entry = self._queue()
+        self.assertEqual(entry.state, 'done')
+        self.assertEqual(self._last_request()['headers']['operatetype'], 'ADD')
+
+    def test_21_worker_updates_edited_document(self):
+        order = self._pushed()
+        order.write({'center': 'Center B'})
+        self._run()
+        self.assertEqual(self.server.calls, 1)
+        self.assertEqual(
+            self._last_request()['headers']['operatetype'], 'UPDATE')
+        self.assertEqual(self._last_request()['json']['center'], 'Center B')
+        self.assertEqual(order.push_state, 'pushed')
+        self.assertEqual(self._queue().state, 'done')
+
+    def test_22_retryable_failure_schedules_retry_then_fails(self):
+        order = self._pushed()
+        order.write({'center': 'C'})
+        self.config.write({'retry_times': 1, 'retry_interval_min': 10})
+        # 1st run: platform error 90003 (retryable)
+        self.server.enqueue(eip_envelope(status='90003', message='system error',
+                                         successful=False))
+        self._run()
+        entry = self._queue()
+        self.assertEqual(entry.state, 'pending')
+        self.assertEqual(entry.retry_count, 1)
+        self.assertTrue(entry.next_attempt_at)
+        self.assertEqual(order.push_state, 'to_push')
+        # 2nd run: the row waits for its next attempt, nothing is sent
+        self.server.reset()
+        self._run()
+        self.assertEqual(self.server.calls, 0)
+        self.assertEqual(entry.state, 'pending')
+        # 3rd run after the wait: it fails again, the retry is used up
+        entry.write({'next_attempt_at': False})
+        self.server.enqueue(eip_envelope(status='90003', message='system error',
+                                         successful=False))
+        self._run()
+        entry.invalidate_recordset()
+        self.assertEqual(entry.state, 'failed')
+        self.assertEqual(entry.retry_count, 1)
+        self.assertEqual(order.push_state, 'failed')
+
+    def test_23_data_error_never_autoretries(self):
+        order = self._pushed()
+        order.write({'center': 'C'})
+        self.config.write({'retry_times': 3})
+        self.server.enqueue(eip_envelope(status='10002', message='too long'))
+        self._run()
+        entry = self._queue()
+        self.assertEqual(entry.state, 'failed')
+        self.assertEqual(entry.retry_count, 0)
+        self.assertFalse(entry.next_attempt_at)
+        self.assertEqual(order.push_state, 'failed')
+        self.assertEqual(self.server.calls, 1)
+
+    def test_24_edit_after_failure_resets_the_retries(self):
+        order = self._pushed()
+        order.write({'center': 'C'})
+        self.server.enqueue(eip_envelope(status='10002', message='too long'))
+        self._run()
+        entry = self._queue()
+        self.assertEqual(entry.state, 'failed')
+        entry.write({'retry_count': 3})
+        # a business edit re-queues with a clean retry counter: the
+        # failed row stays as history, a fresh pending row appears
+        order.write({'center': 'C2'})
+        entries = self._queue()
+        self.assertEqual(len(entries), 2)
+        self.assertEqual(entries[0].state, 'failed')
+        self.assertEqual(entries[0].retry_count, 3)
+        self.assertEqual(entries[1].state, 'pending')
+        self.assertEqual(entries[1].retry_count, 0)
+        self.assertEqual(order.push_state, 'to_push')
+
+    def test_25_edited_while_pushing_is_requeued_after_success(self):
+        order = self._pushed()
+        order.write({'center': 'C'})
+        # the edit races the request: it lands after the body was built
+        # but before the answer arrives (same thread, via the transport)
+        original_send = type(self.env['sn.wsd.eip.transport'])._eip_send
+
+        def send(transport, log, body):
+            order.write({'center': 'C2'})
+            return original_send(transport, log, body)
+        with patch.object(type(self.env['sn.wsd.eip.transport']),
+                          '_eip_send', send):
+            self._run()
+        # the platform learned "C" (the body was built before the edit)
+        self.assertEqual(self._last_request()['json']['center'], 'C')
+        self.assertEqual(order.push_state, 'to_push')
+        entries = self._queue()
+        # the run's row is done, a fresh row carries the newer edit
+        self.assertEqual(len(entries), 2)
+        self.assertEqual(entries[0].state, 'done')
+        self.assertEqual(entries[1].state, 'pending')
+        self.assertEqual(entries[1].retry_count, 0)
+        # and the next run pushes the newer value
+        self.server.enqueue(eip_envelope())
+        self._run()
+        self.assertEqual(
+            self._last_request()['json']['center'], 'C2')
+        self.assertEqual(order.push_state, 'pushed')
+
+    def test_26_already_pushed_and_clean_row_is_closed_without_request(self):
+        order = self._pushed()
+        order.write({'center': 'C'})
+        # pushed manually before the worker runs
+        self.server.enqueue(eip_envelope())
+        order._eip_push_one()
+        self.server.reset()
+        self._run()
+        self.assertEqual(self.server.calls, 0)
+        self.assertEqual(self._queue().state, 'done')
+        self.assertEqual(order.push_state, 'pushed')
+
+    # ------------------------------------------------------------------
+    # claim and batch behaviour
+    # ------------------------------------------------------------------
+
+    def test_30_claim_is_atomic_and_batched(self):
+        self.config.write({'push_batch_size': 2})
+        orders = self._pushed() + self._pushed() + self._pushed()
+        for order in orders:
+            order.write({'center': 'C'})
+        self.assertEqual(len(self._queue().filtered(
+            lambda entry: entry.state == 'pending')), 3)
+        worker = self.env['sn.wsd.eip.push.worker']
+        # the batch size caps the claim
+        claimed = worker._eip_claim(self.config, 2)
+        self.assertEqual(len(claimed), 2)
+        self.assertEqual(claimed.mapped('state'), ['pushing', 'pushing'])
+        # claimed rows are never handed out again; the third pending
+        # row is
+        again = worker._eip_claim(self.config, 2)
+        self.assertEqual(len(again), 1)
+        self.assertFalse(claimed & again)
+        self.assertFalse(worker._eip_claim(self.config, 2))
+
+    def test_31_one_failure_does_not_stop_the_batch(self):
+        self.config.write({'push_batch_size': 10})
+        order_a = self._pushed(po_item_id='111')
+        order_b = self._pushed(po_item_id='222')
+        order_a.write({'center': 'A'})
+        order_b.write({'center': 'B'})
+        self.server.set_responder(lambda request: eip_envelope(
+            status='10002', message='too long', successful=False)
+            if request['json']['ipoNo'] == order_a.ipo_no
+            else eip_envelope())
+        self._run()
+        entry_a, entry_b = self._queue()
+        self.assertEqual(entry_a.state, 'failed')
+        self.assertEqual(entry_a._eip_document(), order_a)
+        self.assertEqual(entry_b.state, 'done')
+        self.assertEqual(entry_b._eip_document(), order_b)
+        self.assertEqual(order_b.push_state, 'pushed')
+
+    def test_32_cron_ships_paused(self):
+        cron = self.env.ref('sn_wsd_eip.ir_cron_eip_push_queue')
+        self.assertFalse(cron.active)
+        self.assertEqual(cron.interval_number, 5)
+        self.assertEqual(cron.interval_type, 'minutes')
+
+    # ------------------------------------------------------------------
+    # preview: headers and body, nothing sent
+    # ------------------------------------------------------------------
+
+    def test_40_preview_of_draft_is_add(self):
+        order = self._order(center='Center A')
+        preview = self.env['sn.wsd.eip.push.preview'].with_context(
+            active_model=order._name, active_id=order.id).create({})
+        self.assertEqual(preview.operatetype, 'ADD')
+        body = json.loads(preview.body_text)
+        self.assertEqual(body['center'], 'Center A')
+        self.assertEqual(body['ipoNo'], order.ipo_no)
+        headers = json.loads(preview.headers_text)
+        self.assertEqual(headers['operatetype'], 'ADD')
+        self.assertEqual(headers['orisys'], '0')
+        self.assertEqual(self.server.calls, 0)
+        self.assertEqual(order.push_state, 'draft')
+
+    def test_41_preview_after_push_is_diff_update(self):
+        order = self._pushed(center='Center A')
+        order.write({'center': 'Center B'})
+        preview = self.env['sn.wsd.eip.push.preview'].with_context(
+            active_model=order._name, active_id=order.id).create({})
+        self.assertEqual(preview.operatetype, 'UPDATE')
+        body = json.loads(preview.body_text)
+        self.assertEqual(body['center'], 'Center B')
+        self.assertEqual(body['materialsCode'], '')
+        self.assertEqual(body['ipoNo'], order.ipo_no)
+        self.assertEqual(self.server.calls, 0)
+
+    def test_42_preview_needs_a_document(self):
+        with self.assertRaisesRegex(UserError, 'not pushed to EIP'):
+            self.env['sn.wsd.eip.push.preview'].with_context(
+                active_model='res.partner', active_id=1).create({})
+

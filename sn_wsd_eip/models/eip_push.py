@@ -93,7 +93,24 @@ class EipPushMixin(models.AbstractModel):
     eip_log_count = fields.Integer(string='Push Logs', compute='_compute_eip_log_count')
     eip_missing = fields.Text(
         string='Missing Required Fields', compute='_compute_eip_missing',
+        store=True,
         help='Required fields still empty for the next push.')
+    eip_queue_id = fields.Many2one(
+        'sn.wsd.eip.push.queue', string='Push Queue Entry', copy=False,
+        ondelete='set null', readonly=True,
+        help='Current (or last) queue entry of this document.')
+    eip_retry_count = fields.Integer(
+        related='eip_queue_id.retry_count', string='Retries')
+    eip_next_attempt_at = fields.Datetime(
+        related='eip_queue_id.next_attempt_at', string='Next Attempt')
+
+    # Fields the engine itself writes on a document: changing only these
+    # is not a business change and never queues a new push.
+    EIP_ENGINE_FIELDS = frozenset({
+        'push_state', 'eip_synced', 'eip_snapshot', 'eip_push_count',
+        'eip_first_push_at', 'eip_last_push_at', 'eip_last_log_id',
+        'eip_last_error', 'eip_queue_id', 'eip_missing',
+    })
 
     # ------------------------------------------------------------------
     # where the values come from
@@ -210,7 +227,8 @@ class EipPushMixin(models.AbstractModel):
         self.ensure_one()
         return OPERATE_UPDATE if self.eip_synced else OPERATE_ADD
 
-    def _eip_build_body(self, operatetype, config, baseline=None):
+    def _eip_build_body(self, operatetype, config, baseline=None,
+                        current=None):
         """Payload to send.
 
         ADD (and UPDATE in "full" mode) carries every current value. An
@@ -222,9 +240,11 @@ class EipPushMixin(models.AbstractModel):
 
         ``baseline``: the values the platform is known to hold; the
         default is the snapshot of the last successful push.
+        ``current``: precomputed current values (an optimization).
         """
         self.ensure_one()
-        current = self._eip_values(config)
+        if current is None:
+            current = self._eip_values(config)
         if operatetype == OPERATE_ADD or config.update_mode == 'full':
             return current
         if baseline is None:
@@ -261,16 +281,20 @@ class EipPushMixin(models.AbstractModel):
     def _eip_send_as(self, operatetype, config, interface, baseline=None):
         """Send one request with the given operation kind and return the
         call result, extended with the operation kind and the values it
-        carried."""
+        carried. The values are taken *before* the request leaves: they
+        are exactly what the body carries, whatever changes race the
+        round trip."""
         transport = self.env['sn.wsd.eip.transport']
-        body = self._eip_build_body(operatetype, config, baseline)
+        current = self._eip_values(config)
+        body = self._eip_build_body(
+            operatetype, config, baseline, current=current)
         literal = (interface.operatetype_add if operatetype == OPERATE_ADD
                    else interface.operatetype_update)
         log = transport._eip_open_log(
             config, interface, literal, body, self._eip_log_extra())
         result = transport._eip_send(log, body)
         result['operatetype'] = operatetype
-        result['values'] = self._eip_values(config)
+        result['values'] = current
         return result
 
     def _eip_push_one(self):
@@ -332,6 +356,101 @@ class EipPushMixin(models.AbstractModel):
         platform returned). The engine fields are already written."""
 
     # ------------------------------------------------------------------
+    # queue: pushed-then-edited documents come back automatically
+    # ------------------------------------------------------------------
+
+    def _eip_enqueue(self, sync_only=True):
+        """Make sure every document of ``self`` has one active queue
+        row and is marked to push. Auto-called on business changes of
+        pushed documents; called with ``sync_only=False`` by the manual
+        queue / retry actions (which also queue never-pushed drafts)."""
+        Queue = self.env['sn.wsd.eip.push.queue']
+        for record in self:
+            if sync_only and not record.eip_synced:
+                continue
+            try:
+                config = record._eip_push_config()
+            except UserError:
+                config = False  # the edit stands; queue it once a config exists
+            record.write({'push_state': 'to_push'})
+            entry = Queue.search([
+                ('model_name', '=', record._name),
+                ('res_id', '=', record.id),
+                ('state', 'in', ('pending', 'pushing')),
+            ], limit=1)
+            values = {
+                'company_id': record.company_id.id,
+                'config_id': config.id if config else False,
+                'document_ref': record._eip_document_ref(),
+                'retry_count': 0,
+                'next_attempt_at': False,
+                'last_error': False,
+            }
+            if entry and entry.state == 'pending':
+                entry.write(values)
+            elif not entry:
+                entry = Queue.create(dict(
+                    values, model_name=record._name, res_id=record.id,
+                    state='pending'))
+            if record.eip_queue_id != entry:
+                record.write({'eip_queue_id': entry.id})
+
+    def action_eip_queue_push(self):
+        """Server action: queue the selected documents (drafts and
+        pushed alike)."""
+        self._eip_enqueue(sync_only=False)
+
+    def action_eip_push(self):
+        """Push this one document now and show the outcome."""
+        self.ensure_one()
+        result = self._eip_push_one()
+        title = _('Payload Pushed') if result['success'] else _('Push Failed')
+        message = (_('Sent as %s; EIP status %s.', result['operatetype'].upper(),
+                     result['status'] or 'n/a')
+                   if result.get('sent', True)
+                   else result.get('error') or _('Push failed.'))
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': title,
+                'message': message,
+                'type': 'success' if result['success'] else 'danger',
+                'sticky': not result['success'],
+            },
+        }
+
+    def action_eip_retry(self):
+        """Clear the retry counter and queue the documents again."""
+        self._eip_enqueue(sync_only=False)
+
+    def action_eip_preview(self):
+        """Open the payload preview of the current document."""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Payload Preview'),
+            'res_model': 'sn.wsd.eip.push.preview',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'active_model': self._name,
+                'active_id': self.id,
+            },
+        }
+
+    def action_view_eip_logs(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Push Logs'),
+            'res_model': 'sn.wsd.eip.push.log',
+            'view_mode': 'list,form',
+            'domain': [('model_name', '=', self._name),
+                       ('res_id', '=', self.id)],
+        }
+
+    # ------------------------------------------------------------------
     # locate keys are frozen once the platform knows the document
     # ------------------------------------------------------------------
 
@@ -341,6 +460,15 @@ class EipPushMixin(models.AbstractModel):
             arg.partition('.')[0]
             for _key, kind, arg, _add, update in self.EIP_FIELDS
             if update and kind == KIND_FIELD}
+
+    @api.model
+    def _eip_payload_fields(self):
+        """Main-model fields the payload carries: only writes touching
+        them are business changes that re-queue a pushed document."""
+        return {
+            arg.partition('.')[0]
+            for key, kind, arg, _add, _update in self.EIP_FIELDS
+            if kind == KIND_FIELD}
 
     def write(self, vals):
         locate = self._eip_locate_fields()
@@ -369,7 +497,12 @@ class EipPushMixin(models.AbstractModel):
                             record._fields[name]._description_string(
                                 record.env)
                             for name in sorted(changed))))
-        return super().write(vals)
+        result = super().write(vals)
+        business = ((set(vals) - self.EIP_ENGINE_FIELDS)
+                    & self._eip_payload_fields())
+        if business:
+            self._eip_enqueue()
+        return result
 
     # ------------------------------------------------------------------
     # computes
@@ -406,3 +539,44 @@ class EipPushMixin(models.AbstractModel):
         counts = {res_id: count for res_id, count in groups}
         for record in self:
             record.eip_log_count = counts.get(record.id, 0)
+
+
+class EipPushLineMixin(models.AbstractModel):
+    """Lines of a pushed document: any create / change / deletion
+    queues the parent document again (it is already pushed, the
+    platform must learn the new child list)."""
+    _name = 'sn.wsd.eip.push.line.mixin'
+    _description = 'EIP Push Line Mixin'
+
+    EIP_PARENT_FIELD = None  # many2one to the pushed document
+
+    def _eip_line_payload_fields(self):
+        """Fields of the line the payload carries: writes touching only
+        other fields (e.g. an ID written back after a successful push)
+        are not business changes and never re-queue the parent."""
+        return {
+            arg.partition('.')[0]
+            for key, kind, arg, _add, _update in self.EIP_LINES
+            if kind == KIND_FIELD}
+
+    def _eip_enqueue_parents(self, vals=None):
+        if vals is not None and not (set(vals) & self._eip_line_payload_fields()):
+            return
+        self.mapped(self.EIP_PARENT_FIELD)._eip_enqueue()
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        records._eip_enqueue_parents()
+        return records
+
+    def write(self, vals):
+        records = super().write(vals)
+        records._eip_enqueue_parents(vals)
+        return records
+
+    def unlink(self):
+        parents = self.mapped(self.EIP_PARENT_FIELD)
+        result = super().unlink()
+        parents._eip_enqueue()
+        return result

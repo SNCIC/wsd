@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Push queue: the to-do list of every pushed document -->
+    <record id="view_eip_push_queue_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.push.queue.list</field>
+        <field name="model">sn.wsd.eip.push.queue</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="document_ref"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-danger="state == 'failed'"
+                       decoration-info="state == 'pushing'"
+                       decoration-warning="state == 'pending'"/>
+                <field name="retry_count" optional="show"/>
+                <field name="next_attempt_at" optional="show"/>
+                <field name="last_error" optional="hide"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_push_queue_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.push.queue.search</field>
+        <field name="model">sn.wsd.eip.push.queue</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="document_ref"/>
+                <field name="last_error"/>
+                <filter string="Pending" name="filter_pending"
+                        domain="[('state', '=', 'pending')]"/>
+                <filter string="Failed" name="filter_failed"
+                        domain="[('state', '=', 'failed')]"/>
+                <filter string="Waiting for Retry" name="filter_retry"
+                        domain="[('state', '=', 'pending'), ('next_attempt_at', '!=', False)]"/>
+                <group>
+                    <filter name="group_by_state" string="State"
+                            context="{'group_by': 'state'}"/>
+                    <filter name="group_by_model" string="Document Model"
+                            context="{'group_by': 'model_name'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_push_queue" model="ir.actions.act_window">
+        <field name="name">Push Queue</field>
+        <field name="res_model">sn.wsd.eip.push.queue</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <menuitem id="menu_eip_push_queue"
+              name="Push Queue"
+              parent="menu_eip_push_center"
+              action="action_eip_push_queue"
+              sequence="10"/>
+
+    <!-- Payload preview -->
+    <record id="view_eip_push_preview_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.push.preview.form</field>
+        <field name="model">sn.wsd.eip.push.preview</field>
+        <field name="arch" type="xml">
+            <form string="Payload Preview">
+                <group>
+                    <group>
+                        <field name="document_ref"/>
+                        <field name="interface_name"/>
+                    </group>
+                    <group>
+                        <field name="operatetype"/>
+                    </group>
+                </group>
+                <group string="Request Headers">
+                    <field name="headers_text" nolabel="1" colspan="2"/>
+                </group>
+                <group string="Request Body">
+                    <field name="body_text" nolabel="1" colspan="2"/>
+                </group>
+                <footer>
+                    <button special="cancel" string="Close" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>
