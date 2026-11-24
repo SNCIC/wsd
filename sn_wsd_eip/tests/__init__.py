@@ -6,3 +6,6 @@ from . import test_eip_transport
 from . import test_eip_pull
 from . import test_eip_push
 from . import test_eip_forms
+from . import test_eip_collect_serve
+from . import test_eip_collect_wire
+from . import test_eip_clean

@@ -126,5 +126,25 @@
             <field name="model_id" ref="model_sn_wsd_eip_finished_inventory_line"/>
             <field name="domain_force">[('company_id', 'in', company_ids)]</field>
         </record>
+        <record id="rule_eip_collect_outbox_company" model="ir.rule">
+            <field name="name">EIP Collect Outbox Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_collect_outbox"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_eip_collect_log_company" model="ir.rule">
+            <field name="name">EIP Collect Log Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_collect_log"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_eip_clean_rule_company" model="ir.rule">
+            <field name="name">EIP Clean Rule Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_clean_rule"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_eip_clean_fix_company" model="ir.rule">
+            <field name="name">EIP Clean Fix Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_clean_fix"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
     </data>
 </odoo>

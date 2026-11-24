@@ -9,6 +9,7 @@
                 <field name="eip_material_code"/>
                 <field name="material_code"/>
                 <field name="material_name" optional="show"/>
+                <field name="subclass_id"/>
                 <field name="material_unit" optional="show"/>
                 <field name="material_desc" optional="hide"/>
                 <field name="product_model" optional="hide"/>
@@ -30,6 +31,7 @@
                         </group>
                         <group>
                             <field name="material_name"/>
+                            <field name="subclass_id"/>
                             <field name="material_unit"/>
                             <field name="material_desc"/>
                             <field name="product_model"/>

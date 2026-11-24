@@ -56,6 +56,12 @@ class EipConfig(models.Model):
     pull_start_date = fields.Date(
         string='Pull Start Date',
         help='First-sync start date; empty = no update-time condition.')
+    clean_grace_hours = fields.Integer(
+        string='Clean Grace (hours)', default=1, required=True,
+        help='Collection rows are cleansed only after this many hours; '
+             'younger rows may still receive late value extractions '
+             '(test-detail backfill, device packets), and cleansing too '
+             'early would judge half-filled rows.')
     default_category_id = fields.Many2one(
         'sn.wsd.eip.category', string='Default Category',
         help='Category code default on business forms.')
@@ -79,6 +85,13 @@ class EipConfig(models.Model):
                 raise ValidationError(_('Page size must be at least 1.'))
             if config.pull_page_size > 1000:
                 raise ValidationError(_('Page size cannot exceed 1000.'))
+
+    @api.constrains('clean_grace_hours')
+    def _check_clean_grace_hours(self):
+        for config in self:
+            if config.clean_grace_hours < 0:
+                raise ValidationError(
+                    _('The clean grace cannot be negative.'))
 
     @api.model
     def _eip_config_for(self, company=None):

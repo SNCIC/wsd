@@ -11,8 +11,10 @@ fields verbatim. Value columns are filled by three extraction buckets:
 * bucket 3 -- aging-room temperature points inside the pass enter/leave
   window (built-in logic, one line per point).
 
-State machine: pending (default) -> delivered (taken by the collection
-system, frozen afterwards). The pull endpoint is a separate project.
+State machine: pending (default) -> qualified (cleansed, snapshots in
+the outbox) / rejected (gates failed, reason kept) -> delivered (taken
+by the gateway, frozen forever). Cleansing never rewrites the raw
+columns; corrections ride along at synthesis (see eip_clean_engine).
 """
 import logging
 from datetime import timedelta
@@ -122,6 +124,31 @@ class EipPassRecord(models.Model):
     conclusion = fields.Integer(
         string='Conclusion', index=True,
         help='EIP CONCLUSION: 0 pass, 1 fail.')
+    spec_family = fields.Selection(
+        selection=[
+            ('meter', 'Electricity Meter'),
+            ('collector', 'Collection Device'),
+        ],
+        string='Spec Family', index=True,
+        help='Production-data spec this row belongs to, resolved per '
+             'product via the material mapping subclass (30002 meter / '
+             '30001 collector). Empty = unmapped product: the row is '
+             'kept but served by no interface until the mapping exists.')
+
+    # ----- cleansing (eip_clean_engine) -----
+    clean_time = fields.Datetime(
+        string='Clean Time',
+        help='Last cleansing pass; doubles as the payload UPLOAD_TIME '
+             '(the moment the row became fetchable).')
+    clean_note = fields.Text(
+        string='Clean Note',
+        help='Rejection reasons of the last cleansing pass (missing '
+             'required fields, limit failures).')
+    clean_dirty = fields.Boolean(
+        default=False,
+        help='Extraction wrote values after qualification: the next '
+             'cleansing sweep re-judges the row and regenerates its '
+             'snapshots.')
 
     # ----- value columns (three extraction buckets) -----
     current_value = fields.Float(string='Battery Current (uA)', digits=(10, 3))
@@ -153,17 +180,34 @@ class EipPassRecord(models.Model):
     table_no = fields.Char(string='Table No')
     table_address = fields.Char(string='Table Address')
     asset_management_no = fields.Char(string='Asset Management No')
+    # collection-device spec (2xxx) additions
+    measured_value = fields.Float(
+        string='Measured Value (V)', digits=(10, 1),
+        help='2006 AC analog: measured voltage of the window.')
+    error_value = fields.Float(
+        string='Error Value', digits=(10, 2),
+        help='2006 AC analog: error of the window.')
+    logic_address = fields.Char(
+        string='Logic Address',
+        help='2004 parameter setting & query: device logical address.')
+    bureau_num = fields.Char(
+        string='Bureau Number',
+        help='2004 parameter setting & query: grid-issued device '
+             'number (lower nameplate).')
 
     # ----- state / metadata -----
     state = fields.Selection(
         selection=[
             ('pending', 'Pending'),
+            ('qualified', 'Qualified'),
+            ('rejected', 'Rejected'),
             ('delivered', 'Delivered'),
         ],
         required=True, default='pending', index=True,
-        help='Pending: waiting for the collection system to pull it. '
-             'Delivered: taken by the collection system, frozen -- no '
-             'value extraction runs on a delivered row.')
+        help='Pending: waiting for cleansing. Qualified: cleansed, '
+             'snapshots in the outbox. Rejected: a gate failed, reason '
+             'kept. Delivered: taken by the gateway, frozen -- no '
+             'extraction or cleansing touches a delivered row.')
     values_extracted = fields.Boolean(
         default=False,
         help='Set once a configured extraction pass ran on this row.')
@@ -171,6 +215,10 @@ class EipPassRecord(models.Model):
 
     line_ids = fields.One2many(
         'sn.wsd.eip.pass.record.line', 'record_id', string='Lines')
+    outbox_ids = fields.One2many(
+        'sn.wsd.eip.collect.outbox', 'source_id', string='Outbox Records')
+    fix_ids = fields.One2many(
+        'sn.wsd.eip.clean.fix', 'source_id', string='Corrections')
 
     _history_uniq = models.Constraint(
         'unique(company_id, history_id)',
@@ -178,31 +226,82 @@ class EipPassRecord(models.Model):
     )
 
     # ------------------------------------------------------------------
+    # spec family (which production-data spec a row belongs to)
+    # ------------------------------------------------------------------
+    @api.model
+    def _eip_resolve_family(self, product, company):
+        """meter / collector via the material mapping subclass
+        (30002 / 30001); False when the product is unmapped."""
+        if not product:
+            return False
+        mapping = self.env['sn.wsd.eip.material.mapping'].search([
+            ('company_id', '=', company.id),
+            ('material_code', '=', product.default_code),
+            ('subclass_id', '!=', False),
+        ], limit=1)
+        if not mapping:
+            return False
+        return {
+            '30002': 'meter',
+            '30001': 'collector',
+        }.get(mapping.subclass_id.code, False)
+
+    def _eip_backfill_family(self):
+        """Resolve the family of rows captured before the mapping was
+        maintained; the first cleansing pass backfills them naturally."""
+        for record in self.filtered(
+                lambda item: not item.spec_family
+                and item.state != 'delivered'):
+            order = record.mes_order_id
+            family = self._eip_resolve_family(
+                order.product_id if order else None, record.company_id)
+            if family:
+                record.spec_family = family
+
+    # ------------------------------------------------------------------
     # capture (phase 1 -- same transaction as the verdict backfill)
     # ------------------------------------------------------------------
     def _capture_from_history(self, history_rows):
         """Create one collection row per completed pass on a mapped
         operation, then run the in-DB extraction buckets (zone packets,
-        aging points)."""
+        aging points). The operation mapping is spec-family aware: the
+        family resolves per product, legacy single-row setups fall back
+        meter-first."""
         Mapping = self.env['sn.wsd.eip.operation.mapping']
         records = self
         for history in history_rows:
             operation = history.route_operation_id.operation_id
             if not operation:
                 continue
-            mapping = Mapping.search([
-                ('operation_id', '=', operation.id),
-                ('company_id', 'in', [history.company_id.id, False]),
-            ], limit=1)
+            order = history.mes_order_id
+            product = order.product_id
+            family = self._eip_resolve_family(product, history.company_id)
+            mapping = False
+            if family:
+                mapping = Mapping.search([
+                    ('operation_id', '=', operation.id),
+                    ('family', '=', family),
+                    ('company_id', 'in', [history.company_id.id, False]),
+                ], limit=1)
+            if not mapping:
+                # legacy single-family lines (or an unmapped product):
+                # deterministic meter-first fallback keeps the old
+                # one-mapping-per-operation behavior
+                for fallback in ('meter', 'collector'):
+                    mapping = Mapping.search([
+                        ('operation_id', '=', operation.id),
+                        ('family', '=', fallback),
+                        ('company_id', 'in', [history.company_id.id, False]),
+                    ], limit=1)
+                    if mapping:
+                        break
             if not mapping:
                 continue
             if self.search_count([
                     ('history_id', '=', history.id),
                     ('company_id', '=', history.company_id.id)]):
                 continue
-            order = history.mes_order_id
             production = order.production_id
-            product = order.product_id
             workcenter = history.workcenter_id
             # device chain level 2: the equipment assigned to the work
             # center (sn.wsd.workcenter.equipment, first by sequence)
@@ -223,6 +322,7 @@ class EipPassRecord(models.Model):
                 'workcenter_id': workcenter.id,
                 'equipment_id': equipment.id,
                 'info_type_code': mapping.info_code,
+                'spec_family': family,
                 'device_no': equipment.code or workcenter.code,
                 'test_code': f'{mapping.info_code}-{history.id}',
                 'model_code': (
@@ -297,26 +397,35 @@ class EipPassRecord(models.Model):
     def _apply_value_extraction(self):
         """Run every extraction bucket on ``self``. Each bucket is
         individually tolerant: an error is logged, never raised --
-        collection must not disturb the pass flow."""
+        collection must not disturb the pass flow. Rows whose values
+        changed are flagged dirty when already qualified, so the
+        cleansing sweep re-judges them."""
+        dirty = self.env['sn.wsd.eip.pass.record']
         try:
-            self._extract_test_details()
+            dirty |= self._extract_test_details()
         except Exception as exc:  # noqa: BLE001 -- deliberate tolerance
             _logger.warning('EIP detail extraction failed: %s', exc)
         try:
-            self._extract_device_zones()
+            dirty |= self._extract_device_zones()
         except Exception as exc:  # noqa: BLE001 -- deliberate tolerance
             _logger.warning('EIP zone extraction failed: %s', exc)
         try:
-            self._extract_aging_points()
+            dirty |= self._extract_aging_points()
         except Exception as exc:  # noqa: BLE001 -- deliberate tolerance
             _logger.warning('EIP aging extraction failed: %s', exc)
+        dirty = dirty & self.filtered(lambda item: item.state == 'qualified')
+        if dirty:
+            dirty.write({'clean_dirty': True})
+        return dirty
 
     def _extract_test_details(self):
         """Bucket 1: map test detail items of the row's own report by
         project name onto EIP fields. Fill-empty only -- the source is
         the immutable report this row is linked to, recomputation has no
-        gain; the first mapping that matches a project name wins."""
+        gain; the first mapping that matches a project name wins.
+        Returns the rows it changed."""
         Mapping = self.env['sn.wsd.eip.value.mapping']
+        changed = self.env['sn.wsd.eip.pass.record']
         for record in self:
             if record.state == 'delivered':
                 continue
@@ -340,14 +449,18 @@ class EipPassRecord(models.Model):
                     values[mapping.eip_field] = detail.actual_value
             if record._fill_empty_values(values):
                 record.values_extracted = True
+                changed |= record
+        return changed
 
     def _extract_device_zones(self):
         """Bucket 2: for reflow (1009) / wave (1010) rows, take the
         nearest zone packet of the pass device at or before the check
         time, match zones by mapped name, aggregate max per field
         (cooling zone: min). Recompute-and-overwrite: a later, nearer
-        packet supersedes the value taken at capture time."""
+        packet supersedes the value taken at capture time. Returns the
+        rows it changed."""
         Mapping = self.env['sn.wsd.eip.value.mapping']
+        changed = self.env['sn.wsd.eip.pass.record']
         for record in self:
             packet_model = ZONE_PACKET_MODELS.get(record.info_type_code)
             if not packet_model or record.state == 'delivered':
@@ -383,14 +496,18 @@ class EipPassRecord(models.Model):
             if values:
                 record.write(values)
                 record.values_extracted = True
+                changed |= record
+        return changed
 
     def _extract_aging_points(self):
         """Bucket 3 (built-in): for aging rows, rebuild the aging lines
         from every temperature point of the pass device inside the
         enter..leave window and refresh the window average. Rebuild is
-        idempotent (the window never changes)."""
+        idempotent (the window never changes). Returns the rows it
+        changed."""
         Aging = self.env['sn.wsd.device.aging.record']
         Line = self.env['sn.wsd.eip.pass.record.line']
+        changed = self.env['sn.wsd.eip.pass.record']
         for record in self:
             if record.info_type_code != AGING_INFO_CODE:
                 continue
@@ -406,20 +523,32 @@ class EipPassRecord(models.Model):
                 ('collect_time', '>=', history.in_date),
                 ('collect_time', '<=', history.out_date),
             ], order='collect_time asc, id asc')
+            old_lines = [
+                (line.point_time, line.actual_value)
+                for line in record.line_ids.filtered(
+                    lambda line: line.line_type == 'aging_point')]
             record.line_ids.filtered(
                 lambda line: line.line_type == 'aging_point').unlink()
+            new_lines = []
+            average = 0.0
             if points:
+                new_lines = [
+                    (point.collect_time, f'{point.temperature:g}')
+                    for point in points]
                 Line.create([{
                     'record_id': record.id,
                     'line_type': 'aging_point',
                     'point_time': point.collect_time,
                     'actual_value': f'{point.temperature:g}',
                 } for point in points])
-                record.agingroom_temperature = (
+                average = (
                     sum(points.mapped('temperature')) / len(points))
                 record.values_extracted = True
-            else:
-                record.agingroom_temperature = 0.0
+            if new_lines != old_lines \
+                    or record.agingroom_temperature != average:
+                record.agingroom_temperature = average
+                changed |= record
+        return changed
 
     def _fill_empty_values(self, values):
         """Fill-only-empty writer: existing values are never overwritten

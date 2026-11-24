@@ -24,6 +24,13 @@ class EipMaterialMapping(models.Model):
     material_desc = fields.Char(string='Material Description')
     material_unit = fields.Char(string='Material Unit')
     product_model = fields.Char(string='Product Model')
+    subclass_id = fields.Many2one(
+        'sn.wsd.eip.subclass', string='EIP Subclass', index=True,
+        help='Product family of this EIP material: electricity meter '
+             '(30002) or collection device (30001). Collection rows are '
+             'captured under the matching production-data spec via this '
+             'column; rows of unmapped products stay out of the gateway '
+             'until the mapping is maintained.')
 
     _company_material_uniq = models.Constraint(
         'unique(company_id, eip_material_code)',

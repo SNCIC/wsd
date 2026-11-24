@@ -99,6 +99,8 @@ msgstr "已推送成功过：下次推送是 UPDATE，且定位键不能再改�
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__active
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__active
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__active
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_rule__active
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__active
 msgid "Active"
 msgstr "启用"
 
@@ -146,6 +148,7 @@ msgstr "老化温度点"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__agingroom_temperature
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__agingroom_temperature
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_rule__field_name__agingroom_temperature
 msgid "Aging Room Temperature (C)"
 msgstr "老化室温度（℃）"
 
@@ -173,6 +176,8 @@ msgstr "已归档"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__asset_management_no
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__asset_management_no
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix__field_name__asset_management_no
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix_wizard__field_name__asset_management_no
 msgid "Asset Management No"
 msgstr "资产管理编码"
 
@@ -195,6 +200,7 @@ msgstr "该队列行已用掉的自动重试次数。"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__average_error
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__average_error
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_rule__field_name__average_error
 msgid "Average Error"
 msgstr "平均误差"
 
@@ -231,6 +237,7 @@ msgstr "批次"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__current_value
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__current_value
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_rule__field_name__current_value
 msgid "Battery Current (uA)"
 msgstr "电池电流（μA）"
 
@@ -343,6 +350,10 @@ msgstr "编码"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__company_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_config_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_material_mapping_search
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_rule__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__company_id
 msgid "Company"
 msgstr "公司"
 
@@ -393,6 +404,7 @@ msgstr "连接"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__constant_temperature_zone
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__constant_temperature_zone
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_rule__field_name__constant_temperature_zone
 msgid "Constant Temperature Zone (C)"
 msgstr "恒温区（℃）"
 
@@ -462,6 +474,7 @@ msgstr "国网经法系统的合同编号。"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__cooling_zone
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__cooling_zone
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_rule__field_name__cooling_zone
 msgid "Cooling Zone (C)"
 msgstr "冷却区（℃）"
 
@@ -552,6 +565,12 @@ msgstr "创建"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__create_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__create_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_rule__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__create_uid
 msgid "Created by"
 msgstr "创建人"
 
@@ -591,6 +610,12 @@ msgstr "创建人"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__create_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__create_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_rule__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__create_date
 msgid "Created on"
 msgstr "创建时间"
 
@@ -686,6 +711,7 @@ msgstr "默认值"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record__state__delivered
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_outbox__state__delivered
 msgid "Delivered"
 msgstr "已交付"
 
@@ -783,6 +809,12 @@ msgstr "停用的接口不会被调用。"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result_detail__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_serial_operation_history__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_rule__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__display_name
 msgid "Display Name"
 msgstr "显示名称"
 
@@ -935,6 +967,7 @@ msgstr "EIP INFO_TYPE_CODE，取自工序编码映射。"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__info_code
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__info_type_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_rule__info_type_code
 msgid "EIP Info Type Code"
 msgstr "EIP 工序编码"
 
@@ -1141,6 +1174,7 @@ msgstr "EIP 状态码"
 
 #. module: sn_wsd_eip
 #: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_subclass
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__subclass_id
 msgid "EIP Subclass"
 msgstr "EIP 种类编码"
 
@@ -1266,6 +1300,8 @@ msgstr "设备"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__error
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_log_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_log_form
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_log__state__error
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_collect_log_search
 msgid "Error"
 msgstr "错误"
 
@@ -1564,6 +1600,9 @@ msgstr "增量拉取与定时任务完全相同；定向拉取按下方的条件
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_value_mapping_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_value_mapping_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_value_mapping_search
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__info_type_code
 msgid "Info Type Code"
 msgstr "工序编码"
 
@@ -1584,6 +1623,7 @@ msgstr "对接配置"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__interface_id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_preview__interface_name
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_log_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_clean_rule_search
 msgid "Interface"
 msgstr "接口"
 
@@ -1774,6 +1814,12 @@ msgstr "平台更新时间"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_rule__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__write_uid
 msgid "Last Updated by"
 msgstr "最后更新人"
 
@@ -1813,12 +1859,19 @@ msgstr "最后更新人"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__write_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__write_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_rule__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__write_date
 msgid "Last Updated on"
 msgstr "最后更新时间"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__leakage_current
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__leakage_current
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_rule__field_name__leakage_current
 msgid "Leakage Current (mA)"
 msgstr "漏电流（mA）"
 
@@ -1860,6 +1913,7 @@ msgstr "数据关联类型"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__lower_limit
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_rule__lower_limit
 msgid "Lower Limit"
 msgstr "下限"
 
@@ -2040,6 +2094,8 @@ msgstr "方式"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__model_code
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix__field_name__model_code
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix_wizard__field_name__model_code
 msgid "Model Code"
 msgstr "规格型号"
 
@@ -2059,6 +2115,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_code__name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_subclass__name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__name
 msgid "Name"
 msgstr "名称"
 
@@ -2070,6 +2127,8 @@ msgstr "供货单或电话沟通中使用的交付货物名称。"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__nameplate_code
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__nameplate_code
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix__field_name__nameplate_code
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix_wizard__field_name__nameplate_code
 msgid "Nameplate Code"
 msgstr "局编号/铭牌号"
 
@@ -2210,6 +2269,7 @@ msgstr "备注"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__note
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__note
 msgid "Notes"
 msgstr "备注"
 
@@ -2514,6 +2574,8 @@ msgstr "生产工厂名称"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__plant_code
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__plant_code
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix__field_name__plant_code
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix_wizard__field_name__plant_code
 msgid "Plant Code"
 msgstr "厂内编号"
 
@@ -2545,6 +2607,7 @@ msgstr "点位时间"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__preheating_area
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__preheating_area
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_rule__field_name__preheating_area
 msgid "Preheating Area (C)"
 msgstr "预热区（℃）"
 
@@ -3137,6 +3200,7 @@ msgstr "推送成功后平台原始返回串。"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__real_error
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__real_error
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_rule__field_name__real_error
 msgid "Real Error"
 msgstr "实际误差"
 
@@ -3451,6 +3515,8 @@ msgstr "多个 ID 用\"&\"拼接。"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__software_version
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__software_version
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix__field_name__software_version
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix_wizard__field_name__software_version
 msgid "Software Version"
 msgstr "软件备案号"
 
@@ -3516,6 +3582,7 @@ msgstr "标准合同"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__standard_value
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__standard_value
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_rule__field_name__standard_value
 msgid "Standard Value (C)"
 msgstr "标准温度（℃）"
 
@@ -3555,6 +3622,8 @@ msgstr "开始时间"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__state
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__state
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_queue_search
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__state
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__state
 msgid "State"
 msgstr "状态"
 
@@ -3597,6 +3666,7 @@ msgstr "种类编码"
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_push_log__result__success
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pull_log_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_push_log_search
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_log__state__success
 msgid "Success"
 msgstr "成功"
 
@@ -3654,12 +3724,16 @@ msgstr "供货单"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__table_address
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__table_address
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix__field_name__table_address
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix_wizard__field_name__table_address
 msgid "Table Address"
 msgstr "表地址"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__table_no
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__table_no
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix__field_name__table_no
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix_wizard__field_name__table_no
 msgid "Table No"
 msgstr "表号"
 
@@ -3685,6 +3759,7 @@ msgstr "技术规范流水号"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__test_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__test_code
 msgid "Test Code"
 msgstr "检验流水号"
 
@@ -3979,6 +4054,7 @@ msgstr "交付时间"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__upper_limit
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_rule__upper_limit
 msgid "Upper Limit"
 msgstr "上限"
 
@@ -3995,6 +4071,7 @@ msgstr "等待重试"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__warming_zone
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__warming_zone
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_rule__field_name__warming_zone
 msgid "Warming Zone (C)"
 msgstr "升温区（℃）"
 
@@ -4011,6 +4088,7 @@ msgstr "波形信息"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__welding_zone
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__welding_zone
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_rule__field_name__welding_zone
 msgid "Welding Zone (C)"
 msgstr "焊接区（℃）"
 
@@ -4131,3 +4209,788 @@ msgstr "实际发送的 operatetype 请求头字面量。"
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__pull_page_size
 msgid "pageSize sent to the purchase-order pull interface; capped at 1000."
 msgstr "发送给采购订单拉取接口的 pageSize；上限 1000。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_interface_form
+msgid "/api/supplier-so"
+msgstr "/api/supplier-so"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_form
+msgid "Anchors"
+msgstr "锚点"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_clean_fix_wizard_form
+msgid "Apply and Re-clean"
+msgstr "应用并重洗"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_clean_fix__field_name
+msgid ""
+"Archive-type column the correction supplies; measured values and the "
+"conclusion are never correctable."
+msgstr "修正针对的档案类字段；测量值与结论永不可修。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_collect_interface_form
+msgid "Availability"
+msgstr "可用性"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix__basis
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix_wizard__basis
+msgid "Basis"
+msgstr "依据"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_clean_fix_wizard
+#: model:ir.actions.server,name:sn_wsd_eip.action_server_eip_batch_fix
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_clean_fix_wizard_form
+msgid "Batch Correction"
+msgstr "批量修正"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_clean_fix_wizard_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__clean_dirty
+msgid "Clean Dirty"
+msgstr "清洗脏标记"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__clean_grace_hours
+msgid "Clean Grace (hours)"
+msgstr "清洗宽限期（小时）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__clean_note
+msgid "Clean Note"
+msgstr "清洗原因"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__clean_time
+msgid "Clean Time"
+msgstr "清洗时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__source_id
+msgid ""
+"Cleansed collection row this snapshot was built from; the snapshot columns "
+"stay self-contained if the row itself is ever removed."
+msgstr "快照由这条数采行清洗生成；即使行本身被移除，快照各列仍自持。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_collect_outbox
+msgid "Cleansed snapshots waiting for the gateway"
+msgstr "等待网关抓取的清洗合格快照"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_collect_interface
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_collect_interface
+msgid "Collect Interfaces"
+msgstr "采集接口注册"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_collect_outbox
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_collect_outbox
+msgid "Collect Outbox"
+msgstr "出库快照"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_interface__family__collector
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_outbox__family__collector
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_operation_mapping__family__collector
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record__spec_family__collector
+msgid "Collection Device"
+msgstr "采集设备"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_pass_record_ledger
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_collect_ledger
+msgid "Collection Ledger"
+msgstr "数采台账"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_clean_rule
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_clean_rule
+msgid "Collection Limit Rules"
+msgstr "上下限规则"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix__source_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__source_id
+msgid "Collection Row"
+msgstr "数采行"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix_wizard__record_ids
+msgid "Collection Rows"
+msgstr "数采行清单"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__clean_grace_hours
+msgid ""
+"Collection rows are cleansed only after this many hours; younger rows may "
+"still receive late value extractions (test-detail backfill, device packets),"
+" and cleansing too early would judge half-filled rows."
+msgstr "数采行超过该小时数后才清洗；更年轻的行可能还有晚到的值要回填（测试明细、设备数据包），清洗过早会误判未填满的行。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_clean_fix_wizard__record_ids
+msgid ""
+"Comma-separated ids of the rows the correction applies to (filled from the "
+"ledger selection)."
+msgstr "修正适用的数采行 id（逗号分隔），来自台账勾选。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_form
+msgid "Correct"
+msgstr "修正"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_search
+msgid "Corrected"
+msgstr "已修正"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix__value
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix_wizard__value
+msgid "Corrected Value"
+msgstr "修正值"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__fix_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_form
+msgid "Corrections"
+msgstr "修正记录"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_form
+msgid ""
+"Corrections are archive fields only\n"
+"                                (missed or mis-captured true values);\n"
+"                                measured values and the conclusion are\n"
+"                                never correctable. Add a correction with\n"
+"                                the Correct button above; edit existing\n"
+"                                ones from the corrections list via an EIP\n"
+"                                manager."
+msgstr "修正仅限档案类字段（漏采或采错的真值）；测量值与结论永不可修。用上方\"修正\"按钮新增修正；已有修正由 EIP 管理员在修正列表维护。"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_collect
+msgid "Data Collection"
+msgstr "数采采集"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_collect_log__returned
+msgid "Data records actually returned to the gateway."
+msgstr "实际返回给网关的数据条数。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__delivered_time
+msgid "Delivered Time"
+msgstr "交付时间"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_clean_fix.py:0
+msgid "Delivered rows are frozen; corrections are not possible."
+msgstr "已交付的行已冻结，无法修正。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_collect_outbox_form
+msgid "Delivery"
+msgstr "交付"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_form
+msgid "Detail Lines"
+msgstr "明细行"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_collect_interface_search
+msgid "Disabled"
+msgstr "停用"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_root
+msgid "EIP"
+msgstr "EIP"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_collect_log
+msgid "EIP Collect Fetch Log"
+msgstr "EIP 网关抓取日志"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_collect_interface
+msgid "EIP Collect Interface"
+msgstr "EIP 采集接口注册"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_collect_outbox
+msgid "EIP Collect Outbox"
+msgstr "EIP 出库快照"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_clean_fix_wizard
+msgid "EIP Collection Batch Correction"
+msgstr "EIP 数采批量修正"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_clean_fix
+msgid "EIP Collection Correction"
+msgstr "EIP 数采修正"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_clean_rule
+msgid "EIP Collection Limit Rule"
+msgstr "EIP 数采上下限规则"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.server,name:sn_wsd_eip.ir_cron_eip_clean_ir_actions_server
+msgid "EIP: cleanse collection rows"
+msgstr "EIP：清洗数采行"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_interface__family__meter
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_outbox__family__meter
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_operation_mapping__family__meter
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record__spec_family__meter
+msgid "Electricity Meter"
+msgstr "电能表"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_clean_rule__lower_limit
+msgid "Empty = no lower bound."
+msgstr "留空 = 无下限。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_clean_rule__upper_limit
+msgid "Empty = no upper bound."
+msgstr "留空 = 无上限。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_collect_interface_search
+msgid "Enabled"
+msgstr "启用"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__error_message
+msgid "Error Message"
+msgstr "错误信息"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__clean_dirty
+msgid ""
+"Extraction wrote values after qualification: the next cleansing sweep re-"
+"judges the row and regenerates its snapshots."
+msgstr "合格后提取器又写入了值：下一轮清洗将重判该行并重建快照。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix__field_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix_wizard__field_name
+msgid "Field"
+msgstr "字段"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_clean_fix.py:0
+msgid "Field %s is not correctable: only archive-type fields are."
+msgstr "字段 %s 不可修正：仅档案类字段可修。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_interface__method__get
+msgid "GET"
+msgstr "GET"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_collect_log
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_collect_log
+msgid "Gateway Fetch Log"
+msgstr "网关抓取日志"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_category__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_rule__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_entity_id__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_finished_inventory_line__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_code__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_worker__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_purchase_order_line__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_line_mixin__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_mixin__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_preview__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_worker__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_inventory_line__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_sale_order_line__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_process__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_schedule_wo__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_spare_inventory_line__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_subclass__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note_line__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_transport__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mixin__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result_detail__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_serial_operation_history__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__info_code
+msgid ""
+"INFO_TYPE_CODE: electricity meters 1001 AOI, 1002 withstand voltage, 1003 "
+"FCT, 1004 daily timing error, 1005 battery current, 1006 basic error, 1007 "
+"basic error detail, 1008 parameter setting, 1009 reflow, 1010 wave "
+"soldering, 1011 high-temp aging; collection devices 2001..2010 mirror the "
+"same stations."
+msgstr ""
+"工序编码：电能表 1001 AOI、1002 耐压、1003 FCT、1004 日计时误差、1005 电池电流、1006 基本误差、1007 "
+"基本误差详情、1008 参数设置、1009 回流焊、1010 波峰焊、1011 高温老化；采集设备 2001~2010 对应同工位。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_form
+msgid "Inspection"
+msgstr "检验信息"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_collect_log__code
+msgid "Interface code of the fetch URL."
+msgstr "抓取 URL 的接口码。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_collect_interface__code
+msgid ""
+"Interface key of the URL /api/eip/collect/<code>: the spec INFO_TYPE_CODE "
+"(1xxx electricity meters, 2xxx collection devices); the report interfaces "
+"use synthetic keys."
+msgstr ""
+"URL /api/eip/collect/<code> 的接口键：规范 INFO_TYPE_CODE（1xxx 电能表、2xxx "
+"采集设备）；报告接口用合成键。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_clean_rule__info_type_code
+msgid "Interface the limit applies to."
+msgstr "限值适用的接口。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__clean_time
+msgid ""
+"Last cleansing pass; doubles as the payload UPLOAD_TIME (the moment the row "
+"became fetchable)."
+msgstr "最近一次清洗时间；同时作为报文 UPLOAD_TIME（可被抓取的时刻）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_clean_rule__field_name
+msgid "Measured value column the limit bounds."
+msgstr "限值约束的实测值列。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__method
+msgid "Method"
+msgstr "请求方式"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record_line__item_result__ng
+msgid "NG"
+msgstr "NG"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_clean_fix.py:0
+msgid "No correctable collection rows selected."
+msgstr "未选中可修正的数采行。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record_line__item_result__ok
+msgid "OK"
+msgstr "OK"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_collect_interface
+msgid "One endpoint per production-data kind"
+msgstr "每种生产现场数据一个端点"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_clean_rule
+msgid "One limit per interface value field"
+msgstr "每个接口数值字段一条限值"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_collect_outbox
+msgid ""
+"One row is one data record of the gateway answer; the\n"
+"                payload is the exact JSON shipped. Delivered snapshots are\n"
+"                kept forever as the audit trail."
+msgstr "一行即网关 data[] 的一条记录，payload 就是实际发出的 JSON；已交付快照永久保留作审计。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix__original_value
+msgid "Original Value"
+msgstr "原值"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__outbox_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_form
+msgid "Outbox Records"
+msgstr "出库记录"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_interface__method__post
+msgid "POST"
+msgstr "POST"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_collect_outbox_form
+msgid "Payload"
+msgstr "报文"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__state
+msgid ""
+"Pending: waiting for cleansing. Qualified: cleansed, snapshots in the "
+"outbox. Rejected: a gate failed, reason kept. Delivered: taken by the "
+"gateway, frozen -- no extraction or cleansing touches a delivered row."
+msgstr "待清洗：等待清洗。合格：已清洗，快照在出库表。不合格：闸未过，原因留存。已交付：网关已取走，冻结——提取与清洗不再触碰。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_material_mapping__subclass_id
+msgid ""
+"Product family of this EIP material: electricity meter (30002) or collection"
+" device (30001). Collection rows are captured under the matching production-"
+"data spec via this column; rows of unmapped products stay out of the gateway"
+" until the mapping is maintained."
+msgstr ""
+"该 EIP 物料的产品族：电能表（30002）或采集设备（30001）。数采行按此列落入对应规范的采集；未映射的行暂不出库，维护映射后批量重洗即可。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__family
+msgid ""
+"Production-data spec the code belongs to: electricity meter (1xxx) or "
+"collection device (2xxx)."
+msgstr "编码所属规范：电能表（1xxx）或采集设备（2xxx）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__spec_family
+msgid ""
+"Production-data spec this row belongs to, resolved per product via the "
+"material mapping subclass (30002 meter / 30001 collector). Empty = unmapped "
+"product: the row is kept but served by no interface until the mapping "
+"exists."
+msgstr ""
+"本行所属的生产数据规范，按产品经物料映射种类解析（30002 电能表 / 30001 采集器）。空 = "
+"未映射产品：行保留但不被任何接口出库，维护映射后即可。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_outbox__state__qualified
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record__state__qualified
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_collect_outbox_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_search
+msgid "Qualified"
+msgstr "合格"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__state
+msgid ""
+"Qualified: waiting for the gateway to fetch it. Delivered: fetched, frozen "
+"forever. Superseded: replaced by a newer snapshot of the same source (re-"
+"cleansing), never delivered."
+msgstr "待抓取：等待网关取走。已交付：已取走，永久冻结。被替代：同源行重洗后由新快照替代，未交付过。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_pass_record_ledger
+msgid "Raw collection rows, straight from the stations"
+msgstr "来自工位的原始数采行"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_clean_fix__original_value
+msgid "Raw column value when the correction was written (audit)."
+msgstr "修正写入时的原始列值（留痕）。"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.server,name:sn_wsd_eip.action_server_eip_re_clean
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_form
+msgid "Re-clean"
+msgstr "重洗"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record__state__rejected
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_search
+msgid "Rejected"
+msgstr "不合格"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__clean_note
+msgid ""
+"Rejection reasons of the last cleansing pass (missing required fields, limit"
+" failures)."
+msgstr "最近一次清洗的不合格原因（缺必填、超限等）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_collect_log__source
+msgid "Remote address of the gateway call."
+msgstr "网关调用的来源地址。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__amount
+msgid "Requested Limit"
+msgstr "请求条数"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__returned
+msgid "Returned Rows"
+msgstr "返回条数"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__serial_identity_id
+msgid "SN"
+msgstr "SN"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_clean_rule.py:0
+msgid "Set a lower limit, an upper limit, or both."
+msgstr "下限、上限至少填一个。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_collect_outbox_form
+msgid "Snapshot"
+msgstr "快照"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__source
+msgid "Source"
+msgstr "来源"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__family
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__family
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__family
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__spec_family
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_collect_interface_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_search
+msgid "Spec Family"
+msgstr "规范族"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_outbox__state__superseded
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_collect_outbox_search
+msgid "Superseded"
+msgstr "被替代"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_config.py:0
+msgid "The clean grace cannot be negative."
+msgstr "清洗宽限期不能为负。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_pass_record_ledger
+msgid ""
+"The cleansing gates judge every row: missing required\n"
+"                fields surface here for archive corrections, out-of-limit\n"
+"                and failing rows stay rejected with the reason, and\n"
+"                qualified rows ship through the outbox."
+msgstr "三道闸判定每一行：缺必填的在此待档案补录，超限与结论不合格的带原因留档，合格的经出库快照交付。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_collect_interface_code_uniq
+msgid "The collect interface code must be unique."
+msgstr "采集接口编码必须唯一。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload
+msgid ""
+"The exact data[] record shipped to the gateway: spec field names, types, "
+"precisions and date formats already applied."
+msgstr "发给网关的 data[] 一条记录：规范字段名、类型、精度与日期格式已定稿。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_clean_rule
+msgid ""
+"The factory's own process standard: out-of-limit readings\n"
+"                are rejected, never repaired -- the row stays in the\n"
+"                ledger with the reason and the process side acts."
+msgstr "厂内工艺标准：超限的实测值直接刷下、绝不修数——行留在台账并记录原因，由生产侧处理。"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_clean_rule.py:0
+msgid "The lower limit must not exceed the upper limit."
+msgstr "下限不能大于上限。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_operation_mapping_operation_uniq
+msgid "The operation already has an EIP code mapping for this spec family."
+msgstr "该工序在此规范族下已有编码映射。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_clean_fix__value
+msgid ""
+"The true value, taken from a real source (issued lists, paper records, the "
+"physical unit)."
+msgstr "真实值，取自真实来源（下发清单、纸质记录、实物）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_clean_fix_wizard__value
+msgid "The true value, taken from a real source."
+msgstr "真实值，取自真实来源。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_clean_fix_fix_uniq
+msgid "This collection row already has a correction for the field."
+msgstr "该数采行此字段已有修正记录。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_clean_rule_rule_uniq
+msgid "This interface value already has a limit rule."
+msgstr "该接口字段已有上下限规则。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_search
+msgid "Unmapped Family"
+msgstr "未识别族"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_form
+msgid "Value Columns"
+msgstr "数值列"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_rule__field_name
+msgid "Value Field"
+msgstr "数值字段"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__delivered_time
+msgid "When the gateway fetched this snapshot."
+msgstr "网关取走该快照的时间。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_clean_fix__basis
+msgid "Where the corrected value comes from; mandatory for the audit trail."
+msgstr "修正值出处；审计必填。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_clean_fix_wizard_form
+msgid "Where the value comes from (issued list, paper record...)"
+msgstr "值出处（下发清单、纸质记录…）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_collect_interface__family
+msgid "Which production-data spec the interface belongs to."
+msgstr "接口所属的生产数据规范。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_collect_log__amount
+msgid ""
+"amount the gateway asked for (0 = request rejected before the limit check)."
+msgstr "网关本次请求的 amount（0 = 未通过校验即被拒）。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_search
+msgid "Awaiting Correction"
+msgstr "待修正"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_collect_interface
+msgid ""
+"The gateway fetches /api/eip/collect/&lt;code&gt; for each\n"
+"                enabled row; disabled rows reserve the URLs of interfaces\n"
+"                whose capture sources are not implemented yet."
+msgstr "网关对每个启用的行抓取 /api/eip/collect/&lt;code&gt;；停用行为未实现采集源的接口预留 URL。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_config_form
+msgid "https://host:port"
+msgstr "https://host:port"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_value_mapping.py:0
+msgid "%(code)s is not a collectable EIP interface code."
+msgstr "%(code)s 不是可采集的 EIP 接口编码。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__logic_address
+msgid "2004 parameter setting & query: device logical address."
+msgstr "2004 参数设置与查询：设备逻辑地址。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__bureau_num
+msgid ""
+"2004 parameter setting & query: grid-issued device number (lower nameplate)."
+msgstr "2004 参数设置与查询：国网下发的设备统一编号（下铭牌号）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__error_value
+msgid "2006 AC analog: error of the window."
+msgstr "2006 交流模拟量：该窗口的误差值。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__measured_value
+msgid "2006 AC analog: measured voltage of the window."
+msgstr "2006 交流模拟量：该窗口的实测电压。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__bureau_num
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix__field_name__bureau_num
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix_wizard__field_name__bureau_num
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__bureau_num
+msgid "Bureau Number"
+msgstr "局编号/下铭牌号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__error_value
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_rule__field_name__error_value
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__error_value
+msgid "Error Value"
+msgstr "误差值"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__logic_address
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix__field_name__logic_address
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix_wizard__field_name__logic_address
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__logic_address
+msgid "Logic Address"
+msgstr "逻辑地址"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__measured_value
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_rule__field_name__measured_value
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__measured_value
+msgid "Measured Value (V)"
+msgstr "实测值（V）"

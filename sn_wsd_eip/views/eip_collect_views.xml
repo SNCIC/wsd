@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Data-collection serving: interface registry, outbox snapshots
+         and the gateway fetch log. The pass-record ledger arrives with
+         the cleansing engine (separate view file keeps the diffs
+         focused). -->
+
+    <record id="view_eip_collect_interface_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.interface.list</field>
+        <field name="model">sn.wsd.eip.collect.interface</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="family"/>
+                <field name="method"/>
+                <field name="active"/>
+                <field name="note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_collect_interface_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.interface.form</field>
+        <field name="model">sn.wsd.eip.collect.interface</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Interface">
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="family"/>
+                            <field name="method"/>
+                        </group>
+                        <group string="Availability">
+                            <field name="active"/>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_collect_interface_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.interface.search</field>
+        <field name="model">sn.wsd.eip.collect.interface</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <filter string="Enabled" name="filter_enabled"
+                        domain="[('active', '=', True)]"/>
+                <filter string="Disabled" name="filter_disabled"
+                        domain="[('active', '=', False)]"/>
+                <group>
+                    <filter name="group_by_family" string="Spec Family"
+                            context="{'group_by': 'family'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_collect_interface" model="ir.actions.act_window">
+        <field name="name">Collect Interfaces</field>
+        <field name="res_model">sn.wsd.eip.collect.interface</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                One endpoint per production-data kind
+            </p>
+            <p>
+                The gateway fetches /api/eip/collect/&lt;code&gt; for each
+                enabled row; disabled rows reserve the URLs of interfaces
+                whose capture sources are not implemented yet.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_eip_collect_outbox_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.list</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="info_type_code"/>
+                <field name="family"/>
+                <field name="test_code"/>
+                <field name="source_id"/>
+                <field name="state"/>
+                <field name="delivered_time"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_collect_outbox_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.form</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Snapshot">
+                            <field name="info_type_code"/>
+                            <field name="family"/>
+                            <field name="test_code"/>
+                            <field name="source_id"/>
+                        </group>
+                        <group string="Delivery">
+                            <field name="state"/>
+                            <field name="delivered_time"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    <group string="Payload">
+                        <field name="payload" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_collect_outbox_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.search</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="info_type_code"/>
+                <field name="test_code"/>
+                <field name="source_id"/>
+                <filter string="Qualified" name="filter_qualified"
+                        domain="[('state', '=', 'qualified')]"/>
+                <filter string="Delivered" name="filter_delivered"
+                        domain="[('state', '=', 'delivered')]"/>
+                <filter string="Superseded" name="filter_superseded"
+                        domain="[('state', '=', 'superseded')]"/>
+                <group>
+                    <filter name="group_by_code" string="Interface"
+                            context="{'group_by': 'info_type_code'}"/>
+                    <filter name="group_by_state" string="State"
+                            context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_collect_outbox" model="ir.actions.act_window">
+        <field name="name">Collect Outbox</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Cleansed snapshots waiting for the gateway
+            </p>
+            <p>
+                One row is one data record of the gateway answer; the
+                payload is the exact JSON shipped. Delivered snapshots are
+                kept forever as the audit trail.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_eip_collect_log_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.log.list</field>
+        <field name="model">sn.wsd.eip.collect.log</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="create_date"/>
+                <field name="code"/>
+                <field name="amount"/>
+                <field name="returned"/>
+                <field name="state"/>
+                <field name="source" optional="hide"/>
+                <field name="error_message" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_collect_log_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.log.search</field>
+        <field name="model">sn.wsd.eip.collect.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <filter string="Success" name="filter_success"
+                        domain="[('state', '=', 'success')]"/>
+                <filter string="Error" name="filter_error"
+                        domain="[('state', '=', 'error')]"/>
+                <group>
+                    <filter name="group_by_code" string="Interface"
+                            context="{'group_by': 'code'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_collect_log" model="ir.actions.act_window">
+        <field name="name">Gateway Fetch Log</field>
+        <field name="res_model">sn.wsd.eip.collect.log</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <menuitem id="menu_eip_collect_outbox"
+              name="Collect Outbox"
+              parent="menu_eip_collect"
+              action="action_eip_collect_outbox"
+              sequence="10"/>
+    <menuitem id="menu_eip_collect_interface"
+              name="Collect Interfaces"
+              parent="menu_eip_collect"
+              action="action_eip_collect_interface"
+              sequence="20"/>
+    <menuitem id="menu_eip_collect_log"
+              name="Gateway Fetch Log"
+              parent="menu_eip_collect"
+              action="action_eip_collect_log"
+              sequence="30"/>
+</odoo>

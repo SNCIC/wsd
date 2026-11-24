@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Collect interface registry: all 38 endpoints of the two
+         production-data specs (electricity meters v2.0 / collection
+         devices v2.0). Only the station/test interfaces are enabled
+         this round; material inspection, packing/shipping and the
+         report interfaces stay inactive until their capture sources
+         are implemented (flip active, no code change). Chinese names
+         are the platform-issued interface titles. -->
+    <data noupdate="1">
+
+        <!-- ===== electricity meters (1xxx, active 1001..1011) ===== -->
+        <record id="collect_interface_1001" model="sn.wsd.eip.collect.interface">
+            <field name="code">1001</field>
+            <field name="family">meter</field>
+            <field name="name">PCB Mounting Inspection (AOI)</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_1002" model="sn.wsd.eip.collect.interface">
+            <field name="code">1002</field>
+            <field name="family">meter</field>
+            <field name="name">Withstand Voltage Test</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_1003" model="sn.wsd.eip.collect.interface">
+            <field name="code">1003</field>
+            <field name="family">meter</field>
+            <field name="name">Board Test (FCT)</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_1004" model="sn.wsd.eip.collect.interface">
+            <field name="code">1004</field>
+            <field name="family">meter</field>
+            <field name="name">Daily Timing Error</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_1005" model="sn.wsd.eip.collect.interface">
+            <field name="code">1005</field>
+            <field name="family">meter</field>
+            <field name="name">Battery Current</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_1006" model="sn.wsd.eip.collect.interface">
+            <field name="code">1006</field>
+            <field name="family">meter</field>
+            <field name="name">Basic Error</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_1007" model="sn.wsd.eip.collect.interface">
+            <field name="code">1007</field>
+            <field name="family">meter</field>
+            <field name="name">Basic Error Detail</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_1008" model="sn.wsd.eip.collect.interface">
+            <field name="code">1008</field>
+            <field name="family">meter</field>
+            <field name="name">Parameter Setting</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_1009" model="sn.wsd.eip.collect.interface">
+            <field name="code">1009</field>
+            <field name="family">meter</field>
+            <field name="name">Reflow Soldering</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_1010" model="sn.wsd.eip.collect.interface">
+            <field name="code">1010</field>
+            <field name="family">meter</field>
+            <field name="name">Wave Soldering</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_1011" model="sn.wsd.eip.collect.interface">
+            <field name="code">1011</field>
+            <field name="family">meter</field>
+            <field name="name">High-Temp Aging</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- meter material inspection (inactive this round) -->
+        <record id="collect_interface_1012" model="sn.wsd.eip.collect.interface">
+            <field name="code">1012</field>
+            <field name="family">meter</field>
+            <field name="name">Varistor Inspection</field>
+            <field name="method">post</field>
+            <field name="active" eval="False"/>
+        </record>
+        <record id="collect_interface_1013" model="sn.wsd.eip.collect.interface">
+            <field name="code">1013</field>
+            <field name="family">meter</field>
+            <field name="name">Optocoupler Inspection</field>
+            <field name="method">post</field>
+            <field name="active" eval="False"/>
+        </record>
+        <record id="collect_interface_1014" model="sn.wsd.eip.collect.interface">
+            <field name="code">1014</field>
+            <field name="family">meter</field>
+            <field name="name">Crystal Resonator Inspection</field>
+            <field name="method">post</field>
+            <field name="active" eval="False"/>
+        </record>
+        <record id="collect_interface_1015" model="sn.wsd.eip.collect.interface">
+            <field name="code">1015</field>
+            <field name="family">meter</field>
+            <field name="name">TVS Diode Inspection</field>
+            <field name="method">post</field>
+            <field name="active" eval="False"/>
+        </record>
+        <record id="collect_interface_1016" model="sn.wsd.eip.collect.interface">
+            <field name="code">1016</field>
+            <field name="family">meter</field>
+            <field name="name">Clock Battery Inspection</field>
+            <field name="method">post</field>
+            <field name="active" eval="False"/>
+        </record>
+        <record id="collect_interface_1017" model="sn.wsd.eip.collect.interface">
+            <field name="code">1017</field>
+            <field name="family">meter</field>
+            <field name="name">LCD Inspection</field>
+            <field name="method">post</field>
+            <field name="active" eval="False"/>
+        </record>
+        <record id="collect_interface_1018" model="sn.wsd.eip.collect.interface">
+            <field name="code">1018</field>
+            <field name="family">meter</field>
+            <field name="name">Current Transformer Inspection</field>
+            <field name="method">post</field>
+            <field name="active" eval="False"/>
+        </record>
+
+        <!-- meter packing / shipping (inactive this round) -->
+        <record id="collect_interface_1090" model="sn.wsd.eip.collect.interface">
+            <field name="code">1090</field>
+            <field name="family">meter</field>
+            <field name="name">Packing Storage</field>
+            <field name="method">post</field>
+            <field name="active" eval="False"/>
+        </record>
+        <record id="collect_interface_1091" model="sn.wsd.eip.collect.interface">
+            <field name="code">1091</field>
+            <field name="family">meter</field>
+            <field name="name">Finished-Goods Shipping</field>
+            <field name="method">post</field>
+            <field name="active" eval="False"/>
+        </record>
+
+        <!-- meter material report collection (inactive this round) -->
+        <record id="collect_interface_meter_report" model="sn.wsd.eip.collect.interface">
+            <field name="code">M-REPORT</field>
+            <field name="family">meter</field>
+            <field name="name">Material Report Collection</field>
+            <field name="method">get</field>
+            <field name="active" eval="False"/>
+        </record>
+
+        <!-- ===== collection devices (2xxx, active 2001..2010) ===== -->
+        <record id="collect_interface_2001" model="sn.wsd.eip.collect.interface">
+            <field name="code">2001</field>
+            <field name="family">collector</field>
+            <field name="name">PCB Mounting Inspection (AOI)</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_2002" model="sn.wsd.eip.collect.interface">
+            <field name="code">2002</field>
+            <field name="family">collector</field>
+            <field name="name">Board Test (FCT)</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_2003" model="sn.wsd.eip.collect.interface">
+            <field name="code">2003</field>
+            <field name="family">collector</field>
+            <field name="name">Withstand Voltage Test</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_2004" model="sn.wsd.eip.collect.interface">
+            <field name="code">2004</field>
+            <field name="family">collector</field>
+            <field name="name">Parameter Setting &amp; Query</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_2005" model="sn.wsd.eip.collect.interface">
+            <field name="code">2005</field>
+            <field name="family">collector</field>
+            <field name="name">Communication Interface Test</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_2006" model="sn.wsd.eip.collect.interface">
+            <field name="code">2006</field>
+            <field name="family">collector</field>
+            <field name="name">AC Analog Acquisition</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_2007" model="sn.wsd.eip.collect.interface">
+            <field name="code">2007</field>
+            <field name="family">collector</field>
+            <field name="name">Battery Current</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_2008" model="sn.wsd.eip.collect.interface">
+            <field name="code">2008</field>
+            <field name="family">collector</field>
+            <field name="name">Reflow Soldering</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_2009" model="sn.wsd.eip.collect.interface">
+            <field name="code">2009</field>
+            <field name="family">collector</field>
+            <field name="name">Wave Soldering</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="collect_interface_2010" model="sn.wsd.eip.collect.interface">
+            <field name="code">2010</field>
+            <field name="family">collector</field>
+            <field name="name">Aging Room</field>
+            <field name="method">post</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- collector material inspection (inactive this round) -->
+        <record id="collect_interface_2011" model="sn.wsd.eip.collect.interface">
+            <field name="code">2011</field>
+            <field name="family">collector</field>
+            <field name="name">Varistor Inspection</field>
+            <field name="method">post</field>
+            <field name="active" eval="False"/>
+        </record>
+        <record id="collect_interface_2012" model="sn.wsd.eip.collect.interface">
+            <field name="code">2012</field>
+            <field name="family">collector</field>
+            <field name="name">Optocoupler Inspection</field>
+            <field name="method">post</field>
+            <field name="active" eval="False"/>
+        </record>
+        <record id="collect_interface_2013" model="sn.wsd.eip.collect.interface">
+            <field name="code">2013</field>
+            <field name="family">collector</field>
+            <field name="name">Crystal Resonator Inspection</field>
+            <field name="method">post</field>
+            <field name="active" eval="False"/>
+        </record>
+        <record id="collect_interface_2014" model="sn.wsd.eip.collect.interface">
+            <field name="code">2014</field>
+            <field name="family">collector</field>
+            <field name="name">TVS Diode Inspection</field>
+            <field name="method">post</field>
+            <field name="active" eval="False"/>
+        </record>
+
+        <!-- collector packing / shipping (inactive this round) -->
+        <record id="collect_interface_2090" model="sn.wsd.eip.collect.interface">
+            <field name="code">2090</field>
+            <field name="family">collector</field>
+            <field name="name">Packing Storage</field>
+            <field name="method">post</field>
+            <field name="active" eval="False"/>
+        </record>
+        <record id="collect_interface_2091" model="sn.wsd.eip.collect.interface">
+            <field name="code">2091</field>
+            <field name="family">collector</field>
+            <field name="name">Finished-Goods Shipping</field>
+            <field name="method">post</field>
+            <field name="active" eval="False"/>
+        </record>
+
+        <!-- collector material report collection (inactive this round) -->
+        <record id="collect_interface_collector_report" model="sn.wsd.eip.collect.interface">
+            <field name="code">C-REPORT</field>
+            <field name="family">collector</field>
+            <field name="name">Material Report Collection</field>
+            <field name="method">get</field>
+            <field name="active" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

@@ -37,10 +37,15 @@ EIP_VALUE_FIELDS = [
     ('table_no', 'Table No'),
     ('table_address', 'Table Address'),
     ('asset_management_no', 'Asset Management No'),
+    ('measured_value', 'Measured Value (V)'),
+    ('error_value', 'Error Value'),
+    ('logic_address', 'Logic Address'),
+    ('bureau_num', 'Bureau Number'),
 ]
 
-# Which value fields belong to which interface (spec v2.0 field tables);
-# a mapping row may only target a field of its own interface.
+# Which value fields belong to which interface (spec v2.0 field tables,
+# meters 1xxx and collection devices 2xxx); a mapping row may only
+# target a field of its own interface.
 INTERFACE_FIELDS = {
     '1001': [],
     '1002': ['check_duration', 'testing_voltage', 'leakage_current'],
@@ -59,6 +64,22 @@ INTERFACE_FIELDS = {
     ],
     '1010': ['preheating_area', 'welding_zone'],
     '1011': ['agingroom_temperature', 'standard_value'],
+    '2001': [],
+    '2002': [],
+    '2003': ['check_duration', 'testing_voltage', 'leakage_current'],
+    '2004': ['plant_code', 'logic_address', 'bureau_num'],
+    '2005': [],
+    '2006': [
+        'average_error_type', 'standard_value',
+        'measured_value', 'error_value',
+    ],
+    '2007': ['current_value'],
+    '2008': [
+        'warming_zone', 'constant_temperature_zone',
+        'welding_zone', 'cooling_zone',
+    ],
+    '2009': ['preheating_area', 'welding_zone'],
+    '2010': ['agingroom_temperature', 'standard_value'],
 }
 
 
@@ -128,8 +149,8 @@ class EipValueMapping(models.Model):
             allowed = INTERFACE_FIELDS.get(mapping.info_type_code)
             if allowed is None:
                 raise ValidationError(_(
-                    '%(code)s is not a station-collectable EIP interface '
-                    'code.', code=mapping.info_type_code))
+                    '%(code)s is not a collectable EIP interface code.',
+                    code=mapping.info_type_code))
             if allowed and mapping.eip_field not in allowed:
                 raise ValidationError(_(
                     '%(field)s does not belong to interface %(code)s.',

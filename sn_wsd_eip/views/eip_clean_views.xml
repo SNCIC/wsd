@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Cleansing configuration: limit rules (the third gate) and the
+         batch-correction wizard. -->
+
+    <record id="view_eip_clean_rule_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.clean.rule.list</field>
+        <field name="model">sn.wsd.eip.clean.rule</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="info_type_code"/>
+                <field name="field_name"/>
+                <field name="lower_limit"/>
+                <field name="upper_limit"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_clean_rule_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.clean.rule.search</field>
+        <field name="model">sn.wsd.eip.clean.rule</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="info_type_code"/>
+                <field name="field_name"/>
+                <group>
+                    <filter name="group_by_code" string="Interface"
+                            context="{'group_by': 'info_type_code'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_clean_rule" model="ir.actions.act_window">
+        <field name="name">Collection Limit Rules</field>
+        <field name="res_model">sn.wsd.eip.clean.rule</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                One limit per interface value field
+            </p>
+            <p>
+                The factory's own process standard: out-of-limit readings
+                are rejected, never repaired -- the row stays in the
+                ledger with the reason and the process side acts.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_eip_clean_rule"
+              name="Collection Limit Rules"
+              parent="menu_eip_collect"
+              action="action_eip_clean_rule"
+              sequence="40"/>
+
+    <!-- batch correction wizard -->
+    <record id="view_eip_clean_fix_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.clean.fix.wizard.form</field>
+        <field name="model">sn.wsd.eip.clean.fix.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Batch Correction">
+                <group>
+                    <field name="record_ids" invisible="1"/>
+                    <field name="field_name"/>
+                    <field name="value"/>
+                    <field name="basis" placeholder="Where the value comes from (issued list, paper record...)"/>
+                </group>
+                <footer>
+                    <button name="action_apply" type="object"
+                            string="Apply and Re-clean" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_eip_clean_fix_wizard" model="ir.actions.act_window">
+        <field name="name">Batch Correction</field>
+        <field name="res_model">sn.wsd.eip.clean.fix.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

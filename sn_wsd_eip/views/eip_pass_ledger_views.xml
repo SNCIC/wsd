@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Raw-data ledger of the collection rows: governance view for the
+         rejected rows (awaiting archive corrections), the qualified
+         outbox candidates and the delivered history. Raw columns are
+         read-only everywhere; the only writable surface is the
+         corrections tab (archive fields, manager). -->
+
+    <record id="view_eip_pass_record_ledger_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.ledger.list</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="work_order_no"/>
+                <field name="sn_name"/>
+                <field name="info_type_code"/>
+                <field name="test_code"/>
+                <field name="device_no" optional="show"/>
+                <field name="check_time"/>
+                <field name="conclusion" optional="show"/>
+                <field name="spec_family" optional="show"/>
+                <field name="state"/>
+                <field name="clean_note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_pass_record_ledger_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.ledger.search</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="test_code"/>
+                <field name="work_order_no"/>
+                <field name="sn_name"/>
+                <field name="device_no"/>
+                <filter string="Pending" name="filter_pending"
+                        domain="[('state', '=', 'pending')]"/>
+                <filter string="Qualified" name="filter_qualified"
+                        domain="[('state', '=', 'qualified')]"/>
+                <filter string="Rejected" name="filter_rejected"
+                        domain="[('state', '=', 'rejected')]"/>
+                <filter string="Delivered" name="filter_delivered"
+                        domain="[('state', '=', 'delivered')]"/>
+                <filter string="Awaiting Correction" name="filter_awaiting_fix"
+                        domain="[('state', '=', 'rejected'), ('fix_ids', '=', False)]"/>
+                <filter string="Corrected" name="filter_fixed"
+                        domain="[('state', '=', 'rejected'), ('fix_ids', '!=', False)]"/>
+                <filter string="Unmapped Family" name="filter_family_unknown"
+                        domain="[('spec_family', '=', False)]"/>
+                <group>
+                    <filter name="group_by_state" string="State"
+                            context="{'group_by': 'state'}"/>
+                    <filter name="group_by_code" string="Interface"
+                            context="{'group_by': 'info_type_code'}"/>
+                    <filter name="group_by_family" string="Spec Family"
+                            context="{'group_by': 'spec_family'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_eip_pass_record_ledger_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.ledger.form</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_eip_re_clean" type="object"
+                            string="Re-clean" class="btn-primary"
+                            groups="mrp.group_mrp_manager"
+                            invisible="state == 'delivered'"/>
+                    <button name="%(action_eip_clean_fix_wizard)d"
+                            type="action" string="Correct"
+                            groups="mrp.group_mrp_manager"
+                            context="{'default_record_ids': str(id)}"
+                            invisible="state == 'delivered'"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="test_code" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Anchors">
+                            <field name="company_id" readonly="1"/>
+                            <field name="work_order_no" readonly="1"/>
+                            <field name="production_order_no" readonly="1"/>
+                            <field name="sn_name" readonly="1"/>
+                            <field name="info_type_code" readonly="1"/>
+                            <field name="spec_family" readonly="1"/>
+                        </group>
+                        <group string="Inspection">
+                            <field name="device_no" readonly="1"/>
+                            <field name="test_name" readonly="1"/>
+                            <field name="check_time" readonly="1"/>
+                            <field name="create_time" readonly="1"/>
+                            <field name="conclusion" readonly="1"/>
+                            <field name="state" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Value Columns">
+                        <group>
+                            <field name="current_value" readonly="1"/>
+                            <field name="check_duration" readonly="1"/>
+                            <field name="testing_voltage" readonly="1"/>
+                            <field name="leakage_current" readonly="1"/>
+                            <field name="average_error_type" readonly="1"/>
+                            <field name="average_error" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="allowable_error" readonly="1"/>
+                            <field name="real_error" readonly="1"/>
+                            <field name="warming_zone" readonly="1"/>
+                            <field name="constant_temperature_zone" readonly="1"/>
+                            <field name="welding_zone" readonly="1"/>
+                            <field name="cooling_zone" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="preheating_area" readonly="1"/>
+                            <field name="agingroom_temperature" readonly="1"/>
+                            <field name="standard_value" readonly="1"/>
+                            <field name="measured_value" readonly="1"/>
+                            <field name="error_value" readonly="1"/>
+                            <field name="logic_address" readonly="1"/>
+                            <field name="bureau_num" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="software_version" readonly="1"/>
+                            <field name="plant_code" readonly="1"/>
+                            <field name="nameplate_code" readonly="1"/>
+                            <field name="table_no" readonly="1"/>
+                            <field name="table_address" readonly="1"/>
+                            <field name="asset_management_no" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Corrections">
+                            <field name="fix_ids" readonly="1">
+                                <list>
+                                    <field name="field_name"/>
+                                    <field name="original_value"/>
+                                    <field name="value"/>
+                                    <field name="basis"/>
+                                    <field name="create_uid"/>
+                                    <field name="create_date"/>
+                                </list>
+                            </field>
+                            <div colspan="2" class="text-muted">
+                                Corrections are archive fields only
+                                (missed or mis-captured true values);
+                                measured values and the conclusion are
+                                never correctable. Add a correction with
+                                the Correct button above; edit existing
+                                ones from the corrections list via an EIP
+                                manager.
+                            </div>
+                        </page>
+                        <page string="Outbox Records">
+                            <field name="outbox_ids" readonly="1">
+                                <list>
+                                    <field name="info_type_code"/>
+                                    <field name="family"/>
+                                    <field name="test_code"/>
+                                    <field name="state"/>
+                                    <field name="delivered_time"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Detail Lines">
+                            <field name="line_ids" readonly="1">
+                                <list>
+                                    <field name="line_type"/>
+                                    <field name="point_time" optional="hide"/>
+                                    <field name="project_name"/>
+                                    <field name="actual_value"/>
+                                    <field name="item_result" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_eip_pass_record_ledger" model="ir.actions.act_window">
+        <field name="name">Collection Ledger</field>
+        <field name="res_model">sn.wsd.eip.pass.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Raw collection rows, straight from the stations
+            </p>
+            <p>
+                The cleansing gates judge every row: missing required
+                fields surface here for archive corrections, out-of-limit
+                and failing rows stay rejected with the reason, and
+                qualified rows ship through the outbox.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_eip_collect_ledger"
+              name="Collection Ledger"
+              parent="menu_eip_collect"
+              action="action_eip_pass_record_ledger"
+              sequence="5"/>
+
+    <!-- server actions bound to the ledger list -->
+    <record id="action_server_eip_re_clean" model="ir.actions.server">
+        <field name="name">Re-clean</field>
+        <field name="model_id" ref="model_sn_wsd_eip_pass_record"/>
+        <field name="binding_model_id" ref="model_sn_wsd_eip_pass_record"/>
+        <field name="state">code</field>
+        <field name="code">records.action_eip_re_clean()</field>
+    </record>
+
+    <record id="action_server_eip_batch_fix" model="ir.actions.server">
+        <field name="name">Batch Correction</field>
+        <field name="model_id" ref="model_sn_wsd_eip_pass_record"/>
+        <field name="binding_model_id" ref="model_sn_wsd_eip_pass_record"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    action = env.ref('sn_wsd_eip.action_eip_clean_fix_wizard').sudo().read()[0]
+    action['context'] = dict(
+        action.get('context', {}),
+        default_record_ids=','.join(str(record_id) for record_id in records.ids))
+</field>
+    </record>
+</odoo>
