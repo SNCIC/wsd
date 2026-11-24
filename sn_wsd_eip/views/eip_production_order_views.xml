@@ -37,6 +37,8 @@
                             string="Retry" invisible="push_state != 'failed'"/>
                     <button name="action_eip_preview" type="object"
                             string="Preview Payload"/>
+                    <button name="action_create_work_order" type="object"
+                            string="Create Work Order"/>
                     <field name="push_state" widget="statusbar"
                            statusbar_visible="draft,to_push,pushed"/>
                 </header>

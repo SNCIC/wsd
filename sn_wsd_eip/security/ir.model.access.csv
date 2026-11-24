@@ -35,3 +35,9 @@ access_sn_wsd_eip_production_order_user,sn.wsd.eip.production.order user,model_s
 access_sn_wsd_eip_production_order_manager,sn.wsd.eip.production.order manager,model_sn_wsd_eip_production_order,mrp.group_mrp_manager,1,1,1,1
 access_sn_wsd_eip_push_queue_user,sn.wsd.eip.push.queue user,model_sn_wsd_eip_push_queue,mrp.group_mrp_user,1,0,0,0
 access_sn_wsd_eip_push_queue_manager,sn.wsd.eip.push.queue manager,model_sn_wsd_eip_push_queue,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_eip_work_order_user,sn.wsd.eip.work.order user,model_sn_wsd_eip_work_order,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_eip_work_order_manager,sn.wsd.eip.work.order manager,model_sn_wsd_eip_work_order,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_eip_process_work_user,sn.wsd.eip.process.work user,model_sn_wsd_eip_process_work,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_eip_process_work_manager,sn.wsd.eip.process.work manager,model_sn_wsd_eip_process_work,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_eip_entity_id_user,sn.wsd.eip.entity.id user,model_sn_wsd_eip_entity_id,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_eip_entity_id_manager,sn.wsd.eip.entity.id manager,model_sn_wsd_eip_entity_id,mrp.group_mrp_manager,1,1,1,1

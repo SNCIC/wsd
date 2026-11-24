@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 
 from .eip_push import C, F, K, T
 
@@ -125,3 +125,29 @@ class EipProductionOrder(models.Model):
     def _eip_document_ref(self):
         self.ensure_one()
         return self.ipo_no
+
+    # ------------------------------------------------------------------
+    # derive: work order(s) of this production order
+    # ------------------------------------------------------------------
+
+    def action_create_work_order(self):
+        """Create a draft work order of this production order; only
+        required fields are brought over (user decision 2026-11-24)."""
+        self.ensure_one()
+        work_order = self.env['sn.wsd.eip.work.order'].create({
+            'company_id': self.company_id.id,
+            'production_order_id': self.id,
+            'ipo_no': self.ipo_no,
+            'category_id': self.category_id.id,
+            'subclass_id': self.subclass_id.id,
+            'materials_code': self.materials_code,
+            'amount': self.amount,
+            'unit': self.unit,
+        })
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Work Order'),
+            'res_model': 'sn.wsd.eip.work.order',
+            'view_mode': 'form',
+            'res_id': work_order.id,
+        }

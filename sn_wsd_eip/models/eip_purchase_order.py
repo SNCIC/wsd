@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 
 # Response keys of the purchase-order interface -> line field (the
 # response parameter table of the spec). Every key the platform returns
@@ -221,3 +221,64 @@ class EipPurchaseOrderLine(models.Model):
         if new_lines:
             self.create(new_lines)
         return len(values_list)
+
+    # ------------------------------------------------------------------
+    # derive: one production order per selected line
+    # ------------------------------------------------------------------
+
+    def _eip_mapping_for(self):
+        """Material mapping of this line's EIP material code, or empty."""
+        self.ensure_one()
+        return self.env['sn.wsd.eip.material.mapping'].search([
+            ('company_id', '=', self.company_id.id),
+            ('eip_material_code', '=', self.material_code or ''),
+        ], limit=1)
+
+    def action_create_production_orders(self):
+        """Create one draft production order per selected line; only
+        required fields are brought over (user decision 2026-11-24)."""
+        orders = self.env['sn.wsd.eip.production.order']
+        config = self.env['sn.wsd.eip.config']._eip_config_for()
+        for line in self:
+            mapping = line._eip_mapping_for()
+            if mapping:
+                materials_code = mapping.material_code or line.material_code
+                materials_name = mapping.material_name or line.material_desc
+                materials_desc = mapping.material_desc or line.material_desc
+                unit = mapping.material_unit or ''
+            else:
+                materials_code = line.material_code
+                materials_name = line.material_desc
+                materials_desc = line.material_desc
+                unit = ''
+            orders += orders.create({
+                'company_id': line.company_id.id,
+                'purchase_line_id': line.id,
+                'po_item_id': line.po_item_id,
+                'data_type': '1',
+                'category_id': config.default_category_id.id,
+                'subclass_id': config.default_subclass_id.id,
+                'materials_code': materials_code,
+                'materials_name': materials_name,
+                'materials_desc': materials_desc,
+                'materials_unit': unit,
+                'unit': unit,
+                'amount': line.amount,
+            })
+        if len(orders) == 1:
+            action = {
+                'type': 'ir.actions.act_window',
+                'name': _('Production Order'),
+                'res_model': 'sn.wsd.eip.production.order',
+                'view_mode': 'form',
+                'res_id': orders.id,
+            }
+        else:
+            action = {
+                'type': 'ir.actions.act_window',
+                'name': _('Production Orders'),
+                'res_model': 'sn.wsd.eip.production.order',
+                'view_mode': 'list,form',
+                'domain': [('id', 'in', orders.ids)],
+            }
+        return action

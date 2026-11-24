@@ -12,5 +12,8 @@ from . import eip_pull
 from . import eip_push
 from . import eip_push_queue
 from . import eip_production_order
+from . import eip_work_order
+from . import eip_process_work
+from . import eip_entity_id
 from . import mes_test_result
 from . import serial_operation_history

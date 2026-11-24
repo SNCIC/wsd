@@ -17,6 +17,7 @@
         'views/eip_purchase_order_views.xml',
         'views/eip_production_order_views.xml',
         'views/eip_push_queue_views.xml',
+        'views/eip_business_views.xml',
         'views/eip_operation_mapping_views.xml',
         'views/eip_value_mapping_views.xml',
         'data/cron_eip.xml',

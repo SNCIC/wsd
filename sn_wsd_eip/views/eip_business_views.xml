@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Work order -->
+    <record id="view_eip_work_order_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.work.order.list</field>
+        <field name="model">sn.wsd.eip.work.order</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="wo_no"/>
+                <field name="ipo_no"/>
+                <field name="push_state" widget="badge"
+                       decoration-success="push_state == 'pushed'"
+                       decoration-danger="push_state == 'failed'"
+                       decoration-info="push_state == 'pushing'"
+                       decoration-warning="push_state in ('to_push', 'draft')"/>
+                <field name="materials_code" optional="show"/>
+                <field name="amount" optional="hide"/>
+                <field name="wo_status" optional="show"/>
+                <field name="plan_start_date" optional="hide"/>
+                <field name="plan_finish_date" optional="hide"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_work_order_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.work.order.form</field>
+        <field name="model">sn.wsd.eip.work.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_eip_push" type="object"
+                            string="Push" class="btn-primary"/>
+                    <button name="action_eip_retry" type="object"
+                            string="Retry" invisible="push_state != 'failed'"/>
+                    <button name="action_eip_preview" type="object"
+                            string="Preview Payload"/>
+                    <field name="push_state" widget="statusbar"
+                           statusbar_visible="draft,to_push,pushed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_eip_logs" icon="fa-list"
+                                invisible="eip_log_count == 0">
+                            <field name="eip_log_count" widget="statinfo" string="Push Logs"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="wo_no" readonly="eip_synced"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="production_order_id"/>
+                            <field name="ipo_no" readonly="eip_synced"/>
+                            <field name="category_id"/>
+                            <field name="subclass_id"/>
+                            <field name="wo_status"/>
+                        </group>
+                        <group>
+                            <field name="materials_code"/>
+                            <field name="materials_description"/>
+                            <field name="materials_batch"/>
+                            <field name="amount"/>
+                            <field name="unit"/>
+                            <field name="model_spec"/>
+                        </group>
+                        <group string="Plan">
+                            <field name="plan_start_date"/>
+                            <field name="plan_finish_date"/>
+                            <field name="actual_start_date"/>
+                            <field name="actual_finish_date"/>
+                        </group>
+                        <group>
+                            <field name="entity_code"/>
+                            <field name="process_route_no"/>
+                            <field name="owner_code"/>
+                            <field name="open_code"/>
+                            <field name="eip_missing"/>
+                            <field name="eip_last_error" invisible="not eip_last_error"/>
+                            <field name="eip_synced" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_work_order_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.work.order.search</field>
+        <field name="model">sn.wsd.eip.work.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="wo_no"/>
+                <field name="ipo_no"/>
+                <field name="materials_code"/>
+                <field name="entity_code"/>
+                <filter string="With Missing Fields" name="filter_missing"
+                        domain="[('eip_missing', '!=', False)]"/>
+                <group>
+                    <filter name="group_by_push_state" string="Push Status"
+                            context="{'group_by': 'push_state'}"/>
+                    <filter name="group_by_production_order" string="Production Order"
+                            context="{'group_by': 'ipo_no'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_work_order" model="ir.actions.act_window">
+        <field name="name">Work Orders</field>
+        <field name="res_model">sn.wsd.eip.work.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No work order yet
+            </p>
+            <p>
+                Create one by hand or from a production order; work
+                orders carry the shop-floor level of the EIP chain.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_eip_work_order"
+              name="Work Orders"
+              parent="menu_eip_order_data"
+              action="action_eip_work_order"
+              sequence="21"/>
+
+    <record id="action_eip_work_order_queue" model="ir.actions.server">
+        <field name="name">Queue Push</field>
+        <field name="model_id" ref="model_sn_wsd_eip_work_order"/>
+        <field name="binding_model_id" ref="model_sn_wsd_eip_work_order"/>
+        <field name="state">code</field>
+        <field name="code">records.action_eip_queue_push()</field>
+    </record>
+
+    <!-- Process work report -->
+    <record id="view_eip_process_work_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.process.work.list</field>
+        <field name="model">sn.wsd.eip.process.work</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="create_date"/>
+                <field name="ipo_no"/>
+                <field name="wo_no"/>
+                <field name="process_code"/>
+                <field name="process_name" optional="show"/>
+                <field name="product_batch_no" optional="show"/>
+                <field name="device_no" optional="hide"/>
+                <field name="push_state" widget="badge"
+                       decoration-success="push_state == 'pushed'"
+                       decoration-danger="push_state == 'failed'"
+                       decoration-info="push_state == 'pushing'"
+                       decoration-warning="push_state in ('to_push', 'draft')"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_process_work_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.process.work.form</field>
+        <field name="model">sn.wsd.eip.process.work</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_eip_push" type="object"
+                            string="Push" class="btn-primary"/>
+                    <button name="action_eip_retry" type="object"
+                            string="Retry" invisible="push_state != 'failed'"/>
+                    <button name="action_eip_preview" type="object"
+                            string="Preview Payload"/>
+                    <field name="push_state" widget="statusbar"
+                           statusbar_visible="draft,to_push,pushed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_eip_logs" icon="fa-list"
+                                invisible="eip_log_count == 0">
+                            <field name="eip_log_count" widget="statinfo" string="Push Logs"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group string="Report">
+                            <field name="ipo_no" readonly="eip_synced"/>
+                            <field name="wo_no" readonly="eip_synced"/>
+                            <field name="process_code_id"/>
+                            <field name="process_code" readonly="eip_synced"/>
+                            <field name="process_name"/>
+                            <field name="process_no"/>
+                            <field name="product_batch_no"/>
+                            <field name="inside_no"/>
+                            <field name="device_no"/>
+                            <field name="entity_no"/>
+                        </group>
+                        <group>
+                            <field name="category_id"/>
+                            <field name="subclass_id"/>
+                            <field name="buyer_province"/>
+                            <field name="wavy_status"/>
+                            <field name="order_status"/>
+                        </group>
+                        <group string="Workshop">
+                            <field name="workshop_id"/>
+                            <field name="workshop_code"/>
+                            <field name="workshop_name"/>
+                        </group>
+                        <group string="Times">
+                            <field name="plan_start_time"/>
+                            <field name="plan_end_time"/>
+                            <field name="actual_start_time"/>
+                            <field name="actual_finish_time"/>
+                        </group>
+                    </group>
+                    <group string="Push">
+                        <group>
+                            <field name="eip_missing"/>
+                            <field name="eip_last_error" invisible="not eip_last_error"/>
+                            <field name="eip_last_push_at"/>
+                        </group>
+                        <group>
+                            <field name="owner_code"/>
+                            <field name="open_code"/>
+                            <field name="eip_synced" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_process_work_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.process.work.search</field>
+        <field name="model">sn.wsd.eip.process.work</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="ipo_no"/>
+                <field name="wo_no"/>
+                <field name="process_code"/>
+                <field name="product_batch_no"/>
+                <filter string="With Missing Fields" name="filter_missing"
+                        domain="[('eip_missing', '!=', False)]"/>
+                <group>
+                    <filter name="group_by_push_state" string="Push Status"
+                            context="{'group_by': 'push_state'}"/>
+                    <filter name="group_by_process" string="Process"
+                            context="{'group_by': 'process_code'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_process_work" model="ir.actions.act_window">
+        <field name="name">Process Work Reports</field>
+        <field name="res_model">sn.wsd.eip.process.work</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No process work report yet
+            </p>
+            <p>
+                What a workstation reported on a work order, pushed to
+                the EIP platform.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_eip_process_work"
+              name="Process Work Reports"
+              parent="menu_eip_order_data"
+              action="action_eip_process_work"
+              sequence="22"/>
+
+    <record id="action_eip_process_work_queue" model="ir.actions.server">
+        <field name="name">Queue Push</field>
+        <field name="model_id" ref="model_sn_wsd_eip_process_work"/>
+        <field name="binding_model_id" ref="model_sn_wsd_eip_process_work"/>
+        <field name="state">code</field>
+        <field name="code">records.action_eip_queue_push()</field>
+    </record>
+
+    <!-- Entity ID -->
+    <record id="view_eip_entity_id_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.entity.id.list</field>
+        <field name="model">sn.wsd.eip.entity.id</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="entity_code"/>
+                <field name="po_item_id"/>
+                <field name="entity_status" optional="show"/>
+                <field name="push_state" widget="badge"
+                       decoration-success="push_state == 'pushed'"
+                       decoration-danger="push_state == 'failed'"
+                       decoration-info="push_state == 'pushing'"
+                       decoration-warning="push_state in ('to_push', 'draft')"/>
+                <field name="remark" optional="hide"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_entity_id_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.entity.id.form</field>
+        <field name="model">sn.wsd.eip.entity.id</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_eip_push" type="object"
+                            string="Push" class="btn-primary"/>
+                    <button name="action_eip_retry" type="object"
+                            string="Retry" invisible="push_state != 'failed'"/>
+                    <button name="action_eip_preview" type="object"
+                            string="Preview Payload"/>
+                    <field name="push_state" widget="statusbar"
+                           statusbar_visible="draft,to_push,pushed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_eip_logs" icon="fa-list"
+                                invisible="eip_log_count == 0">
+                            <field name="eip_log_count" widget="statinfo" string="Push Logs"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="entity_code" readonly="eip_synced"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="po_item_id" readonly="eip_synced"/>
+                            <field name="entity_status"/>
+                        </group>
+                        <group>
+                            <field name="remark"/>
+                            <field name="owner_code"/>
+                            <field name="open_code"/>
+                            <field name="eip_missing"/>
+                            <field name="eip_last_error" invisible="not eip_last_error"/>
+                            <field name="eip_synced" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_entity_id_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.entity.id.search</field>
+        <field name="model">sn.wsd.eip.entity.id</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="entity_code"/>
+                <field name="po_item_id"/>
+                <filter string="With Missing Fields" name="filter_missing"
+                        domain="[('eip_missing', '!=', False)]"/>
+                <group>
+                    <filter name="group_by_push_state" string="Push Status"
+                            context="{'group_by': 'push_state'}"/>
+                    <filter name="group_by_status" string="Entity Status"
+                            context="{'group_by': 'entity_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_entity_id" model="ir.actions.act_window">
+        <field name="name">Entity IDs</field>
+        <field name="res_model">sn.wsd.eip.entity.id</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No entity ID yet
+            </p>
+            <p>
+                The State Grid asset identity of one unit or a whole
+                continuous range, tracked with its production status.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_eip_entity_id"
+              name="Entity IDs"
+              parent="menu_eip_order_data"
+              action="action_eip_entity_id"
+              sequence="23"/>
+
+    <record id="action_eip_entity_id_queue" model="ir.actions.server">
+        <field name="name">Queue Push</field>
+        <field name="model_id" ref="model_sn_wsd_eip_entity_id"/>
+        <field name="binding_model_id" ref="model_sn_wsd_eip_entity_id"/>
+        <field name="state">code</field>
+        <field name="code">records.action_eip_queue_push()</field>
+    </record>
+
+</odoo>
