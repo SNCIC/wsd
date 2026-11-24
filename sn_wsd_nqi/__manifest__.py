@@ -5,7 +5,7 @@
     'version': '19.0.1.0.0',
     'depends': [
         'mail', 'sn_wsd_mrp', 'sn_wsd_api', 'sn_wsd_device',
-        'sn_wsd_quality', 'hr',
+        'sn_wsd_quality', 'sn_wsd_workorder', 'hr',
     ],
     'data': [
         'security/nqi_security.xml',
@@ -25,7 +25,9 @@
         'views/nqi_checkup_views.xml',
         'views/nqi_push_views.xml',
         'wizard/nqi_batch_fill_views.xml',
-        'views/nqi_batch_fill_actions.xml',
+        'views/nqi_form_actions_views.xml',
+        'views/nqi_binding_actions.xml',
+        'views/nqi_ops_actions.xml',
         'data/cron_nqi.xml',
         'data/nqi_code_sort_data.xml',
         'data/nqi_code_data.xml',

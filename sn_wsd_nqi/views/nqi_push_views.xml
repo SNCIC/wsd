@@ -71,9 +71,7 @@
         <field name="name">Run Push Batch</field>
         <field name="model_id" ref="model_sn_wsd_nqi_worker"/>
         <field name="state">code</field>
-        <field name="code">
-message = model.run_push()
-</field>
+        <field name="code">action = model._nqi_notify(model.run_push_all())</field>
     </record>
 
     <menuitem id="menu_nqi_push_log_entry"

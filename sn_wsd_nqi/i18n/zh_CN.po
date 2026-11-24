@@ -18,9 +18,21 @@ msgstr ""
 
 #. module: sn_wsd_nqi
 #. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_staging_mixin.py:0
+msgid "%(filled)s of %(total)s rows filled"
+msgstr "已补 %(filled)s 行（共 %(total)s 行）"
+
+#. module: sn_wsd_nqi
+#. odoo-python
 #: code:addons/sn_wsd_nqi/models/nqi_checkup.py:0
 msgid "%d rows missing columns"
 msgstr "%d 行缺少必填列"
+
+#. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_push.py:0
+msgid "; %s rows left for the next run"
+msgstr "；还有 %s 行留待下次运行"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_code_code_uniq
@@ -31,6 +43,12 @@ msgstr "代码编号在其代码类型内必须唯一。"
 #: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_code_sort_code_type_uniq
 msgid "A code type can only be declared once."
 msgstr "代码类型只能声明一次。"
+
+#. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_push.py:0
+msgid "A push is already running."
+msgstr "推送任务正在运行。"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.constraint,message:sn_wsd_nqi.constraint_sn_wsd_nqi_field_mapping_mapping_uniq
@@ -332,6 +350,18 @@ msgid "Avg Up Err"
 msgstr "升流误差平均"
 
 #. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_ops_backfill
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_ops_backfill
+msgid "Backfill History"
+msgstr "补抽历史数据"
+
+#. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_worker.py:0
+msgid "Backfill: %(count)s events enqueued. %(result)s"
+msgstr "补抽：已入队 %(count)s 个事件。%(result)s"
+
+#. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_fit_meter_info__barcode
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_sp_box_bind__barcode
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_sp_spot_check__barcode
@@ -344,11 +374,28 @@ msgid "Basic Auth"
 msgstr "Basic 认证"
 
 #. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_push.py:0
+msgid "Batch %(log)s: %(state)s"
+msgstr "批次 %(log)s：%(state)s"
+
+#. module: sn_wsd_nqi
 #: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_batch_fill_form
 msgid "Batch Fill"
 msgstr "批量填充"
 
 #. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_achievement_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_as_agreement_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_as_mgt_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_capacity_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_device_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_person_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_qi_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_rb_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_staff_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_standard_setting_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_supplier_score_batch_fill
 #: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_fit_component_bind_batch_fill
 #: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_fit_meter_info_batch_fill
 #: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_fit_meter_mounting_batch_fill
@@ -373,6 +420,32 @@ msgstr "批量填充"
 #: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_ts_batch_fill
 #: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_volt_batch_fill
 #: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_ot_other_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pr_arrive_batch_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pr_bidding_change_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pr_bidding_info_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pr_purchase_plan_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pr_test_result_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pr_unqualified_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pt_env_temp_hum_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pt_plan_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pt_plan_detail_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pt_procedure_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pt_process_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pt_unqualified_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pub_file_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_rd_component_change_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_rd_component_list_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_rd_product_detail_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_rd_product_info_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_rd_product_test_report_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_rd_project_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_rd_project_change_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_rd_project_detail_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_sp_box_bind_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_sp_recall_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_sp_spot_check_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_sp_supply_batch_batch_fill
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_sp_supply_test_batch_fill
 #: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_consist_batch_fill
 #: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_demand_batch_fill
 #: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_eq_batch_fill
@@ -426,6 +499,12 @@ msgstr "招标单位"
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_pr_bidding_info__bidding_time
 msgid "Bidding Time"
 msgstr "中标时间"
+
+#. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_worker.py:0
+msgid "Birth queue: %(processed)s processed, %(dropped)s dropped"
+msgstr "生成队列：已处理 %(processed)s 条，丢弃 %(dropped)s 条"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_pub_file__blob
@@ -677,15 +756,9 @@ msgid "Codes"
 msgstr "代码信息"
 
 #. module: sn_wsd_nqi
-#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_batch_fill__field_name
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_batch_fill__field_id
 msgid "Column"
 msgstr "列名"
-
-#. module: sn_wsd_nqi
-#. odoo-python
-#: code:addons/sn_wsd_nqi/wizard/nqi_batch_fill.py:0
-msgid "Column %s does not exist on %s."
-msgstr "列 %s 在 %s 上不存在。"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,help:sn_wsd_nqi.field_sn_wsd_nqi_push_log__row_ids
@@ -1429,6 +1502,7 @@ msgstr "只能停用、不能删除：推送日志需要能追溯该批次推送
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_product_product__display_name
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_product_template__display_name
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sale_order_line__display_name
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_meter_component_binding__display_name
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_batch_fill__display_name
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_birth_queue__display_name
@@ -1698,6 +1772,83 @@ msgid "ET_SUPPLYER_SCORE_INFO"
 msgstr "供应商评分表"
 
 #. module: sn_wsd_nqi
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_achievement_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_as_agreement_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_as_mgt_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_capacity_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_device_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_person_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_qi_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_rb_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_staff_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_standard_setting_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_supplier_score_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_fit_component_bind_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_fit_meter_info_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_fit_meter_mounting_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_fit_pcb_mounting_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_fit_pcb_serial_bind_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_aoi_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_basicerr_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_const_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_creeping_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_dayerr_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_demandvalue_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_esam_read_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_function_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_hutchison_combina_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_intuit_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_mounting_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_parameter_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_rfid_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_single_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_starting_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_time_error_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_ts_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_volt_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_ot_other_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pr_arrive_batch_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pr_bidding_change_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pr_bidding_info_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pr_purchase_plan_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pr_test_result_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pr_unqualified_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pt_env_temp_hum_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pt_plan_detail_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pt_plan_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pt_procedure_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pt_process_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pt_unqualified_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pub_file_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_rd_component_change_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_rd_component_list_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_rd_product_detail_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_rd_product_info_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_rd_product_test_report_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_rd_project_change_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_rd_project_detail_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_rd_project_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_sp_box_bind_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_sp_recall_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_sp_spot_check_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_sp_supply_batch_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_sp_supply_test_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_consist_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_demand_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_eq_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_error_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_event_record_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_fee_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_max_demand_err_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_max_demandvalue_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_overload_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_power_measure_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_standard_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_variation_fill
+msgid "Edit the missing cells right in the list"
+msgstr "直接在列表里补缺失的单元格"
+
+#. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_et_person__employee_id
 msgid "Employee"
 msgstr "员工"
@@ -1711,6 +1862,24 @@ msgstr "结束局编号"
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_const__end_reading
 msgid "End Reading"
 msgstr "结束度数"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_ops_enrich
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_ops_enrich
+msgid "Enrich Asset Rows"
+msgstr "富化资产行"
+
+#. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_worker.py:0
+msgid "Enriched %(count)s asset rows"
+msgstr "已富化 %(count)s 行资产"
+
+#. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_worker.py:0
+msgid "Enrichment is already running."
+msgstr "富化任务正在运行。"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_config__enterprise_code
@@ -1970,6 +2139,83 @@ msgid "Expand Details"
 msgstr "展开明细"
 
 #. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_achievement_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_as_agreement_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_as_mgt_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_capacity_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_device_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_person_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_qi_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_rb_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_staff_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_standard_setting_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_et_supplier_score_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_fit_component_bind_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_fit_meter_info_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_fit_meter_mounting_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_fit_pcb_mounting_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_fit_pcb_serial_bind_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_aoi_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_basicerr_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_const_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_creeping_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_dayerr_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_demandvalue_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_esam_read_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_function_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_hutchison_combina_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_intuit_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_mounting_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_parameter_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_rfid_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_single_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_starting_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_time_error_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_ts_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_mt_volt_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_ot_other_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pr_arrive_batch_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pr_bidding_change_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pr_bidding_info_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pr_purchase_plan_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pr_test_result_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pr_unqualified_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pt_env_temp_hum_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pt_plan_detail_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pt_plan_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pt_procedure_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pt_process_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pt_unqualified_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_pub_file_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_rd_component_change_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_rd_component_list_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_rd_product_detail_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_rd_product_info_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_rd_product_test_report_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_rd_project_change_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_rd_project_detail_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_rd_project_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_sp_box_bind_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_sp_recall_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_sp_spot_check_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_sp_supply_batch_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_sp_supply_test_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_consist_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_demand_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_eq_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_error_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_event_record_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_fee_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_max_demand_err_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_max_demandvalue_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_overload_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_power_measure_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_standard_export
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_tt_variation_export
+msgid "Export NQI JSON"
+msgstr "导出 NQI JSON"
+
+#. module: sn_wsd_nqi
 #: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_fit_component_bind
 #: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_fit_component_bind_entry
 msgid "FIT_METER_COMPONENT_BIND"
@@ -1998,6 +2244,11 @@ msgstr "PCB生产过程表"
 #: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_fit_pcb_serial_bind_entry
 msgid "FIT_PCB_SERIAL_BIND"
 msgstr "电能表PCB板号和厂内编码绑定表"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_birth_queue__fail_count
+msgid "Fail Count"
+msgstr "失败次数"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields.selection,name:sn_wsd_nqi.selection__sn_wsd_nqi_et_achievement__push_state__failed
@@ -2148,6 +2399,13 @@ msgid "Files Count"
 msgstr "文档数量"
 
 #. module: sn_wsd_nqi
+#: model:ir.model.fields,help:sn_wsd_nqi.field_sn_wsd_nqi_batch_fill__only_empty
+msgid ""
+"Fill the rows where the column is still empty; clear it to overwrite every "
+"selected row."
+msgstr "只填该列仍为空的行；取消勾选则覆盖所有选中的行。"
+
+#. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_sp_recall__finish_barcode
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_sp_supply_batch__finish_barcode
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_sp_supply_test__finish_barcode
@@ -2265,6 +2523,13 @@ msgstr "关注者"
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_sp_supply_test__message_partner_ids
 msgid "Followers (Partners)"
 msgstr "关注者（业务伙伴）"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,help:sn_wsd_nqi.field_sn_wsd_nqi_pt_plan__bidding_ids
+msgid ""
+"Framework contracts of the plan; their codes are joined into "
+"BUSINESS_CONTRACT_CODE."
+msgstr "计划的框架合同；其编码以逗号拼入 BUSINESS_CONTRACT_CODE。"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__freq
@@ -2499,6 +2764,7 @@ msgstr "湿度"
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_product_product__id
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_product_template__id
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sale_order_line__id
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_meter_component_binding__id
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_batch_fill__id
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_birth_queue__id
@@ -2736,6 +3002,83 @@ msgid "In Province Response Time"
 msgstr "承诺售后服务响应时间（省内）"
 
 #. module: sn_wsd_nqi
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_et_achievement_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_et_as_agreement_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_et_as_mgt_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_et_capacity_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_et_device_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_et_person_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_et_qi_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_et_rb_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_et_staff_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_et_standard_setting_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_et_supplier_score_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_fit_component_bind_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_fit_meter_info_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_fit_meter_mounting_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_fit_pcb_mounting_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_fit_pcb_serial_bind_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_aoi_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_basicerr_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_const_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_creeping_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_dayerr_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_demandvalue_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_esam_read_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_function_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_hutchison_combina_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_intuit_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_mounting_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_parameter_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_rfid_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_single_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_starting_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_time_error_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_ts_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_mt_volt_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_ot_other_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_pr_arrive_batch_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_pr_bidding_change_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_pr_bidding_info_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_pr_purchase_plan_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_pr_test_result_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_pr_unqualified_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_pt_env_temp_hum_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_pt_plan_detail_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_pt_plan_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_pt_procedure_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_pt_process_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_pt_unqualified_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_pub_file_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_rd_component_change_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_rd_component_list_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_rd_product_detail_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_rd_product_info_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_rd_product_test_report_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_rd_project_change_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_rd_project_detail_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_rd_project_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_sp_box_bind_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_sp_recall_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_sp_spot_check_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_sp_supply_batch_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_sp_supply_test_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_consist_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_demand_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_eq_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_error_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_event_record_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_fee_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_max_demand_err_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_max_demandvalue_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_overload_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_power_measure_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_standard_fill
+#: model:ir.actions.act_window,name:sn_wsd_nqi.action_nqi_tt_variation_fill
+msgid "Inline Fill (Missing Data)"
+msgstr "行内补数（缺数据）"
+
+#. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_basicerr__int_convert_err
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_dayerr__int_convert_err
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_consist__int_convert_err
@@ -2851,6 +3194,11 @@ msgstr "是否符合国际标准或先进技术"
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_sp_supply_test__message_is_follower
 msgid "Is Follower"
 msgstr "是关注者"
+
+#. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_birth_queue__error_text
+msgid "Last Error"
+msgstr "最近错误"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_batch_fill__write_uid
@@ -3282,6 +3630,18 @@ msgid "Manager Num"
 msgstr "管理人员人数"
 
 #. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_ops_mapping
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_ops_mapping
+msgid "Map Test Results"
+msgstr "映射检定结果"
+
+#. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_worker.py:0
+msgid "Mapped %(created)s rows from %(scanned)s results"
+msgstr "已处理 %(scanned)s 条检定结果，生成 %(created)s 行"
+
+#. module: sn_wsd_nqi
 #: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_achievement_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_agreement_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_mgt_form
@@ -3490,11 +3850,6 @@ msgstr "技术工人中级职工人数"
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_detail__min_current
 msgid "Min Current"
 msgstr "最小电流"
-
-#. module: sn_wsd_nqi
-#: model:ir.model.fields,help:sn_wsd_nqi.field_sn_wsd_nqi_batch_fill__field_name
-msgid "Mirror field name (lower snake), e.g. error_limit."
-msgstr "镜像表字段名（小写下划线），例如 error_limit。"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,help:sn_wsd_nqi.field_sn_wsd_nqi_field_mapping__nqi_field
@@ -3812,6 +4167,7 @@ msgstr "中标合同/信息变更表"
 
 #. module: sn_wsd_nqi
 #: model:ir.model,name:sn_wsd_nqi.model_sn_wsd_nqi_pr_bidding_info
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_pt_plan__bidding_ids
 msgid "NQI Bidding Info"
 msgstr "中标/合同信息表"
 
@@ -4222,6 +4578,13 @@ msgid "NQI Overload"
 msgstr "电流过载试验"
 
 #. module: sn_wsd_nqi
+#: model:ir.model.fields,help:sn_wsd_nqi.field_sn_wsd_nqi_pt_plan__product_detail_id
+msgid ""
+"NQI PRODUCT_CODE references the product detail record (R&D chapter); the "
+"column keeps its code as a snapshot."
+msgstr "NQI 的 PRODUCT_CODE 引用产品详细信息记录（研发业务）；列值保存其编码快照。"
+
+#. module: sn_wsd_nqi
 #: model:ir.model,name:sn_wsd_nqi.model_sn_wsd_nqi_mt_parameter
 msgid "NQI Parameter"
 msgstr "参数检验记录表"
@@ -4269,6 +4632,7 @@ msgstr "生产进度表"
 
 #. module: sn_wsd_nqi
 #: model:ir.model,name:sn_wsd_nqi.model_sn_wsd_nqi_rd_product_detail
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_pt_plan__product_detail_id
 msgid "NQI Product Detail"
 msgstr "产品详细信息表"
 
@@ -4337,6 +4701,11 @@ msgstr "企业营收预算表"
 #: model:ir.model,name:sn_wsd_nqi.model_sn_wsd_nqi_sp_recall
 msgid "NQI Recall"
 msgstr "产品召回信息"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_form_expand
+msgid "NQI References"
+msgstr "NQI 引用"
 
 #. module: sn_wsd_nqi
 #: model:ir.model,name:sn_wsd_nqi.model_sn_wsd_nqi_mt_rfid
@@ -4514,9 +4883,21 @@ msgstr "写入时间"
 
 #. module: sn_wsd_nqi
 #. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_staging_mixin.py:0
+msgid "NQI auto fill"
+msgstr "NQI 自动补数"
+
+#. module: sn_wsd_nqi
+#. odoo-python
 #: code:addons/sn_wsd_nqi/models/nqi_push.py:0
 msgid "NQI payload preview"
 msgstr "NQI 报文预览"
+
+#. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_plan_expand.py:0
+msgid "NQI product detail"
+msgstr "NQI 产品详细信息"
 
 #. module: sn_wsd_nqi
 #. odoo-python
@@ -4718,10 +5099,38 @@ msgstr "无行"
 
 #. module: sn_wsd_nqi
 #. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_worker.py:0
+msgid "No active field mappings."
+msgstr "没有启用的字段映射。"
+
+#. module: sn_wsd_nqi
+#. odoo-python
 #: code:addons/sn_wsd_nqi/models/nqi_plan_expand.py:0
 msgid ""
 "No manufacturing order found under sales order %s (check the MTO chain)."
 msgstr "销售订单 %s 名下未找到制造订单（请检查 MTO 链）。"
+
+#. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_push.py:0
+msgid "No push API configured: rows stay pending."
+msgstr "未配置推送 API：行保持待推送。"
+
+#. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/wizard/nqi_batch_fill.py:0
+msgid ""
+"No row to fill: pushed rows are read-only and the other selected rows "
+"already carry a value."
+msgstr "没有可填充的行：已推送的行只读，其余选中的行已有值。"
+
+#. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_plan_expand.py:0
+msgid ""
+"No single NQI product detail for %(product)s: pick one on the plan, or "
+"maintain it under R&D first."
+msgstr "产品 %(product)s 没有唯一的 NQI 产品详细信息：请在计划上手动选择，或先到研发业务维护。"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields.selection,name:sn_wsd_nqi.selection__sn_wsd_nqi_config__auth_type__none
@@ -4737,9 +5146,21 @@ msgstr "备注"
 
 #. module: sn_wsd_nqi
 #. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_push.py:0
+msgid "Nothing left to claim."
+msgstr "没有可领取的行。"
+
+#. module: sn_wsd_nqi
+#. odoo-python
 #: code:addons/sn_wsd_nqi/controllers/nqi_export.py:0
 msgid "Nothing to export."
 msgstr "没有可导出的内容。"
+
+#. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_push.py:0
+msgid "Nothing to push."
+msgstr "没有可推送的数据。"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_et_achievement__notice_no
@@ -5038,6 +5459,11 @@ msgid "One mirror row per station pass event."
 msgstr "每个过站事件只能有一条镜像行。"
 
 #. module: sn_wsd_nqi
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_batch_fill__only_empty
+msgid "Only Empty Cells"
+msgstr "仅填空单元格"
+
+#. module: sn_wsd_nqi
 #. odoo-python
 #: code:addons/sn_wsd_nqi/models/nqi_staging_mixin.py:0
 msgid "Only draft rows can be marked as to push."
@@ -5049,10 +5475,94 @@ msgid "Only one NQI integration config per company."
 msgstr "每家公司只能有一条 NQI 对接配置。"
 
 #. module: sn_wsd_nqi
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_achievement_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_as_agreement_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_as_mgt_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_capacity_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_device_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_person_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_qi_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_rb_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_staff_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_standard_setting_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_et_supplier_score_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_fit_component_bind_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_fit_meter_info_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_fit_meter_mounting_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_fit_pcb_mounting_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_fit_pcb_serial_bind_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_aoi_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_basicerr_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_const_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_creeping_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_dayerr_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_demandvalue_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_esam_read_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_function_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_hutchison_combina_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_intuit_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_mounting_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_parameter_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_rfid_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_single_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_starting_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_time_error_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_ts_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_mt_volt_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_ot_other_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pr_arrive_batch_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pr_bidding_change_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pr_bidding_info_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pr_purchase_plan_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pr_test_result_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pr_unqualified_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pt_env_temp_hum_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pt_plan_detail_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pt_plan_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pt_procedure_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pt_process_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pt_unqualified_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_pub_file_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_rd_component_change_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_rd_component_list_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_rd_product_detail_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_rd_product_info_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_rd_product_test_report_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_rd_project_change_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_rd_project_detail_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_rd_project_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_sp_box_bind_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_sp_recall_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_sp_spot_check_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_sp_supply_batch_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_sp_supply_test_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_consist_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_demand_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_eq_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_error_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_event_record_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_fee_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_max_demand_err_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_max_demandvalue_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_overload_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_power_measure_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_standard_fill
+#: model_terms:ir.actions.act_window,help:sn_wsd_nqi.action_nqi_tt_variation_fill
+msgid ""
+"Only rows with missing data are listed. Type into an empty cell; the missing"
+" count updates when you leave the cell. Pushed rows stay read-only."
+msgstr "这里只列出缺数据的行。在空单元格里直接输入，离开单元格后缺失列数会随之更新。已推送的行保持只读。"
+
+#. module: sn_wsd_nqi
 #. odoo-python
 #: code:addons/sn_wsd_nqi/models/nqi_push.py:0
 msgid "Only to-push or failed rows can be withdrawn."
 msgstr "只有待推送或失败的行可以撤回。"
+
+#. module: sn_wsd_nqi
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_ops
+msgid "Operations"
+msgstr "运维"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_fit_meter_mounting__operator_code
@@ -5303,6 +5813,12 @@ msgid "Pick a sales order before expanding details."
 msgstr "展开明细前请先选择销售订单。"
 
 #. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_plan_expand.py:0
+msgid "Pick a sales order line: the order has several product lines."
+msgstr "请选择销售订单行：该订单有多个产品行。"
+
+#. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_pt_env_temp_hum__place
 msgid "Place"
 msgstr "地点"
@@ -5354,6 +5870,83 @@ msgid "Post Type"
 msgstr "岗位类型"
 
 #. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_achievement_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_agreement_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_mgt_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_capacity_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_device_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_person_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_qi_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_rb_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_staff_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_standard_setting_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_supplier_score_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_component_bind_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_info_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_mounting_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_pcb_mounting_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_pcb_serial_bind_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_aoi_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_basicerr_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_const_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_creeping_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_dayerr_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_demandvalue_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_esam_read_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_function_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_hutchison_combina_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_intuit_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_mounting_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_parameter_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_rfid_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_single_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_starting_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_time_error_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_ts_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_volt_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_ot_other_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_arrive_batch_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_bidding_change_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_bidding_info_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_purchase_plan_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_test_result_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_unqualified_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_env_temp_hum_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_detail_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_procedure_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_process_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_unqualified_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pub_file_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_change_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_list_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_detail_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_info_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_test_report_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_change_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_detail_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_box_bind_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_recall_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_spot_check_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_batch_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_test_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_consist_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_demand_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_eq_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_error_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_event_record_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_fee_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demand_err_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demandvalue_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_overload_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_power_measure_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_standard_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_variation_form_actions
+msgid "Preview Payload"
+msgstr "预览推送载荷"
+
+#. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_fit_meter_mounting__procedure_code
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_fit_meter_mounting__procedure_code_id
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_fit_pcb_mounting__procedure_code
@@ -5370,6 +5963,12 @@ msgstr "工序编号"
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_pt_procedure__procedure_name
 msgid "Procedure Name"
 msgstr "工序名称"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_ops_queue
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_ops_queue
+msgid "Process Birth Queue"
+msgstr "处理生成队列"
 
 #. module: sn_wsd_nqi
 #: model:ir.model,name:sn_wsd_nqi.model_product_template
@@ -5465,6 +6064,12 @@ msgstr "生产过程"
 #: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_testing
 msgid "Production Testing"
 msgstr "生产检测"
+
+#. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_worker.py:0
+msgid "Progress rows updated for %(count)s plans"
+msgstr "已更新 %(count)s 个计划的进度行"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_et_device__property_right_type
@@ -5751,6 +6356,12 @@ msgstr "推送状态"
 #: model:ir.model.fields.selection,name:sn_wsd_nqi.selection__sn_wsd_nqi_tt_variation__push_state__pushed
 msgid "Pushed"
 msgstr "已推送"
+
+#. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_push.py:0
+msgid "Pushed %(detail)s%(left)s"
+msgstr "已推送 %(detail)s%(left)s"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_push_log__pushed_at
@@ -6220,6 +6831,12 @@ msgid "Sales Order"
 msgstr "销售订单"
 
 #. module: sn_wsd_nqi
+#: model:ir.model,name:sn_wsd_nqi.model_sale_order_line
+#: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_pt_plan__sale_order_line_id
+msgid "Sales Order Line"
+msgstr "销售订单行"
+
+#. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_et_supplier_score__score
 msgid "Score"
 msgstr "得分"
@@ -6597,6 +7214,11 @@ msgid "Target mirror model (one of the testing tables)."
 msgstr "目标镜像模型（31 张检测表之一）。"
 
 #. module: sn_wsd_nqi
+#: model:ir.model.fields,help:sn_wsd_nqi.field_sn_wsd_nqi_pt_plan__sale_order_line_id
+msgid "Task-level anchor: one NQI plan per sales order line."
+msgstr "任务级锚点：每个销售订单行一条 NQI 计划。"
+
+#. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_rd_product_detail__technology_rules
 msgid "Technology Rules"
 msgstr "工艺规程"
@@ -6708,9 +7330,21 @@ msgid "Test Valid Date"
 msgstr "检定有效期"
 
 #. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_worker.py:0
+msgid "Test mapping is already running."
+msgstr "检定映射正在运行。"
+
+#. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_et_staff__testing_personnel_num
 msgid "Testing Personnel Num"
 msgstr "检测人员数量"
+
+#. module: sn_wsd_nqi
+#. odoo-python
+#: code:addons/sn_wsd_nqi/models/nqi_worker.py:0
+msgid "The birth queue is already being processed."
+msgstr "生成队列正在处理中。"
 
 #. module: sn_wsd_nqi
 #: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_push_log_list
@@ -6920,6 +7554,11 @@ msgid "Trip Delay Time"
 msgstr "跳闸延时时间秒"
 
 #. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_fit_meter_info_autofill
+msgid "Try Auto Fill"
+msgstr "尝试自动补"
+
+#. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_mt_ts__ts_err
 msgid "Ts Err"
 msgstr "误差限"
@@ -7008,6 +7647,12 @@ msgstr "升流误差1"
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_tt_variation__up_err2
 msgid "Up Err2"
 msgstr "升流误差2"
+
+#. module: sn_wsd_nqi
+#: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_ops_progress
+#: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_ops_progress
+msgid "Update Production Progress"
+msgstr "更新生产进度"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_et_device__used_years
@@ -7160,6 +7805,83 @@ msgstr "网站消息"
 #: model:ir.model.fields,help:sn_wsd_nqi.field_sn_wsd_nqi_sp_supply_test__website_message_ids
 msgid "Website communication history"
 msgstr "网站沟通记录"
+
+#. module: sn_wsd_nqi
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_achievement_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_agreement_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_as_mgt_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_capacity_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_device_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_person_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_qi_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_rb_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_staff_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_standard_setting_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_et_supplier_score_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_component_bind_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_info_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_meter_mounting_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_pcb_mounting_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_fit_pcb_serial_bind_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_aoi_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_basicerr_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_const_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_creeping_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_dayerr_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_demandvalue_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_esam_read_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_function_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_hutchison_combina_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_intuit_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_mounting_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_parameter_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_rfid_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_single_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_starting_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_time_error_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_ts_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_mt_volt_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_ot_other_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_arrive_batch_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_bidding_change_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_bidding_info_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_purchase_plan_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_test_result_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pr_unqualified_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_env_temp_hum_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_detail_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_plan_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_procedure_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_process_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pt_unqualified_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_pub_file_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_change_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_component_list_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_detail_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_info_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_product_test_report_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_change_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_detail_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_rd_project_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_box_bind_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_recall_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_spot_check_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_batch_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_sp_supply_test_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_consist_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_demand_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_eq_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_error_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_event_record_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_fee_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demand_err_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_max_demandvalue_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_overload_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_power_measure_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_standard_form_actions
+#: model_terms:ir.ui.view,arch_db:sn_wsd_nqi.view_nqi_tt_variation_form_actions
+msgid "Withdraw"
+msgstr "撤回"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_rd_component_change__witness_material

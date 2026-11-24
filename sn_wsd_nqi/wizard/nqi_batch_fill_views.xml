@@ -7,8 +7,9 @@
             <form string="Batch Fill">
                 <group>
                     <field name="target_model" invisible="1"/>
-                    <field name="field_name"/>
+                    <field name="field_id" options="{'no_create': True}"/>
                     <field name="value"/>
+                    <field name="only_empty"/>
                 </group>
                 <footer>
                     <button name="action_apply" type="object"

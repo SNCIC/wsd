@@ -88,6 +88,8 @@ class NqiGenerationIdempotency(models.AbstractModel):
     def _nqi_birth_mounting_rows(self, model_name, records):
         """One process row per judged station pass, axis by product kind."""
         board = model_name == 'sn.wsd.nqi.fit.pcb.mounting'
+        worker = self.env['sn.wsd.nqi.worker']
+        plan_codes = {}
         batch = []
         for record in records.sudo():
             order = record.mes_order_id
@@ -100,13 +102,24 @@ class NqiGenerationIdempotency(models.AbstractModel):
             sequence = ''
             if record.route_operation_id:
                 sequence = str(record.route_operation_id.sequence or '')
+            # device chain: the equipment assigned to the work center
+            # (first by sequence), else the work center code
+            workcenter = record.workcenter_id
+            equipment = workcenter.sn_equipment_ids.sorted('sequence')[
+                :1].equipment_id
             values = {
                 'company_id': record.company_id.id,
                 'operation_history_id': record.id,
                 'para_index': sequence,
                 'operator_code': record.operator_code or '',
+                'device_code': (
+                    equipment.code or workcenter.code or '')
+                if workcenter else '',
                 'detect_date': _fmt(record.out_date or record.in_date),
             }
+            if order.production_id:
+                values['make_plan_code'] = worker._resolve_plan_code(
+                    order, plan_codes)
             values['pcb_code' if board else 'serial_no'] = sn.name
             batch.append(values)
         self._nqi_create_batch_if_new(
@@ -128,6 +141,8 @@ class NqiFitMeterInfoBirth(models.Model):
     def _nqi_birth_from_history(self, records):
         """Asset rows born when a machine-kind SN passes its output op."""
         helpers = self.env['sn.wsd.nqi.generation.mixin']
+        worker = self.env['sn.wsd.nqi.worker']
+        plan_codes = {}
         batch = []
         for record in records.sudo():
             order = record.mes_order_id
@@ -142,12 +157,17 @@ class NqiFitMeterInfoBirth(models.Model):
             sn = record.serial_identity_id
             if not sn:
                 continue
-            batch.append({
+            values = {
                 'company_id': record.company_id.id,
                 'operation_history_id': record.id,
+                'serial_identity_id': sn.id,
                 'serial_no': sn.name,
                 'status': '1',
-            })
+            }
+            if order.production_id:
+                values['make_plan_no'] = worker._resolve_plan_code(
+                    order, plan_codes)
+            batch.append(values)
         helpers._nqi_create_batch_if_new(
             'sn.wsd.nqi.fit.meter.info', batch, 'operation_history_id')
 
@@ -208,6 +228,18 @@ class NqiFitBridgeBirthFromQueue(models.Model):
             })
         helpers._nqi_create_batch_if_new(
             'sn.wsd.nqi.fit.pcb.serial.bind', batch, 'binding_id')
+        # a nameplate mapping makes the barcode of its meter knowable:
+        # complete the asset rows that were still waiting for it
+        machines = records.sudo().filtered(
+            lambda record: record.binding_type == 'nameplate'
+        ).mapped('bound_serial_identity_id.name')
+        if machines:
+            worker = self.env['sn.wsd.nqi.worker']
+            assets = self.env['sn.wsd.nqi.fit.meter.info'].sudo().search([
+                ('serial_no', 'in', machines), ('barcode', '=', False),
+                ('push_state', '!=', 'pushed')])
+            for asset in assets:
+                worker._enrich_asset_row(asset)
 
 
 class NqiFitComponentBirthFromQueue(models.Model):

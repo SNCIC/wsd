@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Manual entries for the workers (managers). Each one runs the
+         worker and reports the outcome as a notification. -->
+    <record id="action_nqi_ops_backfill" model="ir.actions.server">
+        <field name="name">Backfill History</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_worker"/>
+        <field name="state">code</field>
+        <field name="code">action = model._nqi_notify(model.action_backfill())</field>
+    </record>
+
+    <record id="action_nqi_ops_queue" model="ir.actions.server">
+        <field name="name">Process Birth Queue</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_worker"/>
+        <field name="state">code</field>
+        <field name="code">action = model._nqi_notify(model.run_birth_queue())</field>
+    </record>
+
+    <record id="action_nqi_ops_enrich" model="ir.actions.server">
+        <field name="name">Enrich Asset Rows</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_worker"/>
+        <field name="state">code</field>
+        <field name="code">action = model._nqi_notify(model.run_enrich())</field>
+    </record>
+
+    <record id="action_nqi_ops_mapping" model="ir.actions.server">
+        <field name="name">Map Test Results</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_worker"/>
+        <field name="state">code</field>
+        <field name="code">action = model._nqi_notify(model.run_test_mapping())</field>
+    </record>
+
+    <record id="action_nqi_ops_progress" model="ir.actions.server">
+        <field name="name">Update Production Progress</field>
+        <field name="model_id" ref="model_sn_wsd_nqi_worker"/>
+        <field name="state">code</field>
+        <field name="code">action = model._nqi_notify(model.run_progress())</field>
+    </record>
+
+    <menuitem id="menu_nqi_ops"
+              name="Operations"
+              parent="menu_nqi_push_center"
+              sequence="5"
+              groups="sn_wsd_nqi.group_nqi_manager"/>
+    <menuitem id="menu_nqi_ops_backfill"
+              name="Backfill History"
+              parent="menu_nqi_ops"
+              action="action_nqi_ops_backfill"
+              sequence="10"/>
+    <menuitem id="menu_nqi_ops_queue"
+              name="Process Birth Queue"
+              parent="menu_nqi_ops"
+              action="action_nqi_ops_queue"
+              sequence="20"/>
+    <menuitem id="menu_nqi_ops_enrich"
+              name="Enrich Asset Rows"
+              parent="menu_nqi_ops"
+              action="action_nqi_ops_enrich"
+              sequence="30"/>
+    <menuitem id="menu_nqi_ops_mapping"
+              name="Map Test Results"
+              parent="menu_nqi_ops"
+              action="action_nqi_ops_mapping"
+              sequence="40"/>
+    <menuitem id="menu_nqi_ops_progress"
+              name="Update Production Progress"
+              parent="menu_nqi_ops"
+              action="action_nqi_ops_progress"
+              sequence="50"/>
+</odoo>

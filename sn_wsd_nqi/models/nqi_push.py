@@ -168,7 +168,7 @@ class NqiPushLog(models.Model):
         for log in self:
             ids = [int(x) for x in log.row_ids.split(',') if x.strip()]
             rows = self.env[log.model_name].sudo().browse(ids).filtered(
-                lambda r, _ids=ids: r.push_state == 'to_push')
+                lambda r, _ids=ids: r.push_state in ('to_push', 'failed'))
             if rows:
                 log.retry_count += 1
                 worker._push_rows(rows, log)
@@ -241,7 +241,7 @@ class NqiTransportStub(models.AbstractModel):
         'sn.wsd.nqi.rd.project.change': 'RD_PROJECT_CHANGE_RECOND',
         'sn.wsd.nqi.rd.project.detail': 'RD_PROJECT_DETAIL',
         'sn.wsd.nqi.sp.box.bind': 'SP_BOX_METER_BIND',
-        'sn.wsd.nqi.sp.meter.recall': 'SP_METER_RECALL',
+        'sn.wsd.nqi.sp.recall': 'SP_METER_RECALL',
         'sn.wsd.nqi.sp.spot.check': 'SP_SPOT_CHECK_RECORD',
         'sn.wsd.nqi.sp.supply.batch': 'SP_SUPPLY_BATCH',
         'sn.wsd.nqi.sp.supply.test': 'SP_SUPPLY_TEST',
@@ -323,58 +323,111 @@ class NqiTransportStub(models.AbstractModel):
             for model, rows in rows_by_model.items() if rows}
         if not payloads:
             return 0
-        # flatten for chunking, then regroup per request
-        flat = [(model, row) for model, rows in payloads.items()
-                for row in rows]
+        # one request carries rows of a single service only: group by
+        # service, then chunk each group under the gateway row cap
+        by_service = {}
+        for model, rows in payloads.items():
+            by_service.setdefault(self._service_for(model), []).append(
+                (model, rows))
         requests_count = 0
-        for start in range(0, len(flat), self.ROWS_PER_REQUEST):
-            chunk = flat[start:start + self.ROWS_PER_REQUEST]
-            grouped = {}
-            for model, row in chunk:
-                grouped.setdefault(model, []).append(row)
-            body = self.build_request(notice_no, grouped)
-            self._post(config, body)
-            requests_count += 1
+        for models in by_service.values():
+            flat = [(model, row) for model, rows in models for row in rows]
+            for start in range(0, len(flat), self.ROWS_PER_REQUEST):
+                grouped = {}
+                for model, row in flat[start:start + self.ROWS_PER_REQUEST]:
+                    grouped.setdefault(model, []).append(row)
+                self._post(config, self.build_request(notice_no, grouped))
+                requests_count += 1
         return requests_count
 
 
 class NqiWorkerPush(models.AbstractModel):
     _inherit = 'sn.wsd.nqi.worker'
 
+    PUSH_LOCK = 'nqi_push'
+    MAX_BATCHES_PER_MODEL = 10
+
+    @api.model
+    def _push_config(self):
+        return self.env['sn.wsd.nqi.config'].sudo().search(
+            [('company_id', 'in', self.env.companies.ids)], limit=1)
+
+    @api.model
+    def _waiting_domain(self):
+        return [('push_state', '=', 'to_push'),
+                ('company_id', 'in', self.env.companies.ids)]
+
     @api.model
     def run_push(self, model_name='sn.wsd.nqi.fit.meter.info',
                  batch_size=500):
-        """Claim to_push rows atomically and hand them to the transport."""
-        config_model = self.env['sn.wsd.nqi.config'].sudo()
-        config = config_model.search(
-            [('company_id', 'in', self.env.companies.ids)], limit=1)
+        """Claim one batch of to_push rows of a model and upload it."""
+        message, _count = self._push_model(model_name, batch_size)
+        return message
+
+    def _push_model(self, model_name, batch_size):
+        """One claimed batch of the model; returns (message, rows pushed)."""
+        config = self._push_config()
         if not config or not config.api_base_url:
-            return 'no push API configured - rows stay pending'
-        if not self._try_lock('nqi_push'):
-            return 'push already running'
+            return _('No push API configured: rows stay pending.'), 0
+        rows = self.env[model_name].sudo().search(
+            self._waiting_domain(), order='id asc', limit=batch_size)
+        if not rows:
+            return _('Nothing to push.'), 0
+        claimed = self._claim(rows)
+        if not claimed:
+            return _('Nothing left to claim.'), 0
+        log = self.env['sn.wsd.nqi.push.log'].sudo().create({
+            'company_id': claimed[0].company_id.id,
+            'model_name': model_name,
+            'row_ids': ','.join(str(i) for i in claimed.ids),
+            'payload': json.dumps(
+                [row._nqi_payload() for row in claimed], ensure_ascii=False),
+            'state': 'pending',
+        })
+        self._push_rows(claimed, log)
+        return _('Batch %(log)s: %(state)s',
+                 log=log.id, state=log.state), len(claimed)
+
+    @api.model
+    def run_push_all(self, batch_size=500):
+        """Manual push: up to MAX_BATCHES_PER_MODEL batches for every
+        mirror model that has rows waiting, under one lock."""
+        config = self._push_config()
+        if not config or not config.api_base_url:
+            return _('No push API configured: rows stay pending.')
+        if not self._try_lock(self.PUSH_LOCK):
+            return _('A push is already running.')
         try:
-            rows = self.env[model_name].sudo().search(
-                [('push_state', '=', 'to_push'),
-                 ('company_id', 'in', self.env.companies.ids)],
-                order='id asc', limit=batch_size)
-            if not rows:
-                return 'nothing to push'
-            claimed = self._claim(rows)
-            if not claimed:
-                return 'nothing left to claim'
-            log = self.env['sn.wsd.nqi.push.log'].sudo().create({
-                'company_id': claimed[0].company_id.id,
-                'model_name': model_name,
-                'row_ids': ','.join(str(i) for i in claimed.ids),
-                'payload': json.dumps(
-                    [row._nqi_payload() for row in claimed],
-                    ensure_ascii=False),
-                'state': 'pending',
-            })
-            self._push_rows(claimed, log)
-            return 'push batch %s: %s' % (log.id, log.state)
+            transport = self.env['sn.wsd.nqi.transport']
+            summaries = []
+            left = 0
+            for model_name in sorted(self.env.registry.models):
+                if not model_name.startswith('sn.wsd.nqi.'):
+                    continue
+                model = self.env[model_name]
+                if model._abstract or 'push_state' not in model._fields:
+                    continue
+                waiting = model.sudo().search_count(self._waiting_domain())
+                if not waiting:
+                    continue
+                pushed = 0
+                for _batch in range(self.MAX_BATCHES_PER_MODEL):
+                    message, count = self._push_model(model_name, batch_size)
+                    pushed += count
+                    if not count:
+                        break
+                left += model.sudo().search_count(self._waiting_domain())
+                summaries.append('%s: %s' % (
+                    transport._table_for(model_name), pushed))
+            if not summaries:
+                return _('Nothing to push.')
+            return _('Pushed %(detail)s%(left)s',
+                     detail='; '.join(summaries),
+                     left=_('; %s rows left for the next run', left)
+                     if left else '')
+
         finally:
-            self._unlock('nqi_push')
+            self._unlock(self.PUSH_LOCK)
 
     def _claim(self, rows):
         """Atomic ownership flip: only rows still to_push move on."""

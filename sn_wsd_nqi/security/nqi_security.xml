@@ -383,5 +383,15 @@
             <field name="model_id" ref="model_sn_wsd_nqi_field_mapping"/>
             <field name="domain_force">[('company_id', 'in', company_ids)]</field>
         </record>
+        <record id="rule_push_log_company" model="ir.rule">
+            <field name="name">NQI Push Log Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_push_log"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_birth_queue_company" model="ir.rule">
+            <field name="name">NQI Birth Queue Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_nqi_birth_queue"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
 </data>
 </odoo>

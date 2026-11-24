@@ -10,6 +10,11 @@
                         string="Expand Details" class="oe_highlight"/>
             </header>
             <group position="inside">
+                <group string="NQI References">
+                    <field name="sale_order_line_id"/>
+                    <field name="product_detail_id"/>
+                    <field name="bidding_ids" widget="many2many_tags"/>
+                </group>
                 <group string="Plan Details">
                     <field name="detail_ids" nolabel="1" colspan="2">
                         <list editable="bottom">

@@ -21,3 +21,5 @@ class NqiBirthQueue(models.Model):
     source_ids = fields.Json(
         string='Source Record IDs', required=True,
         help='Event record ids of one source create batch.')
+    fail_count = fields.Integer(string='Fail Count', default=0)
+    error_text = fields.Text(string='Last Error', readonly=True)

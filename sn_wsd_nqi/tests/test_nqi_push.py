@@ -61,7 +61,7 @@ class TestNqiPush(TransactionCase):
         row.action_mark_to_push()
         message = self.env['sn.wsd.nqi.worker'].run_push(
             'sn.wsd.nqi.rd.product.info')
-        self.assertIn('no push API configured', message)
+        self.assertIn('No push API configured', message)
         self.assertEqual(row.push_state, 'to_push')
 
     def test_claim_is_atomic_on_state(self):

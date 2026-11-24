@@ -103,23 +103,33 @@ class NqiStagingMixin(models.AbstractModel):
         return result
 
     def action_try_auto_fill(self):
-        """Completion helper: re-run the chain enrichment on the selected
-        rows (plan code, nameplate barcode, test date/conclusion)."""
+        """Completion helper for asset rows: re-run the chain enrichment
+        (plan code, nameplate barcode, test date/conclusion) on the
+        selected rows that are still editable."""
         worker = self.env['sn.wsd.nqi.worker'].sudo()
-        enriched = 0
-        for record in self:
-            if record._name != 'sn.wsd.nqi.fit.meter.info':
-                continue
-            before = (
-                record.make_plan_no, record.barcode, record.test_date,
-                record.conc_code)
+        rows = self.filtered(
+            lambda record: record._name == 'sn.wsd.nqi.fit.meter.info'
+            and record.push_state != 'pushed')
+        filled = 0
+        for record in rows:
+            before = (record.make_plan_no, record.barcode,
+                      record.test_date, record.conc_code)
             worker._enrich_asset_row(record)
-            after = (
-                record.make_plan_no, record.barcode, record.test_date,
-                record.conc_code)
+            after = (record.make_plan_no, record.barcode,
+                     record.test_date, record.conc_code)
             if before != after:
-                enriched += 1
-        return enriched
+                filled += 1
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('NQI auto fill'),
+                'message': _('%(filled)s of %(total)s rows filled',
+                             filled=filled, total=len(rows)),
+                'type': 'success',
+                'sticky': False,
+            },
+        }
 
     # ----- push gate ----------------------------------------------------
 

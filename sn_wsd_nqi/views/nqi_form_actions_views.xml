@@ -1,0 +1,1025 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_nqi_et_achievement_form_actions" model="ir.ui.view">
+        <field name="name">nqi.et.achievement.form.actions</field>
+        <field name="model">sn.wsd.nqi.et.achievement</field>
+        <field name="inherit_id" ref="view_nqi_et_achievement_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_et_as_agreement_form_actions" model="ir.ui.view">
+        <field name="name">nqi.et.as.agreement.form.actions</field>
+        <field name="model">sn.wsd.nqi.et.as.agreement</field>
+        <field name="inherit_id" ref="view_nqi_et_as_agreement_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_et_as_mgt_form_actions" model="ir.ui.view">
+        <field name="name">nqi.et.as.mgt.form.actions</field>
+        <field name="model">sn.wsd.nqi.et.as.mgt</field>
+        <field name="inherit_id" ref="view_nqi_et_as_mgt_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_et_capacity_form_actions" model="ir.ui.view">
+        <field name="name">nqi.et.capacity.form.actions</field>
+        <field name="model">sn.wsd.nqi.et.capacity</field>
+        <field name="inherit_id" ref="view_nqi_et_capacity_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_et_device_form_actions" model="ir.ui.view">
+        <field name="name">nqi.et.device.form.actions</field>
+        <field name="model">sn.wsd.nqi.et.device</field>
+        <field name="inherit_id" ref="view_nqi_et_device_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_et_person_form_actions" model="ir.ui.view">
+        <field name="name">nqi.et.person.form.actions</field>
+        <field name="model">sn.wsd.nqi.et.person</field>
+        <field name="inherit_id" ref="view_nqi_et_person_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_et_qi_form_actions" model="ir.ui.view">
+        <field name="name">nqi.et.qi.form.actions</field>
+        <field name="model">sn.wsd.nqi.et.qi</field>
+        <field name="inherit_id" ref="view_nqi_et_qi_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_et_rb_form_actions" model="ir.ui.view">
+        <field name="name">nqi.et.rb.form.actions</field>
+        <field name="model">sn.wsd.nqi.et.rb</field>
+        <field name="inherit_id" ref="view_nqi_et_rb_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_et_staff_form_actions" model="ir.ui.view">
+        <field name="name">nqi.et.staff.form.actions</field>
+        <field name="model">sn.wsd.nqi.et.staff</field>
+        <field name="inherit_id" ref="view_nqi_et_staff_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_et_standard_setting_form_actions" model="ir.ui.view">
+        <field name="name">nqi.et.standard.setting.form.actions</field>
+        <field name="model">sn.wsd.nqi.et.standard.setting</field>
+        <field name="inherit_id" ref="view_nqi_et_standard_setting_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_et_supplier_score_form_actions" model="ir.ui.view">
+        <field name="name">nqi.et.supplier.score.form.actions</field>
+        <field name="model">sn.wsd.nqi.et.supplier.score</field>
+        <field name="inherit_id" ref="view_nqi_et_supplier_score_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_fit_component_bind_form_actions" model="ir.ui.view">
+        <field name="name">nqi.fit.component.bind.form.actions</field>
+        <field name="model">sn.wsd.nqi.fit.component.bind</field>
+        <field name="inherit_id" ref="view_nqi_fit_component_bind_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_fit_meter_info_form_actions" model="ir.ui.view">
+        <field name="name">nqi.fit.meter.info.form.actions</field>
+        <field name="model">sn.wsd.nqi.fit.meter.info</field>
+        <field name="inherit_id" ref="view_nqi_fit_meter_info_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_fit_meter_mounting_form_actions" model="ir.ui.view">
+        <field name="name">nqi.fit.meter.mounting.form.actions</field>
+        <field name="model">sn.wsd.nqi.fit.meter.mounting</field>
+        <field name="inherit_id" ref="view_nqi_fit_meter_mounting_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_fit_pcb_mounting_form_actions" model="ir.ui.view">
+        <field name="name">nqi.fit.pcb.mounting.form.actions</field>
+        <field name="model">sn.wsd.nqi.fit.pcb.mounting</field>
+        <field name="inherit_id" ref="view_nqi_fit_pcb_mounting_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_fit_pcb_serial_bind_form_actions" model="ir.ui.view">
+        <field name="name">nqi.fit.pcb.serial.bind.form.actions</field>
+        <field name="model">sn.wsd.nqi.fit.pcb.serial.bind</field>
+        <field name="inherit_id" ref="view_nqi_fit_pcb_serial_bind_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_aoi_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.aoi.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.aoi</field>
+        <field name="inherit_id" ref="view_nqi_mt_aoi_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_basicerr_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.basicerr.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.basicerr</field>
+        <field name="inherit_id" ref="view_nqi_mt_basicerr_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_const_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.const.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.const</field>
+        <field name="inherit_id" ref="view_nqi_mt_const_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_creeping_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.creeping.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.creeping</field>
+        <field name="inherit_id" ref="view_nqi_mt_creeping_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_dayerr_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.dayerr.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.dayerr</field>
+        <field name="inherit_id" ref="view_nqi_mt_dayerr_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_demandvalue_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.demandvalue.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.demandvalue</field>
+        <field name="inherit_id" ref="view_nqi_mt_demandvalue_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_esam_read_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.esam.read.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.esam.read</field>
+        <field name="inherit_id" ref="view_nqi_mt_esam_read_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_function_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.function.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.function</field>
+        <field name="inherit_id" ref="view_nqi_mt_function_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_hutchison_combina_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.hutchison.combina.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.hutchison.combina</field>
+        <field name="inherit_id" ref="view_nqi_mt_hutchison_combina_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_intuit_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.intuit.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.intuit</field>
+        <field name="inherit_id" ref="view_nqi_mt_intuit_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_mounting_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.mounting.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.mounting</field>
+        <field name="inherit_id" ref="view_nqi_mt_mounting_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_parameter_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.parameter.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.parameter</field>
+        <field name="inherit_id" ref="view_nqi_mt_parameter_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_rfid_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.rfid.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.rfid</field>
+        <field name="inherit_id" ref="view_nqi_mt_rfid_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_single_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.single.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.single</field>
+        <field name="inherit_id" ref="view_nqi_mt_single_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_starting_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.starting.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.starting</field>
+        <field name="inherit_id" ref="view_nqi_mt_starting_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_time_error_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.time.error.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.time.error</field>
+        <field name="inherit_id" ref="view_nqi_mt_time_error_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_ts_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.ts.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.ts</field>
+        <field name="inherit_id" ref="view_nqi_mt_ts_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_mt_volt_form_actions" model="ir.ui.view">
+        <field name="name">nqi.mt.volt.form.actions</field>
+        <field name="model">sn.wsd.nqi.mt.volt</field>
+        <field name="inherit_id" ref="view_nqi_mt_volt_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_ot_other_form_actions" model="ir.ui.view">
+        <field name="name">nqi.ot.other.form.actions</field>
+        <field name="model">sn.wsd.nqi.ot.other</field>
+        <field name="inherit_id" ref="view_nqi_ot_other_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_pr_arrive_batch_form_actions" model="ir.ui.view">
+        <field name="name">nqi.pr.arrive.batch.form.actions</field>
+        <field name="model">sn.wsd.nqi.pr.arrive.batch</field>
+        <field name="inherit_id" ref="view_nqi_pr_arrive_batch_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_pr_bidding_change_form_actions" model="ir.ui.view">
+        <field name="name">nqi.pr.bidding.change.form.actions</field>
+        <field name="model">sn.wsd.nqi.pr.bidding.change</field>
+        <field name="inherit_id" ref="view_nqi_pr_bidding_change_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_pr_bidding_info_form_actions" model="ir.ui.view">
+        <field name="name">nqi.pr.bidding.info.form.actions</field>
+        <field name="model">sn.wsd.nqi.pr.bidding.info</field>
+        <field name="inherit_id" ref="view_nqi_pr_bidding_info_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_pr_purchase_plan_form_actions" model="ir.ui.view">
+        <field name="name">nqi.pr.purchase.plan.form.actions</field>
+        <field name="model">sn.wsd.nqi.pr.purchase.plan</field>
+        <field name="inherit_id" ref="view_nqi_pr_purchase_plan_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_pr_test_result_form_actions" model="ir.ui.view">
+        <field name="name">nqi.pr.test.result.form.actions</field>
+        <field name="model">sn.wsd.nqi.pr.test.result</field>
+        <field name="inherit_id" ref="view_nqi_pr_test_result_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_pr_unqualified_form_actions" model="ir.ui.view">
+        <field name="name">nqi.pr.unqualified.form.actions</field>
+        <field name="model">sn.wsd.nqi.pr.unqualified</field>
+        <field name="inherit_id" ref="view_nqi_pr_unqualified_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_pt_env_temp_hum_form_actions" model="ir.ui.view">
+        <field name="name">nqi.pt.env.temp.hum.form.actions</field>
+        <field name="model">sn.wsd.nqi.pt.env.temp.hum</field>
+        <field name="inherit_id" ref="view_nqi_pt_env_temp_hum_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_pt_plan_form_actions" model="ir.ui.view">
+        <field name="name">nqi.pt.plan.form.actions</field>
+        <field name="model">sn.wsd.nqi.pt.plan</field>
+        <field name="inherit_id" ref="view_nqi_pt_plan_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_pt_plan_detail_form_actions" model="ir.ui.view">
+        <field name="name">nqi.pt.plan.detail.form.actions</field>
+        <field name="model">sn.wsd.nqi.pt.plan.detail</field>
+        <field name="inherit_id" ref="view_nqi_pt_plan_detail_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_pt_procedure_form_actions" model="ir.ui.view">
+        <field name="name">nqi.pt.procedure.form.actions</field>
+        <field name="model">sn.wsd.nqi.pt.procedure</field>
+        <field name="inherit_id" ref="view_nqi_pt_procedure_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_pt_process_form_actions" model="ir.ui.view">
+        <field name="name">nqi.pt.process.form.actions</field>
+        <field name="model">sn.wsd.nqi.pt.process</field>
+        <field name="inherit_id" ref="view_nqi_pt_process_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_pt_unqualified_form_actions" model="ir.ui.view">
+        <field name="name">nqi.pt.unqualified.form.actions</field>
+        <field name="model">sn.wsd.nqi.pt.unqualified</field>
+        <field name="inherit_id" ref="view_nqi_pt_unqualified_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_pub_file_form_actions" model="ir.ui.view">
+        <field name="name">nqi.pub.file.form.actions</field>
+        <field name="model">sn.wsd.nqi.pub.file</field>
+        <field name="inherit_id" ref="view_nqi_pub_file_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_rd_component_change_form_actions" model="ir.ui.view">
+        <field name="name">nqi.rd.component.change.form.actions</field>
+        <field name="model">sn.wsd.nqi.rd.component.change</field>
+        <field name="inherit_id" ref="view_nqi_rd_component_change_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_rd_component_list_form_actions" model="ir.ui.view">
+        <field name="name">nqi.rd.component.list.form.actions</field>
+        <field name="model">sn.wsd.nqi.rd.component.list</field>
+        <field name="inherit_id" ref="view_nqi_rd_component_list_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_rd_product_detail_form_actions" model="ir.ui.view">
+        <field name="name">nqi.rd.product.detail.form.actions</field>
+        <field name="model">sn.wsd.nqi.rd.product.detail</field>
+        <field name="inherit_id" ref="view_nqi_rd_product_detail_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_rd_product_info_form_actions" model="ir.ui.view">
+        <field name="name">nqi.rd.product.info.form.actions</field>
+        <field name="model">sn.wsd.nqi.rd.product.info</field>
+        <field name="inherit_id" ref="view_nqi_rd_product_info_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_rd_product_test_report_form_actions" model="ir.ui.view">
+        <field name="name">nqi.rd.product.test.report.form.actions</field>
+        <field name="model">sn.wsd.nqi.rd.product.test.report</field>
+        <field name="inherit_id" ref="view_nqi_rd_product_test_report_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_rd_project_form_actions" model="ir.ui.view">
+        <field name="name">nqi.rd.project.form.actions</field>
+        <field name="model">sn.wsd.nqi.rd.project</field>
+        <field name="inherit_id" ref="view_nqi_rd_project_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_rd_project_change_form_actions" model="ir.ui.view">
+        <field name="name">nqi.rd.project.change.form.actions</field>
+        <field name="model">sn.wsd.nqi.rd.project.change</field>
+        <field name="inherit_id" ref="view_nqi_rd_project_change_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_rd_project_detail_form_actions" model="ir.ui.view">
+        <field name="name">nqi.rd.project.detail.form.actions</field>
+        <field name="model">sn.wsd.nqi.rd.project.detail</field>
+        <field name="inherit_id" ref="view_nqi_rd_project_detail_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_sp_box_bind_form_actions" model="ir.ui.view">
+        <field name="name">nqi.sp.box.bind.form.actions</field>
+        <field name="model">sn.wsd.nqi.sp.box.bind</field>
+        <field name="inherit_id" ref="view_nqi_sp_box_bind_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_sp_recall_form_actions" model="ir.ui.view">
+        <field name="name">nqi.sp.recall.form.actions</field>
+        <field name="model">sn.wsd.nqi.sp.recall</field>
+        <field name="inherit_id" ref="view_nqi_sp_recall_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_sp_spot_check_form_actions" model="ir.ui.view">
+        <field name="name">nqi.sp.spot.check.form.actions</field>
+        <field name="model">sn.wsd.nqi.sp.spot.check</field>
+        <field name="inherit_id" ref="view_nqi_sp_spot_check_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_sp_supply_batch_form_actions" model="ir.ui.view">
+        <field name="name">nqi.sp.supply.batch.form.actions</field>
+        <field name="model">sn.wsd.nqi.sp.supply.batch</field>
+        <field name="inherit_id" ref="view_nqi_sp_supply_batch_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_sp_supply_test_form_actions" model="ir.ui.view">
+        <field name="name">nqi.sp.supply.test.form.actions</field>
+        <field name="model">sn.wsd.nqi.sp.supply.test</field>
+        <field name="inherit_id" ref="view_nqi_sp_supply_test_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_tt_consist_form_actions" model="ir.ui.view">
+        <field name="name">nqi.tt.consist.form.actions</field>
+        <field name="model">sn.wsd.nqi.tt.consist</field>
+        <field name="inherit_id" ref="view_nqi_tt_consist_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_tt_demand_form_actions" model="ir.ui.view">
+        <field name="name">nqi.tt.demand.form.actions</field>
+        <field name="model">sn.wsd.nqi.tt.demand</field>
+        <field name="inherit_id" ref="view_nqi_tt_demand_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_tt_eq_form_actions" model="ir.ui.view">
+        <field name="name">nqi.tt.eq.form.actions</field>
+        <field name="model">sn.wsd.nqi.tt.eq</field>
+        <field name="inherit_id" ref="view_nqi_tt_eq_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_tt_error_form_actions" model="ir.ui.view">
+        <field name="name">nqi.tt.error.form.actions</field>
+        <field name="model">sn.wsd.nqi.tt.error</field>
+        <field name="inherit_id" ref="view_nqi_tt_error_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_tt_event_record_form_actions" model="ir.ui.view">
+        <field name="name">nqi.tt.event.record.form.actions</field>
+        <field name="model">sn.wsd.nqi.tt.event.record</field>
+        <field name="inherit_id" ref="view_nqi_tt_event_record_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_tt_fee_form_actions" model="ir.ui.view">
+        <field name="name">nqi.tt.fee.form.actions</field>
+        <field name="model">sn.wsd.nqi.tt.fee</field>
+        <field name="inherit_id" ref="view_nqi_tt_fee_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_tt_max_demand_err_form_actions" model="ir.ui.view">
+        <field name="name">nqi.tt.max.demand.err.form.actions</field>
+        <field name="model">sn.wsd.nqi.tt.max.demand.err</field>
+        <field name="inherit_id" ref="view_nqi_tt_max_demand_err_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_tt_max_demandvalue_form_actions" model="ir.ui.view">
+        <field name="name">nqi.tt.max.demandvalue.form.actions</field>
+        <field name="model">sn.wsd.nqi.tt.max.demandvalue</field>
+        <field name="inherit_id" ref="view_nqi_tt_max_demandvalue_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_tt_overload_form_actions" model="ir.ui.view">
+        <field name="name">nqi.tt.overload.form.actions</field>
+        <field name="model">sn.wsd.nqi.tt.overload</field>
+        <field name="inherit_id" ref="view_nqi_tt_overload_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_tt_power_measure_form_actions" model="ir.ui.view">
+        <field name="name">nqi.tt.power.measure.form.actions</field>
+        <field name="model">sn.wsd.nqi.tt.power.measure</field>
+        <field name="inherit_id" ref="view_nqi_tt_power_measure_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_tt_standard_form_actions" model="ir.ui.view">
+        <field name="name">nqi.tt.standard.form.actions</field>
+        <field name="model">sn.wsd.nqi.tt.standard</field>
+        <field name="inherit_id" ref="view_nqi_tt_standard_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+    <record id="view_nqi_tt_variation_form_actions" model="ir.ui.view">
+        <field name="name">nqi.tt.variation.form.actions</field>
+        <field name="model">sn.wsd.nqi.tt.variation</field>
+        <field name="inherit_id" ref="view_nqi_tt_variation_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_withdraw" type="object"
+                        string="Withdraw"
+                        invisible="push_state not in ('to_push', 'failed')"/>
+                <button name="action_preview_payload"
+                        type="object" string="Preview Payload"/>
+            </header>
+        </field>
+    </record>
+</odoo>

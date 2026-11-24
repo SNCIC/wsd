@@ -1,27 +1,52 @@
-"""NQI enrich worker: watermark cron over mirror rows and test results.
+"""NQI workers: birth queue drain, history backfill, asset enrichment,
+test-result mapping and production progress.
 
 Concurrency contract (design decision 7):
-- single-flight via PostgreSQL advisory locks (cron vs manual button);
-- LIMIT-batched short transactions, resumable via max-id watermarks;
+- single-flight via PostgreSQL advisory locks (cron vs manual button),
+  keyed by a process-stable hash so separate processes exclude each
+  other;
+- LIMIT-batched processing, resumable via max-id watermarks;
 - keyset pagination (id > last), never OFFSET;
 - no FOR UPDATE on business tables.
 """
+import hashlib
 import logging
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 
-from .nqi_generation import DATETIME_FORMAT, _fmt
+from .nqi_generation import DATETIME_FORMAT, _enqueue_birth, _fmt
 
 _logger = logging.getLogger(__name__)
 
-LOCK_KEY_ENRICH = 'nqi_enrich'
-LOCK_KEY_TESTS = 'nqi_test_results'
+LOCK_ENRICH = 'nqi_enrich'
+LOCK_TESTS = 'nqi_test_results'
+LOCK_QUEUE = 'nqi_birth_queue'
+BIRTH_SOURCES = (
+    'sn.wsd.serial.operation.history',
+    'sn.wsd.serial.binding',
+    'sn.wsd.meter.component.binding',
+)
 BATCH_SIZE = 500
+QUEUE_MAX_FAILURES = 5
 
 
 def _lock_hash(key):
-    # stable 64-bit hash for pg advisory locks
-    return hash(key) & 0x7FFFFFFFFFFFFFFF
+    # process-stable 63-bit key: hash() is salted per process, so two
+    # processes would otherwise never see each other's lock
+    return int(hashlib.md5(key.encode()).hexdigest()[:15], 16)
+
+
+def _nqi_to_text(value):
+    """Mirror columns are text: flatten whatever a source yielded."""
+    if value is None or value is False:
+        return ''
+    if isinstance(value, models.BaseModel):
+        return value.display_name if value else ''
+    if isinstance(value, bool):
+        return str(value).lower()
+    if isinstance(value, float):
+        return '%.10g' % value
+    return str(value)
 
 
 class NqiWorker(models.Model):
@@ -46,6 +71,30 @@ class NqiWorker(models.Model):
         self.env.cr.execute(
             'SELECT pg_advisory_unlock(%s)', (_lock_hash(key),))
 
+    # ----- UI helpers ---------------------------------------------------
+
+    @api.model
+    def _nqi_notify(self, message):
+        """Notification action for the manual operations entries."""
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'NQI',
+                'message': message,
+                'sticky': True,
+                'type': 'info',
+            },
+        }
+
+    @api.model
+    def action_backfill(self):
+        """Manual entry: replay the whole source history through the
+        queue (history that predates the module, failed enqueues)."""
+        count = self.run_backfill()
+        return _('Backfill: %(count)s events enqueued. %(result)s',
+                 count=count, result=self.run_birth_queue())
+
     # ----- watermarks ----------------------------------------------------
 
     @api.model
@@ -59,73 +108,155 @@ class NqiWorker(models.Model):
         param = self.env['ir.config_parameter'].sudo()
         param.set_param('sn_wsd_nqi.watermark.%s' % key, str(value))
 
+    # ----- birth queue ---------------------------------------------------
+
     @api.model
-    def run_birth_queue(self, batch_size=500):
-        """Dequeue birth events and run the (batched) birth functions."""
-        if not self._try_lock('nqi_birth_queue'):
-            return 'birth queue already running'
+    def run_birth_queue(self, batch_size=BATCH_SIZE):
+        """Dequeue birth events and run the (batched) birth functions.
+
+        Drains the queue in batches; an event that keeps failing is
+        dropped after QUEUE_MAX_FAILURES runs so it cannot block the
+        queue (its anchor keeps any row a partial run already created).
+        """
+        if not self._try_lock(LOCK_QUEUE):
+            return _('The birth queue is already being processed.')
         try:
             Queue = self.env['sn.wsd.nqi.birth.queue'].sudo()
-            rows = Queue.search([], order='id asc', limit=batch_size)
-            for row in rows:
-                sources = self.env[row.source_model].sudo().browse(
-                    row.source_ids or []).exists()
-                if row.source_model == 'sn.wsd.serial.operation.history':
-                    self.env['sn.wsd.nqi.fit.meter.info'].sudo(
-                    )._nqi_birth_from_history(sources)
-                    self.env['sn.wsd.nqi.fit.pcb.mounting'].sudo(
-                    )._nqi_birth_mounting(sources)
-                    self.env['sn.wsd.nqi.fit.meter.mounting'].sudo(
-                    )._nqi_birth_mounting(sources)
-                elif row.source_model == 'sn.wsd.serial.binding':
-                    self.env['sn.wsd.nqi.fit.pcb.serial.bind'].sudo(
-                    )._nqi_birth_from_bindings(sources)
-                elif row.source_model == 'sn.wsd.meter.component.binding':
-                    self.env['sn.wsd.nqi.fit.component.bind'].sudo(
-                    )._nqi_birth_from_component_bindings(sources)
-                row.unlink()
-            return 'birth queue processed %d events' % len(rows)
+            processed = dropped = 0
+            last_id = 0
+            while True:
+                rows = Queue.search(
+                    [('id', '>', last_id)], order='id asc',
+                    limit=batch_size)
+                if not rows:
+                    break
+                # keyset: a failing event waits for the next run instead
+                # of burning its retries inside this one
+                last_id = max(rows.ids)
+                for row in rows:
+                    try:
+                        with self.env.cr.savepoint():
+                            self._process_birth_row(row)
+                            row.unlink()
+                        processed += 1
+                    except Exception as exc:  # noqa: BLE001
+                        _logger.warning(
+                            'NQI birth event %s failed (%s): %s',
+                            row.id, row.source_model, exc)
+                        row.write({'fail_count': row.fail_count + 1,
+                                   'error_text': str(exc)})
+                        if row.fail_count >= QUEUE_MAX_FAILURES:
+                            _logger.error(
+                                'NQI birth event %s dropped after %d '
+                                'failures', row.id, row.fail_count)
+                            row.unlink()
+                            dropped += 1
+                if len(rows) < batch_size:
+                    break
+            return _('Birth queue: %(processed)s processed, '
+                       '%(dropped)s dropped',
+                       processed=processed, dropped=dropped)
         finally:
-            self._unlock('nqi_birth_queue')
+            self._unlock(LOCK_QUEUE)
+
+    def _process_birth_row(self, row):
+        if row.source_model not in self.env:
+            raise ValueError('Unknown NQI source model %s'
+                             % row.source_model)
+        sources = self.env[row.source_model].sudo().browse(
+            row.source_ids or []).exists()
+        if row.source_model == 'sn.wsd.serial.operation.history':
+            self.env['sn.wsd.nqi.fit.meter.info'].sudo(
+            )._nqi_birth_from_history(sources)
+            self.env['sn.wsd.nqi.fit.pcb.mounting'].sudo(
+            )._nqi_birth_mounting(sources)
+            self.env['sn.wsd.nqi.fit.meter.mounting'].sudo(
+            )._nqi_birth_mounting(sources)
+        elif row.source_model == 'sn.wsd.serial.binding':
+            self.env['sn.wsd.nqi.fit.pcb.serial.bind'].sudo(
+            )._nqi_birth_from_bindings(sources)
+        elif row.source_model == 'sn.wsd.meter.component.binding':
+            self.env['sn.wsd.nqi.fit.component.bind'].sudo(
+            )._nqi_birth_from_component_bindings(sources)
+
+    @api.model
+    def run_backfill(self, source_models=None, from_id=0, to_id=None,
+                     chunk=BATCH_SIZE):
+        """Re-enqueue source events of an id window.
+
+        Covers history that predates the module install and events whose
+        enqueue failed. Idempotent: birth anchors collapse rows that
+        already exist, so a window can be replayed at any time.
+        """
+        total = 0
+        for model_name in source_models or BIRTH_SOURCES:
+            Source = self.env[model_name].sudo()
+            last = from_id
+            while True:
+                domain = [('id', '>', last)]
+                if to_id:
+                    domain.append(('id', '<=', to_id))
+                batch = Source.search(domain, order='id asc', limit=chunk)
+                if not batch:
+                    break
+                _enqueue_birth(
+                    self.env.cr, self.env.uid,
+                    batch[0].company_id.id, model_name, batch.ids)
+                total += len(batch)
+                last = max(batch.ids)
+                if len(batch) < chunk:
+                    break
+        return total
 
     # ----- enrichment ----------------------------------------------------
 
     @api.model
     def run_enrich(self, batch_size=BATCH_SIZE):
-        """Fill chain-derived columns on born asset rows (plan code,
-        barcode via nameplate mapping, test date/conclusion from the
-        output pass)."""
-        if not self._try_lock(LOCK_KEY_ENRICH):
-            return 'enrich already running'
+        """Fill chain-derived columns on new asset rows that are still
+        incomplete: nameplate barcode, test date/conclusion from the
+        output pass, plan code when the row was born without one.
+
+        Selection is by completeness, not by a single column: rows are
+        born with the plan code already, and must still be enriched.
+        """
+        if not self._try_lock(LOCK_ENRICH):
+            return _('Enrichment is already running.')
         try:
             Asset = self.env['sn.wsd.nqi.fit.meter.info'].sudo()
-            domain = [
-                ('id', '>', self._get_watermark('asset')),
-                ('make_plan_no', '=', False),
-            ]
-            rows = Asset.search(domain, order='id asc', limit=batch_size)
-            for row in rows:
-                self._enrich_asset_row(row)
-            if rows:
-                self._set_watermark('asset', max(rows.ids))
-            return 'enriched %d' % len(rows)
+            last = self._get_watermark('asset')
+            total = 0
+            while True:
+                rows = Asset.search(
+                    [('id', '>', last), ('missing_count', '>', 0),
+                     ('push_state', '!=', 'pushed')],
+                    order='id asc', limit=batch_size)
+                if not rows:
+                    break
+                for row in rows:
+                    self._enrich_asset_row(row)
+                total += len(rows)
+                last = max(rows.ids)
+                if len(rows) < batch_size:
+                    break
+            self._set_watermark('asset', last)
+            return _('Enriched %(count)s asset rows', count=total)
         finally:
-            self._unlock(LOCK_KEY_ENRICH)
+            self._unlock(LOCK_ENRICH)
 
     def _enrich_asset_row(self, row):
-        history = self.env['sn.wsd.serial.operation.history'].sudo().browse(
-            row.operation_history_id.id)
-        record = history.exists() and history or None
+        record = row.operation_history_id.sudo()
         values = {}
         if record:
             sn = record.serial_identity_id
-            # nameplate barcode via the SN binding chain
-            if sn:
+            # the nameplate mapping binds the nameplate SN *to* the
+            # machine SN, so look the machine up on the bound side
+            if sn and not row.barcode:
                 binding = self.env['sn.wsd.serial.binding'].sudo().search([
-                    ('serial_identity_id', '=', sn.id),
+                    ('bound_serial_identity_id', '=', sn.id),
                     ('binding_type', '=', 'nameplate'),
-                ], order='binding_date desc', limit=1)
-                if binding and not row.barcode:
+                ], order='is_current desc, binding_date desc, id desc',
+                    limit=1)
+                if binding:
                     values['barcode'] = binding.serial_identity_id.name
             if not row.test_date and record.out_date:
                 values['test_date'] = record.out_date.strftime(
@@ -134,142 +265,262 @@ class NqiWorker(models.Model):
                 values['conc_code'] = (
                     '1' if record.result == 'ok'
                     else '2' if record.result == 'ng' else '3')
-        order = record and record.mes_order_id or None
-        if order and not row.make_plan_no:
-            # plan code resolution: MES order -> MO -> sales order name
-            plan_code = self._resolve_plan_code(order)
+        if not row.make_plan_no and record:
+            plan_code = self._resolve_plan_code(record.mes_order_id)
             if plan_code:
                 values['make_plan_no'] = plan_code
         if values:
             row.write(values)
 
-    @api.model
-    def _resolve_plan_code(self, mes_order):
-        """MES order -> manufacturing order -> sales order name."""
+    def _resolve_plan_code(self, mes_order, cache=None):
+        """Plan code of the NQI plan a MES order feeds.
+
+        MES order -> manufacturing order -> sales order line. Only an
+        unambiguous line resolves (direct link, or a single-line order);
+        the plan header's own code wins over the default "<order>-<n>".
+        """
         production = mes_order.production_id
         if not production:
             return ''
-        sale = self.env['sale.order'].sudo()
-        if production.procurement_group_id:
-            order = sale.search(
-                [('procurement_group_id', '=',
-                  production.procurement_group_id.id)], limit=1)
-            if order:
-                return order.name
-        if production.origin:
-            order = sale.search(
+        if cache is not None and production.id in cache:
+            return cache[production.id]
+        line = False
+        if 'sale_line_id' in production._fields:
+            line = production.sale_line_id
+        if not line and production.origin:
+            order = self.env['sale.order'].sudo().search(
                 [('name', '=', production.origin)], limit=1)
-            if order:
-                return order.name
-        return production.origin or ''
+            lines = order.order_line._nqi_product_lines()
+            if len(lines) == 1:
+                line = lines
+        plan_code = ''
+        if line:
+            plan = self.env['sn.wsd.nqi.pt.plan'].sudo().search(
+                [('sale_order_line_id', '=', line.id)], limit=1)
+            plan_code = plan.plan_code if plan else (
+                line._nqi_default_plan_code())
+        if cache is not None:
+            cache[production.id] = plan_code
+        return plan_code
 
     # ----- test-result mapping engine ------------------------------------
 
-    @api.model
-    def run_test_mapping(self, batch_size=BATCH_SIZE):
-        """Feed MES test results through the field mapping config into
-        the 31 testing mirror tables. Unmapped project names are
-        skipped silently - configure the mapping and re-run."""
-        if not self._try_lock(LOCK_KEY_TESTS):
-            return 'test mapping already running'
+    def _nqi_source_value(self, result, mapping):
+        """Value a row-level mapping extracts from a test result."""
+        kind = mapping.source_kind
+        key = (mapping.source_key or '').strip()
+        if kind == 'fixed':
+            return key
         try:
-            mappings = self.env['sn.wsd.nqi.field.mapping'].sudo().search([
-                ('active', '=', True),
-                ('source_kind', '=', 'detail_project'),
-            ])
-            if not mappings:
-                return 'no active mappings'
-            by_project = {}
-            for mapping in mappings:
-                by_project.setdefault(mapping.source_key, []).append(mapping)
-            Result = self.env['sn.wsd.mes.test.result'].sudo()
-            watermark = self._get_watermark('tests')
-            results = Result.search(
-                [('id', '>', watermark)], order='id asc', limit=batch_size)
-            created = 0
-            for result in results:
-                created += self._map_test_result(result, by_project)
-            if results:
-                self._set_watermark('tests', max(results.ids))
-            return 'mapped %d rows from %d results' % (created, len(results))
-        finally:
-            self._unlock(LOCK_KEY_TESTS)
+            if kind == 'result_attr':
+                value = result
+                for part in key.split('.'):
+                    value = value[part]
+                return value
+            if kind == 'payload_key':
+                value = result.payload
+                for part in key.split('.'):
+                    if not isinstance(value, dict):
+                        return False
+                    value = value.get(part)
+                return value
+        except (KeyError, TypeError):
+            return False
+        return False
 
     @api.model
-    def _map_test_result(self, result, by_project):
-        helpers = self.env['sn.wsd.nqi.generation.mixin']
+    def _nqi_mapping_index(self):
+        """Active mappings grouped as {model: {'detail': {...}, 'row': []}}.
+
+        detail_project mappings drive the test points; the other source
+        kinds (result attribute, payload key, fixed value) fill every
+        row the model gets for a result.
+        """
+        index = {}
+        for mapping in self.env['sn.wsd.nqi.field.mapping'].sudo().search(
+                [('active', '=', True)]):
+            model = mapping.nqi_model_id.model
+            if not model:
+                continue
+            spec = index.setdefault(model, {'detail': {}, 'row': []})
+            if mapping.source_kind == 'detail_project':
+                spec['detail'].setdefault(mapping.source_key, []).append(
+                    mapping)
+            else:
+                spec['row'].append(mapping)
+        return index
+
+    @api.model
+    def run_test_mapping(self, batch_size=BATCH_SIZE, since_id=None):
+        """Feed MES test results through the field mapping config into
+        the testing mirror tables.
+
+        Unmapped projects are skipped silently. ``since_id`` overrides
+        the watermark so a historical window can be mapped again after
+        configuring new mappings (rows are keyed by result and point).
+        """
+        if not self._try_lock(LOCK_TESTS):
+            return _('Test mapping is already running.')
+        try:
+            index = self._nqi_mapping_index()
+            if not index:
+                return _('No active field mappings.')
+            Result = self.env['sn.wsd.mes.test.result'].sudo()
+            last = (self._get_watermark('tests')
+                    if since_id is None else since_id)
+            created = scanned = 0
+            while True:
+                results = Result.search(
+                    [('id', '>', last)], order='id asc', limit=batch_size)
+                if not results:
+                    break
+                for result in results:
+                    created += self._map_test_result(result, index)
+                scanned += len(results)
+                last = max(results.ids)
+                if len(results) < batch_size:
+                    break
+            self._set_watermark('tests', last)
+            return _('Mapped %(created)s rows from %(scanned)s results',
+                       created=created, scanned=scanned)
+        finally:
+            self._unlock(LOCK_TESTS)
+
+    def _map_test_result(self, result, index):
+        """Mirror rows of one test result, per configured target model.
+
+        Point n merges the n-th occurrence of every mapped project of
+        the result, so a 6-point test yields 6 rows numbered 1..6; the
+        point number lands on the table's locator column. Models mapped
+        from the result header only (no detail project) get one row per
+        result.
+        """
         created = 0
         sn = result.serial_identity_id
         if not sn:
             return 0
-        base = {
-            'company_id': result.company_id.id,
-            'test_result_id': result.id,
-            'serial_no': sn.name,
-            'detect_date': _fmt(result.test_time),
-        }
-        for detail in result.detail_ids:
-            for mapping in by_project.get(detail.project_name, []):
-                target = mapping.nqi_model_id.model
-                if not target or not mapping.nqi_field:
+        details = result.detail_ids.sorted(
+            key=lambda detail: (detail.sequence, detail.id))
+        for model_name, spec in index.items():
+            target = self.env[model_name].sudo()
+            present = target._fields
+            if 'test_result_id' not in present:
+                _logger.warning(
+                    'NQI mapping target %s is not a testing table: '
+                    'skipped', model_name)
+                continue
+            points = {}
+            for project, mappings in spec['detail'].items():
+                occurrences = details.filtered(
+                    lambda detail, name=project:
+                    detail.project_name == name)
+                for number, detail in enumerate(occurrences, start=1):
+                    bucket = points.setdefault(number, {})
+                    for mapping in mappings:
+                        if mapping.nqi_field in present:
+                            bucket[mapping.nqi_field] = (
+                                detail.actual_value or '')
+            # detail mappings drive the rows: a result without those
+            # projects yields nothing. A model mapped from the result
+            # header only gets exactly one row per result.
+            if spec['detail']:
+                point_count = max(points) if points else 0
+            else:
+                point_count = 1
+            if not point_count:
+                continue
+            base = {
+                'company_id': result.company_id.id,
+                'test_result_id': result.id,
+                'detect_date': _fmt(result.test_time),
+            }
+            if 'serial_no' in present:
+                base['serial_no'] = sn.name
+            elif 'pcb_code' in present:
+                base['pcb_code'] = sn.name
+            for mapping in spec['row']:
+                if mapping.nqi_field in present:
+                    base[mapping.nqi_field] = _nqi_to_text(
+                        self._nqi_source_value(result, mapping))
+            locator = next(
+                (name for name in ('detect_item_point', 'para_index',
+                                   'detect_item') if name in present), None)
+            for number in range(1, point_count + 1):
+                values = {name: value for name, value in base.items()
+                          if name in present}
+                values.update(points.get(number, {}))
+                if locator and locator not in values:
+                    values[locator] = str(number)
+                domain = [('test_result_id', '=', result.id)]
+                if locator:
+                    domain.append((locator, '=', values.get(locator)))
+                if target.search(domain, limit=1):
                     continue
-                row_model = self.env[target].sudo()
-                if mapping.nqi_field not in row_model._fields:
-                    continue
-                existing = row_model.search(
-                    [('test_result_id', '=', result.id),
-                     (mapping.nqi_field, '=', detail.actual_value or '')],
-                    limit=1)
-                if existing:
-                    continue
-                values = dict(base)
-                values[mapping.nqi_field] = detail.actual_value or ''
                 try:
                     with self.env.cr.savepoint():
-                        row_model.create(values)
+                        target.create(values)
                     created += 1
                 except Exception as exc:  # noqa: BLE001
                     _logger.warning(
-                        'NQI mapping row skipped (%s): %s', target, exc)
+                        'NQI mapping row skipped (%s): %s',
+                        model_name, exc)
         return created
 
     # ----- production progress -------------------------------------------
 
     @api.model
     def run_progress(self):
-        """Aggregate MES order progress into PT_PRODUCTION_PROCESS rows.
+        """Aggregate MES order quantities into PT_PRODUCTION_PROCESS.
 
-        One row per plan task (plan code resolved through the MO chain);
-        upsert by (company, plan_code): plan quantity from the MES order,
-        finished quantity from its output count.
+        One row per NQI plan. Plan and finished quantities sum the MES
+        orders of the plan's machine-kind product (every MES order of
+        the chain when the plan sells no machine-kind product).
         """
         Process = self.env['sn.wsd.nqi.pt.process'].sudo()
-        orders = self.env['sn.wsd.mes.order'].sudo().search([
-            ('state', '!=', 'cancelled'),
-        ])
-        for order in orders:
-            plan_code = self._resolve_plan_code(order)
-            if not plan_code:
-                continue
+        MesOrder = self.env['sn.wsd.mes.order'].sudo()
+        plans = self.env['sn.wsd.nqi.pt.plan'].sudo().search([
+            ('sale_order_line_id', '!=', False)])
+        for plan in plans:
+            line = plan.sale_order_line_id
+            orders = MesOrder.search(
+                [('production_id', 'in', plan._nqi_manufacturing_orders().ids),
+                 ('state', '!=', 'cancelled')])
+            if not orders:
+                orders = MesOrder.search(
+                    [('product_id', '=', line.product_id.id),
+                     ('state', '!=', 'cancelled')])
+            machine = orders.filtered(
+                lambda order: order.product_id._nqi_product_kind()
+                == 'machine')
+            counted = machine or orders
             row = Process.search([
-                ('company_id', '=', order.company_id.id),
-                ('plan_code', '=', plan_code),
+                ('company_id', '=', plan.company_id.id),
+                ('plan_code', '=', plan.plan_code),
             ], limit=1)
             values = {
-                'plan_num': str(int(order.planned_qty or 0)),
-                'finish_num': str(int(order.x_output_qty or 0)),
+                'plan_num': str(int(sum(counted.mapped('planned_qty')))),
+                'finish_num': str(int(sum(
+                    counted.mapped('x_output_qty')))),
             }
+            bidding = plan.bidding_ids[:1]
+            if bidding.bidding_party_a:
+                values.update({
+                    'bidding_party_a_id': bidding.bidding_party_a_id.id,
+                    'bidding_party_a': bidding.bidding_party_a,
+                })
             if row:
                 row.write(values)
             else:
-                row_values = dict(
-                    values, company_id=order.company_id.id,
-                    plan_code=plan_code)
+                values.update({
+                    'company_id': plan.company_id.id,
+                    'plan_code': plan.plan_code,
+                })
                 try:
                     with self.env.cr.savepoint():
-                        Process.create(row_values)
+                        Process.create(values)
                 except Exception as exc:  # noqa: BLE001
                     _logger.warning(
                         'NQI progress row skipped for %s: %s',
-                        plan_code, exc)
-        return 'progress rows updated for %d orders' % len(orders)
+                        plan.plan_code, exc)
+        return _('Progress rows updated for %(count)s plans',
+                 count=len(plans))
