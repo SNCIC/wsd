@@ -50,14 +50,11 @@ class NqiGenerationIdempotency(models.AbstractModel):
         existing = target.search([(key_field, '=', vals[key_field])], limit=1)
         if existing:
             return existing
-        try:
-            with self.env.cr.savepoint():
-                return target.create(vals)
-        except Exception as exc:  # noqa: BLE001 -- deliberate tolerance
-            _logger.warning(
-                'NQI birth skipped for %s %s: %s',
-                model_name, vals.get(key_field), exc)
-            return target.browse()
+        created = self.env['sn.wsd.nqi.worker']._nqi_guarded(
+            lambda: target.create(vals),
+            'birth row (%s %s)' % (model_name, vals.get(key_field)))
+        return target.browse() if isinstance(created, Exception) else created
+
 
     @api.model
     def _nqi_create_batch_if_new(self, model_name, vals_list, key_field):
@@ -74,15 +71,18 @@ class NqiGenerationIdempotency(models.AbstractModel):
                 if vals[key_field] not in existing]
         if not todo:
             return target.browse()
-        try:
-            with self.env.cr.savepoint():
-                return target.create(todo)
-        except Exception:  # noqa: BLE001 -- race: retry row by row
-            created = target.browse()
-            for vals in todo:
-                created |= self._nqi_create_if_new(
-                    model_name, vals, key_field)
+        created = self.env['sn.wsd.nqi.worker']._nqi_guarded(
+            lambda: target.create(todo),
+            'birth batch (%s, %s rows)' % (model_name, len(todo)))
+        if not isinstance(created, Exception):
             return created
+        # something in the batch already exists (a concurrent creator):
+        # retry row by row
+        created = target.browse()
+        for vals in todo:
+            created |= self._nqi_create_if_new(
+                model_name, vals, key_field)
+        return created
 
     @api.model
     def _nqi_birth_mounting_rows(self, model_name, records):

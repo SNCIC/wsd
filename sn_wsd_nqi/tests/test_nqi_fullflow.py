@@ -7,6 +7,7 @@ import json
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
+from odoo import api
 from odoo.exceptions import UserError
 from odoo.tests import Form, TransactionCase
 
@@ -301,7 +302,15 @@ class TestNqiFullFlow(TransactionCase):
         return result
 
     def _mapping(self, model, field, kind, key):
-        return self.env['sn.wsd.nqi.field.mapping'].create({
+        """A mapping is unique per company: reuse one the database
+        already holds (the full data set carries demo mappings)."""
+        Mapping = self.env['sn.wsd.nqi.field.mapping']
+        existing = Mapping.search([
+            ('nqi_model_id.model', '=', model), ('nqi_field', '=', field),
+            ('source_kind', '=', kind), ('source_key', '=', key)], limit=1)
+        if existing:
+            return existing
+        return Mapping.create({
             'nqi_model_id': self.env['ir.model']._get_id(model),
             'nqi_field': field,
             'source_kind': kind,
@@ -366,6 +375,48 @@ class TestNqiFullFlow(TransactionCase):
         rows = rows.search([('test_result_id', '=', result.id)])
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows.test_result, 'ok')
+
+    def test_guard_tolerates_one_bad_row_and_keeps_the_transaction(self):
+        """A row the database refuses is skipped; the worker goes on
+        and the transaction stays usable."""
+        basic = 'sn.wsd.nqi.mt.basicerr'
+        # a mapping wired to a non-text column: the row of the point
+        # that carries that project cannot be inserted
+        self._mapping(basic, 'company_id', 'detail_project', 'BROKEN')
+        sn = self._identity('199999910003')
+        result = self._test_result(sn, [
+            (1, 'ERROR', '0.1'), (2, 'ERROR', '0.2'), (3, 'ERROR', '0.3')])
+        self.env['sn.wsd.mes.test.result.detail'].create([{
+            'test_result_id': result.id, 'sequence': sequence,
+            'project_name': 'BROKEN', 'actual_value': value,
+            'result': 'ok'}
+            for sequence, value in ((1, '1'), (2, 'not-a-company'), (3, '1'))])
+        self.worker.run_test_mapping()
+        rows = self.env[basic].search(
+            [('test_result_id', '=', result.id)], order='detect_item_point')
+        self.assertEqual(rows.mapped('detect_item_point'), ['1', '3'])
+        # the transaction is still healthy
+        self.env[basic].flush_recordset(['detect_item_point'])
+
+    def test_bad_pending_write_surfaces_once_instead_of_poisoning(self):
+        """A write that is still pending when the worker starts and
+        turns out invalid must fail where it is flushed - not be
+        swallowed by a guard and re-raised on every later statement."""
+        from psycopg2.errors import InFailedSqlTransaction
+        basic = 'sn.wsd.nqi.mt.basicerr'
+        self._mapping(basic, 'error', 'detail_project', 'ERROR')
+        duplicate = self._mapping(basic, 'error', 'detail_project', 'ERR_X')
+        sn = self._identity('199999910004')
+        self._test_result(sn, [(1, 'ERROR', '0.1')])
+        # deferred write: the unique key only bites when it is flushed
+        duplicate.write({'source_key': 'ERROR'})
+        caught = None
+        try:
+            self.worker.run_test_mapping()
+        except Exception as exc:  # noqa: BLE001 -- the point of the test
+            caught = exc
+        self.assertIsNotNone(caught)
+        self.assertNotIsInstance(caught, InFailedSqlTransaction)
 
     # ----- push retry ------------------------------------------------------
 

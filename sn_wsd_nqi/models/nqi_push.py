@@ -41,8 +41,9 @@ class NqiStagingMixinPush(models.AbstractModel):
         return super().write(vals)
 
     def unlink(self):
-        if self.filtered(lambda r: r.push_state == 'pushed'):
-            raise UserError(_('Pushed rows cannot be deleted.'))
+        if not self.env.context.get('nqi_system_write'):
+            if self.filtered(lambda r: r.push_state == 'pushed'):
+                raise UserError(_('Pushed rows cannot be deleted.'))
         return super().unlink()
 
     def action_withdraw(self):
@@ -397,37 +398,33 @@ class NqiWorkerPush(models.AbstractModel):
             return _('No push API configured: rows stay pending.')
         if not self._try_lock(self.PUSH_LOCK):
             return _('A push is already running.')
-        try:
-            transport = self.env['sn.wsd.nqi.transport']
-            summaries = []
-            left = 0
-            for model_name in sorted(self.env.registry.models):
-                if not model_name.startswith('sn.wsd.nqi.'):
-                    continue
-                model = self.env[model_name]
-                if model._abstract or 'push_state' not in model._fields:
-                    continue
-                waiting = model.sudo().search_count(self._waiting_domain())
-                if not waiting:
-                    continue
-                pushed = 0
-                for _batch in range(self.MAX_BATCHES_PER_MODEL):
-                    message, count = self._push_model(model_name, batch_size)
-                    pushed += count
-                    if not count:
-                        break
-                left += model.sudo().search_count(self._waiting_domain())
-                summaries.append('%s: %s' % (
-                    transport._table_for(model_name), pushed))
-            if not summaries:
-                return _('Nothing to push.')
-            return _('Pushed %(detail)s%(left)s',
-                     detail='; '.join(summaries),
-                     left=_('; %s rows left for the next run', left)
-                     if left else '')
-
-        finally:
-            self._unlock(self.PUSH_LOCK)
+        transport = self.env['sn.wsd.nqi.transport']
+        summaries = []
+        left = 0
+        for model_name in sorted(self.env.registry.models):
+            if not model_name.startswith('sn.wsd.nqi.'):
+                continue
+            model = self.env[model_name]
+            if model._abstract or 'push_state' not in model._fields:
+                continue
+            waiting = model.sudo().search_count(self._waiting_domain())
+            if not waiting:
+                continue
+            pushed = 0
+            for _batch in range(self.MAX_BATCHES_PER_MODEL):
+                message, count = self._push_model(model_name, batch_size)
+                pushed += count
+                if not count:
+                    break
+            left += model.sudo().search_count(self._waiting_domain())
+            summaries.append('%s: %s' % (
+                transport._table_for(model_name), pushed))
+        if not summaries:
+            return _('Nothing to push.')
+        return _('Pushed %(detail)s%(left)s',
+                 detail='; '.join(summaries),
+                 left=_('; %s rows left for the next run', left)
+                 if left else '')
 
     def _claim(self, rows):
         """Atomic ownership flip: only rows still to_push move on."""

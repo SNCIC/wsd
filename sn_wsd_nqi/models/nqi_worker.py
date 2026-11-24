@@ -2,12 +2,19 @@
 test-result mapping and production progress.
 
 Concurrency contract (design decision 7):
-- single-flight via PostgreSQL advisory locks (cron vs manual button),
-  keyed by a process-stable hash so separate processes exclude each
-  other;
+- single-flight via a transaction-level PostgreSQL advisory lock: it
+  lives exactly as long as the run's transaction and is released by
+  the database on commit or rollback, also when the transaction is
+  aborted (a session-level lock would stay on the pooled connection);
 - LIMIT-batched processing, resumable via max-id watermarks;
 - keyset pagination (id > last), never OFFSET;
 - no FOR UPDATE on business tables.
+
+Failure containment: every tolerated failure runs through
+``_nqi_guarded``, which flushes pending writes BEFORE opening its
+savepoint. Odoo flushes again when the savepoint opens; a bad pending
+write failing there would be swallowed by the guard and fail again on
+the next statement of the transaction, outside any guard.
 """
 import hashlib
 import logging
@@ -49,6 +56,10 @@ def _nqi_to_text(value):
     return str(value)
 
 
+def _failed(result):
+    return isinstance(result, Exception)
+
+
 class NqiWorker(models.Model):
     _name = 'sn.wsd.nqi.worker'
     _description = 'NQI Generation Worker'
@@ -58,18 +69,33 @@ class NqiWorker(models.Model):
         'res.company', string='Company', required=True, index=True,
         default=lambda self: self.env.company)
 
-    # ----- single-flight -------------------------------------------------
+    # ----- single flight and failure containment -------------------------
 
     @api.model
     def _try_lock(self, key):
+        """Single-flight guard for a worker run (see module docstring)."""
         self.env.cr.execute(
-            'SELECT pg_try_advisory_lock(%s)', (_lock_hash(key),))
+            'SELECT pg_try_advisory_xact_lock(%s)', (_lock_hash(key),))
         return self.env.cr.fetchone()[0]
 
     @api.model
     def _unlock(self, key):
-        self.env.cr.execute(
-            'SELECT pg_advisory_unlock(%s)', (_lock_hash(key),))
+        """Nothing to release: the lock ends with the transaction."""
+        return True
+
+    @api.model
+    def _nqi_guarded(self, function, what):
+        """Run ``function`` under a savepoint and tolerate a failure.
+
+        Returns what ``function`` returned, or the exception it raised.
+        """
+        self.env.flush_all()
+        try:
+            with self.env.cr.savepoint():
+                return function()
+        except Exception as exc:  # noqa: BLE001 -- deliberate tolerance
+            _logger.warning('NQI %s skipped: %s', what, exc)
+            return exc
 
     # ----- UI helpers ---------------------------------------------------
 
@@ -120,44 +146,43 @@ class NqiWorker(models.Model):
         """
         if not self._try_lock(LOCK_QUEUE):
             return _('The birth queue is already being processed.')
-        try:
-            Queue = self.env['sn.wsd.nqi.birth.queue'].sudo()
-            processed = dropped = 0
-            last_id = 0
-            while True:
-                rows = Queue.search(
-                    [('id', '>', last_id)], order='id asc',
-                    limit=batch_size)
-                if not rows:
-                    break
-                # keyset: a failing event waits for the next run instead
-                # of burning its retries inside this one
-                last_id = max(rows.ids)
-                for row in rows:
-                    try:
-                        with self.env.cr.savepoint():
-                            self._process_birth_row(row)
-                            row.unlink()
-                        processed += 1
-                    except Exception as exc:  # noqa: BLE001
-                        _logger.warning(
-                            'NQI birth event %s failed (%s): %s',
-                            row.id, row.source_model, exc)
-                        row.write({'fail_count': row.fail_count + 1,
-                                   'error_text': str(exc)})
-                        if row.fail_count >= QUEUE_MAX_FAILURES:
-                            _logger.error(
-                                'NQI birth event %s dropped after %d '
-                                'failures', row.id, row.fail_count)
-                            row.unlink()
-                            dropped += 1
-                if len(rows) < batch_size:
-                    break
-            return _('Birth queue: %(processed)s processed, '
-                       '%(dropped)s dropped',
-                       processed=processed, dropped=dropped)
-        finally:
-            self._unlock(LOCK_QUEUE)
+        Queue = self.env['sn.wsd.nqi.birth.queue'].sudo()
+        processed = dropped = 0
+        last_id = 0
+        while True:
+            rows = Queue.search(
+                [('id', '>', last_id)], order='id asc', limit=batch_size)
+            if not rows:
+                break
+            # keyset: a failing event waits for the next run instead of
+            # burning its retries inside this one
+            last_id = max(rows.ids)
+            for row in rows:
+                done = self._nqi_guarded(
+                    lambda row=row: self._process_and_drop(row),
+                    'birth event %s (%s)' % (row.id, row.source_model))
+                if _failed(done):
+                    row.write({
+                        'fail_count': row.fail_count + 1,
+                        'error_text': str(done),
+                    })
+                    if row.fail_count >= QUEUE_MAX_FAILURES:
+                        _logger.error(
+                            'NQI birth event %s dropped after %d failures',
+                            row.id, row.fail_count)
+                        row.unlink()
+                        dropped += 1
+                else:
+                    processed += 1
+            if len(rows) < batch_size:
+                break
+        return _('Birth queue: %(processed)s processed, %(dropped)s dropped',
+                 processed=processed, dropped=dropped)
+
+    def _process_and_drop(self, row):
+        self._process_birth_row(row)
+        row.unlink()
+        return True
 
     def _process_birth_row(self, row):
         if row.source_model not in self.env:
@@ -171,13 +196,13 @@ class NqiWorker(models.Model):
             self.env['sn.wsd.nqi.fit.pcb.mounting'].sudo(
             )._nqi_birth_mounting(sources)
             self.env['sn.wsd.nqi.fit.meter.mounting'].sudo(
-            )._nqi_birth_mounting(sources)
+                )._nqi_birth_mounting(sources)
         elif row.source_model == 'sn.wsd.serial.binding':
             self.env['sn.wsd.nqi.fit.pcb.serial.bind'].sudo(
             )._nqi_birth_from_bindings(sources)
         elif row.source_model == 'sn.wsd.meter.component.binding':
             self.env['sn.wsd.nqi.fit.component.bind'].sudo(
-            )._nqi_birth_from_component_bindings(sources)
+                )._nqi_birth_from_component_bindings(sources)
 
     @api.model
     def run_backfill(self, source_models=None, from_id=0, to_id=None,
@@ -221,27 +246,26 @@ class NqiWorker(models.Model):
         """
         if not self._try_lock(LOCK_ENRICH):
             return _('Enrichment is already running.')
-        try:
-            Asset = self.env['sn.wsd.nqi.fit.meter.info'].sudo()
-            last = self._get_watermark('asset')
-            total = 0
-            while True:
-                rows = Asset.search(
-                    [('id', '>', last), ('missing_count', '>', 0),
-                     ('push_state', '!=', 'pushed')],
-                    order='id asc', limit=batch_size)
-                if not rows:
-                    break
-                for row in rows:
-                    self._enrich_asset_row(row)
-                total += len(rows)
-                last = max(rows.ids)
-                if len(rows) < batch_size:
-                    break
-            self._set_watermark('asset', last)
-            return _('Enriched %(count)s asset rows', count=total)
-        finally:
-            self._unlock(LOCK_ENRICH)
+        Asset = self.env['sn.wsd.nqi.fit.meter.info'].sudo()
+        last = self._get_watermark('asset')
+        total = 0
+        while True:
+            rows = Asset.search(
+                [('id', '>', last), ('missing_count', '>', 0),
+                 ('push_state', '!=', 'pushed')],
+                order='id asc', limit=batch_size)
+            if not rows:
+                break
+            for row in rows:
+                done = self._nqi_guarded(
+                    lambda row=row: self._enrich_asset_row(row),
+                    'enrichment of asset %s' % row.id)
+                total += not _failed(done)
+            last = max(rows.ids)
+            if len(rows) < batch_size:
+                break
+        self._set_watermark('asset', last)
+        return _('Enriched %(count)s asset rows', count=total)
 
     def _enrich_asset_row(self, row):
         record = row.operation_history_id.sudo()
@@ -271,6 +295,7 @@ class NqiWorker(models.Model):
                 values['make_plan_no'] = plan_code
         if values:
             row.write(values)
+        return True
 
     def _resolve_plan_code(self, mes_order, cache=None):
         """Plan code of the NQI plan a MES order feeds.
@@ -313,6 +338,9 @@ class NqiWorker(models.Model):
             return key
         try:
             if kind == 'result_attr':
+                if key == 'nqi_plan_code':
+                    # NQI plan code of the MES order the result belongs to
+                    return self._resolve_plan_code(result.mes_order_id)
                 value = result
                 for part in key.split('.'):
                     value = value[part]
@@ -361,30 +389,27 @@ class NqiWorker(models.Model):
         """
         if not self._try_lock(LOCK_TESTS):
             return _('Test mapping is already running.')
-        try:
-            index = self._nqi_mapping_index()
-            if not index:
-                return _('No active field mappings.')
-            Result = self.env['sn.wsd.mes.test.result'].sudo()
-            last = (self._get_watermark('tests')
-                    if since_id is None else since_id)
-            created = scanned = 0
-            while True:
-                results = Result.search(
-                    [('id', '>', last)], order='id asc', limit=batch_size)
-                if not results:
-                    break
-                for result in results:
-                    created += self._map_test_result(result, index)
-                scanned += len(results)
-                last = max(results.ids)
-                if len(results) < batch_size:
-                    break
-            self._set_watermark('tests', last)
-            return _('Mapped %(created)s rows from %(scanned)s results',
-                       created=created, scanned=scanned)
-        finally:
-            self._unlock(LOCK_TESTS)
+        index = self._nqi_mapping_index()
+        if not index:
+            return _('No active field mappings.')
+        Result = self.env['sn.wsd.mes.test.result'].sudo()
+        last = (self._get_watermark('tests')
+                if since_id is None else since_id)
+        created = scanned = 0
+        while True:
+            results = Result.search(
+                [('id', '>', last)], order='id asc', limit=batch_size)
+            if not results:
+                break
+            for result in results:
+                created += self._map_test_result(result, index)
+            scanned += len(results)
+            last = max(results.ids)
+            if len(results) < batch_size:
+                break
+        self._set_watermark('tests', last)
+        return _('Mapped %(created)s rows from %(scanned)s results',
+                 created=created, scanned=scanned)
 
     def _map_test_result(self, result, index):
         """Mirror rows of one test result, per configured target model.
@@ -456,14 +481,10 @@ class NqiWorker(models.Model):
                     domain.append((locator, '=', values.get(locator)))
                 if target.search(domain, limit=1):
                     continue
-                try:
-                    with self.env.cr.savepoint():
-                        target.create(values)
-                    created += 1
-                except Exception as exc:  # noqa: BLE001
-                    _logger.warning(
-                        'NQI mapping row skipped (%s): %s',
-                        model_name, exc)
+                done = self._nqi_guarded(
+                    lambda values=values: target.create(values),
+                    'mapping row (%s)' % model_name)
+                created += not _failed(done)
         return created
 
     # ----- production progress -------------------------------------------
@@ -515,12 +536,8 @@ class NqiWorker(models.Model):
                     'company_id': plan.company_id.id,
                     'plan_code': plan.plan_code,
                 })
-                try:
-                    with self.env.cr.savepoint():
-                        Process.create(values)
-                except Exception as exc:  # noqa: BLE001
-                    _logger.warning(
-                        'NQI progress row skipped for %s: %s',
-                        plan.plan_code, exc)
+                self._nqi_guarded(
+                    lambda values=values: Process.create(values),
+                    'progress row (%s)' % plan.plan_code)
         return _('Progress rows updated for %(count)s plans',
                  count=len(plans))
