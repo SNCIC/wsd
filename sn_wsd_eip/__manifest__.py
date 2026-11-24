@@ -12,6 +12,7 @@
         'views/eip_interface_views.xml',
         'views/eip_dictionary_views.xml',
         'views/eip_material_mapping_views.xml',
+        'views/eip_log_views.xml',
         'views/eip_operation_mapping_views.xml',
         'views/eip_value_mapping_views.xml',
         'data/cron_eip.xml',

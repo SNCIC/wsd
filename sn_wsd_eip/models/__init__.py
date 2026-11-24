@@ -5,5 +5,7 @@ from . import eip_config
 from . import eip_interface
 from . import eip_dictionary
 from . import eip_material_mapping
+from . import eip_call_log
+from . import eip_transport
 from . import mes_test_result
 from . import serial_operation_history

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Push log: one row per push request -->
+    <record id="view_eip_push_log_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.push.log.list</field>
+        <field name="model">sn.wsd.eip.push.log</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" duplicate="0">
+                <field name="start_at"/>
+                <field name="interface_id"/>
+                <field name="document_ref"/>
+                <field name="operatetype"/>
+                <field name="transno" optional="hide"/>
+                <field name="result" widget="badge"
+                       decoration-success="result == 'success'"
+                       decoration-danger="result == 'failed'"
+                       decoration-warning="result == 'sending'"/>
+                <field name="status_code"/>
+                <field name="status_message"/>
+                <field name="error" optional="hide"/>
+                <field name="http_status" optional="hide"/>
+                <field name="duration_ms" optional="hide"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_push_log_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.push.log.form</field>
+        <field name="model">sn.wsd.eip.push.log</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="start_at"/>
+                            <field name="interface_id"/>
+                            <field name="operatetype"/>
+                            <field name="transno"/>
+                            <field name="model_name" invisible="1"/>
+                            <field name="res_id" invisible="1"/>
+                            <field name="document_ref"/>
+                        </group>
+                        <group>
+                            <field name="result"/>
+                            <field name="status_code"/>
+                            <field name="status_message"/>
+                            <field name="http_status"/>
+                            <field name="duration_ms"/>
+                            <field name="end_at"/>
+                            <field name="config_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Error" invisible="not error">
+                        <field name="error" colspan="2" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Request">
+                            <group>
+                                <field name="request_headers" colspan="2" nolabel="1"/>
+                                <field name="request_body" colspan="2" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="Response">
+                            <field name="response_body" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_push_log_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.push.log.search</field>
+        <field name="model">sn.wsd.eip.push.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="transno"/>
+                <field name="document_ref"/>
+                <field name="status_code"/>
+                <field name="status_message"/>
+                <field name="interface_id"/>
+                <field name="error"/>
+                <filter string="Success" name="filter_success"
+                        domain="[('result', '=', 'success')]"/>
+                <filter string="Failed" name="filter_failed"
+                        domain="[('result', '=', 'failed')]"/>
+                <filter string="Sending" name="filter_sending"
+                        domain="[('result', '=', 'sending')]"/>
+                <separator/>
+                <filter string="Today" name="filter_today"
+                        domain="[('start_at', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0, 0, 0)))]"/>
+                <group>
+                    <filter name="group_by_interface" string="Interface"
+                            context="{'group_by': 'interface_id'}"/>
+                    <filter name="group_by_result" string="Result"
+                            context="{'group_by': 'result'}"/>
+                    <filter name="group_by_start_date" string="Start Date"
+                            context="{'group_by': 'start_at:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_push_log" model="ir.actions.act_window">
+        <field name="name">Push Logs</field>
+        <field name="res_model">sn.wsd.eip.push.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_eip_push_log"
+              name="Push Logs"
+              parent="menu_eip_push_center"
+              action="action_eip_push_log"
+              sequence="40"/>
+
+    <!-- Pull log: one row per purchase-order pull request (one page) -->
+    <record id="view_eip_pull_log_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pull.log.list</field>
+        <field name="model">sn.wsd.eip.pull.log</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" duplicate="0">
+                <field name="start_at"/>
+                <field name="page_num"/>
+                <field name="operatetype"/>
+                <field name="transno" optional="hide"/>
+                <field name="result" widget="badge"
+                       decoration-success="result == 'success'"
+                       decoration-danger="result == 'failed'"
+                       decoration-warning="result == 'sending'"/>
+                <field name="row_count"/>
+                <field name="status_code"/>
+                <field name="status_message"/>
+                <field name="error" optional="hide"/>
+                <field name="http_status" optional="hide"/>
+                <field name="duration_ms" optional="hide"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_pull_log_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pull.log.form</field>
+        <field name="model">sn.wsd.eip.pull.log</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="start_at"/>
+                            <field name="page_num"/>
+                            <field name="operatetype"/>
+                            <field name="transno"/>
+                            <field name="row_count"/>
+                            <field name="page_info"/>
+                        </group>
+                        <group>
+                            <field name="result"/>
+                            <field name="status_code"/>
+                            <field name="status_message"/>
+                            <field name="http_status"/>
+                            <field name="duration_ms"/>
+                            <field name="end_at"/>
+                            <field name="config_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Error" invisible="not error">
+                        <field name="error" colspan="2" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Request">
+                            <group>
+                                <field name="filters" colspan="2" nolabel="1"/>
+                                <field name="request_headers" colspan="2" nolabel="1"/>
+                                <field name="request_body" colspan="2" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="Response">
+                            <field name="response_body" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_pull_log_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pull.log.search</field>
+        <field name="model">sn.wsd.eip.pull.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="transno"/>
+                <field name="status_code"/>
+                <field name="status_message"/>
+                <field name="filters"/>
+                <filter string="Success" name="filter_success"
+                        domain="[('result', '=', 'success')]"/>
+                <filter string="Failed" name="filter_failed"
+                        domain="[('result', '=', 'failed')]"/>
+                <filter string="Sending" name="filter_sending"
+                        domain="[('result', '=', 'sending')]"/>
+                <separator/>
+                <filter string="Today" name="filter_today"
+                        domain="[('start_at', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0, 0, 0)))]"/>
+                <group>
+                    <filter name="group_by_start_date" string="Start Date"
+                            context="{'group_by': 'start_at:day'}"/>
+                    <filter name="group_by_result" string="Result"
+                            context="{'group_by': 'result'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_pull_log" model="ir.actions.act_window">
+        <field name="name">Pull Logs</field>
+        <field name="res_model">sn.wsd.eip.pull.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_eip_pull_log"
+              name="Pull Logs"
+              parent="menu_eip_push_center"
+              action="action_eip_pull_log"
+              sequence="30"/>
+
+</odoo>
