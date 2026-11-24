@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_eip_supply_note_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.supply.note.list</field>
+        <field name="model">sn.wsd.eip.supply.note</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="supply_no"/>
+                <field name="push_state" widget="badge"
+                       decoration-success="push_state == 'pushed'"
+                       decoration-danger="push_state == 'failed'"
+                       decoration-info="push_state == 'pushing'"
+                       decoration-warning="push_state in ('to_push', 'draft')"/>
+                <field name="con_code" optional="show"/>
+                <field name="con_type" optional="show"/>
+                <field name="cargo_name" optional="hide"/>
+                <field name="purchase_name" optional="hide"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_supply_note_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.supply.note.form</field>
+        <field name="model">sn.wsd.eip.supply.note</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_eip_push" type="object"
+                            string="Push" class="btn-primary"/>
+                    <button name="action_eip_retry" type="object"
+                            string="Retry" invisible="push_state != 'failed'"/>
+                    <button name="action_eip_preview" type="object"
+                            string="Preview Payload"/>
+                    <field name="push_state" widget="statusbar"
+                           statusbar_visible="draft,to_push,pushed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_eip_logs" icon="fa-list"
+                                invisible="eip_log_count == 0">
+                            <field name="eip_log_count" widget="statinfo" string="Push Logs"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="supply_no" readonly="eip_synced"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="con_type"/>
+                            <field name="con_code"/>
+                            <field name="con_name"/>
+                            <field name="seller_con_code"/>
+                            <field name="seller_sign_time"/>
+                            <field name="prj_name"/>
+                        </group>
+                        <group>
+                            <field name="cargo_name"/>
+                            <field name="purchase_name"/>
+                            <field name="purchase_code"/>
+                            <field name="mat_max_code"/>
+                            <field name="mat_med_code"/>
+                            <field name="mat_min_code"/>
+                            <field name="mat_max_name" invisible="1"/>
+                            <field name="mat_med_name" invisible="1"/>
+                            <field name="mat_min_name" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Push">
+                        <group>
+                            <field name="eip_missing"/>
+                            <field name="eip_last_error" invisible="not eip_last_error"/>
+                            <field name="eip_last_push_at"/>
+                        </group>
+                        <group>
+                            <field name="eip_result_data"/>
+                            <field name="eip_synced" invisible="1"/>
+                            <field name="owner_code"/>
+                            <field name="open_code"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines" name="lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="po_item_no"/>
+                                    <field name="received_name"/>
+                                    <field name="material_code"/>
+                                    <field name="material_desc"/>
+                                    <field name="amount"/>
+                                    <field name="category_id"/>
+                                    <field name="subclass_id" domain="[('category_id', '=', category_id)]"/>
+                                    <field name="meas_unit"/>
+                                    <field name="eip_item_id" readonly="1" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_supply_note_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.supply.note.search</field>
+        <field name="model">sn.wsd.eip.supply.note</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="supply_no"/>
+                <field name="con_code"/>
+                <field name="cargo_name"/>
+                <filter string="With Missing Fields" name="filter_missing"
+                        domain="[('eip_missing', '!=', False)]"/>
+                <group>
+                    <filter name="group_by_push_state" string="Push Status"
+                            context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_supply_note" model="ir.actions.act_window">
+        <field name="name">Supply Notes</field>
+        <field name="res_model">sn.wsd.eip.supply.note</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No supply note yet
+            </p>
+            <p>
+                A contract / supply note received outside ECP; on a
+                successful push the platform returns the line IDs.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_eip_supply_note"
+              name="Supply Notes"
+              parent="menu_eip_order_data"
+              action="action_eip_supply_note"
+              sequence="50"/>
+
+    <record id="action_eip_supply_note_queue" model="ir.actions.server">
+        <field name="name">Queue Push</field>
+        <field name="model_id" ref="model_sn_wsd_eip_supply_note"/>
+        <field name="binding_model_id" ref="model_sn_wsd_eip_supply_note"/>
+        <field name="state">code</field>
+        <field name="code">records.action_eip_queue_push()</field>
+    </record>
+
+</odoo>

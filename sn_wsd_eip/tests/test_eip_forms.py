@@ -307,3 +307,318 @@ class TestEipForms(EipOrderCase):
             [('production_order_id', '=', order.id)])
         self.assertEqual(len(works), 2)
         self.assertNotEqual(works[0].wo_no, works[1].wo_no)
+
+
+@tagged('post_install', '-at_install')
+class TestEipFormsMasterDetail(EipOrderCase):
+    """Batches 7 (+ the deferred child-list scenarios of batches 4/5):
+    the master-detail forms, their payloads, line numbering, the supply
+    note write-back, the schedule first-push exemption and the daily
+    inventory re-push."""
+
+    def _last_request(self):
+        return self.server.requests[-1]
+
+    def _sale(self, **values):
+        return self.env['sn.wsd.eip.sale.order'].create(dict(
+            dict(buyer_name='Grid Example Power Company'), **values))
+
+    def _supply(self, **values):
+        values.setdefault('con_type', '3')
+        values.setdefault('con_code', 'CON-9')
+        values.setdefault('cargo_name', 'Meters')
+        values.setdefault('purchase_name', 'Grid Example Power Company')
+        return self.env['sn.wsd.eip.supply.note'].create(values)
+
+    def _supply_line(self, note, **values):
+        values.setdefault('received_name', 'Grid Warehouse 1')
+        values.setdefault('material_code', 'M-1')
+        values.setdefault('material_desc', 'Meter')
+        values.setdefault('amount', '10')
+        values.setdefault('meas_unit', 'PCS')
+        values.setdefault(
+            'category_id', self.env.ref('sn_wsd_eip.category_30').id)
+        values.setdefault(
+            'subclass_id', self.env.ref('sn_wsd_eip.subclass_30002').id)
+        return self.env['sn.wsd.eip.supply.note.line'].create(
+            dict(values, supply_note_id=note.id))
+
+    def _schedule(self, **values):
+        values.setdefault('po_item_id', '699708678428688384')
+        values.setdefault('due_date', datetime.date(2027, 1, 1))
+        values.setdefault(
+            'category_id', self.env.ref('sn_wsd_eip.category_30').id)
+        values.setdefault(
+            'subclass_id', self.env.ref('sn_wsd_eip.subclass_30002').id)
+        return self.env['sn.wsd.eip.schedule'].create(values)
+
+    # ------------------------------------------------------------------
+    # three-level schedule
+    # ------------------------------------------------------------------
+
+    def test_10_schedule_three_levels(self):
+        schedule = self._schedule()
+        wo_model = self.env['sn.wsd.eip.schedule.wo']
+        process_model = self.env['sn.wsd.eip.schedule.process']
+        wo_a = wo_model.create({'schedule_id': schedule.id})
+        wo_b = wo_model.create({'schedule_id': schedule.id})
+        for _index in range(3):
+            process_model.create({'schedule_wo_id': wo_a.id})
+        process_model.create({'schedule_wo_id': wo_b.id})
+        self.assertEqual(len(schedule.wo_ids), 2)
+        self.assertEqual(len(wo_a.process_ids), 3)
+        self.assertEqual(len(wo_b.process_ids), 1)
+        values = schedule._eip_values(self.config)
+        self.assertEqual(len(values['woList']), 2)
+        self.assertEqual(len(values['woList'][0]['processList']), 3)
+        self.assertEqual(len(values['woList'][1]['processList']), 1)
+
+    # ------------------------------------------------------------------
+    # payload shapes of the master-detail interfaces
+    # ------------------------------------------------------------------
+
+    def test_20_sale_order_payload(self):
+        order = self._sale()
+        self.env['sn.wsd.eip.sale.order.line'].create(dict(
+            sale_order_id=order.id, po_item_id='1001',
+            product_code='MC-1', product_name='Meter',
+            product_unit='PCS', product_amount='100'))
+        self.env['sn.wsd.eip.sale.order.line'].create(dict(
+            sale_order_id=order.id, po_item_id='1002',
+            product_code='MC-2', product_name='Meter 2',
+            product_unit='PCS', product_amount='200'))
+        values = order._eip_values(self.config)
+        self.assertEqual(values['soNo'], order.so_no)
+        self.assertEqual(values['buyerName'], 'Grid Example Power Company')
+        self.assertEqual(len(values['itemList']), 2)
+        line_values = values['itemList'][0]
+        self.assertEqual(line_values['soItemNo'], '0010')
+        self.assertEqual(line_values['poItemId'], '1001')
+        self.assertEqual(line_values['productAmount'], '100')
+
+    def test_30_inventory_payloads(self):
+        raw = self.env['sn.wsd.eip.raw.inventory'].create({
+            'mat_name': 'Chip', 'mat_code': 'RAW-1', 'mat_num': '50',
+            'mat_unit': 'PCS'})
+        self.env['sn.wsd.eip.raw.inventory.line'].create(
+            dict(inventory_id=raw.id, batch_code='B1', product_amount='30'))
+        spare = self.env['sn.wsd.eip.spare.inventory'].create({
+            'spare_product_code': 'SP-1', 'product_dec': 'Spare',
+            'product_amount': '5', 'product_unit': 'PCS'})
+        self.env['sn.wsd.eip.spare.inventory.line'].create(
+            dict(inventory_id=spare.id, product_lot='L1',
+                 product_amount='2', remark='x'))
+        finished = self.env['sn.wsd.eip.finished.inventory'].create({
+            'product_code': '30002', 'product_name': '电能表',
+            'product_amount': '12', 'product_unit': 'PCS'})
+        self.env['sn.wsd.eip.finished.inventory.line'].create(
+            dict(inventory_id=finished.id, batch_code='F1',
+                 product_amount='7', data_source='0'))
+        raw_values = raw._eip_values(self.config)
+        spare_values = spare._eip_values(self.config)
+        finished_values = finished._eip_values(self.config)
+        # the three detail arrays use the three different keys of the spec
+        self.assertEqual(len(raw_values['data']), 1)
+        self.assertEqual(raw_values['data'][0]['batchCode'], 'B1')
+        self.assertEqual(len(spare_values['itemList']), 1)
+        self.assertEqual(spare_values['itemList'][0]['productLot'], 'L1')
+        self.assertEqual(len(finished_values['itemList']), 1)
+        self.assertEqual(finished_values['itemList'][0]['dataSource'], '0')
+        # the finished product carries the subclass as the code
+        self.assertEqual(finished_values['productCode'], '30002')
+
+    def test_31_finished_picks_the_subclass(self):
+        finished = self.env['sn.wsd.eip.finished.inventory'].create({
+            'subclass_id': self.env.ref('sn_wsd_eip.subclass_30002').id,
+            'product_code': 'X'})
+        finished._onchange_subclass_id()
+        self.assertEqual(finished.product_code, '30002')
+        self.assertEqual(finished.product_name, '电能表')
+
+    # ------------------------------------------------------------------
+    # sequential line numbers (0010 step)
+    # ------------------------------------------------------------------
+
+    def test_40_line_numbers(self):
+        note = self._supply()
+        self._supply_line(note)
+        self._supply_line(note)
+        self._supply_line(note)
+        self.assertEqual(note.line_ids.mapped('po_item_no'),
+                         ['0010', '0020', '0030'])
+        # numbering also works when several lines arrive in one create
+        sale2 = self._sale()
+        self.env['sn.wsd.eip.sale.order.line'].create([
+            dict(sale_order_id=sale2.id, po_item_id='1',
+                 product_code='A', product_name='A', product_unit='U',
+                 product_amount='1'),
+            dict(sale_order_id=sale2.id, po_item_id='2',
+                 product_code='B', product_name='B', product_unit='U',
+                 product_amount='2'),
+        ])
+        self.assertEqual(sale2.line_ids.mapped('so_item_no'),
+                         ['0010', '0020'])
+
+    # ------------------------------------------------------------------
+    # deferred scenarios of batches 4/5: child lists and re-queue
+    # ------------------------------------------------------------------
+
+    def test_50_child_edit_requeues(self):
+        note = self._supply()
+        self._supply_line(note)
+        self.server.enqueue(eip_envelope())
+        self.assertTrue(note._eip_push_one()['success'])
+        self.server.reset()
+        # adding a line re-queues the note
+        self._supply_line(note)
+        self.assertEqual(note.push_state, 'to_push')
+        entries = self.env['sn.wsd.eip.push.queue'].search(
+            [('model_name', '=', note._name), ('res_id', '=', note.id)])
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries.state, 'pending')
+        # ...and the next push carries both lines
+        self.server.enqueue(eip_envelope())
+        self.assertTrue(note._eip_push_one()['success'])
+        body = self._last_request()['json']
+        self.assertEqual(len(body['itemList']), 2)
+
+    def test_51_child_list_carries_every_row(self):
+        order = self._sale()
+        line_a = self.env['sn.wsd.eip.sale.order.line'].create(dict(
+            sale_order_id=order.id, po_item_id='1001',
+            category_id=self.env.ref('sn_wsd_eip.category_30').id,
+            subclass_id=self.env.ref('sn_wsd_eip.subclass_30002').id,
+            product_code='MC-1', product_name='Meter',
+            product_unit='PCS', product_amount='100'))
+        self.env['sn.wsd.eip.sale.order.line'].create(dict(
+            sale_order_id=order.id, po_item_id='1002',
+            category_id=self.env.ref('sn_wsd_eip.category_30').id,
+            subclass_id=self.env.ref('sn_wsd_eip.subclass_30002').id,
+            product_code='MC-2', product_name='Meter 2',
+            product_unit='PCS', product_amount='200'))
+        self.server.enqueue(eip_envelope())
+        self.assertTrue(order._eip_push_one()['success'], order.eip_last_error)
+        self.server.reset()
+        line_a.product_amount = '150'  # writes the line, re-queues the order
+        self.assertEqual(order.push_state, 'to_push')
+        self.server.enqueue(eip_envelope())
+        self.assertTrue(order._eip_push_one()['success'], order.eip_last_error)
+        body = self._last_request()['json']
+        self.assertEqual(self._last_request()['headers']['operatetype'],
+                         'UPDATE')
+        self.assertEqual(len(body['itemList']), 2)
+        self.assertEqual(
+            [row['soItemNo'] for row in body['itemList']],
+            ['0010', '0020'])
+        self.assertEqual(body['itemList'][0]['productAmount'], '150')
+        self.assertEqual(body['itemList'][1]['productAmount'], '200')
+
+    # ------------------------------------------------------------------
+    # supply note write-back of the returned line IDs
+    # ------------------------------------------------------------------
+
+    def test_60_supply_writeback(self):
+        note = self._supply()
+        self._supply_line(note)  # numbered 0010
+        self._supply_line(note)  # numbered 0020
+        self.server.enqueue(eip_envelope(
+            data='0010:699708678428688384&0020:699708678428688385'))
+        self.assertTrue(note._eip_push_one()['success'])
+        self.assertEqual(
+            note.line_ids.sorted('po_item_no').mapped('eip_item_id'),
+            ['699708678428688384', '699708678428688385'])
+        self.assertEqual(
+            note.eip_result_data,
+            '0010:699708678428688384&0020:699708678428688385')
+        # the write-back is not a business change: nothing re-queued
+        self.assertEqual(note.push_state, 'pushed')
+        self.assertFalse(self.env['sn.wsd.eip.push.queue'].search([
+            ('model_name', '=', note._name), ('res_id', '=', note.id),
+            ('state', 'in', ('pending', 'pushing'))]))
+
+    def test_61_supply_writeback_with_malformed_segments(self):
+        note = self._supply()
+        self._supply_line(note)
+        self._supply_line(note)
+        self.server.enqueue(eip_envelope(
+            data='0010:699708678428688384&broken&0020:'))
+        self.assertTrue(note._eip_push_one()['success'])
+        lines = note.line_ids.sorted('po_item_no')
+        self.assertEqual(lines[0].eip_item_id, '699708678428688384')
+        self.assertFalse(lines[1].eip_item_id)
+        self.assertEqual(
+            note.eip_result_data,
+            '0010:699708678428688384&broken&0020:')
+
+    def test_62_supply_number_locked_after_push(self):
+        note = self._supply()
+        self._supply_line(note)
+        self.server.enqueue(eip_envelope(
+            data='0010:699708678428688384'))
+        self.assertTrue(note._eip_push_one()['success'])
+        with self.assertRaisesRegex(UserError, 'locate it there'):
+            note.write({'supply_no': 'SN-CHANGED'})
+
+    # ------------------------------------------------------------------
+    # schedule: the first push may leave plan dates and amounts empty
+    # ------------------------------------------------------------------
+
+    def test_70_schedule_first_push_exemption(self):
+        schedule = self._schedule()
+        self.env['sn.wsd.eip.schedule.wo'].create({
+            'schedule_id': schedule.id,
+            'batch_code': 'B1', 'schedule_wo': 'SWO-1',
+            'mat_code': 'M-1', 'mat_desc': 'Meter',
+            'schedule_unit': 'PCS'})
+        self.assertFalse(schedule.eip_missing)
+        self.server.enqueue(eip_envelope())
+        result = schedule._eip_push_one()
+        self.assertTrue(result['success'], result)
+        self.assertEqual(
+            self._last_request()['headers']['operatetype'], 'ADD')
+        body = self._last_request()['json']
+        self.assertEqual(body['planStartDate'], '')
+        self.assertEqual(body['planPeriod'], '')
+        self.assertEqual(body['woList'][0]['scheduleAmount'], '')
+
+    def test_71_schedule_delivery_date_still_required(self):
+        schedule = self.env['sn.wsd.eip.schedule'].create({
+            'po_item_id': '699708678428688384',
+            'category_id': self.env.ref('sn_wsd_eip.category_30').id,
+            'subclass_id': self.env.ref('sn_wsd_eip.subclass_30002').id})
+        self.assertIn('Delivery Date', schedule.eip_missing)
+
+    # ------------------------------------------------------------------
+    # daily inventory re-push
+    # ------------------------------------------------------------------
+
+    def test_80_daily_inventory_repushes_pushed_only(self):
+        finished_pushed = self.env['sn.wsd.eip.finished.inventory'].create({
+            'product_code': '30002', 'product_name': '电能表',
+            'product_amount': '12', 'product_unit': 'PCS'})
+        spare_pushed = self.env['sn.wsd.eip.spare.inventory'].create({
+            'spare_product_code': 'SP-1', 'product_dec': 'Spare',
+            'product_amount': '5', 'product_unit': 'PCS'})
+        spare_draft = self.env['sn.wsd.eip.spare.inventory'].create({
+            'spare_product_code': 'SP-2', 'product_dec': 'Spare 2',
+            'product_amount': '3', 'product_unit': 'PCS'})
+        for doc in (finished_pushed, spare_pushed):
+            self.server.enqueue(eip_envelope())
+            doc._eip_push_one()
+        self.server.reset()
+        self.env['sn.wsd.eip.push.worker'].run_daily_inventory()
+        queued = self.env['sn.wsd.eip.push.queue'].search(
+            [('state', '=', 'pending')])
+        queued_docs = {entry.model_name: entry.res_id for entry in queued}
+        self.assertEqual(queued_docs.get(finished_pushed._name),
+                         finished_pushed.id)
+        self.assertEqual(queued_docs.get(spare_pushed._name), spare_pushed.id)
+        spare_ids = self.env['sn.wsd.eip.push.queue'].search(
+            [('model_name', '=', spare_draft._name)]).mapped('res_id')
+        self.assertNotIn(spare_draft.id, spare_ids)
+
+    def test_81_daily_inventory_cron_ships_paused(self):
+        cron = self.env.ref('sn_wsd_eip.ir_cron_eip_daily_inventory')
+        self.assertFalse(cron.active)
+        self.assertEqual(cron.interval_number, 1)
+        self.assertEqual(cron.interval_type, 'days')

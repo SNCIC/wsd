@@ -15,5 +15,10 @@ from . import eip_production_order
 from . import eip_work_order
 from . import eip_process_work
 from . import eip_entity_id
+from . import eip_sale_order
+from . import eip_schedule
+from . import eip_supply_note
+from . import eip_raw_inventory
+from . import eip_inventories
 from . import mes_test_result
 from . import serial_operation_history

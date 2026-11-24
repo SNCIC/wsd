@@ -52,91 +52,20 @@ def _is_empty(value):
     return value is None or value is False or value == ''
 
 
-class EipPushMixin(models.AbstractModel):
-    """Shared behaviour of every document pushed to the EIP platform.
+class EipPushValueMixin(models.AbstractModel):
+    """Payload value builders shared by the pushed documents and their
+    lines: reading a field list into a payload-shaped dict, and the
+    required-field walk over it."""
+    _name = 'sn.wsd.eip.value.mixin'
+    _description = 'EIP Payload Value Mixin'
 
-    Each model declares its interface code and its field list
-    (``EIP_FIELDS``); that single list drives everything: building the
-    payload, the required-field gate, the locate keys of an UPDATE and
-    the diff against the last pushed values. The operation type is
-    decided here: ADD until a push succeeded, UPDATE afterwards.
-    """
-
-    _name = 'sn.wsd.eip.push.mixin'
-    _description = 'EIP Push Mixin'
-
-    EIP_INTERFACE = None
-    EIP_SEQUENCE = None
     EIP_FIELDS = ()
-
-    push_state = fields.Selection(
-        [('draft', 'Draft'), ('to_push', 'Queued'), ('pushing', 'Pushing'),
-         ('pushed', 'Pushed'), ('failed', 'Failed')],
-        string='Push Status', required=True, default='draft', index=True,
-        copy=False)
-    eip_synced = fields.Boolean(
-        string='Pushed Before', default=False, copy=False,
-        help='A push already succeeded: the next one is an UPDATE and '
-             'the keys locating the document can no longer change.')
-    eip_snapshot = fields.Text(
-        string='Last Pushed Values', readonly=True, copy=False,
-        help='Complete values at the time of the last successful push; '
-             'the UPDATE payload is the difference against it.')
-    eip_push_count = fields.Integer(
-        string='Successful Pushes', default=0, copy=False)
-    eip_first_push_at = fields.Datetime(string='First Pushed On', copy=False)
-    eip_last_push_at = fields.Datetime(string='Last Pushed On', copy=False)
-    eip_last_log_id = fields.Many2one(
-        'sn.wsd.eip.push.log', string='Last Push Log', copy=False,
-        ondelete='set null')
-    eip_last_error = fields.Text(string='Last Push Error', copy=False)
-    eip_log_count = fields.Integer(string='Push Logs', compute='_compute_eip_log_count')
-    eip_missing = fields.Text(
-        string='Missing Required Fields', compute='_compute_eip_missing',
-        store=True,
-        help='Required fields still empty for the next push.')
-    eip_queue_id = fields.Many2one(
-        'sn.wsd.eip.push.queue', string='Push Queue Entry', copy=False,
-        ondelete='set null', readonly=True,
-        help='Current (or last) queue entry of this document.')
-    eip_retry_count = fields.Integer(
-        related='eip_queue_id.retry_count', string='Retries')
-    eip_next_attempt_at = fields.Datetime(
-        related='eip_queue_id.next_attempt_at', string='Next Attempt')
-
-    # Fields the engine itself writes on a document: changing only these
-    # is not a business change and never queues a new push.
-    EIP_ENGINE_FIELDS = frozenset({
-        'push_state', 'eip_synced', 'eip_snapshot', 'eip_push_count',
-        'eip_first_push_at', 'eip_last_push_at', 'eip_last_log_id',
-        'eip_last_error', 'eip_queue_id', 'eip_missing',
-    })
+    EIP_LINES = ()
 
     # ------------------------------------------------------------------
     # where the values come from
     # ------------------------------------------------------------------
 
-    def _eip_push_config(self):
-        self.ensure_one()
-        return self.env['sn.wsd.eip.config']._eip_config_for(self.company_id)
-
-    def _eip_push_interface(self):
-        return self.env['sn.wsd.eip.interface']._eip_interface(
-            self.EIP_INTERFACE)
-
-    def _eip_document_ref(self):
-        """Human-readable key shown on the push logs (the number)."""
-        self.ensure_one()
-        return ''
-
-    @api.model
-    def _eip_new_number(self):
-        """Next number of the document sequence: a company-specific
-        sequence wins over the shared one."""
-        return self.env['ir.sequence'].with_company(
-            self.env.company).next_by_code(self.EIP_SEQUENCE) or False
-
-    @api.model
     def _eip_format(self, record, path):
         """Value of ``path`` on ``record`` in its payload form; an
         empty value is the empty string."""
@@ -219,9 +148,94 @@ class EipPushMixin(models.AbstractModel):
                 missing.append(prefix + self._eip_label(kind, arg, key))
         return missing
 
+
+class EipPushMixin(models.AbstractModel):
+    """Shared behaviour of every document pushed to the EIP platform.
+
+    Each model declares its interface code and its field list
+    (``EIP_FIELDS``); that single list drives everything: building the
+    payload, the required-field gate, the locate keys of an UPDATE and
+    the diff against the last pushed values. The operation type is
+    decided here: ADD until a push succeeded, UPDATE afterwards.
+    """
+
+    _name = 'sn.wsd.eip.push.mixin'
+    _description = 'EIP Push Mixin'
+    _inherit = 'sn.wsd.eip.value.mixin'
+
+    EIP_INTERFACE = None
+    EIP_SEQUENCE = None
+    EIP_FIELDS = ()
+    # Main-model number generated by a sequence; frozen after the first
+    # successful push even when the interface does not locate by it.
+    EIP_NUMBER_FIELD = None
+
+    push_state = fields.Selection(
+        [('draft', 'Draft'), ('to_push', 'Queued'), ('pushing', 'Pushing'),
+         ('pushed', 'Pushed'), ('failed', 'Failed')],
+        string='Push Status', required=True, default='draft', index=True,
+        copy=False)
+    eip_synced = fields.Boolean(
+        string='Pushed Before', default=False, copy=False,
+        help='A push already succeeded: the next one is an UPDATE and '
+             'the keys locating the document can no longer change.')
+    eip_snapshot = fields.Text(
+        string='Last Pushed Values', readonly=True, copy=False,
+        help='Complete values at the time of the last successful push; '
+             'the UPDATE payload is the difference against it.')
+    eip_push_count = fields.Integer(
+        string='Successful Pushes', default=0, copy=False)
+    eip_first_push_at = fields.Datetime(string='First Pushed On', copy=False)
+    eip_last_push_at = fields.Datetime(string='Last Pushed On', copy=False)
+    eip_last_log_id = fields.Many2one(
+        'sn.wsd.eip.push.log', string='Last Push Log', copy=False,
+        ondelete='set null')
+    eip_last_error = fields.Text(string='Last Push Error', copy=False)
+    eip_log_count = fields.Integer(string='Push Logs', compute='_compute_eip_log_count')
+    eip_missing = fields.Text(
+        string='Missing Required Fields', compute='_compute_eip_missing',
+        store=True,
+        help='Required fields still empty for the next push.')
+    eip_queue_id = fields.Many2one(
+        'sn.wsd.eip.push.queue', string='Push Queue Entry', copy=False,
+        ondelete='set null', readonly=True,
+        help='Current (or last) queue entry of this document.')
+    eip_retry_count = fields.Integer(
+        related='eip_queue_id.retry_count', string='Retries')
+    eip_next_attempt_at = fields.Datetime(
+        related='eip_queue_id.next_attempt_at', string='Next Attempt')
+
+    # Fields the engine itself writes on a document: changing only these
+    # is not a business change and never queues a new push.
+    EIP_ENGINE_FIELDS = frozenset({
+        'push_state', 'eip_synced', 'eip_snapshot', 'eip_push_count',
+        'eip_first_push_at', 'eip_last_push_at', 'eip_last_log_id',
+        'eip_last_error', 'eip_queue_id', 'eip_missing',
+    })
+
     # ------------------------------------------------------------------
-    # payload
+    # where the values come from
     # ------------------------------------------------------------------
+
+    def _eip_push_config(self):
+        self.ensure_one()
+        return self.env['sn.wsd.eip.config']._eip_config_for(self.company_id)
+
+    def _eip_push_interface(self):
+        return self.env['sn.wsd.eip.interface']._eip_interface(
+            self.EIP_INTERFACE)
+
+    def _eip_document_ref(self):
+        """Human-readable key shown on the push logs (the number)."""
+        self.ensure_one()
+        return ''
+
+    @api.model
+    def _eip_new_number(self):
+        """Next number of the document sequence: a company-specific
+        sequence wins over the shared one."""
+        return self.env['ir.sequence'].with_company(
+            self.env.company).next_by_code(self.EIP_SEQUENCE) or False
 
     def _eip_operatetype(self):
         self.ensure_one()
@@ -461,6 +475,13 @@ class EipPushMixin(models.AbstractModel):
             for _key, kind, arg, _add, update in self.EIP_FIELDS
             if update and kind == KIND_FIELD}
 
+    def _eip_locked_fields(self):
+        """Main-model fields frozen once the document was pushed."""
+        locked = self._eip_locate_fields()
+        if self.EIP_NUMBER_FIELD:
+            locked.add(self.EIP_NUMBER_FIELD)
+        return locked
+
     @api.model
     def _eip_payload_fields(self):
         """Main-model fields the payload carries: only writes touching
@@ -471,7 +492,7 @@ class EipPushMixin(models.AbstractModel):
             if kind == KIND_FIELD}
 
     def write(self, vals):
-        locate = self._eip_locate_fields()
+        locate = self._eip_locked_fields()
         touched = locate & set(vals)
         if touched:
             for record in self:
@@ -543,12 +564,21 @@ class EipPushMixin(models.AbstractModel):
 
 class EipPushLineMixin(models.AbstractModel):
     """Lines of a pushed document: any create / change / deletion
-    queues the parent document again (it is already pushed, the
-    platform must learn the new child list)."""
+    queues the pushed root document again (it is already pushed, the
+    platform must learn the new child list).
+
+    ``EIP_PARENT_FIELD`` is the direct parent (used for data links);
+    ``EIP_PUSH_ROOT_FIELD`` (dotted path allowed) overrides who is
+    enqueued when the direct parent is itself a line (grandchildren).
+    ``EIP_LINE_NO_FIELD`` gets sequential 0010-step numbers on create.
+    """
     _name = 'sn.wsd.eip.push.line.mixin'
     _description = 'EIP Push Line Mixin'
+    _inherit = 'sn.wsd.eip.value.mixin'
 
-    EIP_PARENT_FIELD = None  # many2one to the pushed document
+    EIP_PARENT_FIELD = None  # many2one to the direct parent
+    EIP_PUSH_ROOT_FIELD = None  # dotted path to the pushed document
+    EIP_LINE_NO_FIELD = None  # sequential line number field
 
     def _eip_line_payload_fields(self):
         """Fields of the line the payload carries: writes touching only
@@ -559,24 +589,57 @@ class EipPushLineMixin(models.AbstractModel):
             for key, kind, arg, _add, _update in self.EIP_LINES
             if kind == KIND_FIELD}
 
+    def _eip_next_item_no(self, parent_id, taken=()):
+        """Next 0010-step line number of one parent document."""
+        field = self.EIP_LINE_NO_FIELD
+        numbers = list(taken)
+        for line in self.search([(self.EIP_PARENT_FIELD, '=', parent_id)]):
+            try:
+                numbers.append(int(line[field]))
+            except (TypeError, ValueError):
+                continue
+        return '%04d' % (max(numbers, default=0) + 10)
+
+    def _eip_enqueue_target(self):
+        field = self.EIP_PUSH_ROOT_FIELD or self.EIP_PARENT_FIELD
+        return self.mapped(field)
+
     def _eip_enqueue_parents(self, vals=None):
         if vals is not None and not (set(vals) & self._eip_line_payload_fields()):
             return
-        self.mapped(self.EIP_PARENT_FIELD)._eip_enqueue()
+        self._eip_enqueue_target()._eip_enqueue()
 
     @api.model_create_multi
     def create(self, vals_list):
+        if self.EIP_LINE_NO_FIELD:
+            taken = {}
+            for vals in vals_list:
+                if vals.get(self.EIP_LINE_NO_FIELD):
+                    continue
+                parent_id = vals.get(self.EIP_PARENT_FIELD)
+                if isinstance(parent_id, models.BaseModel):
+                    parent_id = parent_id.id
+                if not parent_id:
+                    parent_id = self.env.context.get(
+                        'default_%s' % self.EIP_PARENT_FIELD)
+                if not parent_id:
+                    continue
+                used = taken.setdefault(parent_id, set())
+                vals[self.EIP_LINE_NO_FIELD] = self._eip_next_item_no(
+                    parent_id, used)
+                used.add(int(vals[self.EIP_LINE_NO_FIELD]))
         records = super().create(vals_list)
         records._eip_enqueue_parents()
         return records
 
     def write(self, vals):
-        records = super().write(vals)
-        records._eip_enqueue_parents(vals)
-        return records
+        result = super().write(vals)
+        # BaseModel.write returns True, not the records
+        self._eip_enqueue_parents(vals)
+        return result
 
     def unlink(self):
-        parents = self.mapped(self.EIP_PARENT_FIELD)
+        parents = self._eip_enqueue_target()
         result = super().unlink()
         parents._eip_enqueue()
         return result

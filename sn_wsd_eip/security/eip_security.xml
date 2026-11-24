@@ -61,5 +61,70 @@
             <field name="model_id" ref="model_sn_wsd_eip_entity_id"/>
             <field name="domain_force">[('company_id', 'in', company_ids)]</field>
         </record>
+        <record id="rule_eip_sale_order_company" model="ir.rule">
+            <field name="name">EIP Sale Order Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_sale_order"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_eip_sale_order_line_company" model="ir.rule">
+            <field name="name">EIP Sale Order Line Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_sale_order_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_eip_schedule_company" model="ir.rule">
+            <field name="name">EIP Schedule Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_schedule"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_eip_schedule_wo_company" model="ir.rule">
+            <field name="name">EIP Schedule Work Order Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_schedule_wo"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_eip_schedule_process_company" model="ir.rule">
+            <field name="name">EIP Schedule Process Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_schedule_process"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_eip_supply_note_company" model="ir.rule">
+            <field name="name">EIP Supply Note Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_supply_note"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_eip_supply_note_line_company" model="ir.rule">
+            <field name="name">EIP Supply Note Line Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_supply_note_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_eip_raw_inventory_company" model="ir.rule">
+            <field name="name">EIP Raw Inventory Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_raw_inventory"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_eip_raw_inventory_line_company" model="ir.rule">
+            <field name="name">EIP Raw Inventory Line Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_raw_inventory_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_eip_spare_inventory_company" model="ir.rule">
+            <field name="name">EIP Spare Inventory Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_spare_inventory"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_eip_spare_inventory_line_company" model="ir.rule">
+            <field name="name">EIP Spare Inventory Line Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_spare_inventory_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_eip_finished_inventory_company" model="ir.rule">
+            <field name="name">EIP Finished Inventory Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_finished_inventory"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_eip_finished_inventory_line_company" model="ir.rule">
+            <field name="name">EIP Finished Inventory Line Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_finished_inventory_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
     </data>
 </odoo>

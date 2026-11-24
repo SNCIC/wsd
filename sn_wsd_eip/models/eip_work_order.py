@@ -15,6 +15,7 @@ class EipWorkOrder(models.Model):
 
     EIP_INTERFACE = 'work_order'
     EIP_SEQUENCE = 'sn.wsd.eip.work.order'
+    EIP_NUMBER_FIELD = 'wo_no'
     EIP_FIELDS = (
         C('purchaserHqCode', 'purchaser_hq_code', add=True),
         F('ipoNo', 'ipo_no', add=True, update=True),

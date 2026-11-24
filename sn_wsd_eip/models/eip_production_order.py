@@ -14,6 +14,7 @@ class EipProductionOrder(models.Model):
 
     EIP_INTERFACE = 'production_order'
     EIP_SEQUENCE = 'sn.wsd.eip.production.order'
+    EIP_NUMBER_FIELD = 'ipo_no'
     # Parameter table of the spec, ADD / UPDATE required flags included
     EIP_FIELDS = (
         C('purchaserHqCode', 'purchaser_hq_code', add=True),

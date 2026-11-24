@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_eip_sale_order_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.sale.order.list</field>
+        <field name="model">sn.wsd.eip.sale.order</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="so_no"/>
+                <field name="push_state" widget="badge"
+                       decoration-success="push_state == 'pushed'"
+                       decoration-danger="push_state == 'failed'"
+                       decoration-info="push_state == 'pushing'"
+                       decoration-warning="push_state in ('to_push', 'draft')"/>
+                <field name="buyer_name" optional="show"/>
+                <field name="buyer_province" optional="hide"/>
+                <field name="so_status" optional="hide"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_sale_order_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.sale.order.form</field>
+        <field name="model">sn.wsd.eip.sale.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_eip_push" type="object"
+                            string="Push" class="btn-primary"/>
+                    <button name="action_eip_retry" type="object"
+                            string="Retry" invisible="push_state != 'failed'"/>
+                    <button name="action_eip_preview" type="object"
+                            string="Preview Payload"/>
+                    <field name="push_state" widget="statusbar"
+                           statusbar_visible="draft,to_push,pushed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_eip_logs" icon="fa-list"
+                                invisible="eip_log_count == 0">
+                            <field name="eip_log_count" widget="statinfo" string="Push Logs"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="so_no" readonly="eip_synced"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="buyer_code"/>
+                            <field name="buyer_name"/>
+                            <field name="buyer_province"/>
+                            <field name="so_status"/>
+                        </group>
+                        <group>
+                            <field name="eip_missing"/>
+                            <field name="eip_last_error" invisible="not eip_last_error"/>
+                            <field name="eip_last_push_at"/>
+                            <field name="owner_code"/>
+                            <field name="open_code"/>
+                            <field name="eip_synced" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines" name="lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="so_item_no"/>
+                                    <field name="category_id"/>
+                                    <field name="subclass_id" domain="[('category_id', '=', category_id)]"/>
+                                    <field name="po_item_id"/>
+                                    <field name="product_code"/>
+                                    <field name="product_name"/>
+                                    <field name="product_unit"/>
+                                    <field name="product_amount"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_sale_order_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.sale.order.search</field>
+        <field name="model">sn.wsd.eip.sale.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="so_no"/>
+                <field name="buyer_name"/>
+                <filter string="With Missing Fields" name="filter_missing"
+                        domain="[('eip_missing', '!=', False)]"/>
+                <group>
+                    <filter name="group_by_push_state" string="Push Status"
+                            context="{'group_by': 'push_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_sale_order" model="ir.actions.act_window">
+        <field name="name">Sales Orders</field>
+        <field name="res_model">sn.wsd.eip.sale.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No sales order yet
+            </p>
+            <p>
+                The supplier-side sales document for grid purchases;
+                its lines carry the grid purchase order line IDs.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_eip_sale_order"
+              name="Sales Orders"
+              parent="menu_eip_order_data"
+              action="action_eip_sale_order"
+              sequence="30"/>
+
+    <record id="action_eip_sale_order_queue" model="ir.actions.server">
+        <field name="name">Queue Push</field>
+        <field name="model_id" ref="model_sn_wsd_eip_sale_order"/>
+        <field name="binding_model_id" ref="model_sn_wsd_eip_sale_order"/>
+        <field name="state">code</field>
+        <field name="code">records.action_eip_queue_push()</field>
+    </record>
+
+</odoo>

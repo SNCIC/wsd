@@ -171,6 +171,18 @@ class EipPushWorker(models.AbstractModel):
                 _logger.exception('EIP push queue run failed for config %s',
                                   config)
 
+    @api.model
+    def run_daily_inventory(self):
+        """Daily re-push of the inventories the platform refreshes once
+        a day (finished goods, spare parts). Only already-pushed
+        documents are queued; drafts wait for a manual push."""
+        for model_name in ('sn.wsd.eip.finished.inventory',
+                           'sn.wsd.eip.spare.inventory'):
+            pushed = self.env[model_name].sudo().search(
+                [('eip_synced', '=', True)])
+            if pushed:
+                pushed._eip_enqueue(sync_only=False)
+
 
 class EipPushPreview(models.TransientModel):
     """Preview of the payload a document would send right now: the
