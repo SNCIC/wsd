@@ -480,3 +480,23 @@ class StockMove(models.Model):
             if (move.product_id and move.state != 'draft' and picking
                     and picking._sn_get_other_operation_kind()):
                 move.show_details_visible = True
+
+    def _action_assign(self, force_qty=False):
+        """Refuse to reserve a record under quality hold for a consuming flow.
+
+        The reservation is what picks the batch on the operation line, so the
+        check belongs here as well: without it a delivery or a production
+        transfer would reserve a sealed batch and only fail when validated.
+        """
+        result = super()._action_assign(force_qty=force_qty)
+        self._sn_check_quality_hold_reserved()
+        return result
+
+    def _sn_check_quality_hold_reserved(self):
+        for move in self:
+            if move.location_id.usage != 'internal':
+                continue
+            if move.location_dest_id.usage not in ('customer', 'production'):
+                continue
+            move.move_line_ids.mapped('lot_id')._sn_check_usable()
+            move.product_id.product_tmpl_id._sn_check_usable()

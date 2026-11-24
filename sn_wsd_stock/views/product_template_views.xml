@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_template_form_quality_hold" model="ir.ui.view">
+        <field name="name">product.template.form.quality.hold</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="quality_hold" string="Quality Hold">
+                    <group>
+                        <group>
+                            <field name="sn_hold_state" widget="badge"
+                                   decoration-success="sn_hold_state == 'none'"
+                                   decoration-danger="sn_hold_state == 'disabled'"/>
+                            <field name="sn_hold_id"/>
+                            <field name="sn_hold_date"/>
+                        </group>
+                        <group>
+                            <field name="sn_hold_reason"/>
+                            <div colspan="2">
+                                <button name="action_sn_open_hold" type="object"
+                                        string="Disable for Quality" class="btn-secondary"
+                                        groups="stock.group_stock_user"
+                                        invisible="sn_hold_state == 'disabled'"/>
+                                <button name="action_sn_release_hold" type="object"
+                                        string="Release Hold" class="btn-primary"
+                                        groups="stock.group_stock_user"
+                                        invisible="sn_hold_state != 'disabled'"/>
+                            </div>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_search_quality_hold" model="ir.ui.view">
+        <field name="name">product.template.search.quality.hold</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter name="filter_quality_hold" string="Disabled for Quality"
+                        domain="[('sn_hold_state', '=', 'disabled')]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

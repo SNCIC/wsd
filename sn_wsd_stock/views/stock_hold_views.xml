@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_stock_hold_list" model="ir.ui.view">
+        <field name="name">sn.wsd.stock.hold.list</field>
+        <field name="model">sn.wsd.stock.hold</field>
+        <field name="arch" type="xml">
+            <list string="Quality Holds"
+                  decoration-muted="state == 'released'"
+                  decoration-danger="state == 'active' and hold_type == 'blocked'"
+                  decoration-warning="state == 'active' and hold_type == 'sealed'">
+                <field name="name"/>
+                <field name="hold_date"/>
+                <field name="product_id"/>
+                <field name="lot_id"/>
+                <field name="target_type"/>
+                <field name="hold_type" widget="badge"
+                       decoration-danger="hold_type == 'blocked'"
+                       decoration-warning="hold_type == 'sealed'"
+                       decoration-info="hold_type == 'disabled'"/>
+                <field name="state" widget="badge"
+                       decoration-danger="state == 'active'"
+                       decoration-success="state == 'released'"/>
+                <field name="reason" optional="show"/>
+                <field name="origin" optional="hide"/>
+                <field name="hold_user_id" optional="hide"/>
+                <field name="release_user_id" optional="hide"/>
+                <field name="release_date" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_stock_hold_form" model="ir.ui.view">
+        <field name="name">sn.wsd.stock.hold.form</field>
+        <field name="model">sn.wsd.stock.hold</field>
+        <field name="arch" type="xml">
+            <form string="Quality Hold">
+                <header>
+                    <button name="action_release" type="object" string="Release"
+                            class="btn-primary" invisible="state != 'active'"
+                            groups="stock.group_stock_user"/>
+                    <field name="state" widget="statusbar" statusbar_visible="active,released"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Scope">
+                            <field name="target_type" readonly="state != 'active'"/>
+                            <field name="product_id" readonly="state != 'active'"/>
+                            <field name="lot_id" readonly="state != 'active'"
+                                   required="target_type == 'lot'"
+                                   invisible="target_type != 'lot'"/>
+                            <field name="hold_type" readonly="state != 'active'"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Tracking">
+                            <field name="hold_user_id"/>
+                            <field name="hold_date"/>
+                            <field name="release_user_id" invisible="state != 'released'"/>
+                            <field name="release_date" invisible="state != 'released'"/>
+                        </group>
+                    </group>
+                    <group string="Quality">
+                        <field name="reason" nolabel="1" colspan="2"
+                               readonly="state != 'active'"
+                               placeholder="Defect or risk that puts the goods on hold"/>
+                        <field name="origin" readonly="state != 'active'"/>
+                        <field name="release_reason" nolabel="1" colspan="2"
+                               invisible="state != 'released'"
+                               placeholder="Why the goods can be used again"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_stock_hold_search" model="ir.ui.view">
+        <field name="name">sn.wsd.stock.hold.search</field>
+        <field name="model">sn.wsd.stock.hold</field>
+        <field name="arch" type="xml">
+            <search string="Quality Holds">
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="lot_id"/>
+                <field name="origin"/>
+                <separator/>
+                <filter name="filter_active" string="Active" domain="[('state', '=', 'active')]"/>
+                <filter name="filter_released" string="Released" domain="[('state', '=', 'released')]"/>
+                <separator/>
+                <filter name="filter_blocked" string="Blocked" domain="[('hold_type', '=', 'blocked')]"/>
+                <filter name="filter_sealed" string="Sealed" domain="[('hold_type', '=', 'sealed')]"/>
+                <filter name="filter_disabled" string="Disabled Material" domain="[('hold_type', '=', 'disabled')]"/>
+                <separator/>
+                <group>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_hold_type" string="Hold Type" context="{'group_by': 'hold_type'}"/>
+                    <filter name="group_product" string="Material" context="{'group_by': 'product_id'}"/>
+                    <filter name="group_lot" string="Batch/Serial" context="{'group_by': 'lot_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_stock_hold" model="ir.actions.act_window">
+        <field name="name">Quality Holds</field>
+        <field name="res_model">sn.wsd.stock.hold</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_stock_hold_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No quality hold</p>
+            <p>A hold seals a batch or disables a material that carries a quality risk:
+               the goods stay in stock and traceable, but no delivery or production
+               flow can use them until the hold is released.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_stock_hold"
+              name="Quality Holds"
+              parent="stock.menu_stock_root"
+              action="action_sn_wsd_stock_hold"
+              sequence="95"
+              groups="stock.group_stock_user"/>
+</odoo>

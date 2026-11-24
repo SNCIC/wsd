@@ -773,6 +773,10 @@ class SnSmtOperationMixin(models.AbstractModel):
             ('is_load', '=', 'Y'),
         ], limit=1):
             raise ValidationError(_('The material is already loaded online.'))
+        # A batch under quality hold must not be loaded, nor a material
+        # disabled for quality reasons: the goods stay traceable in stock.
+        material_lot._sn_check_usable()
+        material_lot.product_id.product_tmpl_id._sn_check_usable()
         self._check_material_expiration(material_lot)
         if material_lot._smt_on_hand_qty() <= 0:
             raise ValidationError(_('The current material quantity is zero.'))

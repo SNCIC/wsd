@@ -1210,6 +1210,7 @@ class QualityInspection(models.Model):
 
     def _apply_quality_hold(self):
         issue_model = self.env['sn.wsd.quality.issue']
+        hold_model = self.env['sn.wsd.stock.hold']
         for inspection in self.filtered(lambda item: item.result in ('fail', 'reject')):
             default_defect_code = self.env['sn.wsd.quality.defect.code'].search([
                 ('company_id', '=', inspection.company_id.id),
@@ -1236,6 +1237,29 @@ class QualityInspection(models.Model):
                         'inspection_id': inspection.id,
                         'note': inspection.name,
                     })
+            # The batches the defect was found on leave the usable pool as
+            # well: a failed inspection seals them so no delivery, issue or
+            # loading flow can consume them before the quality team releases
+            # them. The hold is the document the warehouse follows, the
+            # quality issue stays the traceability record.
+            lots = self.env['stock.lot']
+            if inspection.lot_id:
+                lots |= inspection.lot_id
+            for identity, _defect_code in serial_defects:
+                lots |= self.env['stock.lot'].search([
+                    ('x_serial_identity_id', '=', identity.id),
+                ], limit=1)
+            for lot in lots:
+                hold_model._create_hold(
+                    lot.product_id,
+                    lot,
+                    'blocked',
+                    _(
+                        'Quality inspection %(name)s failed.',
+                        name=inspection.name,
+                    ),
+                    origin=inspection.name,
+                )
 
     def _fai_expand_result_cells(self):
         # 投入逐台展开矩阵：每个样本 SN × 每个检验项补缺失的结果格（幂等）。

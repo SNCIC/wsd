@@ -80,6 +80,19 @@ class MesOrderRepairGate(models.Model):
             ).get(issue.state, issue.state)
             return {'kind': _('quality issue'), 'ref': issue.name,
                     'state': state_label}
+        # A hold created by hand must freeze the SN as well: without this the
+        # station gate would only know the repair orders and the quality issues.
+        lot = self.env['stock.lot'].search([
+            ('x_serial_identity_id', '=', serial_identity.id),
+        ], limit=1)
+        if lot and lot.sn_hold_state not in (False, 'none'):
+            return {
+                'kind': _('stock hold'),
+                'ref': lot.sn_hold_id.name or lot.name,
+                'state': dict(
+                    lot._fields['sn_hold_state'].selection
+                ).get(lot.sn_hold_state, lot.sn_hold_state),
+            }
         return False
 
     def _sn_last_closed_repair(self, serial_identity):

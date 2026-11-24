@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Repair',
-    'version': '19.0.5.1.0',
+    'version': '19.0.5.2.0',
     'summary': 'Production repair management for SN and quantity reporting',
     'depends': ['mrp', 'stock', 'mail', 'sn_wsd_scrap', 'sn_wsd_quality', 'sn_wsd_report', 'sn_wsd_code_rule'],
     'data': [

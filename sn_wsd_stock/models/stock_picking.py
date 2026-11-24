@@ -161,3 +161,16 @@ class StockPicking(models.Model):
         if 'location_dest_id' in fields_list:
             res['location_dest_id'] = picking_type.default_location_dest_id.id
         return res
+
+    def _pre_action_done_hook(self):
+        """Refuse a held batch or material before the transfer is validated.
+
+        The move line checks the same condition when the stock is booked; this
+        hook runs earlier and names the document, which is the message the
+        warehouse user sees.
+        """
+        result = super()._pre_action_done_hook()
+        if result is not True:
+            return result
+        self.move_line_ids._sn_check_quality_hold()
+        return True
