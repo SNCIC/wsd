@@ -17,6 +17,7 @@ patch(BomOverviewTable, {
             shape: {
                 ...BomOverviewTable.props.showOptions.shape,
                 costInfo: Boolean,
+                costPrecision: Number,
             },
         },
     },

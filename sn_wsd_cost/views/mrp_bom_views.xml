@@ -16,13 +16,13 @@
                     </group>
                     <group>
                         <field name="sn_total_cost"/>
-                        <field name="sn_unit_cost"/>
+                        <field name="sn_unit_cost" options="{'hide_trailing_zeros': True}"/>
                     </group>
                 </group>
             </xpath>
 
             <xpath expr="//field[@name='bom_line_ids']/list/field[@name='product_uom_id']" position="after">
-                <field name="sn_unit_cost" optional="show"/>
+                <field name="sn_unit_cost" optional="show" options="{'hide_trailing_zeros': True}"/>
                 <field name="sn_cost_amount" optional="show"/>
                 <field name="sn_cost_date" optional="show"/>
                 <field name="sn_cost_source" optional="hide"/>

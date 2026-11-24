@@ -4,7 +4,7 @@
     <t t-name="sn_wsd_cost.BomOverviewLine" t-inherit="mrp.BomOverviewLine" t-inherit-mode="extension">
         <xpath expr="//td[@name='td_mrp_bom']" position="after">
             <td t-if="showCostInfo" class="text-end">
-                <t t-if="data.sn_unit_cost" t-esc="formatMonetary(data.sn_unit_cost)"/>
+                <t t-if="data.sn_unit_cost" t-esc="formatUnitCost(data.sn_unit_cost)"/>
             </td>
             <td t-if="showCostInfo" class="text-center" t-esc="data.sn_cost_date"/>
         </xpath>

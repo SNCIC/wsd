@@ -1,4 +1,10 @@
 from odoo import api, fields, models
+from odoo.tools.misc import get_lang
+
+# The unit price carries the precision of the price decimal precision, not the
+# two decimals of the currency: a component priced 0.00089 would otherwise be
+# shown as 0.00.
+PRICE_PRECISION = 'Product Price'
 
 
 class ReportMrpReportBomStructure(models.AbstractModel):
@@ -18,6 +24,8 @@ class ReportMrpReportBomStructure(models.AbstractModel):
     def get_html(self, bom_id=False, searchQty=1, searchVariant=False):
         res = super().get_html(bom_id, searchQty, searchVariant)
         res['has_cost_info'] = self._has_cost_info(res['lines'])
+        res['sn_cost_precision'] = self.env['decimal.precision'].precision_get(
+            PRICE_PRECISION)
         return res
 
     @api.model
@@ -99,9 +107,30 @@ class ReportMrpReportBomStructure(models.AbstractModel):
             if position >= len(lines):
                 return position
             lines[position]['sn_unit_cost'] = component.get('sn_unit_cost')
+            lines[position]['sn_unit_cost_display'] = self._format_price(
+                component.get('sn_unit_cost'), data['currency'])
             lines[position]['sn_cost_date'] = component.get('sn_cost_date', '')
             lines[position]['sn_cost_source'] = component.get('sn_cost_source')
             position += 1
             if component.get('components'):
                 position = self._set_line_costs(lines, position, component)
         return position
+
+    @api.model
+    def _format_price(self, value, currency):
+        """Render a unit price with its precision and without trailing zeros.
+
+        The QWeb float converter can only strip the zeros down to one decimal,
+        so the PDF export is fed the same text the screen report shows.
+        """
+        if not value:
+            return ''
+        precision = self.env['decimal.precision'].precision_get(PRICE_PRECISION)
+        lang = self.env['res.lang'].browse(get_lang(self.env).id)
+        integer, _, decimals = lang.format(
+            f'%.{precision}f', value, grouping=True).partition('.')
+        decimals = decimals.rstrip('0')
+        amount = f'{integer}.{decimals}' if decimals else integer
+        if currency.position == 'after':
+            return f'{amount}{currency.symbol}'
+        return f'{currency.symbol}{amount}'

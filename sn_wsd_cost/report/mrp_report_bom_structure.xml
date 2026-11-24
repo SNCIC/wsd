@@ -27,9 +27,7 @@
 
     <template id="report_mrp_bom_pdf_line_inherit_sn_wsd_cost" inherit_id="mrp.report_mrp_bom_pdf_line">
         <xpath expr="//td[@name='td_mrp_code']" position="after">
-            <td class="text-end" t-if="data['has_cost_info']">
-                <t t-if="l.get('sn_unit_cost')" t-esc="l['sn_unit_cost']" t-options='{"widget": "monetary", "display_currency": currency}'/>
-            </td>
+            <td class="text-end" t-if="data['has_cost_info']" t-esc="l.get('sn_unit_cost_display', '')"/>
             <td class="text-center" t-if="data['has_cost_info']" t-esc="l.get('sn_cost_date', '')"/>
         </xpath>
     </template>
