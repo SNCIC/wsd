@@ -18,9 +18,10 @@ class TestStockBalanceDetail(TransactionCase):
         cls.stock_location = cls.warehouse.lot_stock_id
         cls.supplier_location = cls.env.ref('stock.stock_location_suppliers')
         cls.customer_location = cls.env.ref('stock.stock_location_customers')
-        # 库存区（WH/库存）内的子库位：库内调拨的两端都在里面
+        # 库存区（WH/库存）内的货位：名称带连字符，报表把它归集到库存区，
+        # 所以货位与库存区之间的移动属于同一报表库位内部的移动，不算收发
         cls.shelf_location = cls.env['stock.location'].create({
-            'name': 'Balance Detail Shelf',
+            'name': 'Balance-Detail-Shelf',
             'location_id': cls.stock_location.id,
             'usage': 'internal',
         })
@@ -185,7 +186,7 @@ class TestStockBalanceDetail(TransactionCase):
         self.assertEqual(fallback_details.direction, 'out')
 
     def test_row_id_survives_period_change(self):
-        """行 id 必须只由「物料 × 仓库」决定。
+        """行 id 必须只由「物料 × 库位」决定。
 
         区间一变，进出区间的物料会让报表行数变化；行 id 若跟着重新编号，
         用户点开的就是另一颗物料的明细。
@@ -245,3 +246,23 @@ class TestStockBalanceDetail(TransactionCase):
         action = outgoing.action_open_document()
         self.assertEqual(action['res_model'], 'stock.move.line')
         self.assertEqual(action['res_id'], self.move_cross_warehouse.move_line_ids.id)
+
+    def test_wizard_filters_by_location(self):
+        """向导选库位后，报表只返回该库位（含下级）的行。"""
+        wizard = self.env['sn.wsd.stock.balance.wizard'].create({
+            'date_from': date(2025, 9, 1),
+            'date_to': date(2025, 9, 30),
+            'location_ids': [(6, 0, self.stock_location.ids)],
+        })
+        action = wizard.action_generate()
+        self.assertIn(
+            ('location_id', 'child_of', self.stock_location.ids), action['domain'],
+        )
+        rows = self.env['sn.wsd.stock.balance.report'].search(action['domain'])
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows.location_id, self.stock_location)
+        self.assertAlmostEqual(rows.qty_balance, 11.0)
+
+    def test_slot_belongs_to_the_store(self):
+        """货位的报表库位是所属的仓：货位之间与仓货位之间的移动都不算收发。"""
+        self.assertEqual(self.shelf_location.sn_report_location_id, self.stock_location)

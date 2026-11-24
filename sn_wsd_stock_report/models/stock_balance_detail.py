@@ -14,10 +14,14 @@ class SnWsdStockBalanceDetail(models.Model):
 
     口径与汇总一致：
 
-    * 行粒度是「库存流水 × 仓库」，因为一笔跨仓库调拨在两端各算一条。
-    * 收入 = 目标库位在库存区内、来源库位在库存区外的流水；
-      发出 = 来源库位在库存区内、目标库位在库存区外的流水。
-    * 库内调拨（两端都在库存区内）不出现。
+    * 行粒度是「库存流水 × 报表库位」，因为一笔跨库位的调拨在两端各算一条。
+      报表库位由 ``stock.location.sn_report_location_id`` 给出：现场把真正的仓
+      （原材料仓、成品仓、线边仓……）建成库位，其下的货位/按灯货架归集到所属
+      的仓，所以货位之间的移动不会进报表，只有「仓与仓（或仓库与外部）之间」
+      的移动才算收发。
+    * 收入 = 目标库位在某个报表库位内、来源库位不在同一报表库位的流水；
+      发出 = 来源库位在某个报表库位内、目标库位不在同一报表库位的流水。
+    * 同一报表库位内部的调拨（含其下货位之间）不出现。
     """
 
     _name = 'sn.wsd.stock.balance.detail'
@@ -27,6 +31,9 @@ class SnWsdStockBalanceDetail(models.Model):
     _order = 'date desc, id desc'
 
     warehouse_id = fields.Many2one('stock.warehouse', string='仓库', readonly=True)
+    report_location_id = fields.Many2one(
+        'stock.location', string='库位', readonly=True,
+    )
     product_id = fields.Many2one('product.product', string='物料', readonly=True)
     default_code = fields.Char(string='物料编码', readonly=True)
     product_name = fields.Char(string='物料名称', readonly=True)
@@ -49,26 +56,9 @@ class SnWsdStockBalanceDetail(models.Model):
         drop_view_if_exists(self.env.cr, self._table)
         self.env.cr.execute(f"""
             CREATE OR REPLACE VIEW {self._table} AS (
-                WITH warehouse_root AS (
-                    -- 仓库库存区的根库位（WH/库存），不写死 id，换库/加仓都适用
-                    SELECT warehouse.id AS warehouse_id,
-                           location.parent_path AS root_path
-                    FROM stock_warehouse warehouse
-                    JOIN stock_location location ON location.id = warehouse.lot_stock_id
-                ),
-                scope AS (
-                    -- 库存区内的全部库位；同一库位只归属一个仓库，避免流水被展开成多行
-                    SELECT pair.location_id, min(pair.warehouse_id) AS warehouse_id
-                    FROM (
-                        SELECT root.warehouse_id, child.id AS location_id
-                        FROM warehouse_root root
-                        JOIN stock_location child
-                          ON child.parent_path LIKE root.root_path || '%'
-                    ) pair
-                    GROUP BY pair.location_id
-                ),
-                flow AS (
-                    -- 只看跨越库存区边界、且两端不同仓库的已完成流水
+                WITH flow AS (
+                    -- 只看跨报表库位的已完成流水：两端报表库位相同（含其下货位之间）
+                    -- 属于库内移动，不算收也不算发。
                     SELECT line.id AS move_line_id,
                            line.product_id,
                            line.quantity,
@@ -76,38 +66,40 @@ class SnWsdStockBalanceDetail(models.Model):
                            line.picking_id,
                            line.location_id,
                            line.location_dest_id,
+                           source.sn_report_location_id AS source_report_location_id,
+                           destination.sn_report_location_id AS destination_report_location_id,
                            (line.date AT TIME ZONE 'UTC' AT TIME ZONE '{BUSINESS_TIMEZONE}')::date AS local_date,
                            move.reference,
-                           move.partner_id,
-                           source.warehouse_id AS source_warehouse_id,
-                           destination.warehouse_id AS destination_warehouse_id
+                           move.partner_id
                     FROM stock_move_line line
+                    LEFT JOIN stock_location source ON source.id = line.location_id
+                    LEFT JOIN stock_location destination ON destination.id = line.location_dest_id
                     -- move_id 理论上有值，但这里用 LEFT JOIN，保证不会因为缺单据而少统计一条流水
                     LEFT JOIN stock_move move ON move.id = line.move_id
-                    LEFT JOIN scope source ON source.location_id = line.location_id
-                    LEFT JOIN scope destination ON destination.location_id = line.location_dest_id
                     WHERE line.state = 'done'
-                      AND (source.warehouse_id IS NOT NULL OR destination.warehouse_id IS NOT NULL)
-                      AND source.warehouse_id IS DISTINCT FROM destination.warehouse_id
+                      AND (source.sn_report_location_id IS NOT NULL
+                           OR destination.sn_report_location_id IS NOT NULL)
+                      AND source.sn_report_location_id IS DISTINCT FROM destination.sn_report_location_id
                 ),
                 leg AS (
-                    -- 一笔流水在目标仓库构成收入，在来源仓库构成发出
-                    SELECT flow.*, flow.destination_warehouse_id AS warehouse_id, 'in' AS direction
+                    -- 一笔流水在目标库位构成收入，在来源库位构成发出
+                    SELECT flow.*, flow.destination_report_location_id AS report_location_id, 'in' AS direction
                     FROM flow
-                    WHERE flow.destination_warehouse_id IS NOT NULL
+                    WHERE flow.destination_report_location_id IS NOT NULL
 
                     UNION ALL
 
-                    SELECT flow.*, flow.source_warehouse_id, 'out'
+                    SELECT flow.*, flow.source_report_location_id, 'out'
                     FROM flow
-                    WHERE flow.source_warehouse_id IS NOT NULL
+                    WHERE flow.source_report_location_id IS NOT NULL
                 )
                 SELECT
                        -- 行 id 由流水 id 与方向编出：一笔流水最多一收一付，所以不会撞号，
                        -- 且流水只增不减（已完成的流水不会被删），id 也就不会随行数漂移——
                        -- 点行打开单据时不会拿到别的流水。库存流水 id < 1073741823 即可。
                        leg.move_line_id * 2 + CASE leg.direction WHEN 'out' THEN 1 ELSE 0 END AS id,
-                       leg.warehouse_id,
+                       report_location.warehouse_id,
+                       leg.report_location_id,
                        leg.product_id,
                        product.default_code,
                        COALESCE(template.name->>'zh_CN', template.name->>'en_US') AS product_name,
@@ -124,6 +116,7 @@ class SnWsdStockBalanceDetail(models.Model):
                        leg.lot_id,
                        leg.quantity
                 FROM leg
+                JOIN stock_location report_location ON report_location.id = leg.report_location_id
                 JOIN product_product product ON product.id = leg.product_id
                 JOIN product_template template ON template.id = product.product_tmpl_id
             )

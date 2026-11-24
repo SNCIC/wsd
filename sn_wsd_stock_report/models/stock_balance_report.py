@@ -16,14 +16,15 @@ class SnWsdStockBalanceReport(models.Model):
 
     统计口径：
 
-    * 只统计仓库库存区（``stock.warehouse.lot_stock_id`` 及其子树，即 WH/库存）内的物料；
-      行粒度是「物料 × 仓库」。
-    * 收入 = 目标库位在库存区内、来源库位在库存区外的流水；
-      发出 = 来源库位在库存区内、目标库位在库存区外的流水。
-    * 库内调拨（两端都在库存区内）不计收入与发出。
+    * 行粒度是「物料 × 报表库位」。现场只有一个默认仓库，真正的仓（原材料仓、
+      成品仓、线边仓……）建成库位，报表库位由 ``stock.location.sn_report_location_id``
+      给出；仓库（``warehouse_id``）作为附加维度保留。
+    * 收入 = 目标库位在某个报表库位内、来源库位不在同一报表库位的流水；
+      发出 = 来源库位在某个报表库位内、目标库位不在同一报表库位的流水。
+    * 同一报表库位内部（含其下货位、按灯货架之间）的调拨不计收入与发出。
     * 查询区间由 ``sn.wsd.stock.balance.range`` 的唯一一行决定，由向导写入；
       期初 = 区间开始日之前的累计净流入，结存 = 区间结束日（含当日）之前的累计净流入。
-      因为库存区总量是守恒量，期末结存即累计净流入，所以无需期初快照表。
+      因为报表库位总量是守恒量，期末结存即累计净流入，所以无需期初快照表。
 
     本视图不自己拼流水，而是从 ``sn.wsd.stock.balance.detail``（下钻明细）聚合，
     保证点击某行看到的明细与列表里的数字完全对得上。
@@ -36,6 +37,7 @@ class SnWsdStockBalanceReport(models.Model):
     _order = 'default_code, warehouse_id'
 
     warehouse_id = fields.Many2one('stock.warehouse', string='仓库', readonly=True)
+    location_id = fields.Many2one('stock.location', string='库位', readonly=True)
     product_id = fields.Many2one('product.product', string='物料', readonly=True)
     default_code = fields.Char(string='物料编码', readonly=True)
     product_name = fields.Char(string='物料名称', readonly=True)
@@ -81,6 +83,7 @@ class SnWsdStockBalanceReport(models.Model):
                     -- 按明细的方向归集：期内收入 / 期内发出 / 期初（区间开始日之前的净流入）
                     SELECT detail.product_id,
                            detail.warehouse_id,
+                           detail.report_location_id,
                            sum(CASE WHEN detail.date < param.date_from
                                     THEN CASE detail.direction
                                              WHEN 'in' THEN detail.quantity
@@ -97,15 +100,17 @@ class SnWsdStockBalanceReport(models.Model):
                                     THEN detail.quantity ELSE 0 END) AS qty_out
                     FROM sn_wsd_stock_balance_detail detail
                     CROSS JOIN param
-                    GROUP BY detail.product_id, detail.warehouse_id, param.date_from, param.date_to
+                    GROUP BY detail.product_id, detail.warehouse_id, detail.report_location_id,
+                             param.date_from, param.date_to
                 )
                 SELECT
-                       -- 行 id 直接用「物料 × 仓库」编出来，不用 row_number()：
+                       -- 行 id 用「物料 × 报表库位」编出来，不用 row_number()：
                        -- 报表行集合会随区间内物料进出（新物料入库、结存归零）而变化，
-                       -- 行号一漂移，用户点开的就是另一颗物料的明细。仓库数 < 1000、
-                       -- 物料 id < 2147483（超出会整数溢出报错，不会静默串行）即可。
-                       summary.product_id * 1000 + summary.warehouse_id AS id,
+                       -- 行号一漂移，用户点开的就是另一颗物料的明细。库位 id < 100000、
+                       -- 物料 id < 21474（超出会整数溢出报错，不会静默串行）即可。
+                       summary.product_id * 100000 + summary.report_location_id AS id,
                        summary.warehouse_id,
+                       summary.report_location_id AS location_id,
                        summary.product_id,
                        product.default_code,
                        COALESCE(template.name->>'zh_CN', template.name->>'en_US') AS product_name,
@@ -122,7 +127,7 @@ class SnWsdStockBalanceReport(models.Model):
                 WHERE summary.qty_in <> 0
                    OR summary.qty_out <> 0
                    OR summary.qty_initial + summary.qty_in - summary.qty_out <> 0
-                ORDER BY product.default_code, summary.warehouse_id
+                ORDER BY product.default_code, summary.warehouse_id, summary.report_location_id
             )
         """)
 
@@ -162,7 +167,7 @@ class SnWsdStockBalanceReport(models.Model):
         return {'type': 'ir.actions.act_url', 'url': url, 'target': 'self'}
 
     def action_open_details(self):
-        """下钻：打开本行（物料 × 仓库）在报表区间内的收发流水明细。"""
+        """下钻：打开本行（物料 × 库位）在报表区间内的收发流水明细。"""
         self.ensure_one()
         date_from, date_to = self._report_period()
         action = self.env['ir.actions.act_window']._for_xml_id(
@@ -173,12 +178,16 @@ class SnWsdStockBalanceReport(models.Model):
             ('date', '>=', date_from),
             ('date', '<=', date_to),
         ]
+        if self.location_id:
+            domain.append(('report_location_id', '=', self.location_id.id))
         if self.warehouse_id:
             domain.append(('warehouse_id', '=', self.warehouse_id.id))
         action.update({
             'name': self.env._(
-                '收发明细：%s（%s ~ %s）',
-                self.product_id.display_name, date_from, date_to,
+                '收发明细：%s %s（%s ~ %s）',
+                self.product_id.display_name,
+                self.location_id.display_name or '',
+                date_from, date_to,
             ),
             'domain': domain,
         })

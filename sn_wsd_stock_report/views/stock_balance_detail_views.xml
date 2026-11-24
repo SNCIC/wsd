@@ -16,6 +16,7 @@
                 <field name="default_code" optional="hide"/>
                 <field name="product_name" optional="hide"/>
                 <field name="material_specification" optional="hide"/>
+                <field name="report_location_id" optional="show"/>
                 <field name="location_id"/>
                 <field name="location_dest_id"/>
                 <field name="lot_id" optional="show"/>
@@ -38,6 +39,7 @@
                 <field name="product_name" string="物料名称" filter_domain="[('product_name', 'ilike', self)]"/>
                 <field name="reference" string="单据" filter_domain="[('reference', 'ilike', self)]"/>
                 <field name="lot_id"/>
+                <field name="report_location_id"/>
                 <field name="location_id"/>
                 <field name="location_dest_id"/>
                 <field name="picking_id"/>
@@ -53,6 +55,7 @@
                     <filter name="group_direction" string="方向" context="{'group_by': 'direction'}"/>
                     <filter name="group_date" string="日期" context="{'group_by': 'date'}"/>
                     <filter name="group_reference" string="单据" context="{'group_by': 'reference'}"/>
+                    <filter name="group_report_location" string="库位" context="{'group_by': 'report_location_id'}"/>
                     <filter name="group_warehouse" string="仓库" context="{'group_by': 'warehouse_id'}"/>
                 </group>
             </search>
@@ -65,9 +68,9 @@
         <field name="view_mode">list</field>
         <field name="search_view_id" ref="view_sn_wsd_stock_balance_detail_search"/>
         <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">该物料在所选区间内没有跨越库存区的收发流水</p>
-            <p>明细与收发汇总表同源：跨库存区边界的已完成流水在目标仓库记收入、在来源仓库记发出，
-               库内调拨不在此列出。</p>
+            <p class="o_view_nocontent_smiling_face">该物料在所选区间内没有跨越库位的收发流水</p>
+            <p>明细与收发汇总表同源：跨库位的已完成流水在目标库位记收入、在来源库位记发出，
+               同一库位内部（含其下货位之间）的调拨不在此列出。</p>
         </field>
     </record>
 </odoo>

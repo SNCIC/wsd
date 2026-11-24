@@ -1,3 +1,4 @@
+from . import stock_location
 from . import stock_balance_range
 from . import stock_balance_detail
 from . import stock_balance_report

@@ -18,6 +18,7 @@ LABEL_FIELDS = (
     ('product_name', 34),
     ('material_specification', 26),
     ('uom_id', 12),
+    ('location_id', 26),
     ('warehouse_id', 18),
 )
 QTY_FIELDS = ('qty_initial', 'qty_in', 'qty_out', 'qty_balance')
@@ -49,6 +50,21 @@ def _parse_domain(raw_domain):
     return domain if isinstance(domain, list) else []
 
 
+def _parse_ids(raw_ids):
+    """Decode the comma separated identifiers of the location filter.
+
+    Only digits are kept, so a malformed payload cannot reach the ORM as
+    anything but a list of integers.
+    """
+    if not raw_ids:
+        return []
+    return [
+        int(token)
+        for token in str(raw_ids).split(',')
+        if token.strip().isdigit()
+    ]
+
+
 def _label(value):
     """Flatten a many2one read result into its display name."""
     if isinstance(value, (list, tuple)):
@@ -60,7 +76,8 @@ class StockBalanceExport(http.Controller):
     """Download the stock in/out balance report as an Excel workbook."""
 
     @http.route('/sn_wsd_stock_report/export/xlsx', type='http', auth='user')
-    def export_balance_xlsx(self, date_from=None, date_to=None, domain=None, **kwargs):
+    def export_balance_xlsx(self, date_from=None, date_to=None, domain=None,
+                            location_ids=None, **kwargs):
         if not request.env.user.has_group('stock.group_stock_user'):
             raise Forbidden()
 
@@ -79,10 +96,18 @@ class StockBalanceExport(http.Controller):
 
         report_model = request.env[REPORT_MODEL]
         report_model.invalidate_model()
+        search_domain = _parse_domain(domain)
+        selected_locations = _parse_ids(location_ids)
+        if selected_locations:
+            # The two domains are plain AND terms, so appending the location
+            # condition narrows the search the list view sent.
+            search_domain = search_domain + [
+                ('location_id', 'child_of', selected_locations),
+            ]
         rows = report_model.search_read(
-            _parse_domain(domain),
+            search_domain,
             [name for name, _width in LABEL_FIELDS] + list(QTY_FIELDS),
-            order='default_code, warehouse_id',
+            order='default_code, warehouse_id, location_id',
         )
 
         action_name = request.env.ref(REPORT_ACTION).name

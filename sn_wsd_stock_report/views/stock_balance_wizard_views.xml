@@ -8,6 +8,8 @@
                 <group>
                     <field name="date_from"/>
                     <field name="date_to"/>
+                    <field name="location_ids" widget="many2many_tags"
+                           placeholder="留空表示全部库位"/>
                 </group>
                 <footer>
                     <button name="action_generate" type="object" string="生成报表"
