@@ -34,7 +34,10 @@
                     .sn-fai-record table.signs tr {
                         border: 0 none !important;
                     }
-                    .sn-fai-record .logo { height: 40px; }
+                    /* Printed height of the mark, in millimetres: the brand
+                       file is cropped tight, and 11 mm keeps the logo 39 mm
+                       wide, inside the 24 % column of the A4 sheet. */
+                    .sn-fai-record .logo { height: 11mm; width: auto; max-width: 100%; }
                     .sn-fai-record .center { text-align: center; }
                     .sn-fai-record .right { text-align: right; }
                     .sn-fai-record .title {

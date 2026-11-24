@@ -90,8 +90,12 @@
                 <table class="plain table-borderless o_ignore_layout_styling">
                     <tr>
                         <td style="width: 220px;">
+                            <!-- Height of the mark itself, in millimetres: the
+                                 brand file is cropped tight, so 12 mm is the
+                                 printed height of the letters (43 mm wide at
+                                 its 3.59:1 ratio), inside the 220 px column. -->
                             <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
-                                 style="max-width: 200px; max-height: 58px;"/>
+                                 style="height: 12mm; width: auto; max-width: 100%;"/>
                             <span t-else="" style="font-size: 20px; font-weight: 700;" t-out="company.name"/>
                         </td>
                         <td><h1>购销合同</h1></td>

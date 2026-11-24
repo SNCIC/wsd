@@ -98,7 +98,10 @@
                         font-weight: 700;
                         margin: 0 0 4px;
                     }
-                    .sn-iqc-record .logo { height: 34px; }
+                    /* The height is the printed height of the mark, in
+                       millimetres: the brand file is cropped tight, so 12 mm
+                       stands against the 5.6 mm of the 21 px sheet title. */
+                    .sn-iqc-record .logo { height: 12mm; width: auto; max-width: 100%; }
                     .sn-iqc-record .label { white-space: nowrap; }
                     .sn-iqc-record .center { text-align: center; }
                     .sn-iqc-record .test-data td {
