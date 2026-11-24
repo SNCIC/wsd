@@ -7,17 +7,16 @@ outbox snapshots. The payload is built here once -- spec field names,
 types, precisions and date formats applied -- so the endpoint layer
 stays a dumb FIFO server. The raw columns of a row are never rewritten;
 corrections ride along at synthesis; re-cleansing supersedes old
-qualified snapshots and delivered rows are frozen forever.
+qualified snapshots and delivered rows are frozen forever. The single
+trigger is the manual per-work-order re-clean -- no cron, no auto
+re-judgement.
 """
 import logging
-from datetime import timedelta
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
-
-# cron sweep chunking: rows cleansed (and committed) per batch
-CLEAN_CHUNK_SIZE = 200
 
 # interfaces expanding to one snapshot per detail/point line
 AGING_CODES = ('1011', '2010')
@@ -194,8 +193,8 @@ class EipPassRecordClean(models.Model):
     # gates + synthesis
     # ------------------------------------------------------------------
     def _eip_clean_rows(self):
-        """Judge and snapshot ``self``: cron targets (pending past the
-        grace, dirty qualified rows) and manually selected rows alike.
+        """Judge and snapshot ``self`` (triggered per work order by the
+        manual wizard, or on the rows a batch correction just fixed).
         Delivered rows are skipped (frozen)."""
         rules_by_company = {}
         for rule in self.env['sn.wsd.eip.clean.rule'].search([]):
@@ -251,7 +250,6 @@ class EipPassRecordClean(models.Model):
                     'clean_time': now,
                     'clean_note': '; '.join(problems)[:2000]
                     or 'no deliverable records',
-                    'clean_dirty': False,
                 })
             else:
                 Outbox.create([{
@@ -266,7 +264,6 @@ class EipPassRecordClean(models.Model):
                     'state': 'qualified',
                     'clean_time': now,
                     'clean_note': False,
-                    'clean_dirty': False,
                 })
 
     def _eip_standard_payload(self, code, upload_time, fixes=None):
@@ -396,43 +393,25 @@ class EipPassRecordClean(models.Model):
         return payloads
 
     # ------------------------------------------------------------------
-    # triggers
+    # trigger (manual, per work order -- the only cleansing entry)
     # ------------------------------------------------------------------
     @api.model
-    def _cron_clean_pending(self):
-        """15-minute sweep: pending rows past the config grace (late
-        extractions have had their chance) plus qualified rows the
-        extractor flagged dirty. Runs in chunks, committing between
-        them: a ten-thousand-row backlog must not hold one transaction
-        (and its locks) for minutes."""
-        now = fields.Datetime.now()
-        todo = self.env['sn.wsd.eip.pass.record']
-        for config in self.env['sn.wsd.eip.config'].sudo().search(
-                [('active', '=', True)]):
-            cutoff = now - timedelta(hours=config.clean_grace_hours or 0)
-            todo |= self.search([
-                ('company_id', '=', config.company_id.id),
-                ('state', '=', 'pending'),
-                ('create_time', '<=', cutoff),
-            ])
-            todo |= self.search([
-                ('company_id', '=', config.company_id.id),
-                ('state', '=', 'qualified'),
-                ('clean_dirty', '=', True),
-            ])
-        ids = todo.ids
-        for start in range(0, len(ids), CLEAN_CHUNK_SIZE):
-            self.browse(
-                ids[start:start + CLEAN_CHUNK_SIZE])._eip_clean_rows()
-            self._eip_clean_commit()
-
-    def _eip_clean_commit(self):
-        """Isolated commit of finished cleansing chunks; patched to a
-        flush inside the tests, which cannot commit."""
-        self.env.cr.commit()
+    def _eip_clean_by_order(self, work_order_no):
+        """Cleanse / re-clean every collection row of one work order:
+        the single manual trigger (no cron, no auto re-clean). Returns
+        the rows judged."""
+        rows = self.search([
+            ('work_order_no', '=', work_order_no),
+            ('company_id', '=', self.env.company.id),
+        ])
+        if not rows:
+            raise UserError(_(
+                'No collection rows for work order %s.', work_order_no))
+        rows._eip_clean_rows()
+        return rows
 
     def action_eip_re_clean(self):
-        """Manual re-clean of the selected rows (button / server
-        action)."""
+        """Cleanse the selected rows in place (used by the batch
+        correction wizard, which owns the rows it corrected)."""
         self._eip_clean_rows()
         return True

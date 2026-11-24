@@ -144,11 +144,6 @@ class EipPassRecord(models.Model):
         string='Clean Note',
         help='Rejection reasons of the last cleansing pass (missing '
              'required fields, limit failures).')
-    clean_dirty = fields.Boolean(
-        default=False,
-        help='Extraction wrote values after qualification: the next '
-             'cleansing sweep re-judges the row and regenerates its '
-             'snapshots.')
 
     # ----- value columns (three extraction buckets) -----
     current_value = fields.Float(string='Battery Current (uA)', digits=(10, 3))
@@ -397,35 +392,26 @@ class EipPassRecord(models.Model):
     def _apply_value_extraction(self):
         """Run every extraction bucket on ``self``. Each bucket is
         individually tolerant: an error is logged, never raised --
-        collection must not disturb the pass flow. Rows whose values
-        changed are flagged dirty when already qualified, so the
-        cleansing sweep re-judges them."""
-        dirty = self.env['sn.wsd.eip.pass.record']
+        collection must not disturb the pass flow."""
         try:
-            dirty |= self._extract_test_details()
+            self._extract_test_details()
         except Exception as exc:  # noqa: BLE001 -- deliberate tolerance
             _logger.warning('EIP detail extraction failed: %s', exc)
         try:
-            dirty |= self._extract_device_zones()
+            self._extract_device_zones()
         except Exception as exc:  # noqa: BLE001 -- deliberate tolerance
             _logger.warning('EIP zone extraction failed: %s', exc)
         try:
-            dirty |= self._extract_aging_points()
+            self._extract_aging_points()
         except Exception as exc:  # noqa: BLE001 -- deliberate tolerance
             _logger.warning('EIP aging extraction failed: %s', exc)
-        dirty = dirty & self.filtered(lambda item: item.state == 'qualified')
-        if dirty:
-            dirty.write({'clean_dirty': True})
-        return dirty
 
     def _extract_test_details(self):
         """Bucket 1: map test detail items of the row's own report by
         project name onto EIP fields. Fill-empty only -- the source is
         the immutable report this row is linked to, recomputation has no
-        gain; the first mapping that matches a project name wins.
-        Returns the rows it changed."""
+        gain; the first mapping that matches a project name wins."""
         Mapping = self.env['sn.wsd.eip.value.mapping']
-        changed = self.env['sn.wsd.eip.pass.record']
         for record in self:
             if record.state == 'delivered':
                 continue
@@ -449,18 +435,14 @@ class EipPassRecord(models.Model):
                     values[mapping.eip_field] = detail.actual_value
             if record._fill_empty_values(values):
                 record.values_extracted = True
-                changed |= record
-        return changed
 
     def _extract_device_zones(self):
         """Bucket 2: for reflow (1009) / wave (1010) rows, take the
         nearest zone packet of the pass device at or before the check
         time, match zones by mapped name, aggregate max per field
         (cooling zone: min). Recompute-and-overwrite: a later, nearer
-        packet supersedes the value taken at capture time. Returns the
-        rows it changed."""
+        packet supersedes the value taken at capture time."""
         Mapping = self.env['sn.wsd.eip.value.mapping']
-        changed = self.env['sn.wsd.eip.pass.record']
         for record in self:
             packet_model = ZONE_PACKET_MODELS.get(record.info_type_code)
             if not packet_model or record.state == 'delivered':
@@ -496,18 +478,14 @@ class EipPassRecord(models.Model):
             if values:
                 record.write(values)
                 record.values_extracted = True
-                changed |= record
-        return changed
 
     def _extract_aging_points(self):
         """Bucket 3 (built-in): for aging rows, rebuild the aging lines
         from every temperature point of the pass device inside the
         enter..leave window and refresh the window average. Rebuild is
-        idempotent (the window never changes). Returns the rows it
-        changed."""
+        idempotent (the window never changes)."""
         Aging = self.env['sn.wsd.device.aging.record']
         Line = self.env['sn.wsd.eip.pass.record.line']
-        changed = self.env['sn.wsd.eip.pass.record']
         for record in self:
             if record.info_type_code != AGING_INFO_CODE:
                 continue
@@ -523,32 +501,20 @@ class EipPassRecord(models.Model):
                 ('collect_time', '>=', history.in_date),
                 ('collect_time', '<=', history.out_date),
             ], order='collect_time asc, id asc')
-            old_lines = [
-                (line.point_time, line.actual_value)
-                for line in record.line_ids.filtered(
-                    lambda line: line.line_type == 'aging_point')]
             record.line_ids.filtered(
                 lambda line: line.line_type == 'aging_point').unlink()
-            new_lines = []
-            average = 0.0
             if points:
-                new_lines = [
-                    (point.collect_time, f'{point.temperature:g}')
-                    for point in points]
                 Line.create([{
                     'record_id': record.id,
                     'line_type': 'aging_point',
                     'point_time': point.collect_time,
                     'actual_value': f'{point.temperature:g}',
                 } for point in points])
-                average = (
+                record.agingroom_temperature = (
                     sum(points.mapped('temperature')) / len(points))
                 record.values_extracted = True
-            if new_lines != old_lines \
-                    or record.agingroom_temperature != average:
-                record.agingroom_temperature = average
-                changed |= record
-        return changed
+            else:
+                record.agingroom_temperature = 0.0
 
     def _fill_empty_values(self, values):
         """Fill-only-empty writer: existing values are never overwritten

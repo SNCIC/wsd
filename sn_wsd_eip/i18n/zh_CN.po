@@ -4139,6 +4139,7 @@ msgstr "生产工单"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__work_order_no
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_order_wizard__work_order_no
 msgid "Work Order No"
 msgstr "工单编号"
 
@@ -4994,3 +4995,37 @@ msgstr "逻辑地址"
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__measured_value
 msgid "Measured Value (V)"
 msgstr "实测值（V）"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_clean_fix.py:0
+msgid ""
+"%(total)s rows re-cleaned for %(order)s: %(qualified)s qualified, "
+"%(rejected)s rejected."
+msgstr "%(order)s 共重洗 %(total)s 行：合格 %(qualified)s、不合格 %(rejected)s。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_clean_order_wizard__work_order_no
+msgid ""
+"Every collection row carrying this work order number is re-judged by the "
+"gates; qualified rows regenerate their outbox snapshots, rejected rows keep "
+"the fresh reason."
+msgstr "携带该工单号的全部数采行重新过闸：合格行重建出库快照，不合格行刷新原因。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_clean_order_wizard_form
+msgid "MES work order number"
+msgstr "MES 工单号"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_clean_engine.py:0
+msgid "No collection rows for work order %s."
+msgstr "工单 %s 没有数采行。"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_clean_order_wizard
+#: model:ir.actions.server,name:sn_wsd_eip.action_server_eip_re_clean_by_order
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_clean_order_wizard_form
+msgid "Re-clean by Work Order"
+msgstr "按工单重洗"

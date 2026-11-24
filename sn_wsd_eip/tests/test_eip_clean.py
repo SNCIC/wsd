@@ -3,7 +3,6 @@ expansion interfaces, the state machine (supersede / freeze), manual
 corrections and the cron sweep."""
 
 from datetime import timedelta
-from unittest.mock import patch
 
 from odoo import fields
 from odoo.exceptions import UserError
@@ -16,12 +15,6 @@ class TestEipClean(TransactionCase):
     def setUp(self):
         super().setUp()
         self.env = self.env(context=dict(self.env.context, lang='en_US'))
-        # the cron commits between chunks; tests cannot commit
-        patcher = patch.object(
-            type(self.env['sn.wsd.eip.pass.record']), '_eip_clean_commit',
-            lambda record: record.env.flush_all())
-        patcher.start()
-        self.addCleanup(patcher.stop)
         self.PassRecord = self.env['sn.wsd.eip.pass.record']
         self.Outbox = self.env['sn.wsd.eip.collect.outbox']
         self.Rule = self.env['sn.wsd.eip.clean.rule']
@@ -220,19 +213,23 @@ class TestEipClean(TransactionCase):
                 'basis': 'nope',
             })
 
-    def test_82_cron_sweeps_grace_and_dirty(self):
-        old = self._source()  # pending, missing required fields
-        old.create_time = fields.Datetime.now() - timedelta(hours=3)
-        qualified = self._full_1002()
-        qualified._eip_clean_rows()
-        self.assertEqual(qualified.state, 'qualified')
-        qualified.clean_dirty = True
-        young = self._full_1002()  # pending, inside the grace window
-        self.env['sn.wsd.eip.pass.record']._cron_clean_pending()
-        self.assertEqual(old.state, 'rejected')
-        self.assertEqual(qualified.state, 'qualified')
-        self.assertFalse(qualified.clean_dirty)
-        self.assertEqual(young.state, 'pending')
+    def test_82_re_clean_by_work_order(self):
+        """The single cleansing trigger: type a work order number --
+        everything of that order is judged, other orders untouched."""
+        row = self._full_1002()
+        broken = self._source()  # same order W001, missing fields
+        other = self._full_1002()
+        other.work_order_no = 'W002'
+        self.env['sn.wsd.eip.clean.order.wizard'].create({
+            'work_order_no': 'W001',
+        }).action_re_clean()
+        self.assertEqual(row.state, 'qualified')
+        self.assertEqual(broken.state, 'rejected')
+        self.assertEqual(other.state, 'pending')
+        with self.assertRaises(UserError):
+            self.env['sn.wsd.eip.clean.order.wizard'].create({
+                'work_order_no': 'NOPE',
+            }).action_re_clean()
 
     def test_90_family_resolution(self):
         product = self.env['product.product'].create({

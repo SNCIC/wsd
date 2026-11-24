@@ -66,10 +66,9 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_eip_re_clean" type="object"
-                            string="Re-clean" class="btn-primary"
-                            groups="mrp.group_mrp_manager"
-                            invisible="state == 'delivered'"/>
+                    <button name="%(action_eip_clean_order_wizard)d"
+                            type="action" string="Re-clean by Order"
+                            groups="mrp.group_mrp_manager"/>
                     <button name="%(action_eip_clean_fix_wizard)d"
                             type="action" string="Correct"
                             groups="mrp.group_mrp_manager"
@@ -207,12 +206,12 @@
               sequence="5"/>
 
     <!-- server actions bound to the ledger list -->
-    <record id="action_server_eip_re_clean" model="ir.actions.server">
-        <field name="name">Re-clean</field>
+    <record id="action_server_eip_re_clean_by_order" model="ir.actions.server">
+        <field name="name">Re-clean by Work Order</field>
         <field name="model_id" ref="model_sn_wsd_eip_pass_record"/>
         <field name="binding_model_id" ref="model_sn_wsd_eip_pass_record"/>
         <field name="state">code</field>
-        <field name="code">records.action_eip_re_clean()</field>
+        <field name="code">action = env.ref('sn_wsd_eip.action_eip_clean_order_wizard').sudo().read()[0]</field>
     </record>
 
     <record id="action_server_eip_batch_fix" model="ir.actions.server">

@@ -140,3 +140,41 @@ class EipCleanFixWizard(models.TransientModel):
                 })
         rows._eip_clean_rows()
         return {'type': 'ir.actions.act_window_close'}
+
+
+class EipCleanOrderWizard(models.TransientModel):
+    """The single cleansing trigger: type a work order number, and every
+    collection row of that order is (re-)cleansed. No cron, no free
+    selection -- re-cleaning is only possible against a work order."""
+
+    _name = 'sn.wsd.eip.clean.order.wizard'
+    _description = 'EIP Collection Re-clean by Work Order'
+
+    work_order_no = fields.Char(
+        string='Work Order No', required=True,
+        help='Every collection row carrying this work order number is '
+             're-judged by the gates; qualified rows regenerate their '
+             'outbox snapshots, rejected rows keep the fresh reason.')
+
+    def action_re_clean(self):
+        self.ensure_one()
+        rows = self.env['sn.wsd.eip.pass.record']._eip_clean_by_order(
+            self.work_order_no.strip())
+        qualified = sum(1 for row in rows if row.state == 'qualified')
+        return {
+            'type': 'ir.actions.act_window_close',
+            'effect': {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'message': _(
+                        '%(total)s rows re-cleaned for %(order)s: '
+                        '%(qualified)s qualified, %(rejected)s rejected.',
+                        total=len(rows),
+                        order=self.work_order_no,
+                        qualified=qualified,
+                        rejected=len(rows) - qualified),
+                    'sticky': False,
+                },
+            },
+        }

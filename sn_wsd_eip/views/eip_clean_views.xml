@@ -82,4 +82,29 @@
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
+
+    <!-- re-clean by work order: the single cleansing trigger -->
+    <record id="view_eip_clean_order_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.clean.order.wizard.form</field>
+        <field name="model">sn.wsd.eip.clean.order.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Re-clean by Work Order">
+                <group>
+                    <field name="work_order_no" placeholder="MES work order number"/>
+                </group>
+                <footer>
+                    <button name="action_re_clean" type="object"
+                            string="Re-clean" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_eip_clean_order_wizard" model="ir.actions.act_window">
+        <field name="name">Re-clean by Work Order</field>
+        <field name="res_model">sn.wsd.eip.clean.order.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
 </odoo>
