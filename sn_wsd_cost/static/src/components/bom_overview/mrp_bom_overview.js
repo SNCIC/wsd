@@ -5,7 +5,9 @@ patch(BomOverviewComponent.prototype, {
     setup() {
         super.setup();
         this.state.showOptions.costInfo = false;
-        this.state.showOptions.costPrecision = 0;
+        // Matches the decimals the unit price is stored with: the column shows
+        // the significant ones, up to that precision.
+        this.state.showOptions.costPrecision = 6;
     },
 
     async getBomData() {

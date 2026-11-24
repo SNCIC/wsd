@@ -1,10 +1,12 @@
 from odoo import api, fields, models
 from odoo.tools.misc import get_lang
 
-# The unit price carries the precision of the price decimal precision, not the
-# two decimals of the currency: a component priced 0.00089 would otherwise be
-# shown as 0.00.
-PRICE_PRECISION = 'Product Price'
+from ..models.product_template import PRICE_DIGITS
+
+# The unit price is stored with ``PRICE_DIGITS`` decimals and has no fixed
+# display precision: it shows its significant decimals, up to that value, never
+# the two decimals of the currency. A component priced 0.00565 is shown as
+# 0.00565, not as 0.01.
 
 
 class ReportMrpReportBomStructure(models.AbstractModel):
@@ -24,8 +26,7 @@ class ReportMrpReportBomStructure(models.AbstractModel):
     def get_html(self, bom_id=False, searchQty=1, searchVariant=False):
         res = super().get_html(bom_id, searchQty, searchVariant)
         res['has_cost_info'] = self._has_cost_info(res['lines'])
-        res['sn_cost_precision'] = self.env['decimal.precision'].precision_get(
-            PRICE_PRECISION)
+        res['sn_cost_precision'] = PRICE_DIGITS
         return res
 
     @api.model
@@ -125,10 +126,9 @@ class ReportMrpReportBomStructure(models.AbstractModel):
         """
         if not value:
             return ''
-        precision = self.env['decimal.precision'].precision_get(PRICE_PRECISION)
         lang = self.env['res.lang'].browse(get_lang(self.env).id)
         integer, _, decimals = lang.format(
-            f'%.{precision}f', value, grouping=True).partition('.')
+            f'%.{PRICE_DIGITS}f', value, grouping=True).partition('.')
         decimals = decimals.rstrip('0')
         amount = f'{integer}.{decimals}' if decimals else integer
         if currency.position == 'after':
