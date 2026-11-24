@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Cost',
-    'version': '19.0.1.0.2',
+    'version': '19.0.1.0.3',
     'summary': 'Latest purchase price of the materials and BoM cost computed from it',
     'description': 'Store the latest confirmed purchase price of every material with the '
                    'purchase date and vendor, and compute the BoM cost from those prices '

@@ -93,6 +93,11 @@ class ProductTemplate(models.Model):
         The price is converted with the confirmation date of the order and
         expressed in the unit of measure of the purchased product so it can be
         compared with the standard cost of that product.
+
+        The conversion is not rounded: rounding it to the cents of the currency
+        would turn a material bought at 0.00565 per unit into 0.01 as soon as
+        the purchase is in the company currency, which is the most common case.
+        The price is rounded once, on the price precision, at the end.
         """
         self.ensure_one()
         product = line.product_id
@@ -106,6 +111,7 @@ class ProductTemplate(models.Model):
             company.currency_id,
             company,
             rate_date,
+            round=False,
         )
         if line.product_uom_id and line.product_uom_id != product.uom_id:
             price = line.product_uom_id._compute_price(price, product.uom_id)
@@ -146,12 +152,15 @@ class ProductTemplate(models.Model):
         seller = self._sn_vendor_pricelist_entry()
         if seller:
             today = fields.Date.context_today(self)
+            # Same rule as a purchase line: the currency conversion must not
+            # round the price to the cents of the currency.
             price = seller.currency_id._convert(
-                seller.price, company.currency_id, company, today)
+                seller.price, company.currency_id, company, today, round=False)
             if seller.discount:
                 price *= 1 - seller.discount / 100.0
             if seller.product_uom_id and seller.product_uom_id != self.uom_id:
                 price = seller.product_uom_id._compute_price(price, self.uom_id)
+            price = float_round(price, precision_digits=PRICE_DIGITS)
             return {
                 'price': price,
                 'date': seller.date_start,
