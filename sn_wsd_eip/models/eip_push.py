@@ -241,44 +241,18 @@ class EipPushMixin(models.AbstractModel):
         self.ensure_one()
         return OPERATE_UPDATE if self.eip_synced else OPERATE_ADD
 
-    def _eip_build_body(self, operatetype, config, baseline=None,
-                        current=None):
-        """Payload to send.
+    def _eip_build_body(self, operatetype, config, current=None):
+        """Payload to send: every key of the field list with its real
+        current value, empty fields as blank strings -- ADD and UPDATE
+        alike, no field is ever omitted. Child lists carry every
+        current line.
 
-        ADD (and UPDATE in "full" mode) carries every current value. An
-        UPDATE in "diff" mode follows the spec's update rules: the keys
-        are all there; a locate key (UPDATE-required) carries its real
-        value, an unchanged field the empty string, a changed field its
-        new value and a cleared field the string "null". Child lists
-        always carry every current line.
-
-        ``baseline``: the values the platform is known to hold; the
-        default is the snapshot of the last successful push.
         ``current``: precomputed current values (an optimization).
         """
         self.ensure_one()
         if current is None:
             current = self._eip_values(config)
-        if operatetype == OPERATE_ADD or config.update_mode == 'full':
-            return current
-        if baseline is None:
-            baseline = json.loads(self.eip_snapshot) if self.eip_snapshot else {}
-        body = {}
-        for key, kind, _arg, _add, update in self.EIP_FIELDS:
-            new = current[key]
-            if kind == KIND_CHILDREN or update:
-                body[key] = new
-                continue
-            old = baseline.get(key, '')
-            if _is_empty(new) and _is_empty(old):
-                body[key] = ''
-            elif new == old:
-                body[key] = ''
-            elif _is_empty(new):
-                body[key] = 'null'
-            else:
-                body[key] = new
-        return body
+        return current
 
     # ------------------------------------------------------------------
     # push
@@ -292,7 +266,7 @@ class EipPushMixin(models.AbstractModel):
             'document_ref': self._eip_document_ref(),
         }
 
-    def _eip_send_as(self, operatetype, config, interface, baseline=None):
+    def _eip_send_as(self, operatetype, config, interface):
         """Send one request with the given operation kind and return the
         call result, extended with the operation kind and the values it
         carried. The values are taken *before* the request leaves: they
@@ -300,8 +274,7 @@ class EipPushMixin(models.AbstractModel):
         round trip."""
         transport = self.env['sn.wsd.eip.transport']
         current = self._eip_values(config)
-        body = self._eip_build_body(
-            operatetype, config, baseline, current=current)
+        body = self._eip_build_body(operatetype, config, current=current)
         literal = (interface.operatetype_add if operatetype == OPERATE_ADD
                    else interface.operatetype_update)
         log = transport._eip_open_log(
@@ -334,10 +307,9 @@ class EipPushMixin(models.AbstractModel):
         result = self._eip_send_as(operatetype, config, interface)
         if operatetype == OPERATE_ADD and result['status'] == STATUS_DUPLICATE:
             # the platform already has it (e.g. an earlier request
-            # succeeded but its answer never got recorded): update it
-            # against an empty baseline, so filled fields carry values
-            result = self._eip_send_as(
-                OPERATE_UPDATE, config, interface, baseline={})
+            # succeeded but its answer never got recorded): resend as
+            # UPDATE with the same complete values
+            result = self._eip_send_as(OPERATE_UPDATE, config, interface)
         self._eip_apply_push_result(result, config)
         return result
 

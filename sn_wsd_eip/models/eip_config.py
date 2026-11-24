@@ -33,15 +33,6 @@ class EipConfig(models.Model):
         help='Interface root address, e.g. https://host:port.')
     timeout_sec = fields.Integer(
         string='Timeout (seconds)', default=30, required=True)
-    update_mode = fields.Selection(
-        [('diff', 'Diff'), ('full', 'Full')],
-        string='Update Mode', default='full', required=True,
-        help='Full (default): every UPDATE carries the complete '
-             'envelope with the current values, empty fields as blank '
-             'strings -- no field is ever omitted. Diff: only changed '
-             'fields carry values, unchanged fields go blank and a '
-             'cleared field goes as the string "null" (use it when a '
-             'field has to be cleared on the platform).')
     push_batch_size = fields.Integer(
         string='Push Batch Size', default=50, required=True,
         help='Documents pushed in one queue run, per company.')

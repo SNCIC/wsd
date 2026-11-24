@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-24 06:22+0000\n"
-"PO-Revision-Date: 2026-11-24 06:22+0000\n"
+"POT-Creation-Date: 2026-11-24 06:35+0000\n"
+"PO-Revision-Date: 2026-11-24 06:35+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -720,11 +720,6 @@ msgid "Device report this row was enriched from (report channel)."
 msgstr "该行补挂数据来源的设备报文（报文通道）。"
 
 #. module: sn_wsd_eip
-#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_config__update_mode__diff
-msgid "Diff"
-msgstr "差量"
-
-#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__direction
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_interface_search
 msgid "Direction"
@@ -1362,24 +1357,6 @@ msgstr "协议库存"
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__mat_code
 msgid "From the list the EIP platform provides."
 msgstr "取自 EIP 提供的清单。"
-
-#. module: sn_wsd_eip
-#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_config__update_mode__full
-msgid "Full"
-msgstr "全量"
-
-#. module: sn_wsd_eip
-#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__update_mode
-msgid ""
-"Full (default): every UPDATE carries the complete envelope with the current "
-"values, empty fields as blank strings -- no field is ever omitted. Diff: "
-"only changed fields carry values, unchanged fields go blank and a cleared "
-"field goes as the string \"null\" (use it when a field has to be cleared on "
-"the platform)."
-msgstr ""
-"全量（默认）：每次 UPDATE "
-"都带完整报文与当前真实值，空字段传空字符串——不隐藏任何字段。差量：只给有变化的字段传值，没变的传空串，清空的字段传字符串 "
-"\"null\"（需要在平台清空字段时使用）。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_finished_inventory_line__data_source__1
@@ -3979,12 +3956,6 @@ msgstr "未完成窗口起点"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__unit
 msgid "Unit of Measure"
 msgstr "计量单位"
-
-#. module: sn_wsd_eip
-#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__update_mode
-#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_config_search
-msgid "Update Mode"
-msgstr "更新报文模式"
 
 #. module: sn_wsd_eip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_purchase_order_line_search

@@ -125,7 +125,7 @@ class TestEipPush(EipOrderCase):
         self.assertEqual(body['scheduleCode'], '')
 
     # ------------------------------------------------------------------
-    # UPDATE payload rules (full is the default, diff is optional)
+    # UPDATE payload: always the complete current values
     # ------------------------------------------------------------------
 
     def test_21_push_after_a_change_is_update(self):
@@ -155,38 +155,6 @@ class TestEipPush(EipOrderCase):
         self.assertEqual(body['supplierCode'], 'SUP-1')
         self.assertEqual(body['ipoNo'], order.ipo_no)
         self.assertEqual(order.eip_push_count, 2)
-
-    def test_22_diff_mode_blank_and_null_string(self):
-        # the optional diff mode follows the spec's update rules literally
-        self.config.write({'update_mode': 'diff'})
-        order = self._order(center='Center A')
-        order._eip_push_one()
-        order.write({'plan_finish_date': datetime.date(2027, 1, 15),
-                     'center': False})
-        order._eip_push_one()
-        body = self._last_request()['json']
-        # changed: the new value
-        self.assertEqual(body['planFinishDate'], '2027-01-15')
-        # unchanged: the empty string
-        for key in ('materialsCode', 'materialsName', 'planStartDate'):
-            self.assertEqual(body[key], '', key)
-        # cleared: the string "null"
-        self.assertEqual(body['center'], 'null')
-        self.assertIsInstance(body['center'], str)
-
-    def test_23_full_mode_cleared_field_sends_blank(self):
-        # full mode (the default) always carries the current value: a
-        # cleared field goes as "" and the gateway keeps its old value
-        # -- use the diff mode when a field has to be cleared
-        order = self._order(center='Center A')
-        order._eip_push_one()
-        order.write({'center': False})
-        order._eip_push_one()
-        body = self._last_request()['json']
-        self.assertEqual(self._last_request()['headers']['operatetype'], 'UPDATE')
-        self.assertEqual(body['materialsCode'], 'MC-1')
-        self.assertEqual(body['amount'], '200')
-        self.assertEqual(body['center'], '')
 
     # ------------------------------------------------------------------
     # required-field gate
@@ -227,7 +195,7 @@ class TestEipPush(EipOrderCase):
         self.assertEqual(
             [request['headers']['operatetype'] for request in self.server.requests],
             ['ADD', 'UPDATE'])
-        # against an empty baseline every filled field carries its value
+        # the resent UPDATE carries the same complete values
         body = self._last_request()['json']
         self.assertEqual(body['ipoNo'], order.ipo_no)
         self.assertEqual(body['materialsCode'], 'MC-1')

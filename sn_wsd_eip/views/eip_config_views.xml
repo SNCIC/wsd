@@ -21,7 +21,6 @@
                             <field name="timeout_sec"/>
                         </group>
                         <group string="Push">
-                            <field name="update_mode"/>
                             <field name="push_batch_size"/>
                             <field name="retry_times"/>
                             <field name="retry_interval_min"/>
@@ -51,7 +50,6 @@
                 <field name="supplier_code"/>
                 <field name="supplier_name"/>
                 <field name="base_url"/>
-                <field name="update_mode"/>
                 <field name="active" optional="hide"/>
             </list>
         </field>
@@ -70,8 +68,6 @@
                 <group>
                     <filter name="group_by_company" string="Company"
                             context="{'group_by': 'company_id'}"/>
-                    <filter name="group_by_update_mode" string="Update Mode"
-                            context="{'group_by': 'update_mode'}"/>
                 </group>
             </search>
         </field>
