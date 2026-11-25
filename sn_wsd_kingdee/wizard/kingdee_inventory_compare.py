@@ -115,7 +115,8 @@ class SnWsdKingdeeInventoryCompare(models.TransientModel):
         self.ensure_one()
         Quant = self.env["stock.quant"].with_context(active_test=False)
         quants = Quant.search([("location_id.usage", "=", "internal")])
-        account = self.env["sn.wsd.kingdee.account"]._for_company(self.env.company)
+        account = self.env["sn.wsd.kingdee.account"].sudo()._for_company(
+            self.env.company)
         bill_mixin = self.env["sn.wsd.kingdee.bill.mixin"]
         rows = {}
         cache = {}

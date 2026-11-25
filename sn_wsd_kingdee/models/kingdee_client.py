@@ -438,7 +438,10 @@ class SnWsdKingdeeClient(models.AbstractModel):
             record = res_record[:1]
             vals["res_model"] = record._name
             vals["res_id"] = record.id
-        env["sn.wsd.kingdee.sync.log"].create(vals)
+        # Written as superuser: the log is read only for an internal user, and a
+        # push started from a document must not lose its trail. ``user_id`` keeps
+        # the author of the call.
+        env["sn.wsd.kingdee.sync.log"].sudo().create(vals)
 
     def _store_log(self, api_name, *, form_id=None, direction="out", success=True, error=None,
                    payload=None, request_payload=None, duration_ms=0, res_record=None,

@@ -150,9 +150,17 @@ class SnWsdKingdeeBillMixin(models.AbstractModel):
     # Account values and reference helpers
     # ------------------------------------------------------------------
     def _kd_account(self):
-        """Kingdee account of the company of the document."""
+        """Kingdee account of the company of the document.
+
+        Read as superuser: the account holds the API secret, so it is readable by
+        the administrators only (``base.group_system``) and an internal user who
+        confirms a document must not be refused. Only derived values leave this
+        helper (organization, currency, stock status and default numbers), never
+        the credentials, and ``_for_company()`` still restricts the result to the
+        companies of the document.
+        """
         company = self.company_id or self.env.company
-        return self.env["sn.wsd.kingdee.account"]._for_company(company)
+        return self.env["sn.wsd.kingdee.account"].sudo()._for_company(company)
 
     def _kd_org(self, kind="create"):
         account = self._kd_account()
@@ -582,20 +590,31 @@ class SnWsdKingdeeBillMixin(models.AbstractModel):
         return True
 
     def _kingdee_auto_push(self):
-        """Defer the push of the documents whose kind is configured to push."""
-        records = self.browse()
-        for record in self:
-            try:
-                map_row = record._kingdee_bill_map()
-            except UserError:
-                continue
-            account = record._kd_account()
-            if not map_row.auto_push:
-                continue
-            if account and not account.auto_push_bills:
-                continue
-            records |= record
-        return records._kingdee_defer_push()
+        """Defer the push of the documents whose kind is configured to push.
+
+        Never raises: the business transaction that calls it (confirmation of a
+        purchase, sale or manufacturing order, validation of a transfer) must
+        succeed even when the account is not configured or cannot be read. The
+        decision phase runs in the environment of the user, the push itself runs
+        after the commit, in its own transaction.
+        """
+        try:
+            records = self.browse()
+            for record in self:
+                try:
+                    map_row = record._kingdee_bill_map()
+                except UserError:
+                    continue
+                account = record._kd_account()
+                if not map_row.auto_push:
+                    continue
+                if account and not account.auto_push_bills:
+                    continue
+                records |= record
+            return records._kingdee_defer_push()
+        except Exception:  # noqa: BLE001 - never break the business transaction
+            _logger.exception("Kingdee auto push refused for %s %s", self._name, self.ids)
+            return False
 
     def action_kingdee_check(self):
         """Report what a push would do, calling nothing (button of the form)."""
