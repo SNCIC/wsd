@@ -13,6 +13,7 @@
             </xpath>
             <xpath expr="//widget[@name='import_lots']" position="after">
                 <field name="x_can_generate_material_labels" invisible="1"/>
+                <field name="x_can_print_material_labels" invisible="1"/>
                 <button name="action_generate_material_labels"
                         string="Generate Internal Batches"
                         type="object"
@@ -24,11 +25,13 @@
                         class="btn btn-link"
                         confirm="This removes the internal batches generated on this operation so the split can be redone. Continue?"
                         invisible="not x_can_generate_material_labels"/>
+                <!-- Printing is not bound to the open state: a label can be
+                     reprinted once the operation is done. -->
                 <button name="action_print_material_labels"
                         string="Print Material Labels"
                         type="object"
                         class="btn btn-link"
-                        invisible="not x_can_generate_material_labels"/>
+                        invisible="not x_can_print_material_labels"/>
             </xpath>
         </field>
     </record>

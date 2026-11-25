@@ -23,6 +23,7 @@ class StockPicking(models.Model):
                 picking.picking_type_id.sequence_code
                 == 'sn.wsd.mes.picking.receipt')
 
+    @api.depends('state', 'move_ids.product_id.tracking')
     def _compute_can_print_material_labels(self):
         for picking in self:
             has_tracked = any(
@@ -39,7 +40,10 @@ class StockPicking(models.Model):
         if self.picking_type_id.sequence_code == 'sn.wsd.mes.picking.receipt':
             return self.action_print_finished_material_labels()
 
-        lots = self.move_line_ids.lot_id.filtered(
+        # Done operations keep their lines on the picking; fall back to the
+        # moves for the states where the picking level one2many is empty.
+        lines = self.move_line_ids or self.move_ids.move_line_ids
+        lots = lines.lot_id.filtered(
             lambda lot: lot.material_sn_base
         ).sorted(key=lambda lot: (lot.material_sn_base or lot.name or '', lot.id))
         if lots:
@@ -99,12 +103,74 @@ class StockMove(models.Model):
         string='Can Generate Material Labels',
         compute='_compute_x_can_generate_material_labels',
     )
+    x_can_print_material_labels = fields.Boolean(
+        string='Can Print Material Labels',
+        compute='_compute_x_can_print_material_labels',
+        help='Gates the print button of the operation detail. Unlike the '
+             'generation, printing stays available once the operation is '
+             'done: a label can always be reprinted.',
+    )
 
     @api.depends('picking_id.picking_type_id', 'picking_id.state',
                  'product_id.tracking', 'state')
     def _compute_x_can_generate_material_labels(self):
         for move in self:
             move.x_can_generate_material_labels = move._is_material_label_picking()
+
+    @api.depends('picking_id.picking_type_id', 'picking_id.state',
+                 'product_id.tracking', 'state', 'move_line_ids.lot_id')
+    def _compute_x_can_print_material_labels(self):
+        for move in self:
+            move.x_can_print_material_labels = (
+                move._is_material_label_picking()
+                or move._has_material_labels_to_reprint()
+            )
+
+    def _has_material_labels_to_reprint(self):
+        """Whether a done operation still carries printed material batches.
+
+        The generation and the revocation are closed once the operation is
+        done, but the operator must be able to reprint the labels of the
+        internal batches generated there.
+        """
+        self.ensure_one()
+        picking = self.picking_id
+        if (
+            not picking
+            or self.state != 'done'
+            or self.product_id.tracking != 'lot'
+            or not picking._is_final_receipt_picking()
+        ):
+            return False
+        return bool(self._material_label_lots())
+
+    def _material_label_lots(self):
+        """Internal batches labelled by this move, done operations included.
+
+        ``stock.lot`` links back to the operation line it was generated from,
+        which survives the validation: that reverse link is used when the
+        operation no longer exposes its lines.
+        """
+        self.ensure_one()
+        lots = self.move_line_ids.lot_id.filtered(lambda lot: lot.material_sn_base)
+        if lots:
+            return lots
+        domain = [('material_sn_base', '!=', False)]
+        by_line = self.env['stock.lot'].search(
+            domain + [('source_move_line_id.move_id', '=', self.id)]
+        )
+        if by_line:
+            return by_line
+        # Batches created by a hook outside the operation lines are only bound
+        # to the source receipt: fall back to it, on the same product.
+        if not self.picking_id:
+            return self.env['stock.lot']
+        return self.env['stock.lot'].search(
+            domain + [
+                ('source_picking_id', '=', self.picking_id.id),
+                ('product_id', '=', self.product_id.id),
+            ]
+        )
 
     def _is_material_label_picking(self):
         """Whether material labels may be generated from this move.
@@ -201,9 +267,9 @@ class StockMove(models.Model):
 
     def action_print_material_labels(self):
         self.ensure_one()
-        lots = self.move_line_ids.lot_id.filtered(
-            lambda lot: lot.material_sn_base
-        ).sorted(key=lambda lot: (lot.material_sn_base or lot.name or '', lot.id))
+        lots = self._material_label_lots().sorted(
+            key=lambda lot: (lot.material_sn_base or lot.name or '', lot.id)
+        )
         if not lots:
             raise UserError(
                 _('Generate internal batches before printing material labels.')
