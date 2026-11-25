@@ -5223,6 +5223,8 @@ msgstr "参数设置与查询（采集设备）"
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_parameter_meter
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_parameter_meter
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1008
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1008
 msgid "Parameter Setting (Meter)"
 msgstr "参数设置（电能表）"
 
@@ -5313,3 +5315,128 @@ msgstr "波峰焊"
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_withstand
 msgid "Withstand Voltage"
 msgstr "耐压测试"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2006
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2006
+msgid "AC Analog Acquisition (Collector)"
+msgstr "交流模拟量采集（采集设备）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2001
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2001
+msgid "AOI Inspection (Collector)"
+msgstr "AOI检验（采集设备）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1001
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1001
+msgid "AOI Inspection (Meter)"
+msgstr "AOI检验（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1006
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1006
+msgid "Basic Error (Meter)"
+msgstr "基本误差（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1007
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1007
+msgid "Basic Error Detail (Meter)"
+msgstr "基本误差详情（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2007
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2007
+msgid "Battery Current (Collector)"
+msgstr "电池电流（采集设备）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1005
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1005
+msgid "Battery Current (Meter)"
+msgstr "电池电流（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2002
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2002
+msgid "Board Test FCT (Collector)"
+msgstr "单板测试（采集设备）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1003
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1003
+msgid "Board Test FCT (Meter)"
+msgstr "单板测试（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2005
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2005
+msgid "Comm Interface Test (Collector)"
+msgstr "通信接口检测（采集设备）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1004
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1004
+msgid "Daily Timing Error (Meter)"
+msgstr "日计时误差（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2010
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2010
+msgid "High-Temp Aging (Collector)"
+msgstr "高温老化（采集设备）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1011
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1011
+msgid "High-Temp Aging (Meter)"
+msgstr "高温老化（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_meter
+msgid "Meter Ledger"
+msgstr "电能表台账"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2004
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2004
+msgid "Parameter Setting & Query (Collector)"
+msgstr "参数设置与查询（采集设备）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2008
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2008
+msgid "Reflow Soldering (Collector)"
+msgstr "回流焊（采集设备）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1009
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1009
+msgid "Reflow Soldering (Meter)"
+msgstr "回流焊（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2009
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2009
+msgid "Wave Soldering (Collector)"
+msgstr "波峰焊接（采集设备）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1010
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1010
+msgid "Wave Soldering (Meter)"
+msgstr "波峰焊接（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2003
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2003
+msgid "Withstand Voltage (Collector)"
+msgstr "耐压测试（采集设备）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1002
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1002
+msgid "Withstand Voltage (Meter)"
+msgstr "耐压测试（电能表）"
