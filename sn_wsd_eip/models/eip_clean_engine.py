@@ -415,3 +415,16 @@ class EipPassRecordClean(models.Model):
         correction wizard, which owns the rows it corrected)."""
         self._eip_clean_rows()
         return True
+
+    def action_open_correction_wizard(self):
+        """Open the correction wizard scoped to this row (server-side
+        context build -- the button context cannot call str())."""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Correction',
+            'res_model': 'sn.wsd.eip.clean.fix.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'default_record_ids': str(self.id)},
+        }

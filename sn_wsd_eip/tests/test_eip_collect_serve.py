@@ -17,6 +17,9 @@ class TestEipCollectServe(TransactionCase):
     def setUp(self):
         super().setUp()
         self.env = self.env(context=dict(self.env.context, lang='en_US'))
+        # clean room: seed/demo snapshots would be claimed by the FIFO
+        # serve (rollback restores them)
+        self.env['sn.wsd.eip.collect.outbox'].search([]).unlink()
         self.Interface = self.env['sn.wsd.eip.collect.interface']
         self.Outbox = self.env['sn.wsd.eip.collect.outbox']
         self.PassRecord = self.env['sn.wsd.eip.pass.record']

@@ -103,10 +103,9 @@
                     <button name="%(action_eip_clean_order_wizard)d"
                             type="action" string="Re-clean by Order"
                             groups="mrp.group_mrp_manager"/>
-                    <button name="%(action_eip_clean_fix_wizard)d"
-                            type="action" string="Correct"
+                    <button name="action_open_correction_wizard"
+                            type="object" string="Correct"
                             groups="mrp.group_mrp_manager"
-                            context="{'default_record_ids': str(id)}"
                             invisible="state == 'delivered'"/>
                 </header>
                 <sheet>

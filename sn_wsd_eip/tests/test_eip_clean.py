@@ -16,6 +16,7 @@ class TestEipClean(TransactionCase):
     def setUp(self):
         super().setUp()
         self.env = self.env(context=dict(self.env.context, lang='en_US'))
+        self.env['sn.wsd.eip.collect.outbox'].search([]).unlink()
         self.PassRecord = self.env['sn.wsd.eip.pass.record']
         self.Outbox = self.env['sn.wsd.eip.collect.outbox']
         self.Rule = self.env['sn.wsd.eip.clean.rule']
@@ -206,6 +207,15 @@ class TestEipClean(TransactionCase):
         payload = row.outbox_ids.payload
         self.assertEqual(payload['NAMEPLATE_CODE'],
                          '3730001000000687348014')
+
+    def test_805_correction_wizard_opener(self):
+        """The Correct button opener: server-built context, scoped to
+        the row."""
+        row = self._source()
+        action = row.action_open_correction_wizard()
+        self.assertEqual(action['res_model'], 'sn.wsd.eip.clean.fix.wizard')
+        self.assertEqual(action['context']['default_record_ids'],
+                         str(row.id))
 
     def test_81_measured_values_are_not_correctable(self):
         row = self._full_1002()
