@@ -94,49 +94,49 @@
             <field name="family">meter</field>
             <field name="name">Varistor Inspection</field>
             <field name="method">post</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
         <record id="collect_interface_1013" model="sn.wsd.eip.collect.interface">
             <field name="code">1013</field>
             <field name="family">meter</field>
             <field name="name">Optocoupler Inspection</field>
             <field name="method">post</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
         <record id="collect_interface_1014" model="sn.wsd.eip.collect.interface">
             <field name="code">1014</field>
             <field name="family">meter</field>
             <field name="name">Crystal Resonator Inspection</field>
             <field name="method">post</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
         <record id="collect_interface_1015" model="sn.wsd.eip.collect.interface">
             <field name="code">1015</field>
             <field name="family">meter</field>
             <field name="name">TVS Diode Inspection</field>
             <field name="method">post</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
         <record id="collect_interface_1016" model="sn.wsd.eip.collect.interface">
             <field name="code">1016</field>
             <field name="family">meter</field>
             <field name="name">Clock Battery Inspection</field>
             <field name="method">post</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
         <record id="collect_interface_1017" model="sn.wsd.eip.collect.interface">
             <field name="code">1017</field>
             <field name="family">meter</field>
             <field name="name">LCD Inspection</field>
             <field name="method">post</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
         <record id="collect_interface_1018" model="sn.wsd.eip.collect.interface">
             <field name="code">1018</field>
             <field name="family">meter</field>
             <field name="name">Current Transformer Inspection</field>
             <field name="method">post</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
 
         <!-- meter packing / shipping (inactive this round) -->
@@ -145,14 +145,14 @@
             <field name="family">meter</field>
             <field name="name">Packing Storage</field>
             <field name="method">post</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
         <record id="collect_interface_1091" model="sn.wsd.eip.collect.interface">
             <field name="code">1091</field>
             <field name="family">meter</field>
             <field name="name">Finished-Goods Shipping</field>
             <field name="method">post</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
 
         <!-- meter material report collection (inactive this round) -->
@@ -161,7 +161,7 @@
             <field name="family">meter</field>
             <field name="name">Material Report Collection</field>
             <field name="method">get</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
 
         <!-- ===== collection devices (2xxx, active 2001..2010) ===== -->
@@ -242,28 +242,28 @@
             <field name="family">collector</field>
             <field name="name">Varistor Inspection</field>
             <field name="method">post</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
         <record id="collect_interface_2012" model="sn.wsd.eip.collect.interface">
             <field name="code">2012</field>
             <field name="family">collector</field>
             <field name="name">Optocoupler Inspection</field>
             <field name="method">post</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
         <record id="collect_interface_2013" model="sn.wsd.eip.collect.interface">
             <field name="code">2013</field>
             <field name="family">collector</field>
             <field name="name">Crystal Resonator Inspection</field>
             <field name="method">post</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
         <record id="collect_interface_2014" model="sn.wsd.eip.collect.interface">
             <field name="code">2014</field>
             <field name="family">collector</field>
             <field name="name">TVS Diode Inspection</field>
             <field name="method">post</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
 
         <!-- collector packing / shipping (inactive this round) -->
@@ -272,14 +272,14 @@
             <field name="family">collector</field>
             <field name="name">Packing Storage</field>
             <field name="method">post</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
         <record id="collect_interface_2091" model="sn.wsd.eip.collect.interface">
             <field name="code">2091</field>
             <field name="family">collector</field>
             <field name="name">Finished-Goods Shipping</field>
             <field name="method">post</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
 
         <!-- collector material report collection (inactive this round) -->
@@ -288,7 +288,7 @@
             <field name="family">collector</field>
             <field name="name">Material Report Collection</field>
             <field name="method">get</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
 
     </data>

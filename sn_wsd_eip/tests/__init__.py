@@ -9,3 +9,4 @@ from . import test_eip_forms
 from . import test_eip_collect_serve
 from . import test_eip_collect_wire
 from . import test_eip_clean
+from . import test_eip_manual

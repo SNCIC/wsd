@@ -31,7 +31,8 @@ class EipCollectController(http.Controller):
     # Odoo 19 defaults auth='none' routes to a readonly cursor; this
     # endpoint delivers (flips states), so readonly=False is mandatory.
     @http.route('/api/eip/collect/<string:code>', type='http',
-                auth='none', methods=['POST'], csrf=False, readonly=False)
+                auth='none', methods=['POST', 'GET'], csrf=False,
+                readonly=False)
     def collect(self, code, **kwargs):
         try:
             body = json.loads(request.httprequest.get_data() or b'{}')

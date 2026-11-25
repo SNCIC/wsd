@@ -56,6 +56,11 @@ class EipConfig(models.Model):
     pull_start_date = fields.Date(
         string='Pull Start Date',
         help='First-sync start date; empty = no update-time condition.')
+    collect_base_url = fields.Char(
+        string='Collect Base URL',
+        help='Our externally reachable address, e.g. https://host:port '
+             '-- the prefix of the report-file download URLs handed to '
+             'the gateway by the raw-material report interface.')
     default_category_id = fields.Many2one(
         'sn.wsd.eip.category', string='Default Category',
         help='Category code default on business forms.')

@@ -1,3 +1,5 @@
+from odoo.exceptions import UserError
+
 from . import eip_test_common
 
 
@@ -134,9 +136,11 @@ class TestEipDetailExtract(eip_test_common.EipCaptureCase):
         self.assertEqual(row.leakage_current, 2.05)
         self.assertEqual(len(row.line_ids.filtered(
             lambda line: line.line_type == 'test_detail')), 1)
-        # delivered rows are frozen
+        # delivered rows are frozen: no write is possible after the
+        # gateway took them, and the backfill cron skips them
         row.state = 'delivered'
-        row.leakage_current = 0.0
+        with self.assertRaises(UserError):
+            row.leakage_current = 0.0
         self.env['sn.wsd.eip.pass.record']._cron_backfill_pending_values()
         row.invalidate_recordset()
-        self.assertFalse(row.leakage_current)
+        self.assertEqual(row.leakage_current, 2.05)

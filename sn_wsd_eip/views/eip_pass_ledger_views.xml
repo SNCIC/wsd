@@ -1003,4 +1003,172 @@
               parent="menu_eip_ledger_coll"
               action="action_eip_ledger_2010"
               sequence="10"/>
+    <!-- manual entry: editable and importable single-table lists for the
+         interfaces without station-pass capture (raw material
+         inspection, packing, shipping); delivered rows are hidden
+         because they live in the delivery history -->
+    <menuitem id="menu_eip_entry_manual"
+              name="Manual Entry"
+              parent="menu_eip_ledger_codes"
+              sequence="1"/>
+    <record id="view_eip_entry_raw_meter" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.entry.raw_meter</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="info_type_code"/>
+                <field name="production_order_no"/>
+                <field name="work_order_no"/>
+                <field name="material_check_batch"/>
+                <field name="material_batch"/>
+                <field name="material_brand"/>
+                <field name="material_supplier"/>
+                <field name="material_leave_date"/>
+                <field name="incoming_check_date"/>
+                <field name="test_code"/>
+                <field name="model_code"/>
+                <field name="check_time"/>
+                <field name="conclusion"/>
+                <field name="varistor_voltage"/>
+                <field name="error_value"/>
+                <field name="ratio_value"/>
+                <field name="frequency_value"/>
+                <field name="voltage_values"/>
+                <field name="leakage_current"/>
+                <field name="contrast_value"/>
+                <field name="clean_note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_entry_raw_meter" model="ir.actions.act_window">
+        <field name="name">Raw Inspection Entry (Meter)</field>
+        <field name="res_model">sn.wsd.eip.pass.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">['info_type_code', 'in', ['1012', '1013', '1014', '1015', '1016', '1017', '1018']]</field>
+    </record>
+
+    <menuitem id="menu_eip_entry_raw_meter"
+              name="Raw Inspection Entry (Meter)"
+              parent="menu_eip_entry_manual"
+              action="action_eip_entry_raw_meter"
+              sequence="10"/>
+
+    <record id="view_eip_entry_raw_coll" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.entry.raw_coll</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="info_type_code"/>
+                <field name="production_order_no"/>
+                <field name="work_order_no"/>
+                <field name="material_check_batch"/>
+                <field name="material_batch"/>
+                <field name="material_brand"/>
+                <field name="material_supplier"/>
+                <field name="material_leave_date"/>
+                <field name="incoming_check_date"/>
+                <field name="test_code"/>
+                <field name="model_code"/>
+                <field name="check_time"/>
+                <field name="conclusion"/>
+                <field name="varistor_voltage"/>
+                <field name="error_value"/>
+                <field name="ratio_value"/>
+                <field name="frequency_value"/>
+                <field name="voltage_values"/>
+                <field name="leakage_current"/>
+                <field name="contrast_value"/>
+                <field name="clean_note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_entry_raw_coll" model="ir.actions.act_window">
+        <field name="name">Raw Inspection Entry (Collector)</field>
+        <field name="res_model">sn.wsd.eip.pass.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">['info_type_code', 'in', ['2011', '2012', '2013', '2014']]</field>
+    </record>
+
+    <menuitem id="menu_eip_entry_raw_coll"
+              name="Raw Inspection Entry (Collector)"
+              parent="menu_eip_entry_manual"
+              action="action_eip_entry_raw_coll"
+              sequence="20"/>
+
+    <record id="view_eip_entry_pack_meter" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.entry.pack_meter</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="info_type_code"/>
+                <field name="production_order_no"/>
+                <field name="work_order_no"/>
+                <field name="test_code"/>
+                <field name="model_code"/>
+                <field name="nameplate_code"/>
+                <field name="nameplate_start"/>
+                <field name="nameplate_final"/>
+                <field name="number"/>
+                <field name="unit"/>
+                <field name="storage_date"/>
+                <field name="deliver_date"/>
+                <field name="deliver_status"/>
+                <field name="conclusion"/>
+                <field name="clean_note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_entry_pack_meter" model="ir.actions.act_window">
+        <field name="name">Packing &amp; Shipping Entry (Meter)</field>
+        <field name="res_model">sn.wsd.eip.pass.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">['info_type_code', 'in', ['1090', '1091']]</field>
+    </record>
+
+    <menuitem id="menu_eip_entry_pack_meter"
+              name="Packing &amp; Shipping Entry (Meter)"
+              parent="menu_eip_entry_manual"
+              action="action_eip_entry_pack_meter"
+              sequence="30"/>
+
+    <record id="view_eip_entry_pack_coll" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.entry.pack_coll</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="info_type_code"/>
+                <field name="production_order_no"/>
+                <field name="work_order_no"/>
+                <field name="test_code"/>
+                <field name="model_code"/>
+                <field name="nameplate_code"/>
+                <field name="nameplate_start"/>
+                <field name="nameplate_final"/>
+                <field name="number"/>
+                <field name="unit"/>
+                <field name="storage_date"/>
+                <field name="deliver_date"/>
+                <field name="deliver_status"/>
+                <field name="conclusion"/>
+                <field name="clean_note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_entry_pack_coll" model="ir.actions.act_window">
+        <field name="name">Packing &amp; Shipping Entry (Collector)</field>
+        <field name="res_model">sn.wsd.eip.pass.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">['info_type_code', 'in', ['2090', '2091']]</field>
+    </record>
+
+    <menuitem id="menu_eip_entry_pack_coll"
+              name="Packing &amp; Shipping Entry (Collector)"
+              parent="menu_eip_entry_manual"
+              action="action_eip_entry_pack_coll"
+              sequence="40"/>
+
 </odoo>

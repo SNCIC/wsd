@@ -19,8 +19,9 @@ columns; corrections ride along at synthesis (see eip_clean_engine).
 import logging
 from datetime import timedelta
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from odoo import Command
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -190,6 +191,50 @@ class EipPassRecord(models.Model):
         help='2004 parameter setting & query: grid-issued device '
              'number (lower nameplate).')
 
+    # ----- raw material inspection (1012..1018 / 2011..2014) -----
+    material_check_batch = fields.Char(
+        string='Material Check Batch',
+        help='Raw-material inspection batch of our side.')
+    material_batch = fields.Char(
+        string='Material Batch',
+        help='Batch number of the manufacturer.')
+    material_brand = fields.Char(
+        string='Material Brand',
+        help='Brand full name, or the agent full name when unbranded.')
+    material_supplier = fields.Char(
+        string='Material Manufacturer',
+        help='Manufacturer full name of the raw material.')
+    material_leave_date = fields.Date(
+        string='Material Leave Date',
+        help='Manufacturer leave date; weekly dates become Monday.')
+    incoming_check_date = fields.Date(
+        string='Incoming Check Date')
+    varistor_voltage = fields.Float(
+        string='Varistor Voltage (V)', digits=(10, 1))
+    ratio_value = fields.Float(
+        string='Ratio Value (%)', digits=(10, 1))
+    frequency_value = fields.Float(
+        string='Frequency Value (ppm)', digits=(10, 1))
+    voltage_values = fields.Float(
+        string='Nominal Voltage (V)', digits=(10, 3))
+    contrast_value = fields.Float(
+        string='Contrast Value (%)', digits=(10, 3))
+
+    # ----- packing / shipping (1090/1091 / 2090/2091) -----
+    number = fields.Integer(string='Number')
+    unit = fields.Char(string='Unit',
+        help='Meter: 只; collection device: 台.')
+    storage_date = fields.Date(string='Storage Date')
+    nameplate_start = fields.Char(
+        string='Nameplate Start',
+        help='Grid device number range start; * for random codes.')
+    nameplate_final = fields.Char(
+        string='Nameplate Final',
+        help='Grid device number range end; * for random codes.')
+    deliver_date = fields.Date(string='Deliver Date')
+    deliver_status = fields.Char(
+        string='Deliver Status', help='0 not shipped, 1 shipped.')
+
     # ----- state / metadata -----
     state = fields.Selection(
         selection=[
@@ -228,6 +273,17 @@ class EipPassRecord(models.Model):
         'unique(company_id, history_id)',
         'This station-pass row is already collected.',
     )
+
+    # the only columns the delivery stamp itself may write on an
+    # already-delivered row -- everything else is frozen forever
+    DELIVERY_WRITE_KEYS = frozenset({'state', 'upload_time'})
+
+    def write(self, vals):
+        if any(record.state == 'delivered' for record in self)                 and any(key not in self.DELIVERY_WRITE_KEYS for key in vals):
+            raise UserError(_(
+                'Delivered rows are frozen: the gateway already took '
+                'them, nothing can be edited afterwards.'))
+        return super().write(vals)
 
     # ------------------------------------------------------------------
     # spec family (which production-data spec a row belongs to)

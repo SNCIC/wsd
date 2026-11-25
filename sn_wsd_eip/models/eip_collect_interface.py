@@ -82,6 +82,18 @@ class EipCollectInterface(models.Model):
         ], limit=1)
         if not config:
             raise EipCollectError('no active EIP integration config')
+        if interface.method == 'get':
+            if not config.collect_base_url:
+                raise EipCollectError(
+                    'collect base URL not configured: fill it under EIP '
+                    'Configuration so the gateway can download the '
+                    'report files')
+            claimed = self.env['sn.wsd.eip.raw.report']._eip_claim(
+                interface.family, amount)
+            return {
+                'supplier_code': config.supplier_code,
+                'data': claimed._eip_report_payloads(config.collect_base_url),
+            }
         claimed = self.env['sn.wsd.eip.collect.outbox']._eip_claim(
             code, amount)
         return {

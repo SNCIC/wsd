@@ -1978,6 +1978,8 @@ msgstr "物料"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__materials_batch
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__material_batch
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_report__material_batch
 msgid "Material Batch"
 msgstr "物料批次"
 
@@ -3244,6 +3246,7 @@ msgstr "备注"
 
 #. module: sn_wsd_eip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_process_work_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_raw_report_form
 msgid "Report"
 msgstr "报工内容"
 
@@ -5499,3 +5502,267 @@ msgstr "全部记录"
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_meter
 msgid "Meter Snapshot"
 msgstr "电能表记录"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__deliver_status
+msgid "0 not shipped, 1 shipped."
+msgstr "0 未发货、1 已发货。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_raw_report_form
+msgid "Batch & Files"
+msgstr "批次与文件"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__material_batch
+msgid "Batch number of the manufacturer."
+msgstr "制造商批次号。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__material_brand
+msgid "Brand full name, or the agent full name when unbranded."
+msgstr "品牌全称，无品牌传代理商全称。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_config__collect_base_url
+msgid "Collect Base URL"
+msgstr "采集外网地址"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__contrast_value
+msgid "Contrast Value (%)"
+msgstr "比差值（%）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__deliver_date
+msgid "Deliver Date"
+msgstr "发货时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__deliver_status
+msgid "Deliver Status"
+msgstr "发货状态"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_pass_record.py:0
+msgid ""
+"Delivered rows are frozen: the gateway already took them, nothing can be "
+"edited afterwards."
+msgstr "已交付的行已冻结：网关取走后任何字段不可再改。"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_raw_report
+msgid "EIP Raw Material Report"
+msgstr "EIP 原材料检验报告"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_report__test_code
+msgid "File serial number, unique per procedure and report type."
+msgstr "文件流水号，同一工序同一报告类型唯一。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__frequency_value
+msgid "Frequency Value (ppm)"
+msgstr "标称频差（ppm）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__nameplate_final
+msgid "Grid device number range end; * for random codes."
+msgstr "国网设备统一编号（终号）；随机编码用 * 表示。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__nameplate_start
+msgid "Grid device number range start; * for random codes."
+msgstr "国网设备统一编号（始号）；随机编码用 * 表示。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__incoming_check_date
+msgid "Incoming Check Date"
+msgstr "来料检验日期"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_raw_report__test_file_type__1
+msgid "Incoming Check Report"
+msgstr "来料检验报告"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_raw_report
+msgid ""
+"Incoming-check and manufacturer reports, served to the\n"
+"                gateway by the raw-material report interface; delivered\n"
+"                records stay forever as the audit trail."
+msgstr "来料检验报告与生产厂商报告，经原材料报告接口交付网关；已交付记录永久留档。"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_entry_manual
+msgid "Manual Entry"
+msgstr "手工录入"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_raw_report__test_file_type__2
+msgid "Manufacturer Report"
+msgstr "生产厂商报告"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__material_supplier
+msgid "Manufacturer full name of the raw material."
+msgstr "原材料制造商全称。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__material_leave_date
+msgid "Manufacturer leave date; weekly dates become Monday."
+msgstr "制造商出厂日期；按周给的日期默认周一。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__material_brand
+msgid "Material Brand"
+msgstr "原材料品牌"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__material_check_batch
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_report__material_check_batch
+msgid "Material Check Batch"
+msgstr "原材料检验批次号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__material_leave_date
+msgid "Material Leave Date"
+msgstr "原材料出厂日期"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__material_supplier
+msgid "Material Manufacturer"
+msgstr "原材料制造商"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__unit
+msgid "Meter: 只; collection device: 台."
+msgstr "电能表“只”；采集设备“台”。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__nameplate_final
+msgid "Nameplate Final"
+msgstr "局编号/下铭牌号（终号）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__nameplate_start
+msgid "Nameplate Start"
+msgstr "局编号/下铭牌号（始号）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__voltage_values
+msgid "Nominal Voltage (V)"
+msgstr "标称电压（V）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__number
+msgid "Number"
+msgstr "数量"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_raw_report
+msgid "One record = one report file of one raw-material batch"
+msgstr "一条记录 = 一个原材料批次的报告文件"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_config__collect_base_url
+msgid ""
+"Our externally reachable address, e.g. https://host:port -- the prefix of "
+"the report-file download URLs handed to the gateway by the raw-material "
+"report interface."
+msgstr "我方可被网关访问的外网地址（如 https://host:port）——原材料报告接口交付网关的报告文件下载 URL 前缀。"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_entry_pack_coll
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_entry_pack_coll
+msgid "Packing & Shipping Entry (Collector)"
+msgstr "出入库录入（采集设备）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_entry_pack_meter
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_entry_pack_meter
+msgid "Packing & Shipping Entry (Meter)"
+msgstr "出入库录入（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_report__procedure_code
+msgid "Procedure Code"
+msgstr "工序编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_report__production_work_no
+msgid "Production Work No."
+msgstr "生产工单号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__ratio_value
+msgid "Ratio Value (%)"
+msgstr "传输比实测值（%）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_entry_raw_coll
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_entry_raw_coll
+msgid "Raw Inspection Entry (Collector)"
+msgstr "原材料检验录入（采集设备）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_entry_raw_meter
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_entry_raw_meter
+msgid "Raw Inspection Entry (Meter)"
+msgstr "原材料检验录入（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_raw_report
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_raw_report
+msgid "Raw Material Reports"
+msgstr "原材料检验报告"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__material_check_batch
+msgid "Raw-material inspection batch of our side."
+msgstr "我方来料检验批次号。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_report__test_code
+msgid "Report Code"
+msgstr "文件流水号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_report__attachment_ids
+msgid "Report Files"
+msgstr "报告文件"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_report__test_file_type
+msgid "Report Type"
+msgstr "报告类型"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__storage_date
+msgid "Storage Date"
+msgstr "入库时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_report__procedure_code
+msgid ""
+"The raw-material inspection procedure the report belongs to (platform-issued"
+" names)."
+msgstr "报告所属的原材料检验工序（平台下发名称）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_report__attachment_ids
+msgid ""
+"The report files themselves (PDF etc); served to the gateway as downloadable"
+" URLs."
+msgstr "报告文件本体（PDF 等），以可下载 URL 交付网关。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__unit
+msgid "Unit"
+msgstr "计量单位"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__varistor_voltage
+msgid "Varistor Voltage (V)"
+msgstr "压敏电压实测值（V）"

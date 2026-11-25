@@ -3,7 +3,7 @@ access_sn_wsd_eip_operation_mapping_user,sn.wsd.eip.operation.mapping user,model
 access_sn_wsd_eip_operation_mapping_manager,sn.wsd.eip.operation.mapping manager,model_sn_wsd_eip_operation_mapping,mrp.group_mrp_manager,1,1,1,1
 access_sn_wsd_eip_value_mapping_user,sn.wsd.eip.value.mapping user,model_sn_wsd_eip_value_mapping,mrp.group_mrp_user,1,0,0,0
 access_sn_wsd_eip_value_mapping_manager,sn.wsd.eip.value.mapping manager,model_sn_wsd_eip_value_mapping,mrp.group_mrp_manager,1,1,1,1
-access_sn_wsd_eip_pass_record_user,sn.wsd.eip.pass.record user,model_sn_wsd_eip_pass_record,mrp.group_mrp_user,1,0,0,0
+access_sn_wsd_eip_pass_record_user,sn.wsd.eip.pass.record user,model_sn_wsd_eip_pass_record,mrp.group_mrp_user,1,1,1,0
 access_sn_wsd_eip_pass_record_manager,sn.wsd.eip.pass.record manager,model_sn_wsd_eip_pass_record,mrp.group_mrp_manager,1,1,1,1
 access_sn_wsd_eip_pass_record_line_user,sn.wsd.eip.pass.record.line user,model_sn_wsd_eip_pass_record_line,mrp.group_mrp_user,1,0,0,0
 access_sn_wsd_eip_pass_record_line_manager,sn.wsd.eip.pass.record.line manager,model_sn_wsd_eip_pass_record_line,mrp.group_mrp_manager,1,1,1,1
@@ -83,3 +83,5 @@ access_sn_wsd_eip_clean_order_wizard_user,sn.wsd.eip.clean.order.wizard user,mod
 access_sn_wsd_eip_clean_order_wizard_manager,sn.wsd.eip.clean.order.wizard manager,model_sn_wsd_eip_clean_order_wizard,mrp.group_mrp_manager,1,1,1,1
 access_sn_wsd_eip_push_preview_user,sn.wsd.eip.push.preview user,model_sn_wsd_eip_push_preview,mrp.group_mrp_user,1,1,1,1
 access_sn_wsd_eip_push_preview_manager,sn.wsd.eip.push.preview manager,model_sn_wsd_eip_push_preview,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_eip_raw_report_user,sn.wsd.eip.raw.report user,model_sn_wsd_eip_raw_report,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_eip_raw_report_manager,sn.wsd.eip.raw.report manager,model_sn_wsd_eip_raw_report,mrp.group_mrp_manager,1,1,1,1
