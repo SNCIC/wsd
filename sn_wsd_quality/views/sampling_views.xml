@@ -18,6 +18,18 @@
         <field name="model">sn.wsd.quality.sampling.standard</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="action_generate_gb2828_matrix" type="object"
+                            string="Generate GB/T 2828.1 Matrix"
+                            help="Add every missing lot range and sampling plan of the GB/T 2828.1 master table. Existing cells are left untouched."/>
+                    <button name="action_align_gb2828_matrix" type="object"
+                            string="Align Matrix with GB/T 2828.1"
+                            help="Rewrite the cells that differ from the GB/T 2828.1 master table."
+                            confirm="This overwrites every cell that differs from the GB/T 2828.1 master table. Continue?"/>
+                    <button name="action_check_sampling_gaps" type="object"
+                            string="Check Matrix Gaps"
+                            help="List the plan cells the inspection schemes using this standard still miss."/>
+                </header>
                 <sheet>
                     <div class="oe_title">
                         <h1><field name="name"/></h1>

@@ -157,6 +157,17 @@ export class SamplingMatrixAction extends Component {
             this.applyData(data);
             this.state.dirty = false;
             this.notification.add(_t("Sampling matrix saved."), { type: "success" });
+            const missing = data.missing_plans || [];
+            if (missing.length) {
+                this.notification.add(
+                    _t(
+                        "An inspection scheme still misses %s plan cell(s): %s. A receipt using it will be blocked until the cell is filled.",
+                        missing.length,
+                        missing.join(", ")
+                    ),
+                    { type: "warning", sticky: true }
+                );
+            }
         } finally {
             this.state.saving = false;
         }

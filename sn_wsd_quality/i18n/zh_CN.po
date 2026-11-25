@@ -6266,3 +6266,125 @@ msgstr "条码ID"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
 msgid "Inspection Request Form"
 msgstr "送检单"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_sampling_standard_form
+msgid "Generate GB/T 2828.1 Matrix"
+msgstr "生成 GB/T 2828.1 抽样矩阵"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_sampling_standard_form
+msgid "Align Matrix with GB/T 2828.1"
+msgstr "按 GB/T 2828.1 校正矩阵"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_sampling_standard_form
+msgid "Check Matrix Gaps"
+msgstr "检查矩阵缺口"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_sampling_standard_form
+msgid ""
+"Add every missing lot range and sampling plan of the GB/T 2828.1 master "
+"table. Existing cells are left untouched."
+msgstr "补齐国标 GB/T 2828.1 主表中缺失的批量范围与抽样方案，已有单元格保持不变。"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_sampling_standard_form
+msgid "Rewrite the cells that differ from the GB/T 2828.1 master table."
+msgstr "按 GB/T 2828.1 主表重写与之不一致的单元格。"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_sampling_standard_form
+msgid "List the plan cells the inspection schemes using this standard still miss."
+msgstr "列出使用本标准的检验方案仍缺失的方案单元格。"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_sampling_standard_form
+msgid ""
+"This overwrites every cell that differs from the GB/T 2828.1 master table. "
+"Continue?"
+msgstr "将覆盖所有与 GB/T 2828.1 主表不一致的单元格，是否继续？"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid "Sampling matrix generated"
+msgstr "抽样矩阵已生成"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid "Sampling matrix aligned"
+msgstr "抽样矩阵已校正"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid "Sampling matrix complete"
+msgstr "抽样矩阵完整"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid "Missing sampling plans"
+msgstr "缺少抽样方案"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid ""
+"%(ranges)s lot ranges and %(plans)s sampling plans added from the GB/T "
+"2828.1 master table. Existing cells were left untouched."
+msgstr "已按 GB/T 2828.1 主表补充 %(ranges)s 条批量范围与 %(plans)s 条抽样方案，已有单元格保持不变。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid ""
+"%(ranges)s lot ranges and %(plans)s sampling plans added; "
+"%(aligned_ranges)s lot ranges and %(aligned_plans)s plans re-aligned with "
+"the GB/T 2828.1 master table."
+msgstr "已补充 %(ranges)s 条批量范围与 %(plans)s 条抽样方案；按 GB/T 2828.1 主表校正 %(aligned_ranges)s 条批量范围与 %(aligned_plans)s 条方案。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid "Every plan cell an inspection scheme needs is configured."
+msgstr "检验方案所需的方案单元格均已配置。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid ""
+"%(count)s plan cells are still missing (mode / sample size code / AQL): "
+"%(gaps)s"
+msgstr "仍有 %(count)s 个方案单元格缺失（模式 / 样本量代码 / AQL）：%(gaps)s"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid ""
+"The AQL sampling matrix of standard %(standard)s has no lot range for level "
+"%(level)s and lot quantity %(qty)s. Add the range in Quality > Configuration "
+"> AQL Sampling Matrix, or press \"Generate GB/T 2828.1 Matrix\" on that "
+"standard."
+msgstr "标准 %(standard)s 的 AQL 抽样矩阵中没有检验水平 %(level)s、批量 %(qty)s 对应的批量范围。请在 质量 > 配置 > AQL规则 中补充该范围，或在该标准上点击“生成 GB/T 2828.1 抽样矩阵”。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid ""
+"The AQL sampling matrix of standard %(standard)s has no plan for %(mode)s "
+"mode, sample size code %(code)s (lot quantity %(qty)s at inspection level "
+"%(level)s) and AQL %(aql)s. Add the cell in Quality > Configuration > AQL "
+"Sampling Matrix, or press \"Generate GB/T 2828.1 Matrix\" on that standard."
+msgstr "标准 %(standard)s 的 AQL 抽样矩阵中没有 模式 %(mode)s、样本量代码 %(code)s（检验水平 %(level)s 下批量 %(qty)s）、AQL %(aql)s 对应的抽样方案。请在 质量 > 配置 > AQL规则 中补充该单元格，或在该标准上点击“生成 GB/T 2828.1 抽样矩阵”。"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.js:0
+msgid ""
+"An inspection scheme still misses %s plan cell(s): %s. A receipt using it "
+"will be blocked until the cell is filled."
+msgstr "仍有检验方案缺少 %s 个方案单元格：%s。在其补齐前，使用该方案的收货将被阻止。"

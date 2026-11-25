@@ -1,3 +1,5 @@
+import math
+
 from odoo import Command, api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools.float_utils import float_compare
@@ -42,6 +44,44 @@ SAMPLE_SELECTION_METHOD_SELECTION = [
 DEFAULT_AQL_VALUES = [0.01, 0.015, 0.025, 0.04, 0.065, 0.1, 0.15, 0.25, 0.4, 0.65, 1.0, 1.5, 2.5, 4.0, 6.5, 10.0]
 DEFAULT_SAMPLE_SIZE_CODES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R']
 MAX_DETAILED_SAMPLE_ROWS = 500
+
+# GB/T 2828.1 (identical to ISO 2859-1) single sampling plans. The master
+# table is not transcribed cell by cell: a plan cell only depends on the
+# sample size and the AQL, and walks the R5 acceptance number series from the
+# first size whose defect expectation (n * AQL / 100) reaches
+# GB2828_MIN_LAMBDA. Cells below that size are the arrow cells of the printed
+# table: they borrow the first applicable plan and its sample size.
+GB2828_SAMPLE_SIZES = {
+    'A': 2, 'B': 3, 'C': 5, 'D': 8, 'E': 13, 'F': 20, 'G': 32, 'H': 50,
+    'J': 80, 'K': 125, 'L': 200, 'M': 315, 'N': 500, 'P': 800, 'Q': 1250,
+    'R': 2000,
+}
+GB2828_ACCEPT_NUMBERS = [
+    0, 1, 2, 3, 5, 7, 10, 14, 21, 30, 44, 68, 100, 150, 200, 300, 450, 700,
+    1000,
+]
+GB2828_MIN_LAMBDA = 0.12
+GB2828_STEP_RATIO = 1.585
+
+# Sample size code letters, Table 1 of GB/T 2828.1: lot quantity range and
+# the code each of the seven inspection levels maps it to.
+GB2828_LOT_CODE_TABLE = [
+    (2, 8, {'s1': 'A', 's2': 'A', 's3': 'A', 's4': 'A', 'g1': 'A', 'g2': 'A', 'g3': 'B'}),
+    (9, 15, {'s1': 'A', 's2': 'A', 's3': 'A', 's4': 'A', 'g1': 'A', 'g2': 'B', 'g3': 'C'}),
+    (16, 25, {'s1': 'A', 's2': 'A', 's3': 'B', 's4': 'B', 'g1': 'B', 'g2': 'C', 'g3': 'D'}),
+    (26, 50, {'s1': 'A', 's2': 'B', 's3': 'B', 's4': 'C', 'g1': 'C', 'g2': 'D', 'g3': 'E'}),
+    (51, 90, {'s1': 'B', 's2': 'B', 's3': 'C', 's4': 'C', 'g1': 'C', 'g2': 'E', 'g3': 'F'}),
+    (91, 150, {'s1': 'B', 's2': 'B', 's3': 'C', 's4': 'D', 'g1': 'D', 'g2': 'F', 'g3': 'G'}),
+    (151, 280, {'s1': 'B', 's2': 'C', 's3': 'D', 's4': 'E', 'g1': 'E', 'g2': 'G', 'g3': 'H'}),
+    (281, 500, {'s1': 'B', 's2': 'C', 's3': 'D', 's4': 'E', 'g1': 'F', 'g2': 'H', 'g3': 'J'}),
+    (501, 1200, {'s1': 'C', 's2': 'C', 's3': 'E', 's4': 'F', 'g1': 'G', 'g2': 'J', 'g3': 'K'}),
+    (1201, 3200, {'s1': 'C', 's2': 'D', 's3': 'E', 's4': 'G', 'g1': 'H', 'g2': 'K', 'g3': 'L'}),
+    (3201, 10000, {'s1': 'C', 's2': 'D', 's3': 'F', 's4': 'G', 'g1': 'J', 'g2': 'L', 'g3': 'M'}),
+    (10001, 35000, {'s1': 'C', 's2': 'D', 's3': 'F', 's4': 'H', 'g1': 'K', 'g2': 'M', 'g3': 'N'}),
+    (35001, 150000, {'s1': 'C', 's2': 'D', 's3': 'G', 's4': 'J', 'g1': 'L', 'g2': 'N', 'g3': 'P'}),
+    (150001, 500000, {'s1': 'C', 's2': 'D', 's3': 'G', 's4': 'J', 'g1': 'M', 'g2': 'P', 'g3': 'Q'}),
+    (500001, 999999999, {'s1': 'C', 's2': 'D', 's3': 'H', 's4': 'K', 'g1': 'N', 'g2': 'Q', 'g3': 'R'}),
+]
 
 
 class QualitySamplingStandard(models.Model):
@@ -130,9 +170,229 @@ class QualitySamplingStandard(models.Model):
     @api.model
     def _default_plan_rows(self):
         return [
-            {'sample_size_code': code, 'sample_size': size}
-            for code, size in zip(DEFAULT_SAMPLE_SIZE_CODES, [2, 3, 5, 8, 13, 20, 32, 50, 80, 125, 200, 315, 500, 800, 1250, 2000])
+            {'sample_size_code': code, 'sample_size': GB2828_SAMPLE_SIZES[code]}
+            for code in DEFAULT_SAMPLE_SIZE_CODES
         ]
+
+    @api.model
+    def _gb2828_plan_cell(self, sample_size, aql_value):
+        """Acceptance numbers of one GB/T 2828.1 single sampling cell.
+
+        Returns the sample size actually applied, the acceptance number and
+        the rejection number. On an arrow cell the printed table borrows the
+        plan of the first applicable size and samples at that size too, which
+        is why the applied size is returned instead of the requested one.
+        """
+        aql = float(aql_value or 0.0)
+        if aql <= 0.0:
+            return sample_size, 0, 1
+        sizes = [GB2828_SAMPLE_SIZES[code] for code in DEFAULT_SAMPLE_SIZE_CODES]
+        applied_size = sample_size
+        if applied_size * aql / 100.0 < GB2828_MIN_LAMBDA:
+            applied_size = next(
+                (size for size in sizes if size * aql / 100.0 >= GB2828_MIN_LAMBDA),
+                sizes[-1],
+            )
+        step = math.log(
+            applied_size * aql / 100.0 / GB2828_MIN_LAMBDA
+        ) / math.log(GB2828_STEP_RATIO)
+        index = max(0, min(int(math.floor(step + 1e-9)), len(GB2828_ACCEPT_NUMBERS) - 1))
+        accept_qty = GB2828_ACCEPT_NUMBERS[index]
+        return applied_size, accept_qty, accept_qty + 1
+
+    @api.model
+    def _gb2828_plan_values(self, switching_mode, sample_size, aql_value):
+        applied_size, accept_qty, reject_qty = self._gb2828_plan_cell(sample_size, aql_value)
+        # Tightened inspection takes one acceptance number away, reduced adds
+        # one, the way the switching tables of the standard shift the plan.
+        if switching_mode == 'tightened':
+            accept_qty = max(0, accept_qty - 1)
+            reject_qty = accept_qty + 1
+        elif switching_mode == 'reduced':
+            accept_qty += 1
+            reject_qty = accept_qty + 1
+        return applied_size, accept_qty, reject_qty
+
+    def _generate_gb2828_matrix(self, overwrite=False):
+        """Fill the standard with the GB/T 2828.1 master table.
+
+        Missing lot ranges and plan cells are added; existing cells are only
+        rewritten when ``overwrite`` is set, so a quality decision taken on
+        one cell survives a topology update.
+        """
+        self.ensure_one()
+        range_model = self.env['sn.wsd.quality.sampling.lot.range']
+        plan_model = self.env['sn.wsd.quality.sampling.plan']
+
+        existing_ranges = {
+            (record.inspection_level, record.lot_qty_min, record.lot_qty_max): record
+            for record in self.lot_range_ids
+        }
+        created_ranges = aligned_ranges = 0
+        for lot_qty_min, lot_qty_max, codes in GB2828_LOT_CODE_TABLE:
+            for level in dict(INSPECTION_LEVEL_SELECTION):
+                code = codes[level]
+                record = existing_ranges.get((level, lot_qty_min, lot_qty_max))
+                if record:
+                    if overwrite and record.sample_size_code != code:
+                        record.write({'sample_size_code': code})
+                        aligned_ranges += 1
+                    continue
+                range_model.create({
+                    'standard_id': self.id,
+                    'inspection_level': level,
+                    'lot_qty_min': lot_qty_min,
+                    'lot_qty_max': lot_qty_max,
+                    'sample_size_code': code,
+                })
+                created_ranges += 1
+
+        existing_plans = {
+            (record.switching_mode, record.sample_size_code, round(record.aql_value, 3)): record
+            for record in self.plan_ids
+        }
+        created_plans = aligned_plans = 0
+        pending = []
+        for mode in dict(SWITCHING_MODE_SELECTION):
+            for aql_value in DEFAULT_AQL_VALUES:
+                for code in DEFAULT_SAMPLE_SIZE_CODES:
+                    sample_size, accept_qty, reject_qty = self._gb2828_plan_values(
+                        mode, GB2828_SAMPLE_SIZES[code], aql_value)
+                    record = existing_plans.get((mode, code, round(aql_value, 3)))
+                    if record:
+                        if overwrite and (
+                                record.sample_size != sample_size
+                                or record.accept_qty != accept_qty
+                                or record.reject_qty != reject_qty):
+                            record.write({
+                                'sample_size': sample_size,
+                                'accept_qty': accept_qty,
+                                'reject_qty': reject_qty,
+                            })
+                            aligned_plans += 1
+                        continue
+                    pending.append({
+                        'standard_id': self.id,
+                        'switching_mode': mode,
+                        'sample_size_code': code,
+                        'sample_size': sample_size,
+                        'aql_value': aql_value,
+                        'accept_qty': accept_qty,
+                        'reject_qty': reject_qty,
+                    })
+                    created_plans += 1
+        if pending:
+            plan_model.create(pending)
+        return created_ranges, aligned_ranges, created_plans, aligned_plans
+
+    def _sampling_gap_message(self):
+        """List the scheme-driven plan cells this standard is still missing."""
+        self.ensure_one()
+        schemes = self.env['sn.wsd.quality.inspection.scheme'].search([
+            ('sampling_standard_id', '=', self.id),
+            ('sampling_method', '=', 'aql'),
+            ('active', '=', True),
+        ])
+        gaps = []
+        seen = set()
+        for scheme in schemes:
+            codes = sorted(set(self.lot_range_ids.filtered(
+                lambda record, level=scheme.inspection_level: record.inspection_level == level
+            ).mapped('sample_size_code')))
+            for code in codes:
+                key = (scheme.switching_mode, code, round(scheme.aql_value, 3))
+                if key in seen:
+                    continue
+                covered = self.plan_ids.filtered(
+                    lambda record, mode=scheme.switching_mode, sample_code=code,
+                    aql=scheme.aql_value: (
+                        record.switching_mode == mode
+                        and record.sample_size_code == sample_code
+                        and float_compare(record.aql_value, aql, precision_digits=3) == 0
+                    )
+                )
+                if not covered:
+                    seen.add(key)
+                    gaps.append('%s / %s / AQL %g' % (
+                        dict(SWITCHING_MODE_SELECTION).get(scheme.switching_mode),
+                        code,
+                        scheme.aql_value,
+                    ))
+        return gaps
+
+    def action_generate_gb2828_matrix(self):
+        self.ensure_one()
+        created_ranges, _aligned_ranges, created_plans, _aligned_plans = \
+            self._generate_gb2828_matrix(overwrite=False)
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Sampling matrix generated'),
+                'message': _(
+                    '%(ranges)s lot ranges and %(plans)s sampling plans added '
+                    'from the GB/T 2828.1 master table. Existing cells were '
+                    'left untouched.',
+                    ranges=created_ranges,
+                    plans=created_plans,
+                ),
+                'type': 'success',
+                'sticky': False,
+            },
+        }
+
+    def action_align_gb2828_matrix(self):
+        self.ensure_one()
+        created_ranges, aligned_ranges, created_plans, aligned_plans = \
+            self._generate_gb2828_matrix(overwrite=True)
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Sampling matrix aligned'),
+                'message': _(
+                    '%(ranges)s lot ranges and %(plans)s sampling plans added; '
+                    '%(aligned_ranges)s lot ranges and %(aligned_plans)s plans '
+                    're-aligned with the GB/T 2828.1 master table.',
+                    ranges=created_ranges,
+                    plans=created_plans,
+                    aligned_ranges=aligned_ranges,
+                    aligned_plans=aligned_plans,
+                ),
+                'type': 'success',
+                'sticky': False,
+            },
+        }
+
+    def action_check_sampling_gaps(self):
+        self.ensure_one()
+        gaps = self._sampling_gap_message()
+        if not gaps:
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': _('Sampling matrix complete'),
+                    'message': _('Every plan cell an inspection scheme needs is configured.'),
+                    'type': 'success',
+                    'sticky': False,
+                },
+            }
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Missing sampling plans'),
+                'message': _(
+                    '%(count)s plan cells are still missing (mode / sample size '
+                    'code / AQL): %(gaps)s',
+                    count=len(gaps),
+                    gaps=', '.join(gaps),
+                ),
+                'type': 'warning',
+                'sticky': True,
+            },
+        }
 
     @api.model
     def action_open_sampling_matrix(self):
@@ -284,7 +544,11 @@ class QualitySamplingStandard(models.Model):
             if key not in seen_plans:
                 record.unlink()
 
-        return self.get_sampling_matrix_data(standard.id, switching_mode)
+        data = self.get_sampling_matrix_data(standard.id, switching_mode)
+        # A save that leaves a scheme without its plan cell would only surface
+        # later, when a receipt is validated: report the gap right here.
+        data['missing_plans'] = standard._sampling_gap_message()
+        return data
 
 
 class QualitySamplingLotRange(models.Model):
@@ -526,7 +790,10 @@ class QualityInspectionScheme(models.Model):
         ], limit=1)
         if not range_record:
             raise UserError(_(
-                'No AQL lot range was found for standard %(standard)s, level %(level)s, and lot quantity %(qty)s.',
+                'The AQL sampling matrix of standard %(standard)s has no lot range '
+                'for level %(level)s and lot quantity %(qty)s. Add the range in '
+                'Quality > Configuration > AQL Sampling Matrix, or press '
+                '"Generate GB/T 2828.1 Matrix" on that standard.',
                 standard=self.sampling_standard_id.display_name,
                 level=dict(INSPECTION_LEVEL_SELECTION).get(self.inspection_level),
                 qty=lot_qty,
@@ -539,10 +806,16 @@ class QualityInspectionScheme(models.Model):
         ], limit=1)
         if not plan:
             raise UserError(_(
-                'No AQL plan was found for standard %(standard)s, mode %(mode)s, code %(code)s, and AQL %(aql)s.',
+                'The AQL sampling matrix of standard %(standard)s has no plan for '
+                '%(mode)s mode, sample size code %(code)s (lot quantity %(qty)s at '
+                'inspection level %(level)s) and AQL %(aql)s. Add the cell in '
+                'Quality > Configuration > AQL Sampling Matrix, or press '
+                '"Generate GB/T 2828.1 Matrix" on that standard.',
                 standard=self.sampling_standard_id.display_name,
                 mode=dict(SWITCHING_MODE_SELECTION).get(self.switching_mode),
                 code=range_record.sample_size_code,
+                qty=lot_qty,
+                level=dict(INSPECTION_LEVEL_SELECTION).get(self.inspection_level),
                 aql=self.aql_value,
             ))
         sample_size = min(plan.sample_size, lot_qty)
