@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Partner',
-    'version': '19.0.4.2.0',
+    'version': '19.0.4.3.0',
     'summary': 'Supplier groups, automatically generated supplier references '
                'and rights on the vendor finance data',
     'category': 'Purchase/Purchase',

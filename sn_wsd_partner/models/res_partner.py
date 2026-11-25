@@ -17,6 +17,56 @@ class ResPartner(models.Model):
         help='Technical field telling the form whether the user may change the '
              'vendor payment terms and the vendor bank accounts.')
 
+    # ------------------------------------------------------------------
+    # Customer profile (filled by the Kingdee customer import)
+    #
+    # Odoo keeps a customer and a vendor in ``res.partner`` and has no field for
+    # the invoicing data a Chinese sales account needs: the delivery code the
+    # customer uses on its own papers, the delivery site, the invoice header and
+    # the invoicing bank. They are declared here, close to the rest of the
+    # partner data, so the sales, the delivery and the invoicing documents read
+    # them; ``sn_wsd_kingdee`` fills them from BD_Customer.
+    # ------------------------------------------------------------------
+    sn_delivery_code = fields.Char(
+        string='Delivery Code', copy=False, index=True,
+        help='Code the customer uses to identify its delivery site (Kingdee '
+             'F_QNBG_Text of BD_Customer). Printed on the delivery documents.')
+    sn_delivery_address = fields.Char(
+        string='Delivery Address', copy=False,
+        help='Site the goods are sent to when it differs from the invoice '
+             'address (Kingdee F_QNBG_Remark of BD_Customer).')
+    sn_invoice_title = fields.Char(
+        string='Invoice Title', copy=False,
+        help='Name the customer asks on its invoices (Kingdee FINVOICETITLE). '
+             'It often differs from the customer name, e.g. when the invoice '
+             'goes to a group company or a project.')
+    sn_invoice_phone = fields.Char(
+        string='Invoice Phone', copy=False,
+        help='Phone printed on the invoice (Kingdee FINVOICETEL).')
+    sn_invoice_address = fields.Char(
+        string='Invoice Address', copy=False,
+        help='Address printed on the invoice (Kingdee FINVOICEADDRESS).')
+    sn_invoice_bank_name = fields.Char(
+        string='Invoice Bank', copy=False,
+        help='Bank the customer asks on its invoices, as free text (Kingdee '
+             'FINVOICEBANKNAME). The account number is stored as a bank account '
+             'of the contact.')
+    sn_rec_condition_number = fields.Char(
+        string='Receivable Condition Code', copy=False, index=True,
+        help='Number (FNumber) of the Kingdee receivable condition '
+             '(BD_RecCondition) of this customer. Kept even when no Odoo '
+             'payment term carries that number yet.')
+    sn_rec_condition_name = fields.Char(
+        string='Receivable Condition', copy=False, readonly=True,
+        help='Name the account gives to the receivable condition above, so the '
+             'screen shows the code and what it stands for.')
+    sn_settlement_currency_id = fields.Many2one(
+        'res.currency', string='Settlement Currency', copy=False,
+        ondelete='restrict',
+        help='Currency the account settles this customer in (Kingdee '
+             'FTRADINGCURRID). The currency of the pricelist still drives the '
+             'sale orders; this field keeps the account value.')
+
     @api.depends_context('uid')
     def _compute_sn_can_edit_supplier_finance(self):
         allowed = self.env.user.has_group(

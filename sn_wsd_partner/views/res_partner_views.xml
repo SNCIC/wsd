@@ -13,6 +13,50 @@
         </field>
     </record>
 
+    <!-- Customer profile: the invoicing and delivery data a customer of this
+         account carries in Kingdee (invoice title, invoicing bank, delivery
+         code and site, receivable condition, settlement currency). Kept on a
+         page of its own: it is read by the sales, the delivery and the
+         invoicing documents, and it is what the Kingdee import fills. -->
+    <record id="view_partner_form_customer_profile" model="ir.ui.view">
+        <field name="name">res.partner.form.customer.profile</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Customer Profile" name="sn_customer_profile">
+                    <group>
+                        <group string="Delivery">
+                            <field name="sn_delivery_code"/>
+                            <field name="sn_delivery_address"/>
+                        </group>
+                        <group string="Invoicing">
+                            <field name="sn_invoice_title"/>
+                            <field name="sn_invoice_phone"/>
+                            <field name="sn_invoice_address"/>
+                            <field name="sn_invoice_bank_name"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Sales">
+                            <field name="user_id"
+                                   options="{'no_create': True}"/>
+                            <field name="sn_settlement_currency_id"
+                                   options="{'no_create': True}"/>
+                        </group>
+                        <group string="Receivable Condition">
+                            <field name="property_payment_term_id"
+                                   options="{'no_create': True}"/>
+                            <field name="sn_rec_condition_number"
+                                   placeholder="Kingdee condition number"/>
+                            <field name="sn_rec_condition_name"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
     <record id="view_res_partner_filter_supplier_code" model="ir.ui.view">
         <field name="name">res.partner.search.supplier.code</field>
         <field name="model">res.partner</field>

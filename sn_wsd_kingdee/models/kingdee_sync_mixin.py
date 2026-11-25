@@ -252,6 +252,19 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
         """
         return {}
 
+    def _kingdee_import_done(self, data, form_id=None):
+        """Hook run on the record once an import has written it.
+
+        Optional hook for the values a read row carries on **other** records: a
+        customer carries its bank account as a ``res.partner.bank`` of its own, so
+        the account cannot travel in the values written on the contact. ``self`` is
+        the record that was just created or updated, so a hook can search beside it.
+
+        Called by ``_kingdee_import_row()`` (create and update) and by
+        ``_kingdee_apply_readback()``, never by a preview run.
+        """
+        return None
+
     def _kingdee_sync_state(self, data):
         """Synchronization state matching the FDocumentStatus of a read record."""
         return KINGDEE_DOCUMENT_STATE.get(data.get("FDocumentStatus"), "saved")
@@ -401,6 +414,7 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
         values.update(self._kingdee_import_extra_values(flat, form_id=form_id))
         values[self._kingdee_field("state", form_id)] = self._kingdee_sync_state(flat)
         self.write(values)
+        self._kingdee_import_done(flat, form_id=form_id)
 
     # ------------------------------------------------------------------
     # Inbound: import (Kingdee to Odoo)
@@ -491,6 +505,7 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
                 # otherwise nothing would ever tie the two together.
                 values[number_field] = number
             record.write(values)
+            record._kingdee_import_done(data, form_id=form_id)
             return "updated"
         values[number_field] = number
         values[name_field] = name or number
@@ -499,7 +514,8 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
         # A hook that owns the Odoo name of a new record (a currency is named by its
         # ISO code, not by the Kingdee number) has its value kept.
         values.setdefault("name", name or number)
-        self.create(values)
+        record = self.create(values)
+        record._kingdee_import_done(data, form_id=form_id)
         return "created"
 
     @api.model
@@ -777,12 +793,16 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
             result = client.get_result(payload)
             inner = result.get("Result") if isinstance(result.get("Result"), dict) else {}
             data = client.get_response_data(payload)
+            # A View answers the property names of the form, not the FieldKeys a
+            # query was sent: the answer is normalised with the same key table an
+            # import uses, so the number and the name are read the same way.
+            flat = record._kingdee_data_from_view(data)
             master_id = result.get("Id") or inner.get("Id")
             record._kingdee_mark_done(
                 "saved", _("Refreshed from Kingdee."),
-                number=(data.get("FNumber") or number),
+                number=(flat.get("FNumber") or number),
                 master_id=master_id,
-                name=data.get("FName"),
+                name=flat.get("FName"),
             )
             record._kingdee_apply_readback(data)
 

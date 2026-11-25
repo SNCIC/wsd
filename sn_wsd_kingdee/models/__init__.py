@@ -9,6 +9,7 @@ from . import kingdee_bill_mixin
 from . import kingdee_sync_target
 from . import kingdee_push_daily
 from . import product_template
+from . import account_payment_term
 from . import res_partner
 from . import res_currency
 from . import hr_department

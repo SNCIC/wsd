@@ -159,3 +159,74 @@ msgstr "您无权修改供应商的付款条件或银行账号，请联系采购
 #: code:addons/sn_wsd_partner/models/0.py:0
 msgid "You are not allowed to change the bank accounts of a vendor. Ask a purchase manager or an accountant."
 msgstr "您无权修改供应商的银行账号，请联系采购经理或财务人员。"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_res_partner__sn_delivery_code
+msgid "Delivery Code"
+msgstr "发货代号"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_res_partner__sn_delivery_address
+msgid "Delivery Address"
+msgstr "发货地址"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_res_partner__sn_invoice_title
+msgid "Invoice Title"
+msgstr "发票抬头"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_res_partner__sn_invoice_phone
+msgid "Invoice Phone"
+msgstr "开票联系电话"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_res_partner__sn_invoice_address
+msgid "Invoice Address"
+msgstr "开票通讯地址"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_res_partner__sn_invoice_bank_name
+msgid "Invoice Bank"
+msgstr "开户银行"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_res_partner__sn_rec_condition_number
+msgid "Receivable Condition Code"
+msgstr "收款条件编码"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_res_partner__sn_rec_condition_name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_partner_form_customer_profile
+msgid "Receivable Condition"
+msgstr "收款条件"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_res_partner__sn_settlement_currency_id
+msgid "Settlement Currency"
+msgstr "结算币别"
+
+#. module: sn_wsd_partner
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_partner_form_customer_profile
+msgid "Customer Profile"
+msgstr "客户资料"
+
+#. module: sn_wsd_partner
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_partner_form_customer_profile
+msgid "Delivery"
+msgstr "发货信息"
+
+#. module: sn_wsd_partner
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_partner_form_customer_profile
+msgid "Invoicing"
+msgstr "开票信息"
+
+#. module: sn_wsd_partner
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_partner_form_customer_profile
+msgid "Sales"
+msgstr "销售"
+
+#. module: sn_wsd_partner
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_partner_form_customer_profile
+msgid "Kingdee condition number"
+msgstr "金蝶收款条件编码"

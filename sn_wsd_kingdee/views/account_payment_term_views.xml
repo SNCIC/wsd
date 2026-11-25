@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        The Kingdee condition an Odoo payment term stands for. Shown on the term
+        so an administrator can link the account conditions once; the customer
+        import then resolves FRECCONDITIONID through it (see
+        models/res_partner.py, _kingdee_payment_term()).
+    -->
+    <record id="view_payment_term_tree_kingdee" model="ir.ui.view">
+        <field name="name">account.payment.term.list.kingdee</field>
+        <field name="model">account.payment.term</field>
+        <field name="inherit_id" ref="account.view_payment_term_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="kingdee_number" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_payment_term_form_kingdee" model="ir.ui.view">
+        <field name="name">account.payment.term.form.kingdee</field>
+        <field name="model">account.payment.term</field>
+        <field name="inherit_id" ref="account.view_payment_term_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_title')]" position="after">
+                <group>
+                    <field name="kingdee_number"
+                           placeholder="Defaults to no Kingdee condition"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_payment_term_search_kingdee" model="ir.ui.view">
+        <field name="name">account.payment.term.search.kingdee</field>
+        <field name="model">account.payment.term</field>
+        <field name="inherit_id" ref="account.view_payment_term_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="kingdee_number"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

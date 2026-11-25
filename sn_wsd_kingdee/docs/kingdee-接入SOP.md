@@ -54,6 +54,7 @@ class ResPartner(models.Model):
 | `_kingdee_number()` | ✅ | 决定幂等：同编码 `Save` 即更新 |
 | `_kingdee_payload(client)` | ✅ | 只放该账套**真能写**的字段；引用型一律 `{"FNumber": ...}` |
 | `_kingdee_apply_readback(data)` | ⭕ | 回读后把额外字段写回 Odoo |
+| `_kingdee_import_done(data)` | ⭕ | 导入/回写之后，写"落在**别的记录**上"的值（客户的开票银行账号是一条 `res.partner.bank`；税号要过 `base_vat` 校验，被拒只记日志不废整条） |
 
 自动获得：`kingdee_number / kingdee_name / kingdee_master_id / kingdee_sync_state /
 kingdee_last_sync_at / kingdee_sync_message / kingdee_log_ids` 状态字段、
@@ -118,7 +119,7 @@ PY
 | Odoo 模型 | formId | 必录 | 推送字段 | 默认值来源 |
 | :--- | :--- | :---: | :--- | :--- |
 | `product.template` | `BD_MATERIAL` | 35（账套版；平台版 36，多标 `FMaterialGroup`） | 最小集：组织 ×2、`FNumber`/`FName`、7 个计量单位、属性/类别/分组 + 20 项账套固定值 | `kingdee_client.DEFAULTS` + 设置页 + 物料级覆盖 |
-| `res.partner` | `BD_Customer` | **5**（账套版；平台版仅 3）。子实体 `FTTel` 虽标必录但**已实测不强制** | 组织 ×2、`FNumber`/`FName`、`FTRADINGCURRID`（结算币别）、`FSELLER`（销售员）、`FSALDEPTID`（销售部门） | `DEFAULTS.customer_*` + 设置页 + 伙伴级覆盖；销售员/销售部门须先配置，`_kingdee_check_ready()` 会提前报错 |
+| `res.partner` | `BD_Customer` | **5**（账套版；平台版仅 3）。子实体 `FTTel` 虽标必录但**已实测不强制** | **出站**：组织 ×2、`FNumber`/`FName`、`FTRADINGCURRID`（结算币别）、`FSELLER`（销售员）、`FSALDEPTID`（销售部门）。**入站**另读开票与发货块：`FINVOICETITLE`/`FINVOICEBANKNAME`/`FINVOICEBANKACCOUNT`/`FINVOICETEL`/`FINVOICEADDRESS`/`FTEL`/`FADDRESS`/`FTAXREGISTERCODE`/`F_QNBG_Text`/`F_QNBG_Remark`/`FRECCONDITIONID` | `DEFAULTS.customer_*` + 设置页 + 伙伴级覆盖；销售员/销售部门须先配置，`_kingdee_check_ready()` 会提前报错。入站落点见 §6.2 |
 | `res.partner` | `BD_Supplier` | **8**（账套版），其中 4 个在子实体 `FLocationInfo` | **仅入站**：编码/名称、禁用状态、`FPayCurrencyId`（结算币别），入站写 `supplier_rank` | 出站 payload 尚未在账套上实推验证，故控制台那一行标为未实现 |
 | `res.currency` | `BD_Currency` | **4**（`FName`/`FNumber`/`FCODE`/`FRoundType`） | **仅入站**：`FCODE`（ISO 码）、`FName`、`FSYSMBOL`（符号，Odoo 19 必填） | 按 ISO 码认领已有币别；`FRoundType` 是舍入模式，不映射 |
 | `hr.department` | `BD_Department` | **3** | **仅入站**：编码、名称 | 部门在 Odoo 无编码字段，仅按 `kingdee_number` 匹配 |
@@ -200,3 +201,35 @@ PY
 `_kingdee_value_map`（金蝶键→Odoo 字段）、`_kingdee_number_field`（除 `kingdee_number` 外的第二匹配键），
 外加可选钩子 `_kingdee_import_extra_values()`。入站**写的是「出站读得到的字段」**，
 故「导入后再推送」逐字段不变；记录名称只在新建时写入。
+
+## 6.2 客户资料入站（`BD_Customer` → `res.partner`）
+
+`docs/基础资料同步清单.md` 的客户行之外，这里记下每个业务字段落到哪、为什么这样落：
+
+| 金蝶字段（Key） | 中文 | Odoo 落点 | 说明 |
+| :--- | :--- | :--- | :--- |
+| `FTRADINGCURRID.FCODE` | 结算币别 | `res.partner.sn_settlement_currency_id` | 按 **ISO 码**认领 `res.currency`；金蝶编码（`PRE001`）与 Odoo `res.currency.kingdee_number` 并不可靠对齐 |
+| `FRECCONDITIONID.FNumber/.FName` | 收款条件 | `property_payment_term_id` + `sn_rec_condition_number`/`sn_rec_condition_name` | 条款不是一对一（金蝶是分期方案），只按 `account.payment.term.kingdee_number` 认领；未映射时保留编码/名称 |
+| `FINVOICETITLE` | 发票抬头 | `sn_invoice_title` | 直写 |
+| `FINVOICEBANKNAME` | 开户银行 | `sn_invoice_bank_name`（文本）+ `bank_ids.bank_id` | 银行名是"总行+支行"自由文本，只认**名称完全一致**的 `res.bank`，**不新建银行** |
+| `FINVOICEBANKACCOUNT` | 银行账号 | `res.partner.bank`（`bank_ids`） | 幂等键 = 客户 + 账号（Odoo 的 `sanitized_acc_number` 唯一约束）；`_kingdee_import_done()` 写入 |
+| `FINVOICETEL` / `FTEL` | 电话 | `phone` | `FTEL` 优先，空则 `FINVOICETEL`（实测 `FTEL` 大量为空） |
+| `FINVOICEADDRESS` / `FADDRESS` | 地址 | `street` | `FADDRESS` 优先，空则 `FINVOICEADDRESS`；整段写入，不拆省市 |
+| `FINVOICETEL` | 开票联系电话 | `sn_invoice_phone` | 直写，与 `phone` 并存 |
+| `FINVOICEADDRESS` | 开票通讯地址 | `sn_invoice_address` | 直写 |
+| `F_QNBG_Text` | 发货代号 | `sn_delivery_code` | **账套自定义字段**（不是平台字段），Key 来自表单元数据 |
+| `F_QNBG_Remark` | 发货地址 | `sn_delivery_address` | 同上 |
+| `FTAXREGISTERCODE` | 纳税登记号 | `vat` | 走 `_kingdee_import_done()`：`base_vat` 拒绝格式时只记日志 |
+| `FSELLER.FName` | 销售员 | `user_id`（仅当为空时） | 金蝶销售员≠Odoo 用户（本库 `胡茜茜` 无用户账号），按**姓名**认领，认不到留 `kingdee_salesman_*` |
+
+**四条实测边界（2026-11-25）**：
+
+1. **子实体字段用裸 FieldKey**：`FT_BD_CUSTBANK.FBANKCODE` 会报 `MsgCode 9`，要写 `FBANKCODE`；
+   一个客户多个银行账户会返回**多行**，与"一行一客户"的导入循环冲突，所以客户主查询只取单据头。
+2. **地址/电话主要在开票块**：抽样的 349 条客户里 `FTEL`/`FADDRESS` 多为空格，`FINVOICETEL`/`FINVOICEADDRESS` 才有值。
+3. **View 与 BillQuery 的键名不同**：`View` 返回表单属性名（`TRADINGCURRID.Number`、`INVOICETITLE`、`TEL`），
+   `BillQuery` 返回发送的 FieldKeys（`FTRADINGCURRID.FNumber`、`FINVOICETITLE`、`FTEL`）。
+   回读（`Refresh from Kingdee`）用 `KINGDEE_VIEW_KEYS` 做翻译，否则回读只会写同步状态。
+   `View` **不带币别 ISO 码**，所以回读不覆盖结算币别（保留导入值）。
+4. **出站 payload 不扩**：新增字段都是账套侧字段（`F_QNBG_*`）或开票块，可写性未实测；`Save`
+   只更新传入的字段，不传即不变，故 payload 维持最小集，回推不会改掉金蝶的值。
