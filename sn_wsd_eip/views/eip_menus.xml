@@ -13,21 +13,21 @@
     <menuitem id="menu_eip_collect"
               name="Data Collection"
               parent="menu_eip_root"
-              sequence="5"/>
+              sequence="20"/>
 
     <!-- Group 1: pass data collection config; the phase-1 mapping
          menus (operation / value mapping) move under this group. -->
     <menuitem id="menu_eip_pass_config"
               name="Pass Data Collection"
               parent="menu_eip_root"
-              sequence="10"/>
+              sequence="30"/>
 
     <!-- Group 2: order & business data (documents land in later
          batches of the eip-order-push change). -->
     <menuitem id="menu_eip_order_data"
               name="Order &amp; Business Data"
               parent="menu_eip_root"
-              sequence="20"/>
+              sequence="10"/>
 
     <!-- Group 3: inventory data, a subsection of the order-data
          menu (user request: one section instead of two). -->
