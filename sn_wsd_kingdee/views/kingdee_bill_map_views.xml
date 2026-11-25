@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_kingdee_bill_map_list" model="ir.ui.view">
+        <field name="name">sn.wsd.kingdee.bill.map.list</field>
+        <field name="model">sn.wsd.kingdee.bill.map</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="failed_count &gt; 0" create="0">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="model_name"/>
+                <field name="picking_type_field" optional="hide"/>
+                <field name="form_id"/>
+                <field name="bill_type_number"/>
+                <field name="auto_push"/>
+                <field name="auto_audit"/>
+                <field name="pending_count"/>
+                <field name="failed_count"/>
+                <button name="action_push_pending" type="object" string="Push Pending"
+                        icon="fa-cloud-upload" class="btn-link"
+                        invisible="not pending_count"/>
+                <button name="action_open_documents" type="object" string="Documents"
+                        icon="fa-list" class="btn-link"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_kingdee_bill_map_form" model="ir.ui.view">
+        <field name="name">sn.wsd.kingdee.bill.map.form</field>
+        <field name="model">sn.wsd.kingdee.bill.map</field>
+        <field name="arch" type="xml">
+            <form create="0">
+                <header>
+                    <button name="action_push_pending" type="object" string="Push Pending"
+                            class="btn-primary" invisible="not pending_count"/>
+                    <button name="action_open_documents" type="object" string="Documents"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger"
+                            invisible="active"/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. Purchase Receipt"/></h1>
+                    </div>
+                    <group>
+                        <group string="Routing">
+                            <field name="model_name"/>
+                            <field name="kind"/>
+                            <field name="picking_type_field"
+                                   invisible="model_name != 'stock.picking'"/>
+                            <field name="other_operation_code"
+                                   invisible="kind not in ['other_in', 'other_out']"
+                                   help="RDP, SCS... Narrows the mapping to one other operation type."/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group string="Kingdee">
+                            <field name="form_id"/>
+                            <field name="bill_type_number"/>
+                            <field name="note_field"/>
+                            <field name="business_type"/>
+                            <field name="transfer_biz_type"
+                                   invisible="kind != 'internal_transfer'"/>
+                            <field name="transfer_direct"
+                                   invisible="kind != 'internal_transfer'"/>
+                            <field name="return_type_number"
+                                   invisible="kind != 'sale_return'"/>
+                            <field name="production_bom_type"
+                                   invisible="kind != 'production_order'"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Behaviour">
+                            <field name="auto_push"/>
+                            <field name="auto_audit"/>
+                            <field name="verify_readback"/>
+                        </group>
+                        <group string="Counters">
+                            <field name="pending_count"/>
+                            <field name="failed_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Advanced" name="advanced">
+                            <group>
+                                <field name="other_operation_types" widget="json"
+                                       invisible="kind not in ['other_in', 'other_out']"/>
+                                <field name="save_options" widget="json"/>
+                                <field name="fixed_values" widget="json"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_kingdee_bill_map_search" model="ir.ui.view">
+        <field name="name">sn.wsd.kingdee.bill.map.search</field>
+        <field name="model">sn.wsd.kingdee.bill.map</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="form_id"/>
+                <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter name="group_model" string="Odoo Model" context="{'group_by': 'model_name'}"/>
+                    <filter name="group_kind" string="Kind" context="{'group_by': 'kind'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_kingdee_bill_map" model="ir.actions.act_window">
+        <field name="name">Documents</field>
+        <field name="res_model">sn.wsd.kingdee.bill.map</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

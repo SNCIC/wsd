@@ -1,0 +1,176 @@
+<odoo>
+    <!--
+        The document kinds this account receives, one row per kind.
+
+        The bill types are the ones read on the account's own BOS_BillType on
+        2026-11-25: CGDD01_SYS standard purchase order, RKD01_SYS standard purchase
+        receipt, TLD01_SYS standard return, XSDD01_SYS standard sales order,
+        XSCKD01_SYS standard sales delivery, XSTHD01_SYS standard sales return,
+        QTRKD01_SYS standard other receipt, QTCKD01_SYS standard other delivery,
+        ZJDB01_SYS standard direct transfer, SCDD03_SYS production order booked on
+        direct receipt, SCLLD01_SYS standard material issue, SCTLD01_SYS standard
+        material return and SCRKD02_SYS production receipt.
+
+        noupdate: a bill type, a switch or a filter changed by the implementation
+        team must survive an upgrade - the account numbers its documents, not the
+        module.
+    -->
+    <data noupdate="1">
+        <record id="bill_map_purchase_order" model="sn.wsd.kingdee.bill.map">
+            <field name="sequence">10</field>
+            <field name="name">Purchase Order</field>
+            <field name="model_name">purchase.order</field>
+            <field name="kind">purchase_order</field>
+            <field name="form_id">PUR_PurchaseOrder</field>
+            <field name="bill_type_number">CGDD01_SYS</field>
+            <field name="business_type">CG</field>
+            <field name="note_field"></field>
+        </record>
+
+        <record id="bill_map_receipt" model="sn.wsd.kingdee.bill.map">
+            <field name="sequence">20</field>
+            <field name="name">Purchase Receipt</field>
+            <field name="model_name">stock.picking</field>
+            <field name="kind">receipt</field>
+            <field name="picking_type_field">store_type_id</field>
+            <field name="form_id">STK_InStock</field>
+            <field name="bill_type_number">RKD01_SYS</field>
+            <field name="business_type">CG</field>
+            <field name="note_field"></field>
+        </record>
+
+        <record id="bill_map_vendor_return" model="sn.wsd.kingdee.bill.map">
+            <field name="sequence">30</field>
+            <field name="name">Purchase Return</field>
+            <field name="model_name">stock.picking</field>
+            <field name="kind">vendor_return</field>
+            <field name="picking_type_field">sn_unstored_return_type_id</field>
+            <field name="form_id">PUR_MRB</field>
+            <field name="bill_type_number">TLD01_SYS</field>
+            <field name="business_type">CG</field>
+            <field name="note_field">FDESCRIPTION</field>
+        </record>
+
+        <record id="bill_map_sale_order" model="sn.wsd.kingdee.bill.map">
+            <field name="sequence">40</field>
+            <field name="name">Sales Order</field>
+            <field name="model_name">sale.order</field>
+            <field name="kind">sale_order</field>
+            <field name="form_id">SAL_SaleOrder</field>
+            <field name="bill_type_number">XSDD01_SYS</field>
+            <field name="note_field">FNote</field>
+        </record>
+
+        <record id="bill_map_delivery" model="sn.wsd.kingdee.bill.map">
+            <field name="sequence">50</field>
+            <field name="name">Sales Delivery</field>
+            <field name="model_name">stock.picking</field>
+            <field name="kind">delivery</field>
+            <field name="picking_type_field">out_type_id</field>
+            <field name="form_id">SAL_OUTSTOCK</field>
+            <field name="bill_type_number">XSCKD01_SYS</field>
+            <field name="note_field">FNote</field>
+        </record>
+
+        <record id="bill_map_sale_return" model="sn.wsd.kingdee.bill.map">
+            <field name="sequence">60</field>
+            <field name="name">Sales Return</field>
+            <field name="model_name">stock.picking</field>
+            <field name="kind">sale_return</field>
+            <field name="picking_type_field">out_type_id</field>
+            <field name="form_id">SAL_RETURNSTOCK</field>
+            <field name="bill_type_number">XSTHD01_SYS</field>
+            <field name="note_field">FHeadNote</field>
+        </record>
+
+        <record id="bill_map_other_in" model="sn.wsd.kingdee.bill.map">
+            <field name="sequence">70</field>
+            <field name="name">Other Receipt</field>
+            <field name="model_name">stock.picking</field>
+            <field name="kind">other_in</field>
+            <field name="picking_type_field">other_in_type_id</field>
+            <field name="form_id">STK_MISCELLANEOUS</field>
+            <field name="bill_type_number">QTRKD01_SYS</field>
+            <field name="note_field">FNOTE</field>
+        </record>
+
+        <record id="bill_map_other_out" model="sn.wsd.kingdee.bill.map">
+            <field name="sequence">80</field>
+            <field name="name">Other Delivery</field>
+            <field name="model_name">stock.picking</field>
+            <field name="kind">other_out</field>
+            <field name="picking_type_field">other_out_type_id</field>
+            <field name="form_id">STK_MisDelivery</field>
+            <field name="bill_type_number">QTCKD01_SYS</field>
+            <field name="note_field">FNote</field>
+        </record>
+
+        <record id="bill_map_internal_transfer" model="sn.wsd.kingdee.bill.map">
+            <field name="sequence">90</field>
+            <field name="name">Direct Transfer</field>
+            <field name="model_name">stock.picking</field>
+            <field name="kind">internal_transfer</field>
+            <field name="picking_type_field">int_type_id</field>
+            <field name="form_id">STK_TransferDirect</field>
+            <field name="bill_type_number">ZJDB01_SYS</field>
+            <field name="transfer_biz_type">InnerOrgTransfer</field>
+            <field name="transfer_direct">GENERAL</field>
+            <field name="note_field">FNote</field>
+        </record>
+
+        <record id="bill_map_production_order" model="sn.wsd.kingdee.bill.map">
+            <field name="sequence">100</field>
+            <field name="name">Production Order</field>
+            <field name="model_name">mrp.production</field>
+            <field name="kind">production_order</field>
+            <field name="form_id">PRD_MO</field>
+            <field name="bill_type_number">SCDD03_SYS</field>
+            <field name="production_bom_type">2</field>
+            <field name="note_field">FDescription</field>
+        </record>
+
+        <record id="bill_map_mes_issue" model="sn.wsd.kingdee.bill.map">
+            <field name="sequence">110</field>
+            <field name="name">Material Issue</field>
+            <field name="model_name">stock.picking</field>
+            <field name="kind">mes_issue</field>
+            <field name="picking_type_field">picking_type_issue_id</field>
+            <field name="form_id">PRD_PickMtrl</field>
+            <field name="bill_type_number">SCLLD01_SYS</field>
+            <field name="note_field">FDescription</field>
+        </record>
+
+        <record id="bill_map_mes_over_pick" model="sn.wsd.kingdee.bill.map">
+            <field name="sequence">120</field>
+            <field name="name">Material Over-pick</field>
+            <field name="model_name">stock.picking</field>
+            <field name="kind">mes_over_pick</field>
+            <field name="picking_type_field">picking_type_over_pick_id</field>
+            <field name="form_id">PRD_PickMtrl</field>
+            <field name="bill_type_number">SCLLD01_SYS</field>
+            <field name="note_field">FDescription</field>
+        </record>
+
+        <record id="bill_map_mes_return" model="sn.wsd.kingdee.bill.map">
+            <field name="sequence">130</field>
+            <field name="name">Material Return</field>
+            <field name="model_name">stock.picking</field>
+            <field name="kind">mes_return</field>
+            <field name="picking_type_field">picking_type_return_id</field>
+            <field name="form_id">PRD_ReturnMtrl</field>
+            <field name="bill_type_number">SCTLD01_SYS</field>
+            <field name="note_field">FDescription</field>
+        </record>
+
+        <record id="bill_map_mes_fg_receipt" model="sn.wsd.kingdee.bill.map">
+            <field name="sequence">140</field>
+            <field name="name">Finished Goods Receipt</field>
+            <field name="model_name">stock.picking</field>
+            <field name="kind">mes_fg_receipt</field>
+            <field name="picking_type_field">picking_type_receipt_id</field>
+            <field name="form_id">PRD_INSTOCK</field>
+            <field name="bill_type_number">SCRKD02_SYS</field>
+            <field name="note_field">FDescription</field>
+        </record>
+    </data>
+</odoo>

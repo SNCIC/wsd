@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        The Kingdee state of a document, on the four models that are pushed. The page
+        is added to the notebook rather than to a new group so the document keeps the
+        layout its users know, and the status is repeated in the list with a colour so
+        a failed push is visible without opening the document.
+    -->
+
+    <!-- Transfers -->
+    <record id="view_picking_form_kingdee" model="ir.ui.view">
+        <field name="name">stock.picking.form.kingdee</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Kingdee" name="kingdee">
+                    <group>
+                        <group string="Synchronization">
+                            <field name="kingdee_sync_state" widget="badge"
+                                   decoration-success="kingdee_sync_state == 'audited'"
+                                   decoration-warning="kingdee_sync_state in ['saved', 'submitted']"
+                                   decoration-danger="kingdee_sync_state == 'error'"/>
+                            <field name="kingdee_number"/>
+                            <field name="kingdee_master_id"/>
+                            <field name="kingdee_pushed_at"/>
+                            <field name="kingdee_verified_at"/>
+                        </group>
+                        <group string="Diagnostics">
+                            <field name="kingdee_push_attempts"/>
+                            <field name="kingdee_next_retry_at"
+                                   invisible="not kingdee_next_retry_at"/>
+                            <field name="kingdee_pushed_qty"/>
+                            <field name="kingdee_pushed_amount"/>
+                        </group>
+                    </group>
+                    <field name="kingdee_sync_message" readonly="1"/>
+                    <div class="mt-2">
+                        <button name="action_kingdee_check" type="object"
+                                string="Check Readiness" class="btn-secondary"/>
+                        <button name="action_kingdee_push" type="object"
+                                string="Push to Kingdee" class="btn-primary"
+                                invisible="state != 'done'"/>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="vpicktree_kingdee" model="ir.ui.view">
+        <field name="name">stock.picking.list.kingdee</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <field name="kingdee_sync_state" widget="badge" optional="show"
+                       decoration-success="kingdee_sync_state == 'audited'"
+                       decoration-warning="kingdee_sync_state in ['saved', 'submitted']"
+                       decoration-danger="kingdee_sync_state == 'error'"/>
+                <field name="kingdee_number" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_picking_search_kingdee" model="ir.ui.view">
+        <field name="name">stock.picking.search.kingdee</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter name="kingdee_pending" string="Kingdee Pending"
+                        domain="[('kingdee_sync_state', 'in', ('not_synced', 'error'))]"/>
+                <filter name="kingdee_failed" string="Kingdee Failed"
+                        domain="[('kingdee_sync_state', '=', 'error')]"/>
+                <separator/>
+                <filter name="kingdee_audited" string="In Kingdee"
+                        domain="[('kingdee_sync_state', '=', 'audited')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Purchase orders -->
+    <record id="view_purchase_order_form_kingdee" model="ir.ui.view">
+        <field name="name">purchase.order.form.kingdee</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Kingdee" name="kingdee">
+                    <group>
+                        <group string="Synchronization">
+                            <field name="kingdee_sync_state" widget="badge"
+                                   decoration-success="kingdee_sync_state == 'audited'"
+                                   decoration-warning="kingdee_sync_state in ['saved', 'submitted']"
+                                   decoration-danger="kingdee_sync_state == 'error'"/>
+                            <field name="kingdee_number"/>
+                            <field name="kingdee_pushed_at"/>
+                            <field name="kingdee_verified_at"/>
+                        </group>
+                        <group string="Diagnostics">
+                            <field name="kingdee_push_attempts"/>
+                            <field name="kingdee_next_retry_at"
+                                   invisible="not kingdee_next_retry_at"/>
+                            <field name="kingdee_pushed_amount"/>
+                        </group>
+                    </group>
+                    <field name="kingdee_sync_message" readonly="1"/>
+                    <div class="mt-2">
+                        <button name="action_kingdee_check" type="object"
+                                string="Check Readiness" class="btn-secondary"/>
+                        <button name="action_kingdee_push" type="object"
+                                string="Push to Kingdee" class="btn-primary"
+                                invisible="state not in ['purchase', 'done']"/>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase_order_tree_kingdee" model="ir.ui.view">
+        <field name="name">purchase.order.list.kingdee</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <field name="kingdee_sync_state" widget="badge" optional="show"
+                       decoration-success="kingdee_sync_state == 'audited'"
+                       decoration-warning="kingdee_sync_state in ['saved', 'submitted']"
+                       decoration-danger="kingdee_sync_state == 'error'"/>
+                <field name="kingdee_number" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase_order_search_kingdee" model="ir.ui.view">
+        <field name="name">purchase.order.search.kingdee</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter name="kingdee_pending" string="Kingdee Pending"
+                        domain="[('kingdee_sync_state', 'in', ('not_synced', 'error'))]"/>
+                <filter name="kingdee_failed" string="Kingdee Failed"
+                        domain="[('kingdee_sync_state', '=', 'error')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Sales orders -->
+    <record id="view_sale_order_form_kingdee" model="ir.ui.view">
+        <field name="name">sale.order.form.kingdee</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Kingdee" name="kingdee">
+                    <group>
+                        <group string="Synchronization">
+                            <field name="kingdee_sync_state" widget="badge"
+                                   decoration-success="kingdee_sync_state == 'audited'"
+                                   decoration-warning="kingdee_sync_state in ['saved', 'submitted']"
+                                   decoration-danger="kingdee_sync_state == 'error'"/>
+                            <field name="kingdee_number"/>
+                            <field name="kingdee_pushed_at"/>
+                            <field name="kingdee_verified_at"/>
+                        </group>
+                        <group string="Diagnostics">
+                            <field name="kingdee_push_attempts"/>
+                            <field name="kingdee_next_retry_at"
+                                   invisible="not kingdee_next_retry_at"/>
+                            <field name="kingdee_pushed_amount"/>
+                        </group>
+                    </group>
+                    <field name="kingdee_sync_message" readonly="1"/>
+                    <div class="mt-2">
+                        <button name="action_kingdee_check" type="object"
+                                string="Check Readiness" class="btn-secondary"/>
+                        <button name="action_kingdee_push" type="object"
+                                string="Push to Kingdee" class="btn-primary"
+                                invisible="state not in ['sale', 'done']"/>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_tree_kingdee" model="ir.ui.view">
+        <field name="name">sale.order.list.kingdee</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <field name="kingdee_sync_state" widget="badge" optional="show"
+                       decoration-success="kingdee_sync_state == 'audited'"
+                       decoration-warning="kingdee_sync_state in ['saved', 'submitted']"
+                       decoration-danger="kingdee_sync_state == 'error'"/>
+                <field name="kingdee_number" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sales_order_filter_kingdee" model="ir.ui.view">
+        <field name="name">sale.order.search.kingdee</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter name="kingdee_pending" string="Kingdee Pending"
+                        domain="[('kingdee_sync_state', 'in', ('not_synced', 'error'))]"/>
+                <filter name="kingdee_failed" string="Kingdee Failed"
+                        domain="[('kingdee_sync_state', '=', 'error')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Manufacturing orders -->
+    <record id="mrp_production_form_kingdee" model="ir.ui.view">
+        <field name="name">mrp.production.form.kingdee</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Kingdee" name="kingdee">
+                    <group>
+                        <group string="Synchronization">
+                            <field name="kingdee_sync_state" widget="badge"
+                                   decoration-success="kingdee_sync_state == 'audited'"
+                                   decoration-warning="kingdee_sync_state in ['saved', 'submitted']"
+                                   decoration-danger="kingdee_sync_state == 'error'"/>
+                            <field name="kingdee_number"/>
+                            <field name="kingdee_pushed_at"/>
+                            <field name="kingdee_verified_at"/>
+                        </group>
+                        <group string="Diagnostics">
+                            <field name="kingdee_push_attempts"/>
+                            <field name="kingdee_next_retry_at"
+                                   invisible="not kingdee_next_retry_at"/>
+                        </group>
+                    </group>
+                    <field name="kingdee_sync_message" readonly="1"/>
+                    <div class="mt-2">
+                        <button name="action_kingdee_check" type="object"
+                                string="Check Readiness" class="btn-secondary"/>
+                        <button name="action_kingdee_push" type="object"
+                                string="Push to Kingdee" class="btn-primary"
+                                invisible="state in ['draft', 'cancel']"/>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mrp_production_tree_kingdee" model="ir.ui.view">
+        <field name="name">mrp.production.list.kingdee</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <field name="kingdee_sync_state" widget="badge" optional="show"
+                       decoration-success="kingdee_sync_state == 'audited'"
+                       decoration-warning="kingdee_sync_state in ['saved', 'submitted']"
+                       decoration-danger="kingdee_sync_state == 'error'"/>
+                <field name="kingdee_number" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_production_filter_kingdee" model="ir.ui.view">
+        <field name="name">mrp.production.search.kingdee</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter name="kingdee_pending" string="Kingdee Pending"
+                        domain="[('kingdee_sync_state', 'in', ('not_synced', 'error'))]"/>
+                <filter name="kingdee_failed" string="Kingdee Failed"
+                        domain="[('kingdee_sync_state', '=', 'error')]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

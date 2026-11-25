@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_kingdee_inventory_compare_form" model="ir.ui.view">
+        <field name="name">sn.wsd.kingdee.inventory.compare.form</field>
+        <field name="model">sn.wsd.kingdee.inventory.compare</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_load" type="object" string="Compare with Kingdee"
+                            class="btn-primary"/>
+                    <button name="action_apply" type="object" string="Align Odoo to Kingdee"
+                            class="btn-secondary" confirm="Every difference is booked as an inventory adjustment in Odoo, using the quantity of Kingdee. Continue?"
+                            invisible="not difference_count"/>
+                    <button name="action_export" type="object" string="Export Workbook"
+                            invisible="not line_count"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="date"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="warehouse_numbers"
+                                   placeholder="Empty: every warehouse of the account"/>
+                            <field name="only_differences"/>
+                        </group>
+                        <group>
+                            <field name="loaded_at"/>
+                            <field name="line_count"/>
+                            <field name="difference_count"/>
+                        </group>
+                    </group>
+                    <field name="line_ids" nolabel="1">
+                        <list create="0" decoration-danger="state != 'match'"
+                              decoration-muted="applied">
+                            <field name="state"/>
+                            <field name="material_number"/>
+                            <field name="warehouse_number"/>
+                            <field name="lot_number"/>
+                            <field name="status_number" optional="hide"/>
+                            <field name="product_id" optional="hide"/>
+                            <field name="kingdee_qty" sum="Kingdee"/>
+                            <field name="odoo_qty" sum="Odoo"/>
+                            <field name="difference" sum="Difference"/>
+                            <field name="applied"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_kingdee_inventory_compare" model="ir.actions.act_window">
+        <field name="name">Stock Alignment</field>
+        <field name="res_model">sn.wsd.kingdee.inventory.compare</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Align the stock of Odoo with Kingdee</p>
+            <p>
+                Reads the current stock of the account (<b>STK_Inventory</b>) and compares
+                it with the stock of Odoo on the material, the warehouse and the batch.
+                It serves both the opening stock of the migration and the weekly
+                alignment: a difference is booked as an inventory adjustment in Odoo,
+                with the quantity of the account as the reference.
+            </p>
+        </field>
+    </record>
+</odoo>

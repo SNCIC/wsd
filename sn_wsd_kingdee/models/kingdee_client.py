@@ -141,8 +141,17 @@ class SnWsdKingdeeClient(models.AbstractModel):
             _logger.warning("Invalid integer for parameter %s.%s: %r", PARAM_PREFIX, key, raw)
             return default
 
+    def _get_account(self):
+        """Kingdee account of the current company (empty when none is configured).
+
+        The credentials of a data center live on ``sn.wsd.kingdee.account``; the
+        system parameters are kept as the fallback of a database that was configured
+        before the model existed, so an upgrade never disconnects an account.
+        """
+        return self.env["sn.wsd.kingdee.account"].sudo()._for_company(self.env.company)
+
     def is_enabled(self):
-        return bool(self._get_param("enabled"))
+        return bool(self._get_param("enabled")) or bool(self._get_account())
 
     def get_default_org(self, kind):
         """Return the default organization number used to create/use a material.
@@ -175,19 +184,25 @@ class SnWsdKingdeeClient(models.AbstractModel):
         return DEFAULTS.get(key, "")
 
     def _get_config(self, override=None):
-        config = {
-            "server_url": (self._get_param("server_url") or "").strip(),
-            "acct_id": (self._get_param("acct_id") or "").strip(),
-            "user_name": (self._get_param("user_name") or "").strip(),
-            "app_id": (self._get_param("app_id") or "").strip(),
-            "app_secret": (self._get_param("app_secret") or "").strip(),
-            "lcid": self._get_int_param("lcid", DEFAULTS["lcid"]) or DEFAULTS["lcid"],
-            "org_num": self._get_int_param("org_num", DEFAULTS["org_num"]),
-            "connect_timeout": (self._get_int_param("connect_timeout", DEFAULTS["connect_timeout"])
-                                or DEFAULTS["connect_timeout"]),
-            "request_timeout": (self._get_int_param("request_timeout", DEFAULTS["request_timeout"])
-                                or DEFAULTS["request_timeout"]),
-        }
+        account = self._get_account()
+        if account:
+            config = account._to_config()
+        else:
+            config = {
+                "server_url": (self._get_param("server_url") or "").strip(),
+                "acct_id": (self._get_param("acct_id") or "").strip(),
+                "user_name": (self._get_param("user_name") or "").strip(),
+                "app_id": (self._get_param("app_id") or "").strip(),
+                "app_secret": (self._get_param("app_secret") or "").strip(),
+                "lcid": self._get_int_param("lcid", DEFAULTS["lcid"]) or DEFAULTS["lcid"],
+                "org_num": self._get_int_param("org_num", DEFAULTS["org_num"]),
+                "connect_timeout": (self._get_int_param(
+                    "connect_timeout", DEFAULTS["connect_timeout"])
+                    or DEFAULTS["connect_timeout"]),
+                "request_timeout": (self._get_int_param(
+                    "request_timeout", DEFAULTS["request_timeout"])
+                    or DEFAULTS["request_timeout"]),
+            }
         for key, value in (override or {}).items():
             if value not in (None, "", False):
                 config[key] = value

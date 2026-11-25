@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_kingdee_account_list" model="ir.ui.view">
+        <field name="name">sn.wsd.kingdee.account.list</field>
+        <field name="model">sn.wsd.kingdee.account</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="server_url"/>
+                <field name="acct_id"/>
+                <field name="create_org_number" string="Organization"/>
+                <field name="is_test"/>
+                <field name="auto_push_bills"/>
+                <field name="company_ids" widget="many2many_tags"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_kingdee_account_form" model="ir.ui.view">
+        <field name="name">sn.wsd.kingdee.account.form</field>
+        <field name="model">sn.wsd.kingdee.account</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger"
+                            invisible="active"/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. ZNDB Production"/></h1>
+                    </div>
+                    <group>
+                        <group string="Identity">
+                            <field name="code"/>
+                            <field name="is_test"/>
+                            <field name="active" invisible="1"/>
+                            <field name="company_ids" widget="many2many_tags"
+                                   help="Empty: the account serves every company."/>
+                        </group>
+                        <group string="Defaults">
+                            <field name="auto_push_bills"/>
+                            <field name="send_create_org_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Connection" name="connection">
+                            <group>
+                                <group>
+                                    <field name="server_url" placeholder="http://host:port/k3cloud/"/>
+                                    <field name="acct_id"/>
+                                    <field name="user_name"/>
+                                    <field name="app_id"/>
+                                    <field name="app_secret" password="True"/>
+                                </group>
+                                <group>
+                                    <field name="lcid"/>
+                                    <field name="org_num"/>
+                                    <field name="connect_timeout"/>
+                                    <field name="request_timeout"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Organizations" name="organizations">
+                            <group>
+                                <group>
+                                    <field name="create_org_number"/>
+                                    <field name="use_org_number"/>
+                                </group>
+                            </group>
+                            <div class="text-muted">
+                                The organization is written on every document: a stock
+                                document carries it as its stock organization, a
+                                production order as its production organization.
+                            </div>
+                        </page>
+                        <page string="Document Values" name="documents">
+                            <group>
+                                <group string="Ownership">
+                                    <field name="owner_type"/>
+                                    <field name="keeper_type"/>
+                                </group>
+                                <group string="Stock Status">
+                                    <field name="stock_status_number"/>
+                                    <field name="quarantine_stock_status_number"/>
+                                    <field name="frozen_stock_status_number"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Defaults">
+                                    <field name="default_currency_number"/>
+                                    <field name="default_department_number"/>
+                                </group>
+                                <group string="People">
+                                    <field name="default_employee_number"/>
+                                    <field name="default_stocker_number"/>
+                                    <field name="default_salesman_number"/>
+                                    <field name="default_sales_dept_number"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="note" placeholder="Test account of the go-live, or the account of the plant..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_kingdee_account_search" model="ir.ui.view">
+        <field name="name">sn.wsd.kingdee.account.search</field>
+        <field name="model">sn.wsd.kingdee.account</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="acct_id"/>
+                <filter name="test" string="Test Accounts" domain="[('is_test', '=', True)]"/>
+                <group>
+                    <filter name="group_test" string="Test or Production" context="{'group_by': 'is_test'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_kingdee_account" model="ir.actions.act_window">
+        <field name="name">Accounts</field>
+        <field name="res_model">sn.wsd.kingdee.account</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

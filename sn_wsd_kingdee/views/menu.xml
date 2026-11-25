@@ -16,7 +16,7 @@
                   action="action_kingdee_sync_log"
                   groups="base.group_system"/>
 
-        <!-- The synchronization console: the single entry point of the module. -->
+        <!-- The synchronization console: the single entry point of the master data. -->
         <menuitem id="menu_sn_wsd_kingdee_sync"
                   name="Synchronization"
                   parent="menu_sn_wsd_kingdee_root"
@@ -37,11 +37,39 @@
                   sequence="20"
                   groups="base.group_system"/>
 
+        <!-- The documents: what is pushed, with which bill type, and how it failed. -->
+        <menuitem id="menu_sn_wsd_kingdee_bills"
+                  name="Documents"
+                  parent="menu_sn_wsd_kingdee_root"
+                  action="action_kingdee_bill_map"
+                  sequence="6"
+                  groups="base.group_system"/>
+
+        <menuitem id="menu_sn_wsd_kingdee_push_daily"
+                  name="Push Report"
+                  parent="menu_sn_wsd_kingdee_root"
+                  action="action_kingdee_push_daily"
+                  sequence="7"/>
+
+        <menuitem id="menu_sn_wsd_kingdee_inventory"
+                  name="Stock Alignment"
+                  parent="menu_sn_wsd_kingdee_root"
+                  action="action_kingdee_inventory_compare"
+                  sequence="8"
+                  groups="base.group_system"/>
+
         <menuitem id="menu_sn_wsd_kingdee_sync_log"
                   name="Sync Logs"
                   parent="menu_sn_wsd_kingdee_root"
                   action="action_kingdee_sync_log"
                   sequence="10"
+                  groups="base.group_system"/>
+
+        <menuitem id="menu_sn_wsd_kingdee_account"
+                  name="Accounts"
+                  parent="menu_sn_wsd_kingdee_root"
+                  action="action_kingdee_account"
+                  sequence="15"
                   groups="base.group_system"/>
 
         <menuitem id="menu_sn_wsd_kingdee_settings"

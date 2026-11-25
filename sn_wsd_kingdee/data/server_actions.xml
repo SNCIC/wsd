@@ -60,5 +60,47 @@
             <field name="code">action = records.action_kingdee_pull()</field>
             <field name="group_ids" eval="[Command.link(ref('base.group_system'))]"/>
         </record>
+
+        <!-- Documents: one push action per model, the document kind is read on the
+             record (operation type for a transfer, the model itself otherwise). -->
+        <record id="action_server_kingdee_picking_push" model="ir.actions.server">
+            <field name="name">Kingdee: Push Transfers</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="binding_model_id" ref="stock.model_stock_picking"/>
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">action = records.filtered(lambda r: r.state == 'done').action_kingdee_push()</field>
+            <field name="group_ids" eval="[Command.link(ref('base.group_system'))]"/>
+        </record>
+
+        <record id="action_server_kingdee_purchase_order_push" model="ir.actions.server">
+            <field name="name">Kingdee: Push Purchase Orders</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_kingdee_push()</field>
+            <field name="group_ids" eval="[Command.link(ref('base.group_system'))]"/>
+        </record>
+
+        <record id="action_server_kingdee_sale_order_push" model="ir.actions.server">
+            <field name="name">Kingdee: Push Sales Orders</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_kingdee_push()</field>
+            <field name="group_ids" eval="[Command.link(ref('base.group_system'))]"/>
+        </record>
+
+        <record id="action_server_kingdee_mrp_production_push" model="ir.actions.server">
+            <field name="name">Kingdee: Push Manufacturing Orders</field>
+            <field name="model_id" ref="mrp.model_mrp_production"/>
+            <field name="binding_model_id" ref="mrp.model_mrp_production"/>
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_kingdee_push()</field>
+            <field name="group_ids" eval="[Command.link(ref('base.group_system'))]"/>
+        </record>
     </data>
 </odoo>

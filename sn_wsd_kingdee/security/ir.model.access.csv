@@ -1,3 +1,13 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_sn_wsd_kingdee_sync_log_system,sn.wsd.kingdee.sync.log.system,model_sn_wsd_kingdee_sync_log,base.group_system,1,1,1,1
 access_sn_wsd_kingdee_sync_target,sn.wsd.kingdee.sync.target,model_sn_wsd_kingdee_sync_target,base.group_system,1,1,1,1
+access_sn_wsd_kingdee_account_system,sn.wsd.kingdee.account.system,model_sn_wsd_kingdee_account,base.group_system,1,1,1,1
+access_sn_wsd_kingdee_bill_map_system,sn.wsd.kingdee.bill.map.system,model_sn_wsd_kingdee_bill_map,base.group_system,1,1,1,1
+access_sn_wsd_kingdee_push_daily_system,sn.wsd.kingdee.push.daily.system,model_sn_wsd_kingdee_push_daily,base.group_system,1,1,1,1
+access_sn_wsd_kingdee_push_daily_line_system,sn.wsd.kingdee.push.daily.line.system,model_sn_wsd_kingdee_push_daily_line,base.group_system,1,1,1,1
+access_sn_wsd_kingdee_inventory_compare_system,sn.wsd.kingdee.inventory.compare.system,model_sn_wsd_kingdee_inventory_compare,base.group_system,1,1,1,1
+access_sn_wsd_kingdee_inventory_compare_line_system,sn.wsd.kingdee.inventory.compare.line.system,model_sn_wsd_kingdee_inventory_compare_line,base.group_system,1,1,1,1
+access_sn_wsd_kingdee_bill_map_user,sn.wsd.kingdee.bill.map.user,model_sn_wsd_kingdee_bill_map,base.group_user,1,0,0,0
+access_sn_wsd_kingdee_push_daily_user,sn.wsd.kingdee.push.daily.user,model_sn_wsd_kingdee_push_daily,base.group_user,1,0,0,0
+access_sn_wsd_kingdee_push_daily_line_user,sn.wsd.kingdee.push.daily.line.user,model_sn_wsd_kingdee_push_daily_line,base.group_user,1,0,0,0
+access_sn_wsd_kingdee_sync_log_user,sn.wsd.kingdee.sync.log.user,model_sn_wsd_kingdee_sync_log,base.group_user,1,0,0,0

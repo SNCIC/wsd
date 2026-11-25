@@ -11,5 +11,39 @@
             <field name="interval_type">days</field>
             <field name="active">False</field>
         </record>
+
+        <!--
+            Retry of the documents whose push failed. The delay grows with the number
+            of attempts (see RETRY_DELAYS in models/kingdee_bill_mixin.py), so the run
+            can stay frequent without hammering an account that is down: the documents
+            that are not due are simply not selected.
+        -->
+        <record id="ir_cron_kingdee_push_bills" model="ir.cron">
+            <field name="name">Kingdee: retry failed documents</field>
+            <field name="model_id" ref="model_sn_wsd_kingdee_bill_map"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_push_pending_bills()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">10</field>
+            <field name="interval_type">minutes</field>
+            <field name="active">False</field>
+        </record>
+
+        <!--
+            Daily push report of the migration: one row per day, one line per
+            document kind. Generated at the end of the night so the 8:30 stand-up and
+            the 18:00 report of the project manager read the figures of the day
+            before, and the 17:00 push check can regenerate the current day.
+        -->
+        <record id="ir_cron_kingdee_push_daily" model="ir.cron">
+            <field name="name">Kingdee: build the daily push report</field>
+            <field name="model_id" ref="model_sn_wsd_kingdee_push_daily"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_generate_daily()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+        </record>
     </data>
 </odoo>

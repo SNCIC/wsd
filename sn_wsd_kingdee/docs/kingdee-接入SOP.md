@@ -133,8 +133,56 @@ PY
 > （见 `models/res_partner.py` 的 `_kingdee_form_fields`）：客户与供应商各有编码与状态，互不覆盖。
 
 > 基础资料的整体清单、被引用次数、实施顺序与方向策略见 `docs/基础资料同步清单.md`。
-> 单据类待接（按建议顺序）：`STK_InStock`（采购入库，对接现有三步入库/IQC）→ `SAL_SaleOrder` /
-> `PUR_PurchaseOrder` → `PRD_*` → 报表（`GetSysReportData` 需先在金蝶保存查询方案）。
+> 单据（出站）见下节；报表（`GetSysReportData`）仍需先在金蝶保存查询方案。
+
+## 6.1 单据推送（bill mixin）
+
+单据与基础资料走两条骨架，区别只有四点（其余全部复用）：
+`sn.wsd.kingdee.bill.mixin` 继承 `sn.wsd.kingdee.sync.mixin`。
+
+| 差异 | 基础资料 | 单据 |
+| :--- | :--- | :--- |
+| 幂等键 | `FNumber`，编码由模型推导 | `FBillNo` = **Odoo 单据号**，重复 Save 即更新 |
+| 生效方式 | 保存即生效 | 必须 `Submit → Audit` 才动库存与成本（映射行 `auto_audit`） |
+| 组织 | `FCreateOrgId` / `FUseOrgId` | 单据自己的组织字段（`FStockOrgId`/`FPrdOrgId`/`FSaleOrgId`/`FPurchaseOrgId`） |
+| 证明 | 回读编码/名称 | 回读 `FBillNo` + `FDocumentStatus` + 数量/金额，落 `kingdee_verified_at` |
+
+落一张新单据只需：① 在 `sn.wsd.kingdee.bill.map` 加一行（kind + formId + 单据类型）② 在对应模型实现
+`_kingdee_bill_kind()` 与 `_kingdee_bill_parts()` ③ 可选 `_kingdee_bill_required_settings()`。
+触发、重试、告警、回读、日志、日报全部已有。
+
+已接单据（映射数据见 `data/kingdee_bill_maps.xml`，单据类型来自本账套 `BOS_BillType` 实测）：
+
+| Odoo 锚点 | kind | formId | 单据类型 | 数量字段 |
+| :--- | :--- | :--- | :--- | :--- |
+| `purchase.order` | `purchase_order` | `PUR_PurchaseOrder` | `CGDD01_SYS` | `FQty` |
+| `stock.picking`（`store_type_id` 上架单） | `receipt` | `STK_InStock` | `RKD01_SYS` | `FRealQty` |
+| `stock.picking`（`sn_unstored_return_type_id`） | `vendor_return` | `PUR_MRB` | `TLD01_SYS` | `FRMREALQTY` |
+| `sale.order` | `sale_order` | `SAL_SaleOrder` | `XSDD01_SYS` | `FQty` |
+| `stock.picking`（`out_type_id`） | `delivery` | `SAL_OUTSTOCK` | `XSCKD01_SYS` | `FRealQty` |
+| `stock.picking`（`out_type_id` + 退货单） | `sale_return` | `SAL_RETURNSTOCK` | `XSTHD01_SYS` | `FRealQty` |
+| `stock.picking`（`other_in_type_id`） | `other_in` | `STK_MISCELLANEOUS` | `QTRKD01_SYS` | `FQty` |
+| `stock.picking`（`other_out_type_id`） | `other_out` | `STK_MisDelivery` | `QTCKD01_SYS` | `FQty` |
+| `stock.picking`（`int_type_id`） | `internal_transfer` | `STK_TransferDirect` | `ZJDB01_SYS` | `FQty` |
+| `mrp.production` | `production_order` | `PRD_MO` | `SCDD03_SYS` | `FQty` |
+| `stock.picking`（`picking_type_issue_id`） | `mes_issue` | `PRD_PickMtrl` | `SCLLD01_SYS` | `FActualQty` |
+| `stock.picking`（`picking_type_over_pick_id`） | `mes_over_pick` | `PRD_PickMtrl` | `SCLLD01_SYS` | `FActualQty` |
+| `stock.picking`（`picking_type_return_id`） | `mes_return` | `PRD_ReturnMtrl` | `SCTLD01_SYS` | `FQty` |
+| `stock.picking`（`picking_type_receipt_id`） | `mes_fg_receipt` | `PRD_INSTOCK` | `SCRKD02_SYS` | `FRealQty` |
+
+**数量字段不可猜**：`FRealQty`（实收/实发）、`FQty`、`FRMREALQTY`（实退）、`FActualQty`（实发）分属
+不同对象，传错字段金蝶照样返回成功但**不记账**。统一在 `kingdee_bill_mixin.QTY_FIELDS` 里维护。
+
+**三种情形会给出明确报错而不是静默失败**：单据类型未配置、生产类单据引用的 `PRD_MO` 尚未推送
+（`FMoBillNo` 必须是金蝶单号）、其他出入库没有业务类型映射（`F_QNBG_Combo` / `FBizType` 均必录）。
+
+**触发与重试**：`button_validate` / `button_confirm` 之后按映射行 `auto_push` 在**事务提交后**推送
+（`cr.postcommit` + 独立游标），业务单据不会因金蝶不可用而回滚；失败的按 10 分钟→30 分钟→2 小时→
+6 小时→1 天 退避，由 `Kingdee: retry failed documents` 定时任务重试（默认停用，开推前启用）。
+
+**日常入口**：`Kingdee → Documents`（每种单据一行：单据类型、待推/失败计数、一键 Push Pending）、
+`Kingdee → Push Report`（每日成功率，由同步日志生成）、`Kingdee → Stock Alignment`（与
+`STK_Inventory` 按物料/仓库/批次/库存状态对齐，兼作期初库存导入）。
 
 **同步控制台**：所有同步从 `Kingdee → Synchronization`（同步）进入，按方向分两个子菜单，
 页面是 `sn.wsd.kingdee.sync.target` 的清单，按模块分组，行内按钮点了直接同步（不弹向导）。
