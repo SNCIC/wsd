@@ -166,51 +166,6 @@
                             <field name="asset_management_no" readonly="1"/>
                         </group>
                     </group>
-                    <notebook>
-                        <page string="Corrections">
-                            <field name="fix_ids" readonly="1">
-                                <list>
-                                    <field name="field_name"/>
-                                    <field name="original_value"/>
-                                    <field name="value"/>
-                                    <field name="basis"/>
-                                    <field name="create_uid"/>
-                                    <field name="create_date"/>
-                                </list>
-                            </field>
-                            <div colspan="2" class="text-muted">
-                                Corrections are archive fields only
-                                (missed or mis-captured true values);
-                                measured values and the conclusion are
-                                never correctable. Add a correction with
-                                the Correct button above; edit existing
-                                ones from the corrections list via an EIP
-                                manager.
-                            </div>
-                        </page>
-                        <page string="Outbox Records">
-                            <field name="outbox_ids" readonly="1">
-                                <list>
-                                    <field name="info_type_code"/>
-                                    <field name="family"/>
-                                    <field name="test_code"/>
-                                    <field name="state"/>
-                                    <field name="delivered_time"/>
-                                </list>
-                            </field>
-                        </page>
-                        <page string="Detail Lines">
-                            <field name="line_ids" readonly="1">
-                                <list>
-                                    <field name="line_type"/>
-                                    <field name="point_time" optional="hide"/>
-                                    <field name="project_name"/>
-                                    <field name="actual_value"/>
-                                    <field name="item_result" optional="hide"/>
-                                </list>
-                            </field>
-                        </page>
-                    </notebook>
                 </sheet>
             </form>
         </field>
