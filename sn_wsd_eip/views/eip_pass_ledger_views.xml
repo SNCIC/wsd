@@ -208,7 +208,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="conclusion" optional="show"/>
                 <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
@@ -245,7 +245,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="check_duration" optional="show"/>
                 <field name="testing_voltage" optional="show"/>
                 <field name="leakage_current" optional="show"/>
@@ -284,7 +284,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="conclusion" optional="show"/>
                 <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
@@ -321,7 +321,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="allowable_error" optional="show"/>
                 <field name="real_error" optional="show"/>
                 <field name="conclusion" optional="show"/>
@@ -359,7 +359,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="current_value" optional="show"/>
                 <field name="conclusion" optional="show"/>
                 <field name="state" optional="show"/>
@@ -397,7 +397,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="conclusion" optional="show"/>
                 <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
@@ -434,7 +434,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="lines_count" optional="show"/>
                 <field name="average_error_type" optional="show"/>
                 <field name="average_error" optional="show"/>
@@ -474,7 +474,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="software_version" optional="show"/>
                 <field name="plant_code" optional="show"/>
                 <field name="nameplate_code" optional="show"/>
@@ -516,7 +516,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="warming_zone" optional="show"/>
                 <field name="constant_temperature_zone" optional="show"/>
                 <field name="welding_zone" optional="show"/>
@@ -556,7 +556,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="preheating_area" optional="show"/>
                 <field name="welding_zone" optional="show"/>
                 <field name="conclusion" optional="show"/>
@@ -593,7 +593,7 @@
                 <field name="model_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="lines_count" optional="show"/>
                 <field name="agingroom_temperature" optional="show"/>
                 <field name="standard_value" optional="show"/>
@@ -636,7 +636,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="conclusion" optional="show"/>
                 <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
@@ -672,7 +672,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="conclusion" optional="show"/>
                 <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
@@ -709,7 +709,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="check_duration" optional="show"/>
                 <field name="testing_voltage" optional="show"/>
                 <field name="leakage_current" optional="show"/>
@@ -749,7 +749,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="plant_code" optional="show"/>
                 <field name="logic_address" optional="show"/>
                 <field name="bureau_num" optional="show"/>
@@ -789,7 +789,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="conclusion" optional="show"/>
                 <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
@@ -826,7 +826,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="average_error_type" optional="show"/>
                 <field name="standard_value" optional="show"/>
                 <field name="measured_value" optional="show"/>
@@ -866,7 +866,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="current_value" optional="show"/>
                 <field name="conclusion" optional="show"/>
                 <field name="state" optional="show"/>
@@ -903,7 +903,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="warming_zone" optional="show"/>
                 <field name="constant_temperature_zone" optional="show"/>
                 <field name="welding_zone" optional="show"/>
@@ -943,7 +943,7 @@
                 <field name="pcb_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="preheating_area" optional="show"/>
                 <field name="welding_zone" optional="show"/>
                 <field name="conclusion" optional="show"/>
@@ -980,7 +980,7 @@
                 <field name="model_code" optional="show"/>
                 <field name="check_time" optional="show"/>
                 <field name="create_time" optional="show"/>
-                <field name="upload_time" optional="show"/>
+                <field name="upload_time" optional="hide"/>
                 <field name="lines_count" optional="show"/>
                 <field name="agingroom_temperature" optional="show"/>
                 <field name="standard_value" optional="show"/>
