@@ -9,6 +9,7 @@ from odoo.exceptions import UserError
 from odoo.tests import TransactionCase
 
 
+
 class TestEipClean(TransactionCase):
     """Judge-and-snapshot behavior of sn.wsd.eip.pass.record."""
 
@@ -88,6 +89,9 @@ class TestEipClean(TransactionCase):
                          row.clean_time.strftime('%Y-%m-%d %H:%M:%S'))
 
     def test_30_limit_gate(self):
+        self.Rule.search([
+            ('company_id', '=', self.company.id),
+            ('info_type_code', '=', '1005')]).unlink()  # seed data may hold one
         self.Rule.create({
             'company_id': self.company.id,
             'info_type_code': '1005',

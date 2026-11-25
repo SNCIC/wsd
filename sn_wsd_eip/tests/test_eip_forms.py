@@ -295,8 +295,10 @@ class TestEipForms(EipOrderCase):
         self.assertEqual(work.unit, 'PCS')
         self.assertEqual(work.wo_status, '1')
         self.assertEqual(work.push_state, 'draft')
-        # not required: not brought over
-        self.assertFalse(work.materials_description)
+        # the material description rides along (user decision 2026-11-25),
+        # falling back to the purchase line when the order has none
+        self.assertEqual(work.materials_description,
+                         'Single-phase smart meter')
         self.assertFalse(work.entity_code)
 
     def test_61_one_order_can_create_several_work_orders(self):

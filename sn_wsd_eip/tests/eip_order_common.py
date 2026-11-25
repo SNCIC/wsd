@@ -151,6 +151,20 @@ class FakeEipServer:
             self._httpd = None
 
 
+def eip_clear_business_docs(env):
+    """Wipe every business document of the order-push world inside the
+    test transaction: the dev database carries seed/demo documents whose
+    numbers would collide with the fixtures, and the rollback restores
+    them after the test."""
+    for model in ('sn.wsd.eip.work.order', 'sn.wsd.eip.production.order',
+                  'sn.wsd.eip.schedule', 'sn.wsd.eip.process.work',
+                  'sn.wsd.eip.entity.id', 'sn.wsd.eip.supply.note',
+                  'sn.wsd.eip.raw.inventory', 'sn.wsd.eip.spare.inventory',
+                  'sn.wsd.eip.finished.inventory', 'sn.wsd.eip.sale.order',
+                  'sn.wsd.eip.purchase.order'):
+        env[model].search([]).unlink()
+
+
 class EipOrderCase(TransactionCase):
     """Base class of the order-push tests: pins the language, starts the
     fake platform and creates one integration config per test."""
@@ -176,6 +190,13 @@ class EipOrderCase(TransactionCase):
         # The DB admin speaks zh_CN while the assertions expect the
         # English source strings: pin the language for the test.
         self.env = self.env(context=dict(self.env.context, lang='en_US'))
+        # clean room inside the transaction: seed/demo rows that the
+        # tests would collide with are removed here and restored by the
+        # rollback -- no conditions anywhere
+        self.env['sn.wsd.eip.push.log'].search([]).unlink()
+        self.env['sn.wsd.eip.pull.log'].search([]).unlink()
+        self.env['sn.wsd.eip.config'].search([]).unlink()
+        eip_clear_business_docs(self.env)
         self.transport = self.env['sn.wsd.eip.transport']
         self.config = self.make_config()
 

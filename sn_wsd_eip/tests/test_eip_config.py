@@ -24,6 +24,13 @@ class TestEipConfig(TransactionCase):
         # the English source strings: pin the language for this test.
         self.env = self.env(context=dict(self.env.context, lang='en_US'))
 
+    def setUp(self):
+        super().setUp()
+        self.env = self.env(context=dict(self.env.context, lang='en_US'))
+        self.env['sn.wsd.eip.push.log'].search([]).unlink()
+        self.env['sn.wsd.eip.pull.log'].search([]).unlink()
+        self.env['sn.wsd.eip.config'].search([]).unlink()
+
     def _config_values(self, company=None):
         values = {
             'supplier_code': 'SUP-1',
