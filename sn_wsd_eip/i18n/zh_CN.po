@@ -5042,3 +5042,274 @@ msgstr "选择工单后自动带入：单号、品类、路线、实物ID 与批
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_process_work_form
 msgid "Pick a work order to fill the report"
 msgstr "选择工单，自动带入报工信息"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_ac_analog
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_ac_analog
+msgid "AC Analog Acquisition"
+msgstr "交流模拟量采集"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_agingroom_temperature
+msgid "AGINGROOM_TEMPERATURE"
+msgstr "实际温度"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_allowable_error
+msgid "ALLOWABLE_ERROR"
+msgstr "允许误差"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_aoi_fct_general
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_aoi_fct_general
+msgid "AOI / FCT / Basic Error / Comm"
+msgstr "AOI / FCT / 基本误差 / 通信检验"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_asset_management_no
+msgid "ASSET_MANAGEMENT_NO"
+msgstr "资产管理编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_average_error
+msgid "AVERAGE_ERROR"
+msgstr "平均误差"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_average_error_type
+msgid "AVERAGE_ERROR_TYPE"
+msgstr "误差类型代号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_bureau_num
+msgid "BUREAU_NUM"
+msgstr "局编号/下铭牌号"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_error_detail
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_error_detail
+msgid "Basic Error Detail"
+msgstr "基本误差详情"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_battery_current
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_battery_current
+msgid "Battery Current"
+msgstr "电池电流"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_check_duration
+msgid "CHECK_DURATION"
+msgstr "检测时长"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_check_time
+msgid "CHECK_TIME"
+msgstr "检验时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_conclusion
+msgid "CONCLUSION"
+msgstr "检测结论"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_constant_temperature_zone
+msgid "CONSTANT_TEMPERATURE_ZONE"
+msgstr "恒温区"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_cooling_zone
+msgid "COOLING_ZONE"
+msgstr "冷却区"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_create_time
+msgid "CREATE_TIME"
+msgstr "创建时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_current_value
+msgid "CURRENT_VALUE"
+msgstr "电流实测值"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_device_no
+msgid "DEVICE_NO"
+msgstr "设备编码"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_daily_timing
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_daily_timing
+msgid "Daily Timing Error"
+msgstr "日计时误差"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_clean_order_wizard
+msgid "EIP Collection Re-clean by Work Order"
+msgstr "EIP 按工单重洗数采"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_error_value
+msgid "ERROR_VALUE"
+msgstr "误差值"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_aging
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_aging
+msgid "High-Temp Aging"
+msgstr "高温老化"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_info_type_code
+msgid "INFO_TYPE_CODE"
+msgstr "工序编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_leakage_current
+msgid "LEAKAGE_CURRENT"
+msgstr "漏电流值"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_logic_address
+msgid "LOGIC_ADDRESS"
+msgstr "逻辑地址"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_codes
+msgid "Ledger by Interface"
+msgstr "按接口分台账"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_measured_value
+msgid "MEASURED_VALUE"
+msgstr "实测值"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_model_code
+msgid "MODEL_CODE"
+msgstr "规格型号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_nameplate_code
+msgid "NAMEPLATE_CODE"
+msgstr "局编号/下铭牌号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_pcb_code
+msgid "PCB_CODE"
+msgstr "电路板编号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_plant_code
+msgid "PLANT_CODE"
+msgstr "厂内编号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_preheating_area
+msgid "PREHEATING_AREA"
+msgstr "预热区"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_production_order_id
+msgid "PRODUCTION_ORDER_ID"
+msgstr "生产订单编号"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_parameter_device
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_parameter_device
+msgid "Parameter Setting & Query (Device)"
+msgstr "参数设置与查询（采集设备）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_parameter_meter
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_parameter_meter
+msgid "Parameter Setting (Meter)"
+msgstr "参数设置（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_real_error
+msgid "REAL_ERROR"
+msgstr "实际误差"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_form
+msgid "Re-clean by Order"
+msgstr "按工单重洗"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_reflow
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_reflow
+msgid "Reflow Soldering"
+msgstr "回流焊"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_software_version
+msgid "SOFTWARE_VERSION"
+msgstr "软件备案号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_standard_value
+msgid "STANDARD_VALUE"
+msgstr "标准值"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_standard_version
+msgid "STANDARD_VERSION"
+msgstr "采集规范版本号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_table_address
+msgid "TABLE_ADDRESS"
+msgstr "表地址"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_table_no
+msgid "TABLE_NO"
+msgstr "表号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_testing_voltage
+msgid "TESTING_VOLTAGE"
+msgstr "试验电压值"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_test_code
+msgid "TEST_CODE"
+msgstr "检验数据编号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_test_name
+msgid "TEST_NAME"
+msgstr "试验名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_upload_time
+msgid "UPLOAD_TIME"
+msgstr "上传时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_warming_zone
+msgid "WARMING_ZONE"
+msgstr "升温区"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_welding_zone
+msgid "WELDING_ZONE"
+msgstr "焊接区"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_work_order_code
+msgid "WORK_ORDER_CODE"
+msgstr "工单编号"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_wave
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_wave
+msgid "Wave Soldering"
+msgstr "波峰焊"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_withstand
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_withstand
+msgid "Withstand Voltage"
+msgstr "耐压测试"
