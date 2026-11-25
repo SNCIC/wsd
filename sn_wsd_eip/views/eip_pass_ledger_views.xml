@@ -196,13 +196,19 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -226,15 +232,23 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_name" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
+                <field name="check_duration" optional="show"/>
+                <field name="testing_voltage" optional="show"/>
+                <field name="leakage_current" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-                <field name="check_duration"/>
-                <field name="testing_voltage"/>
-                <field name="leakage_current"/>
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -258,13 +272,19 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -288,14 +308,22 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_name" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
+                <field name="allowable_error" optional="show"/>
+                <field name="real_error" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-                <field name="allowable_error"/>
-                <field name="real_error"/>
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -319,13 +347,20 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
+                <field name="current_value" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-                <field name="current_value"/>
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -349,13 +384,20 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_name" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -379,15 +421,23 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_name" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
+                <field name="lines_count" optional="show"/>
+                <field name="average_error_type" optional="show"/>
+                <field name="average_error" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-                <field name="lines_count"/>
-                <field name="average_error_type"/>
-                <field name="average_error"/>
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -411,18 +461,26 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_name" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
+                <field name="software_version" optional="show"/>
+                <field name="plant_code" optional="show"/>
+                <field name="nameplate_code" optional="show"/>
+                <field name="table_no" optional="show"/>
+                <field name="table_address" optional="show"/>
+                <field name="asset_management_no" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-                <field name="software_version"/>
-                <field name="plant_code"/>
-                <field name="nameplate_code"/>
-                <field name="table_no"/>
-                <field name="table_address"/>
-                <field name="asset_management_no"/>
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -446,16 +504,23 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
+                <field name="warming_zone" optional="show"/>
+                <field name="constant_temperature_zone" optional="show"/>
+                <field name="welding_zone" optional="show"/>
+                <field name="cooling_zone" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-                <field name="warming_zone"/>
-                <field name="constant_temperature_zone"/>
-                <field name="welding_zone"/>
-                <field name="cooling_zone"/>
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -479,14 +544,21 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
+                <field name="preheating_area" optional="show"/>
+                <field name="welding_zone" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-                <field name="preheating_area"/>
-                <field name="welding_zone"/>
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -510,15 +582,21 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
+                <field name="lines_count" optional="show"/>
+                <field name="agingroom_temperature" optional="show"/>
+                <field name="standard_value" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-                <field name="lines_count"/>
-                <field name="agingroom_temperature"/>
-                <field name="standard_value"/>
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -546,13 +624,19 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -576,13 +660,19 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -606,15 +696,23 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_name" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
+                <field name="check_duration" optional="show"/>
+                <field name="testing_voltage" optional="show"/>
+                <field name="leakage_current" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-                <field name="check_duration"/>
-                <field name="testing_voltage"/>
-                <field name="leakage_current"/>
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -638,15 +736,23 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_name" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
+                <field name="plant_code" optional="show"/>
+                <field name="logic_address" optional="show"/>
+                <field name="bureau_num" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-                <field name="plant_code"/>
-                <field name="logic_address"/>
-                <field name="bureau_num"/>
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -670,13 +776,20 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_name" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -700,16 +813,24 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_name" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
+                <field name="average_error_type" optional="show"/>
+                <field name="standard_value" optional="show"/>
+                <field name="measured_value" optional="show"/>
+                <field name="error_value" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-                <field name="average_error_type"/>
-                <field name="standard_value"/>
-                <field name="measured_value"/>
-                <field name="error_value"/>
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -733,13 +854,20 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
+                <field name="current_value" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-                <field name="current_value"/>
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -763,16 +891,23 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
+                <field name="warming_zone" optional="show"/>
+                <field name="constant_temperature_zone" optional="show"/>
+                <field name="welding_zone" optional="show"/>
+                <field name="cooling_zone" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-                <field name="warming_zone"/>
-                <field name="constant_temperature_zone"/>
-                <field name="welding_zone"/>
-                <field name="cooling_zone"/>
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -796,14 +931,21 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="pcb_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
+                <field name="preheating_area" optional="show"/>
+                <field name="welding_zone" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-                <field name="preheating_area"/>
-                <field name="welding_zone"/>
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
@@ -827,15 +969,21 @@
         <field name="model">sn.wsd.eip.pass.record</field>
         <field name="arch" type="xml">
             <list>
-                <field name="work_order_no"/>
-                <field name="sn_name"/>
-                <field name="device_no"/>
-                <field name="check_time"/>
+                <field name="standard_version" optional="show"/>
+                <field name="production_order_no" optional="show"/>
+                <field name="work_order_no" optional="show"/>
+                <field name="info_type_code" optional="show"/>
+                <field name="device_no" optional="show"/>
+                <field name="test_code" optional="show"/>
+                <field name="model_code" optional="show"/>
+                <field name="check_time" optional="show"/>
+                <field name="create_time" optional="show"/>
+                <field name="upload_time" optional="show"/>
+                <field name="lines_count" optional="show"/>
+                <field name="agingroom_temperature" optional="show"/>
+                <field name="standard_value" optional="show"/>
                 <field name="conclusion" optional="show"/>
-                <field name="state"/>
-                <field name="lines_count"/>
-                <field name="agingroom_temperature"/>
-                <field name="standard_value"/>
+                <field name="state" optional="show"/>
                 <field name="clean_note" optional="hide"/>
             </list>
         </field>
