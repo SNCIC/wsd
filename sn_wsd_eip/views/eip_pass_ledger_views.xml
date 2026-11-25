@@ -1171,4 +1171,91 @@
               action="action_eip_entry_pack_coll"
               sequence="40"/>
 
+    <record id="view_eip_entry_raw_meter_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.entry.raw.form</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <form string="Raw Material Inspection">
+                <sheet>
+                    <group>
+                        <group string="Batch">
+                            <field name="info_type_code"/>
+                            <field name="production_order_no"/>
+                            <field name="work_order_no"/>
+                            <field name="material_check_batch"/>
+                            <field name="material_batch"/>
+                            <field name="material_brand"/>
+                            <field name="material_supplier"/>
+                            <field name="material_leave_date"/>
+                            <field name="incoming_check_date"/>
+                        </group>
+                        <group string="Inspection">
+                            <field name="test_code"/>
+                            <field name="model_code"/>
+                            <field name="check_time"/>
+                            <field name="conclusion"/>
+                            <field name="varistor_voltage"/>
+                            <field name="error_value"/>
+                            <field name="ratio_value"/>
+                            <field name="frequency_value"/>
+                            <field name="voltage_values"/>
+                            <field name="leakage_current"/>
+                            <field name="contrast_value"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_entry_pack_meter_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.entry.pack.form</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <form string="Packing &amp; Shipping">
+                <sheet>
+                    <group>
+                        <group string="Document">
+                            <field name="info_type_code"/>
+                            <field name="production_order_no"/>
+                            <field name="work_order_no"/>
+                            <field name="test_code"/>
+                            <field name="model_code"/>
+                        </group>
+                        <group string="Pack / Ship">
+                            <field name="nameplate_code"/>
+                            <field name="nameplate_start"/>
+                            <field name="nameplate_final"/>
+                            <field name="number"/>
+                            <field name="unit"/>
+                            <field name="storage_date"/>
+                            <field name="deliver_date"/>
+                            <field name="deliver_status"/>
+                            <field name="conclusion"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_eip_entry_raw_meter" model="ir.actions.act_window">
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_eip_entry_raw_meter')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_eip_entry_raw_meter_form')})]"/>
+    </record>
+    <record id="action_eip_entry_raw_coll" model="ir.actions.act_window">
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_eip_entry_raw_meter')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_eip_entry_raw_meter_form')})]"/>
+    </record>
+    <record id="action_eip_entry_pack_meter" model="ir.actions.act_window">
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_eip_entry_pack_meter')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_eip_entry_pack_meter_form')})]"/>
+    </record>
+    <record id="action_eip_entry_pack_coll" model="ir.actions.act_window">
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_eip_entry_pack_meter')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_eip_entry_pack_meter_form')})]"/>
+    </record>
 </odoo>

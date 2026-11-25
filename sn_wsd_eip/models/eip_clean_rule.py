@@ -51,6 +51,11 @@ class EipCleanRule(models.Model):
         selection=LIMIT_FIELD_SELECTION,
         string='Value Field', required=True, index=True,
         help='Measured value column the limit bounds.')
+    average_error_type = fields.Char(
+        string='Error Type', default='', index=True,
+        help='Type code the limit applies to (basic error detail D1..D4 '
+             '/ H / A / B / C, AC analog IA.. II1). Empty = applies to '
+             'every value of the field regardless of type.')
     lower_limit = fields.Float(
         string='Lower Limit', digits=(10, 3),
         help='Empty = no lower bound.')
@@ -60,8 +65,8 @@ class EipCleanRule(models.Model):
     active = fields.Boolean(default=True, index=True)
 
     _rule_uniq = models.Constraint(
-        'unique(company_id, info_type_code, field_name)',
-        'This interface value already has a limit rule.',
+        'unique(company_id, info_type_code, field_name, average_error_type)',
+        'This interface value already has a limit rule for the type.',
     )
 
     @api.constrains('lower_limit', 'upper_limit')

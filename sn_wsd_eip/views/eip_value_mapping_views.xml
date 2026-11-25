@@ -28,13 +28,21 @@
                             <field name="info_type_code" string="Info Type Code"/>
                             <field name="operation_ids" widget="many2many_tags"/>
                             <field name="eip_field"/>
+                            <field name="match_up_limit"/>
+                            <field name="target_type"/>
+                            <field name="target_test_name"/>
                         </group>
                         <group>
                             <field name="source_kind"/>
                             <field name="source_key"/>
+                            <field name="sample_value"/>
                             <field name="active" invisible="1"/>
                         </group>
                     </group>
+                    <button name="action_test_transform" type="object"
+                            string="Trial" class="btn-secondary"
+                            invisible="not transform_code"/>
+                    <field name="transform_code"/>
                 </sheet>
             </form>
         </field>

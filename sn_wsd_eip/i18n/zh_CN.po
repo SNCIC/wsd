@@ -825,6 +825,7 @@ msgstr "显示名称"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__document_ref
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_preview__document_ref
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__document_ref
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_entry_pack_meter_form
 msgid "Document"
 msgstr "单据"
 
@@ -5766,3 +5767,23 @@ msgstr "计量单位"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__varistor_voltage
 msgid "Varistor Voltage (V)"
 msgstr "压敏电压实测值（V）"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_entry_raw_meter_form
+msgid "Batch"
+msgstr "批次"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_entry_pack_meter_form
+msgid "Pack / Ship"
+msgstr "出入库信息"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_entry_pack_meter_form
+msgid "Packing & Shipping"
+msgstr "出入库"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_entry_raw_meter_form
+msgid "Raw Material Inspection"
+msgstr "原材料检验"

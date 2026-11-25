@@ -122,6 +122,19 @@ PAYLOAD_COLUMNS = {
 
 # per-interface payload additions on top of the base (the spec field
 # tables; the test-process interfaces also carry TEST_NAME)
+# row-level value columns the limit gate judges per interface (only
+# fields whose limits are meaningful; type-dimension rules never apply
+# to row-level fields)
+VALUE_RULE_FIELDS = {
+    '1002': ['check_duration', 'testing_voltage', 'leakage_current'],
+    '1004': ['allowable_error', 'real_error'],
+    '1005': ['current_value'],
+    '2003': ['check_duration', 'testing_voltage', 'leakage_current'],
+    '2004': ['plant_code', 'logic_address', 'bureau_num'],
+    '2006': ['standard_value', 'error_value'],
+    '2007': ['current_value'],
+}
+
 INTERFACE_PAYLOAD_FIELDS = {
     '1001': [],
     '1002': ['TEST_NAME', 'CHECK_DURATION', 'TESTING_VOLTAGE',
@@ -275,7 +288,7 @@ class EipPassRecordClean(models.Model):
         rules_by_company = {}
         for rule in self.env['sn.wsd.eip.clean.rule'].search([]):
             rules_by_company.setdefault(rule.company_id.id, {}).setdefault(
-                rule.info_type_code, {})[rule.field_name] = rule
+                rule.info_type_code, []).append(rule)
         family_by_code = {
             item.code: item.family
             for item in self.env['sn.wsd.eip.collect.interface'].search([])}
@@ -297,9 +310,10 @@ class EipPassRecordClean(models.Model):
                 # the conclusion gate: a failing test never ships
                 problems.append('conclusion failed: 1')
             rules = rules_by_company.get(
-                record.company_id.id, {}).get(code, {})
-            for field_name, rule in rules.items():
-                problem = rule._eip_limit_problem(record[field_name])
+                record.company_id.id, {}).get(code, [])
+            for field_name in VALUE_RULE_FIELDS.get(code, []):
+                rule = _eip_match_rule(rules, field_name, None)
+                problem = rule and rule._eip_limit_problem(record[field_name])
                 if problem:
                     problems.append('limit fail: %s' % problem)
             now = fields.Datetime.now()

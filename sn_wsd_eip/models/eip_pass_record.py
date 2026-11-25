@@ -650,6 +650,10 @@ class EipPassRecordLine(models.Model):
     lower_limit = fields.Char(string='Lower Limit')
     upper_limit = fields.Char(string='Upper Limit')
     actual_value = fields.Char(string='Actual Value')
+    washed_value = fields.Char(
+        string='Washed Value',
+        help='Value after the mapping transform ran (audit of the '
+             'wash); empty when no transform applied or it failed.')
     item_result = fields.Selection(
         selection=[('ok', 'OK'), ('ng', 'NG')], string='Item Result')
     raw_line = fields.Char(string='Raw Line')
