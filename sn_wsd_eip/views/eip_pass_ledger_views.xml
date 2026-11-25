@@ -14,6 +14,7 @@
                 <field name="work_order_no"/>
                 <field name="sn_name"/>
                 <field name="info_type_code"/>
+                <field name="test_name" optional="show"/>
                 <field name="test_code"/>
                 <field name="device_no" optional="show"/>
                 <field name="check_time"/>
@@ -25,7 +26,6 @@
                 <field name="model_code" optional="hide"/>
                 <field name="pcb_code" optional="hide"/>
                 <field name="standard_version" optional="hide"/>
-                <field name="test_name" optional="hide"/>
                 <field name="create_time" optional="hide"/>
                 <field name="upload_time" optional="hide"/>
                 <field name="clean_time" optional="hide"/>
@@ -233,6 +233,13 @@
         </field>
     </record>
 
+    <!-- per-interface ledger views: one table per process, so the
+         columns are the ones that interface actually carries -->
+    <menuitem id="menu_eip_ledger_codes"
+              name="Ledger by Interface"
+              parent="menu_eip_collect"
+              sequence="7"/>
+
     <menuitem id="menu_eip_collect_ledger"
               name="Collection Ledger"
               parent="menu_eip_collect"
@@ -261,4 +268,365 @@ if records:
         default_record_ids=','.join(str(record_id) for record_id in records.ids))
 </field>
     </record>
+    <record id="view_eip_ledger_aoi_fct_general" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.ledger.aoi_fct_general</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="work_order_no"/>
+                <field name="sn_name"/>
+                <field name="device_no"/>
+                <field name="check_time"/>
+                <field name="conclusion" optional="show"/>
+                <field name="state"/>
+
+                <field name="clean_note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_ledger_aoi_fct_general" model="ir.actions.act_window">
+        <field name="name">AOI / FCT / Basic Error / Comm</field>
+        <field name="res_model">sn.wsd.eip.pass.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1001'), ('info_type_code', '=', '1003'), ('info_type_code', '=', '1006'), ('info_type_code', '=', '2001'), ('info_type_code', '=', '2002'), ('info_type_code', '=', '2005')]</field>
+        <field name="context">{'search_default_group_by_code': 1}</field>
+    </record>
+
+    <menuitem id="menu_eip_ledger_aoi_fct_general"
+              name="AOI / FCT / Basic Error / Comm"
+              parent="menu_eip_ledger_codes"
+              action="action_eip_ledger_aoi_fct_general"
+              sequence="10"/>
+
+    <record id="view_eip_ledger_withstand" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.ledger.withstand</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="work_order_no"/>
+                <field name="sn_name"/>
+                <field name="device_no"/>
+                <field name="check_time"/>
+                <field name="conclusion" optional="show"/>
+                <field name="state"/>
+                <field name="check_duration"/>
+                <field name="testing_voltage"/>
+                <field name="leakage_current"/>
+                <field name="clean_note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_ledger_withstand" model="ir.actions.act_window">
+        <field name="name">Withstand Voltage</field>
+        <field name="res_model">sn.wsd.eip.pass.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1002'), ('info_type_code', '=', '2003')]</field>
+        <field name="context">{'search_default_group_by_code': 1}</field>
+    </record>
+
+    <menuitem id="menu_eip_ledger_withstand"
+              name="Withstand Voltage"
+              parent="menu_eip_ledger_codes"
+              action="action_eip_ledger_withstand"
+              sequence="20"/>
+
+    <record id="view_eip_ledger_daily_timing" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.ledger.daily_timing</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="work_order_no"/>
+                <field name="sn_name"/>
+                <field name="device_no"/>
+                <field name="check_time"/>
+                <field name="conclusion" optional="show"/>
+                <field name="state"/>
+                <field name="allowable_error"/>
+                <field name="real_error"/>
+                <field name="clean_note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_ledger_daily_timing" model="ir.actions.act_window">
+        <field name="name">Daily Timing Error</field>
+        <field name="res_model">sn.wsd.eip.pass.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1004')]</field>
+        <field name="context">{'search_default_group_by_code': 1}</field>
+    </record>
+
+    <menuitem id="menu_eip_ledger_daily_timing"
+              name="Daily Timing Error"
+              parent="menu_eip_ledger_codes"
+              action="action_eip_ledger_daily_timing"
+              sequence="30"/>
+
+    <record id="view_eip_ledger_battery_current" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.ledger.battery_current</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="work_order_no"/>
+                <field name="sn_name"/>
+                <field name="device_no"/>
+                <field name="check_time"/>
+                <field name="conclusion" optional="show"/>
+                <field name="state"/>
+                <field name="current_value"/>
+                <field name="clean_note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_ledger_battery_current" model="ir.actions.act_window">
+        <field name="name">Battery Current</field>
+        <field name="res_model">sn.wsd.eip.pass.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1005'), ('info_type_code', '=', '2007')]</field>
+        <field name="context">{'search_default_group_by_code': 1}</field>
+    </record>
+
+    <menuitem id="menu_eip_ledger_battery_current"
+              name="Battery Current"
+              parent="menu_eip_ledger_codes"
+              action="action_eip_ledger_battery_current"
+              sequence="40"/>
+
+    <record id="view_eip_ledger_error_detail" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.ledger.error_detail</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="work_order_no"/>
+                <field name="sn_name"/>
+                <field name="device_no"/>
+                <field name="check_time"/>
+                <field name="conclusion" optional="show"/>
+                <field name="state"/>
+                <field name="lines_count"/>
+                <field name="average_error_type"/>
+                <field name="average_error"/>
+                <field name="clean_note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_ledger_error_detail" model="ir.actions.act_window">
+        <field name="name">Basic Error Detail</field>
+        <field name="res_model">sn.wsd.eip.pass.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1007')]</field>
+        <field name="context">{'search_default_group_by_code': 1}</field>
+    </record>
+
+    <menuitem id="menu_eip_ledger_error_detail"
+              name="Basic Error Detail"
+              parent="menu_eip_ledger_codes"
+              action="action_eip_ledger_error_detail"
+              sequence="50"/>
+
+    <record id="view_eip_ledger_parameter_meter" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.ledger.parameter_meter</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="work_order_no"/>
+                <field name="sn_name"/>
+                <field name="device_no"/>
+                <field name="check_time"/>
+                <field name="conclusion" optional="show"/>
+                <field name="state"/>
+                <field name="software_version"/>
+                <field name="plant_code"/>
+                <field name="nameplate_code"/>
+                <field name="table_no"/>
+                <field name="table_address"/>
+                <field name="asset_management_no"/>
+                <field name="clean_note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_ledger_parameter_meter" model="ir.actions.act_window">
+        <field name="name">Parameter Setting (Meter)</field>
+        <field name="res_model">sn.wsd.eip.pass.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1008')]</field>
+        <field name="context">{'search_default_group_by_code': 1}</field>
+    </record>
+
+    <menuitem id="menu_eip_ledger_parameter_meter"
+              name="Parameter Setting (Meter)"
+              parent="menu_eip_ledger_codes"
+              action="action_eip_ledger_parameter_meter"
+              sequence="60"/>
+
+    <record id="view_eip_ledger_parameter_device" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.ledger.parameter_device</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="work_order_no"/>
+                <field name="sn_name"/>
+                <field name="device_no"/>
+                <field name="check_time"/>
+                <field name="conclusion" optional="show"/>
+                <field name="state"/>
+                <field name="plant_code"/>
+                <field name="logic_address"/>
+                <field name="bureau_num"/>
+                <field name="clean_note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_ledger_parameter_device" model="ir.actions.act_window">
+        <field name="name">Parameter Setting &amp; Query (Device)</field>
+        <field name="res_model">sn.wsd.eip.pass.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '2004')]</field>
+        <field name="context">{'search_default_group_by_code': 1}</field>
+    </record>
+
+    <menuitem id="menu_eip_ledger_parameter_device"
+              name="Parameter Setting &amp; Query (Device)"
+              parent="menu_eip_ledger_codes"
+              action="action_eip_ledger_parameter_device"
+              sequence="70"/>
+
+    <record id="view_eip_ledger_reflow" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.ledger.reflow</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="work_order_no"/>
+                <field name="sn_name"/>
+                <field name="device_no"/>
+                <field name="check_time"/>
+                <field name="conclusion" optional="show"/>
+                <field name="state"/>
+                <field name="warming_zone"/>
+                <field name="constant_temperature_zone"/>
+                <field name="welding_zone"/>
+                <field name="cooling_zone"/>
+                <field name="clean_note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_ledger_reflow" model="ir.actions.act_window">
+        <field name="name">Reflow Soldering</field>
+        <field name="res_model">sn.wsd.eip.pass.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1009'), ('info_type_code', '=', '2008')]</field>
+        <field name="context">{'search_default_group_by_code': 1}</field>
+    </record>
+
+    <menuitem id="menu_eip_ledger_reflow"
+              name="Reflow Soldering"
+              parent="menu_eip_ledger_codes"
+              action="action_eip_ledger_reflow"
+              sequence="80"/>
+
+    <record id="view_eip_ledger_wave" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.ledger.wave</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="work_order_no"/>
+                <field name="sn_name"/>
+                <field name="device_no"/>
+                <field name="check_time"/>
+                <field name="conclusion" optional="show"/>
+                <field name="state"/>
+                <field name="preheating_area"/>
+                <field name="welding_zone"/>
+                <field name="clean_note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_ledger_wave" model="ir.actions.act_window">
+        <field name="name">Wave Soldering</field>
+        <field name="res_model">sn.wsd.eip.pass.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1010'), ('info_type_code', '=', '2009')]</field>
+        <field name="context">{'search_default_group_by_code': 1}</field>
+    </record>
+
+    <menuitem id="menu_eip_ledger_wave"
+              name="Wave Soldering"
+              parent="menu_eip_ledger_codes"
+              action="action_eip_ledger_wave"
+              sequence="90"/>
+
+    <record id="view_eip_ledger_aging" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.ledger.aging</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="work_order_no"/>
+                <field name="sn_name"/>
+                <field name="device_no"/>
+                <field name="check_time"/>
+                <field name="conclusion" optional="show"/>
+                <field name="state"/>
+                <field name="lines_count"/>
+                <field name="agingroom_temperature"/>
+                <field name="standard_value"/>
+                <field name="clean_note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_ledger_aging" model="ir.actions.act_window">
+        <field name="name">High-Temp Aging</field>
+        <field name="res_model">sn.wsd.eip.pass.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1011'), ('info_type_code', '=', '2010')]</field>
+        <field name="context">{'search_default_group_by_code': 1}</field>
+    </record>
+
+    <menuitem id="menu_eip_ledger_aging"
+              name="High-Temp Aging"
+              parent="menu_eip_ledger_codes"
+              action="action_eip_ledger_aging"
+              sequence="100"/>
+
+    <record id="view_eip_ledger_ac_analog" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pass.record.ledger.ac_analog</field>
+        <field name="model">sn.wsd.eip.pass.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="work_order_no"/>
+                <field name="sn_name"/>
+                <field name="device_no"/>
+                <field name="check_time"/>
+                <field name="conclusion" optional="show"/>
+                <field name="state"/>
+                <field name="average_error_type"/>
+                <field name="standard_value"/>
+                <field name="measured_value"/>
+                <field name="error_value"/>
+                <field name="clean_note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_ledger_ac_analog" model="ir.actions.act_window">
+        <field name="name">AC Analog Acquisition</field>
+        <field name="res_model">sn.wsd.eip.pass.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '2006')]</field>
+        <field name="context">{'search_default_group_by_code': 1}</field>
+    </record>
+
+    <menuitem id="menu_eip_ledger_ac_analog"
+              name="AC Analog Acquisition"
+              parent="menu_eip_ledger_codes"
+              action="action_eip_ledger_ac_analog"
+              sequence="110"/>
 </odoo>

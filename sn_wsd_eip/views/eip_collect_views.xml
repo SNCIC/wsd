@@ -86,6 +86,7 @@
                 <field name="info_type_code"/>
                 <field name="family"/>
                 <field name="test_code"/>
+                <field name="payload_test_name" optional="show"/>
                 <field name="source_id"/>
                 <field name="state"/>
                 <field name="delivered_time"/>
@@ -101,7 +102,6 @@
                 <field name="payload_create_time" optional="hide"/>
                 <field name="payload_upload_time" optional="hide"/>
                 <field name="payload_conclusion" optional="hide"/>
-                <field name="payload_test_name" optional="hide"/>
                 <field name="payload_current_value" optional="hide"/>
                 <field name="payload_warming_zone" optional="hide"/>
                 <field name="payload_constant_temperature_zone" optional="hide"/>
@@ -165,6 +165,7 @@
             <search>
                 <field name="info_type_code"/>
                 <field name="test_code"/>
+                <field name="payload_test_name" optional="show"/>
                 <field name="source_id"/>
                 <filter string="Qualified" name="filter_qualified"
                         domain="[('state', '=', 'qualified')]"/>

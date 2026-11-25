@@ -210,6 +210,15 @@ class EipPassRecord(models.Model):
 
     line_ids = fields.One2many(
         'sn.wsd.eip.pass.record.line', 'record_id', string='Lines')
+    lines_count = fields.Integer(
+        string='Detail Lines', compute='_compute_lines_count',
+        help='Test-detail / aging-point lines of this row: the '
+             'per-inspection completeness glance (aging wants at least '
+             '6 points per order).')
+
+    def _compute_lines_count(self):
+        for record in self:
+            record.lines_count = len(record.line_ids)
     outbox_ids = fields.One2many(
         'sn.wsd.eip.collect.outbox', 'source_id', string='Outbox Records')
     fix_ids = fields.One2many(
