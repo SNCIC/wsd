@@ -129,6 +129,7 @@ PY
 | `hr.employee` | `BD_Empinfo` | **7** | **仅入站**：编码、姓名、部门、岗位 | 部门/岗位用 `_kingdee_linked()` 按金蝶编码解析，解析不到留空 |
 | `hr.job` | `HR_ORG_HRPOST` | **9** | **仅入站**：编码、名称、所属部门 | 按名称认领；账套的生效/失效日期与角色实体不读 |
 | `res.bank` | `BD_BANK` | **3** | **仅入站**：编码、名称 | 按名称认领（同币别按 ISO 码、单位按名称） |
+| `account.payment.term` | `BD_RecCondition` | **2**（`FName`、`FCreateOrgId`；另有 `FUseOrgId`、`FAccountTimeJudge`、`FRECMETHOD`） | **仅入站**：编码、名称、分期（`FRate` 比例、`FISPREPAID` 预收、`FODMonth`/`FODDay` 到期日） | 先按 `kingdee_number`、再按**名称**认领已有条款（本账套 7 条中文条款已手工维护，不能建重复），缺的才新建：`rate`→百分比，预收→0 天，月→30 天；`SKTJ04_SYS` 按金额分期无法表达（百分比须合计 100%），跳过留人工 |
 
 > 同一模型同步多个对象时，调度键是 **(方向, 金蝶对象)**，字段也按对象分列
 > （见 `models/res_partner.py` 的 `_kingdee_form_fields`）：客户与供应商各有编码与状态，互不覆盖。
@@ -209,7 +210,7 @@ PY
 | 金蝶字段（Key） | 中文 | Odoo 落点 | 说明 |
 | :--- | :--- | :--- | :--- |
 | `FTRADINGCURRID.FCODE` | 结算币别 | `res.partner.sn_settlement_currency_id` | 按 **ISO 码**认领 `res.currency`；金蝶编码（`PRE001`）与 Odoo `res.currency.kingdee_number` 并不可靠对齐 |
-| `FRECCONDITIONID.FNumber/.FName` | 收款条件 | `property_payment_term_id` + `sn_rec_condition_number`/`sn_rec_condition_name` | 条款不是一对一（金蝶是分期方案），只按 `account.payment.term.kingdee_number` 认领；未映射时保留编码/名称 |
+| `FRECCONDITIONID.FNumber/.FName` | 收款条件 | `property_payment_term_id` + `sn_rec_condition_number`/`sn_rec_condition_name` | 先按 `kingdee_number`、再按**名称**认领（本账套已有 7 条同名中文条款，认领后回写编码）；都没有时保留编码/名称，由控制台 `Receivable Conditions` 补齐（见 §6 表） |
 | `FINVOICETITLE` | 发票抬头 | `sn_invoice_title` | 直写 |
 | `FINVOICEBANKNAME` | 开户银行 | `sn_invoice_bank_name`（文本）+ `bank_ids.bank_id` | 银行名是"总行+支行"自由文本，只认**名称完全一致**的 `res.bank`，**不新建银行** |
 | `FINVOICEBANKACCOUNT` | 银行账号 | `res.partner.bank`（`bank_ids`） | 幂等键 = 客户 + 账号（Odoo 的 `sanitized_acc_number` 唯一约束）；`_kingdee_import_done()` 写入 |

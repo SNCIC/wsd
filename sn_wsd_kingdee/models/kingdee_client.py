@@ -55,6 +55,7 @@ BATCH_FORM_ID = "BD_BatchMainFile"
 EMPLOYEE_FORM_ID = "BD_Empinfo"
 JOB_FORM_ID = "HR_ORG_HRPOST"
 BANK_FORM_ID = "BD_BANK"
+REC_CONDITION_FORM_ID = "BD_RecCondition"
 
 # Kingdee business object used for materials (basic data). It doubles as the
 # cheapest object to prove the credentials with: ``GetDataCenters`` is served

@@ -25,6 +25,7 @@ SYNC_METHODS = {
     ("out", "BD_Customer"): "_kingdee_push_customers",
     ("in", "BD_Supplier"): "_kingdee_import_suppliers",
     ("in", "BD_Currency"): "_kingdee_import_currencies",
+    ("in", "BD_RecCondition"): "_kingdee_import_terms",
     ("in", "BD_Department"): "_kingdee_import_departments",
     ("in", "BD_UNIT"): "_kingdee_import_units",
     ("in", "BD_STOCK"): "_kingdee_import_stocks",

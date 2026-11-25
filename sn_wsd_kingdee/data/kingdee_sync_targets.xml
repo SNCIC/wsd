@@ -84,6 +84,20 @@
             <field name="form_id">BD_Currency</field>
         </record>
 
+        <!-- The receivable conditions. Inbound only: the account owns them. The run
+             claims the Odoo term an accountant maintains by the number of the
+             condition, or by its name when the term carries no number yet, and
+             creates the terms Odoo has none for (the amount-based condition is
+             reported instead: an Odoo term cannot age by amount). -->
+        <record id="sync_target_rec_condition_in" model="sn.wsd.kingdee.sync.target">
+            <field name="name">Receivable Conditions</field>
+            <field name="module">base</field>
+            <field name="direction">in</field>
+            <field name="sequence">45</field>
+            <field name="model_id" ref="account.model_account_payment_term"/>
+            <field name="form_id">BD_RecCondition</field>
+        </record>
+
         <record id="sync_target_department_in" model="sn.wsd.kingdee.sync.target">
             <field name="name">Departments</field>
             <field name="module">base</field>

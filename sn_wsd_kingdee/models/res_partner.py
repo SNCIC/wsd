@@ -430,19 +430,34 @@ class ResPartner(models.Model):
     def _kingdee_payment_term(self, data):
         """Odoo payment term standing for the receivable condition of a row.
 
-        The account conditions (BD_RecCondition: ``100%预收``, ``票后1个月``) are
-        instalment schemes — a percentage, a prepaid flag and a due-date algorithm
-        per line — while an Odoo term is a percentage/days line: the two are not
-        one to one, so nothing is derived from the account. An Odoo term is claimed
-        through the ``kingdee_number`` an administrator fills on it; a condition
-        nobody mapped leaves the term empty, and the raw number and name stay on
-        ``sn_rec_condition_number`` / ``sn_rec_condition_name``.
+        The condition is claimed by its **number** first and by its **name** second:
+        this account keeps the seven expressible conditions as Odoo terms named
+        exactly like the account ones (``票后1个月``, ``100%预收``…), and those terms
+        carried no Kingdee number until the import touched them. A term claimed by
+        name gets the number stored on it, so the next run finds it by number.
+
+        A condition no term stands for leaves the field empty (the number and the
+        name stay on ``sn_rec_condition_number`` / ``sn_rec_condition_name``); the
+        ``Receivable Conditions`` run of the console creates the missing terms, and
+        the amount-based condition the account also carries is left to the
+        accountant because Odoo cannot express it.
         """
         number = ((data or {}).get("FRECCONDITIONID.FNumber") or "").strip()
         if not number:
             return self.env["account.payment.term"].browse()
-        return self.env["account.payment.term"].search(
-            [("kingdee_number", "=", number)], limit=1)
+        Term = self.env["account.payment.term"].sudo()
+        term = Term.search([("kingdee_number", "=", number)], limit=1)
+        if term:
+            return term
+        name = ((data or {}).get("FRECCONDITIONID.FName") or "").strip()
+        if not name:
+            return Term.browse()
+        term = Term.search([("name", "=", name), ("kingdee_number", "=", False)], limit=1)
+        if not term:
+            term = Term.search([("name", "=", name)], limit=1)
+        if term:
+            term._kingdee_link_number(number)
+        return term
 
     def _kingdee_salesman_user(self, data):
         """Odoo user the salesman of a row stands for, when the account has one.
