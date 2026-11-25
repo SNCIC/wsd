@@ -9,6 +9,52 @@ supersedes its old snapshots; nothing is ever deleted.
 from odoo import api, fields, models
 
 
+# ---- payload display columns ----
+# every spec field as a readable column: the payload is synthesized
+# once at cleansing and these non-stored columns read the keys
+# back out, so the outbox can be reviewed like a plain table
+PAYLOAD_COLUMN_MAP = {
+    'payload_standard_version': 'STANDARD_VERSION',
+    'payload_production_order_id': 'PRODUCTION_ORDER_ID',
+    'payload_work_order_code': 'WORK_ORDER_CODE',
+    'payload_info_type_code': 'INFO_TYPE_CODE',
+    'payload_device_no': 'DEVICE_NO',
+    'payload_test_code': 'TEST_CODE',
+    'payload_model_code': 'MODEL_CODE',
+    'payload_pcb_code': 'PCB_CODE',
+    'payload_check_time': 'CHECK_TIME',
+    'payload_create_time': 'CREATE_TIME',
+    'payload_upload_time': 'UPLOAD_TIME',
+    'payload_conclusion': 'CONCLUSION',
+    'payload_test_name': 'TEST_NAME',
+    'payload_current_value': 'CURRENT_VALUE',
+    'payload_warming_zone': 'WARMING_ZONE',
+    'payload_constant_temperature_zone': 'CONSTANT_TEMPERATURE_ZONE',
+    'payload_welding_zone': 'WELDING_ZONE',
+    'payload_cooling_zone': 'COOLING_ZONE',
+    'payload_preheating_area': 'PREHEATING_AREA',
+    'payload_agingroom_temperature': 'AGINGROOM_TEMPERATURE',
+    'payload_standard_value': 'STANDARD_VALUE',
+    'payload_check_duration': 'CHECK_DURATION',
+    'payload_testing_voltage': 'TESTING_VOLTAGE',
+    'payload_leakage_current': 'LEAKAGE_CURRENT',
+    'payload_allowable_error': 'ALLOWABLE_ERROR',
+    'payload_real_error': 'REAL_ERROR',
+    'payload_average_error_type': 'AVERAGE_ERROR_TYPE',
+    'payload_average_error': 'AVERAGE_ERROR',
+    'payload_software_version': 'SOFTWARE_VERSION',
+    'payload_plant_code': 'PLANT_CODE',
+    'payload_nameplate_code': 'NAMEPLATE_CODE',
+    'payload_table_no': 'TABLE_NO',
+    'payload_table_address': 'TABLE_ADDRESS',
+    'payload_asset_management_no': 'ASSET_MANAGEMENT_NO',
+    'payload_measured_value': 'MEASURED_VALUE',
+    'payload_error_value': 'ERROR_VALUE',
+    'payload_logic_address': 'LOGIC_ADDRESS',
+    'payload_bureau_num': 'BUREAU_NUM',
+}
+
+
 class EipCollectOutbox(models.Model):
     _name = 'sn.wsd.eip.collect.outbox'
     _description = 'EIP Collect Outbox'
@@ -52,6 +98,129 @@ class EipCollectOutbox(models.Model):
     delivered_time = fields.Datetime(
         string='Delivered Time', readonly=True,
         help='When the gateway fetched this snapshot.')
+
+    # payload display columns (non-stored, one per spec key)
+    payload_standard_version = fields.Char(
+        string='STANDARD_VERSION', compute='_compute_payload_columns',
+        store=False)
+    payload_production_order_id = fields.Char(
+        string='PRODUCTION_ORDER_ID', compute='_compute_payload_columns',
+        store=False)
+    payload_work_order_code = fields.Char(
+        string='WORK_ORDER_CODE', compute='_compute_payload_columns',
+        store=False)
+    payload_info_type_code = fields.Char(
+        string='INFO_TYPE_CODE', compute='_compute_payload_columns',
+        store=False)
+    payload_device_no = fields.Char(
+        string='DEVICE_NO', compute='_compute_payload_columns',
+        store=False)
+    payload_test_code = fields.Char(
+        string='TEST_CODE', compute='_compute_payload_columns',
+        store=False)
+    payload_model_code = fields.Char(
+        string='MODEL_CODE', compute='_compute_payload_columns',
+        store=False)
+    payload_pcb_code = fields.Char(
+        string='PCB_CODE', compute='_compute_payload_columns',
+        store=False)
+    payload_check_time = fields.Char(
+        string='CHECK_TIME', compute='_compute_payload_columns',
+        store=False)
+    payload_create_time = fields.Char(
+        string='CREATE_TIME', compute='_compute_payload_columns',
+        store=False)
+    payload_upload_time = fields.Char(
+        string='UPLOAD_TIME', compute='_compute_payload_columns',
+        store=False)
+    payload_conclusion = fields.Char(
+        string='CONCLUSION', compute='_compute_payload_columns',
+        store=False)
+    payload_test_name = fields.Char(
+        string='TEST_NAME', compute='_compute_payload_columns',
+        store=False)
+    payload_current_value = fields.Char(
+        string='CURRENT_VALUE', compute='_compute_payload_columns',
+        store=False)
+    payload_warming_zone = fields.Char(
+        string='WARMING_ZONE', compute='_compute_payload_columns',
+        store=False)
+    payload_constant_temperature_zone = fields.Char(
+        string='CONSTANT_TEMPERATURE_ZONE', compute='_compute_payload_columns',
+        store=False)
+    payload_welding_zone = fields.Char(
+        string='WELDING_ZONE', compute='_compute_payload_columns',
+        store=False)
+    payload_cooling_zone = fields.Char(
+        string='COOLING_ZONE', compute='_compute_payload_columns',
+        store=False)
+    payload_preheating_area = fields.Char(
+        string='PREHEATING_AREA', compute='_compute_payload_columns',
+        store=False)
+    payload_agingroom_temperature = fields.Char(
+        string='AGINGROOM_TEMPERATURE', compute='_compute_payload_columns',
+        store=False)
+    payload_standard_value = fields.Char(
+        string='STANDARD_VALUE', compute='_compute_payload_columns',
+        store=False)
+    payload_check_duration = fields.Char(
+        string='CHECK_DURATION', compute='_compute_payload_columns',
+        store=False)
+    payload_testing_voltage = fields.Char(
+        string='TESTING_VOLTAGE', compute='_compute_payload_columns',
+        store=False)
+    payload_leakage_current = fields.Char(
+        string='LEAKAGE_CURRENT', compute='_compute_payload_columns',
+        store=False)
+    payload_allowable_error = fields.Char(
+        string='ALLOWABLE_ERROR', compute='_compute_payload_columns',
+        store=False)
+    payload_real_error = fields.Char(
+        string='REAL_ERROR', compute='_compute_payload_columns',
+        store=False)
+    payload_average_error_type = fields.Char(
+        string='AVERAGE_ERROR_TYPE', compute='_compute_payload_columns',
+        store=False)
+    payload_average_error = fields.Char(
+        string='AVERAGE_ERROR', compute='_compute_payload_columns',
+        store=False)
+    payload_software_version = fields.Char(
+        string='SOFTWARE_VERSION', compute='_compute_payload_columns',
+        store=False)
+    payload_plant_code = fields.Char(
+        string='PLANT_CODE', compute='_compute_payload_columns',
+        store=False)
+    payload_nameplate_code = fields.Char(
+        string='NAMEPLATE_CODE', compute='_compute_payload_columns',
+        store=False)
+    payload_table_no = fields.Char(
+        string='TABLE_NO', compute='_compute_payload_columns',
+        store=False)
+    payload_table_address = fields.Char(
+        string='TABLE_ADDRESS', compute='_compute_payload_columns',
+        store=False)
+    payload_asset_management_no = fields.Char(
+        string='ASSET_MANAGEMENT_NO', compute='_compute_payload_columns',
+        store=False)
+    payload_measured_value = fields.Char(
+        string='MEASURED_VALUE', compute='_compute_payload_columns',
+        store=False)
+    payload_error_value = fields.Char(
+        string='ERROR_VALUE', compute='_compute_payload_columns',
+        store=False)
+    payload_logic_address = fields.Char(
+        string='LOGIC_ADDRESS', compute='_compute_payload_columns',
+        store=False)
+    payload_bureau_num = fields.Char(
+        string='BUREAU_NUM', compute='_compute_payload_columns',
+        store=False)
+
+    def _compute_payload_columns(self):
+        for row in self:
+            payload = row.payload or {}
+            for fname, key in PAYLOAD_COLUMN_MAP.items():
+                value = payload.get(key, '')
+                row[fname] = str(value) if value is not None else ''
 
     @api.model
     def _eip_claim(self, code, amount):

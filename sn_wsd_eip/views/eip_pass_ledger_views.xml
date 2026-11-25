@@ -21,6 +21,40 @@
                 <field name="spec_family" optional="show"/>
                 <field name="state"/>
                 <field name="clean_note" optional="hide"/>
+                <field name="production_order_no" optional="hide"/>
+                <field name="model_code" optional="hide"/>
+                <field name="pcb_code" optional="hide"/>
+                <field name="standard_version" optional="hide"/>
+                <field name="test_name" optional="hide"/>
+                <field name="create_time" optional="hide"/>
+                <field name="upload_time" optional="hide"/>
+                <field name="clean_time" optional="hide"/>
+                <field name="software_version" optional="hide"/>
+                <field name="plant_code" optional="hide"/>
+                <field name="nameplate_code" optional="hide"/>
+                <field name="table_no" optional="hide"/>
+                <field name="table_address" optional="hide"/>
+                <field name="asset_management_no" optional="hide"/>
+                <field name="logic_address" optional="hide"/>
+                <field name="bureau_num" optional="hide"/>
+                <field name="current_value" optional="hide"/>
+                <field name="check_duration" optional="hide"/>
+                <field name="testing_voltage" optional="hide"/>
+                <field name="leakage_current" optional="hide"/>
+                <field name="average_error_type" optional="hide"/>
+                <field name="average_error" optional="hide"/>
+                <field name="allowable_error" optional="hide"/>
+                <field name="real_error" optional="hide"/>
+                <field name="warming_zone" optional="hide"/>
+                <field name="constant_temperature_zone" optional="hide"/>
+                <field name="welding_zone" optional="hide"/>
+                <field name="cooling_zone" optional="hide"/>
+                <field name="preheating_area" optional="hide"/>
+                <field name="agingroom_temperature" optional="hide"/>
+                <field name="standard_value" optional="hide"/>
+                <field name="measured_value" optional="hide"/>
+                <field name="error_value" optional="hide"/>
+                <field name="device_no" optional="hide"/>
             </list>
         </field>
     </record>

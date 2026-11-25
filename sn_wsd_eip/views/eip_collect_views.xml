@@ -89,6 +89,44 @@
                 <field name="source_id"/>
                 <field name="state"/>
                 <field name="delivered_time"/>
+                <field name="payload_standard_version" optional="hide"/>
+                <field name="payload_production_order_id" optional="hide"/>
+                <field name="payload_work_order_code" optional="hide"/>
+                <field name="payload_info_type_code" optional="hide"/>
+                <field name="payload_device_no" optional="hide"/>
+                <field name="payload_test_code" optional="hide"/>
+                <field name="payload_model_code" optional="hide"/>
+                <field name="payload_pcb_code" optional="hide"/>
+                <field name="payload_check_time" optional="hide"/>
+                <field name="payload_create_time" optional="hide"/>
+                <field name="payload_upload_time" optional="hide"/>
+                <field name="payload_conclusion" optional="hide"/>
+                <field name="payload_test_name" optional="hide"/>
+                <field name="payload_current_value" optional="hide"/>
+                <field name="payload_warming_zone" optional="hide"/>
+                <field name="payload_constant_temperature_zone" optional="hide"/>
+                <field name="payload_welding_zone" optional="hide"/>
+                <field name="payload_cooling_zone" optional="hide"/>
+                <field name="payload_preheating_area" optional="hide"/>
+                <field name="payload_agingroom_temperature" optional="hide"/>
+                <field name="payload_standard_value" optional="hide"/>
+                <field name="payload_check_duration" optional="hide"/>
+                <field name="payload_testing_voltage" optional="hide"/>
+                <field name="payload_leakage_current" optional="hide"/>
+                <field name="payload_allowable_error" optional="hide"/>
+                <field name="payload_real_error" optional="hide"/>
+                <field name="payload_average_error_type" optional="hide"/>
+                <field name="payload_average_error" optional="hide"/>
+                <field name="payload_software_version" optional="hide"/>
+                <field name="payload_plant_code" optional="hide"/>
+                <field name="payload_nameplate_code" optional="hide"/>
+                <field name="payload_table_no" optional="hide"/>
+                <field name="payload_table_address" optional="hide"/>
+                <field name="payload_asset_management_no" optional="hide"/>
+                <field name="payload_measured_value" optional="hide"/>
+                <field name="payload_error_value" optional="hide"/>
+                <field name="payload_logic_address" optional="hide"/>
+                <field name="payload_bureau_num" optional="hide"/>
             </list>
         </field>
     </record>
