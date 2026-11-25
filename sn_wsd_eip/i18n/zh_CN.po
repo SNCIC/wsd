@@ -4305,7 +4305,7 @@ msgstr "采集接口注册"
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_collect_outbox
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_collect_outbox
 msgid "Collect Outbox"
-msgstr "出库记录"
+msgstr "采集记录"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_interface__family__collector
@@ -4442,7 +4442,7 @@ msgstr "EIP 采集接口注册"
 #. module: sn_wsd_eip
 #: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_collect_outbox
 msgid "EIP Collect Outbox"
-msgstr "EIP 出库记录"
+msgstr "EIP 采集记录"
 
 #. module: sn_wsd_eip
 #: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_clean_fix_wizard
@@ -4674,7 +4674,7 @@ msgstr "原值"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__outbox_ids
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_form
 msgid "Outbox Records"
-msgstr "出库记录"
+msgstr "采集记录"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_interface__method__post
@@ -4693,7 +4693,7 @@ msgid ""
 "Pending: waiting for cleansing. Qualified: cleansed, snapshots in the "
 "outbox. Rejected: a gate failed, reason kept. Delivered: taken by the "
 "gateway, frozen -- no extraction or cleansing touches a delivered row."
-msgstr "待清洗：等待清洗。合格：已清洗，记录在出库表。不合格：闸未过，原因留存。已交付：网关已取走，冻结——提取与清洗不再触碰。"
+msgstr "待清洗：等待清洗。合格：已清洗，记录在采集记录表。不合格：闸未过，原因留存。已交付：网关已取走，冻结——提取与清洗不再触碰。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_material_mapping__subclass_id
@@ -4833,7 +4833,7 @@ msgid ""
 "                fields surface here for archive corrections, out-of-limit\n"
 "                and failing rows stay rejected with the reason, and\n"
 "                qualified rows ship through the outbox."
-msgstr "三道闸判定每一行：缺必填的在此待档案补录，超限与结论不合格的带原因留档，合格的经出库记录交付。"
+msgstr "三道闸判定每一行：缺必填的在此待档案补录，超限与结论不合格的带原因留档，合格的经采集记录交付。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_collect_interface_code_uniq
@@ -5018,7 +5018,7 @@ msgid ""
 "Every collection row carrying this work order number is re-judged by the "
 "gates; qualified rows regenerate their outbox snapshots, rejected rows keep "
 "the fresh reason."
-msgstr "携带该工单号的全部数采行重新过闸：合格行重建出库记录，不合格行刷新原因。"
+msgstr "携带该工单号的全部数采行重新过闸：合格行重建采集记录，不合格行刷新原因。"
 
 #. module: sn_wsd_eip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_clean_order_wizard_form
