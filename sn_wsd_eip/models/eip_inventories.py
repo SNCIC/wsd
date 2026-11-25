@@ -25,6 +25,7 @@ class EipSpareInventory(models.Model):
     for a refresh every 24 hours."""
     _name = 'sn.wsd.eip.spare.inventory'
     _description = 'EIP Spare Parts Inventory'
+    _rec_name = 'spare_product_code'
     _inherit = 'sn.wsd.eip.push.mixin'
     _order = 'spare_product_code, id'
     _check_company_auto = True
@@ -99,6 +100,7 @@ class EipFinishedInventory(models.Model):
     asks for one push per product (and per batch) every day."""
     _name = 'sn.wsd.eip.finished.inventory'
     _description = 'EIP Finished Goods Inventory'
+    _rec_name = 'product_code'
     _inherit = 'sn.wsd.eip.push.mixin'
     _order = 'product_code, id'
     _check_company_auto = True

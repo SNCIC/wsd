@@ -8,6 +8,7 @@ class EipProductionOrder(models.Model):
     interface). Created from a grid purchase order line or by hand."""
     _name = 'sn.wsd.eip.production.order'
     _description = 'EIP Production Order'
+    _rec_name = 'ipo_no'
     _inherit = 'sn.wsd.eip.push.mixin'
     _order = 'ipo_no desc, id desc'
     _check_company_auto = True

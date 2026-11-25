@@ -59,6 +59,7 @@ class EipPurchaseOrder(models.Model):
     one record per purchase order number, contract-level fields only."""
     _name = 'sn.wsd.eip.purchase.order'
     _description = 'EIP Grid Purchase Order'
+    _rec_name = 'po_no'
     _order = 'po_no desc, id desc'
     _check_company_auto = True
 
@@ -106,6 +107,7 @@ class EipPurchaseOrderLine(models.Model):
     as text and never converted to a number."""
     _name = 'sn.wsd.eip.purchase.order.line'
     _description = 'EIP Grid Purchase Order Line'
+    _rec_name = 'po_item_id'
     _order = 'po_no, po_item_no, id'
     _check_company_auto = True
 

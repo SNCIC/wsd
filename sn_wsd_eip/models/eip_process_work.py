@@ -8,6 +8,7 @@ class EipProcessWork(models.Model):
     interface): what a workstation reported on a work order."""
     _name = 'sn.wsd.eip.process.work'
     _description = 'EIP Process Work Report'
+    _rec_name = 'wo_no'
     _inherit = 'sn.wsd.eip.push.mixin'
     _order = 'create_date desc, id desc'
     _check_company_auto = True

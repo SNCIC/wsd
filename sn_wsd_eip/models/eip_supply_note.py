@@ -23,6 +23,7 @@ class EipSupplyNote(models.Model):
     written back on the lines (usable later as purchase line IDs)."""
     _name = 'sn.wsd.eip.supply.note'
     _description = 'EIP Supply Note'
+    _rec_name = 'supply_no'
     _inherit = 'sn.wsd.eip.push.mixin'
     _order = 'supply_no desc, id desc'
     _check_company_auto = True

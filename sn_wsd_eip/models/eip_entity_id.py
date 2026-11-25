@@ -9,6 +9,7 @@ class EipEntityId(models.Model):
     continuous range."""
     _name = 'sn.wsd.eip.entity.id'
     _description = 'EIP Entity ID'
+    _rec_name = 'entity_code'
     _inherit = 'sn.wsd.eip.push.mixin'
     _order = 'entity_code, id'
     _check_company_auto = True

@@ -30,6 +30,7 @@ class EipSchedule(models.Model):
     orders and their processes below it."""
     _name = 'sn.wsd.eip.schedule'
     _description = 'EIP Production Schedule'
+    _rec_name = 'schedule_code'
     _inherit = 'sn.wsd.eip.push.mixin'
     _order = 'schedule_code desc, id desc'
     _check_company_auto = True

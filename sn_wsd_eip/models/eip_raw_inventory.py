@@ -15,6 +15,7 @@ class EipRawInventory(models.Model):
     incoming batches below it."""
     _name = 'sn.wsd.eip.raw.inventory'
     _description = 'EIP Raw Material Inventory'
+    _rec_name = 'mat_code'
     _inherit = 'sn.wsd.eip.push.mixin'
     _order = 'mat_code, id'
     _check_company_auto = True

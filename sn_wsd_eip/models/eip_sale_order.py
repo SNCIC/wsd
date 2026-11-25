@@ -23,6 +23,7 @@ class EipSaleOrder(models.Model):
     document linked to the grid purchase order lines via its lines."""
     _name = 'sn.wsd.eip.sale.order'
     _description = 'EIP Sale Order'
+    _rec_name = 'so_no'
     _inherit = 'sn.wsd.eip.push.mixin'
     _order = 'so_no desc, id desc'
     _check_company_auto = True

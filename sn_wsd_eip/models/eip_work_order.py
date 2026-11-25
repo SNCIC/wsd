@@ -9,6 +9,7 @@ class EipWorkOrder(models.Model):
     production order or by hand."""
     _name = 'sn.wsd.eip.work.order'
     _description = 'EIP Work Order'
+    _rec_name = 'wo_no'
     _inherit = 'sn.wsd.eip.push.mixin'
     _order = 'wo_no desc, id desc'
     _check_company_auto = True
