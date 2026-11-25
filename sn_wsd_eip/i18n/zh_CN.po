@@ -1041,7 +1041,7 @@ msgstr "EIP PCB_CODE：SN 本身（1011 留空，老化接口没有板卡身份�
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__production_order_no
 msgid "EIP PRODUCTION_ORDER_ID: manufacturing order name snapshot."
-msgstr "EIP PRODUCTION_ORDER_ID：制造订单号快照。"
+msgstr "EIP PRODUCTION_ORDER_ID：制造订单号记录。"
 
 #. module: sn_wsd_eip
 #: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_value_mixin
@@ -1227,7 +1227,7 @@ msgstr "EIP 取值映射"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__work_order_no
 msgid "EIP WORK_ORDER_CODE: MES order name snapshot."
-msgstr "EIP WORK_ORDER_CODE：制令单号快照。"
+msgstr "EIP WORK_ORDER_CODE：制令单号记录。"
 
 #. module: sn_wsd_eip
 #: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_work_order
@@ -1743,7 +1743,7 @@ msgstr "最近推送时间"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__eip_snapshot
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__eip_snapshot
 msgid "Last Pushed Values"
-msgstr "上次推送快照"
+msgstr "上次推送记录"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_state__last_run_at
@@ -4288,12 +4288,12 @@ msgstr "清洗时间"
 msgid ""
 "Cleansed collection row this snapshot was built from; the snapshot columns "
 "stay self-contained if the row itself is ever removed."
-msgstr "快照由这条数采行清洗生成；即使行本身被移除，快照各列仍自持。"
+msgstr "记录由这条数采行清洗生成；即使行本身被移除，记录各列仍自持。"
 
 #. module: sn_wsd_eip
 #: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_collect_outbox
 msgid "Cleansed snapshots waiting for the gateway"
-msgstr "等待网关抓取的清洗合格快照"
+msgstr "等待网关抓取的清洗合格记录"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_collect_interface
@@ -4305,7 +4305,7 @@ msgstr "采集接口注册"
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_collect_outbox
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_collect_outbox
 msgid "Collect Outbox"
-msgstr "出库快照"
+msgstr "出库记录"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_interface__family__collector
@@ -4442,7 +4442,7 @@ msgstr "EIP 采集接口注册"
 #. module: sn_wsd_eip
 #: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_collect_outbox
 msgid "EIP Collect Outbox"
-msgstr "EIP 出库快照"
+msgstr "EIP 出库记录"
 
 #. module: sn_wsd_eip
 #: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_clean_fix_wizard
@@ -4497,7 +4497,7 @@ msgstr "错误信息"
 msgid ""
 "Extraction wrote values after qualification: the next cleansing sweep re-"
 "judges the row and regenerates its snapshots."
-msgstr "合格后提取器又写入了值：下一轮清洗将重判该行并重建快照。"
+msgstr "合格后提取器又写入了值：下一轮清洗将重判该行并重建记录。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix__field_name
@@ -4663,7 +4663,7 @@ msgid ""
 "One row is one data record of the gateway answer; the\n"
 "                payload is the exact JSON shipped. Delivered snapshots are\n"
 "                kept forever as the audit trail."
-msgstr "一行即网关 data[] 的一条记录，payload 就是实际发出的 JSON；已交付快照永久保留作审计。"
+msgstr "一行即网关 data[] 的一条记录，payload 就是实际发出的 JSON；已交付记录永久保留作审计。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_fix__original_value
@@ -4693,7 +4693,7 @@ msgid ""
 "Pending: waiting for cleansing. Qualified: cleansed, snapshots in the "
 "outbox. Rejected: a gate failed, reason kept. Delivered: taken by the "
 "gateway, frozen -- no extraction or cleansing touches a delivered row."
-msgstr "待清洗：等待清洗。合格：已清洗，快照在出库表。不合格：闸未过，原因留存。已交付：网关已取走，冻结——提取与清洗不再触碰。"
+msgstr "待清洗：等待清洗。合格：已清洗，记录在出库表。不合格：闸未过，原因留存。已交付：网关已取走，冻结——提取与清洗不再触碰。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_material_mapping__subclass_id
@@ -4737,7 +4737,7 @@ msgid ""
 "Qualified: waiting for the gateway to fetch it. Delivered: fetched, frozen "
 "forever. Superseded: replaced by a newer snapshot of the same source (re-"
 "cleansing), never delivered."
-msgstr "待抓取：等待网关取走。已交付：已取走，永久冻结。被替代：同源行重洗后由新快照替代，未交付过。"
+msgstr "待抓取：等待网关取走。已交付：已取走，永久冻结。被替代：同源行重洗后由新记录替代，未交付过。"
 
 #. module: sn_wsd_eip
 #: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_pass_record_ledger
@@ -4797,7 +4797,7 @@ msgstr "下限、上限至少填一个。"
 #. module: sn_wsd_eip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_collect_outbox_form
 msgid "Snapshot"
-msgstr "快照"
+msgstr "记录"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__source
@@ -4833,7 +4833,7 @@ msgid ""
 "                fields surface here for archive corrections, out-of-limit\n"
 "                and failing rows stay rejected with the reason, and\n"
 "                qualified rows ship through the outbox."
-msgstr "三道闸判定每一行：缺必填的在此待档案补录，超限与结论不合格的带原因留档，合格的经出库快照交付。"
+msgstr "三道闸判定每一行：缺必填的在此待档案补录，超限与结论不合格的带原因留档，合格的经出库记录交付。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_collect_interface_code_uniq
@@ -4906,7 +4906,7 @@ msgstr "数值字段"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__delivered_time
 msgid "When the gateway fetched this snapshot."
-msgstr "网关取走该快照的时间。"
+msgstr "网关取走该记录的时间。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_clean_fix__basis
@@ -5018,7 +5018,7 @@ msgid ""
 "Every collection row carrying this work order number is re-judged by the "
 "gates; qualified rows regenerate their outbox snapshots, rejected rows keep "
 "the fresh reason."
-msgstr "携带该工单号的全部数采行重新过闸：合格行重建出库快照，不合格行刷新原因。"
+msgstr "携带该工单号的全部数采行重新过闸：合格行重建出库记录，不合格行刷新原因。"
 
 #. module: sn_wsd_eip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_clean_order_wizard_form
@@ -5493,9 +5493,9 @@ msgstr "耐压测试（电能表）"
 #. module: sn_wsd_eip
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_all
 msgid "All Snapshots"
-msgstr "全部快照"
+msgstr "全部记录"
 
 #. module: sn_wsd_eip
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_meter
 msgid "Meter Snapshot"
-msgstr "电能表快照"
+msgstr "电能表记录"
