@@ -6327,8 +6327,8 @@ msgstr "抽样矩阵完整"
 #. module: sn_wsd_quality
 #. odoo-python
 #: code:addons/sn_wsd_quality/models/sampling.py:0
-msgid "Missing sampling plans"
-msgstr "缺少抽样方案"
+msgid "Sampling matrix needs attention"
+msgstr "抽样矩阵需要处理"
 
 #. module: sn_wsd_quality
 #. odoo-python
@@ -6358,8 +6358,14 @@ msgstr "检验方案所需的方案单元格均已配置。"
 #: code:addons/sn_wsd_quality/models/sampling.py:0
 msgid ""
 "%(count)s plan cells are still missing (mode / sample size code / AQL): "
-"%(gaps)s"
-msgstr "仍有 %(count)s 个方案单元格缺失（模式 / 样本量代码 / AQL）：%(gaps)s"
+"%(cells)s"
+msgstr "仍有 %(count)s 个方案单元格缺失（模式 / 样本量代码 / AQL）：%(cells)s"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid "%(count)s cells differ from the GB/T 2828.1 master table: %(cells)s"
+msgstr "有 %(count)s 个单元格与 GB/T 2828.1 主表不一致：%(cells)s"
 
 #. module: sn_wsd_quality
 #. odoo-python

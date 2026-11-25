@@ -320,6 +320,25 @@ class QualitySamplingStandard(models.Model):
                     ))
         return gaps
 
+    def _sampling_mismatch_list(self):
+        """Cells whose numbers differ from the GB/T 2828.1 master table."""
+        self.ensure_one()
+        mismatches = []
+        for record in self.plan_ids.filtered(lambda plan: plan.sample_size_code in GB2828_SAMPLE_SIZES):
+            expected = self._gb2828_plan_values(
+                record.switching_mode,
+                GB2828_SAMPLE_SIZES[record.sample_size_code],
+                record.aql_value,
+            )
+            actual = (record.sample_size, record.accept_qty, record.reject_qty)
+            if actual != expected:
+                mismatches.append('%s / %s / AQL %g' % (
+                    dict(SWITCHING_MODE_SELECTION).get(record.switching_mode),
+                    record.sample_size_code,
+                    record.aql_value,
+                ))
+        return mismatches
+
     def action_generate_gb2828_matrix(self):
         self.ensure_one()
         created_ranges, _aligned_ranges, created_plans, _aligned_plans = \
@@ -338,6 +357,7 @@ class QualitySamplingStandard(models.Model):
                 ),
                 'type': 'success',
                 'sticky': False,
+                'next': {'type': 'ir.actions.client', 'tag': 'soft_reload'},
             },
         }
 
@@ -361,13 +381,15 @@ class QualitySamplingStandard(models.Model):
                 ),
                 'type': 'success',
                 'sticky': False,
+                'next': {'type': 'ir.actions.client', 'tag': 'soft_reload'},
             },
         }
 
     def action_check_sampling_gaps(self):
         self.ensure_one()
         gaps = self._sampling_gap_message()
-        if not gaps:
+        mismatches = self._sampling_mismatch_list()
+        if not gaps and not mismatches:
             return {
                 'type': 'ir.actions.client',
                 'tag': 'display_notification',
@@ -378,17 +400,27 @@ class QualitySamplingStandard(models.Model):
                     'sticky': False,
                 },
             }
+        messages = []
+        if gaps:
+            messages.append(_(
+                '%(count)s plan cells are still missing (mode / sample size code '
+                '/ AQL): %(cells)s',
+                count=len(gaps),
+                cells=', '.join(gaps[:20]),
+            ))
+        if mismatches:
+            messages.append(_(
+                '%(count)s cells differ from the GB/T 2828.1 master table: '
+                '%(cells)s',
+                count=len(mismatches),
+                cells=', '.join(mismatches[:20]),
+            ))
         return {
             'type': 'ir.actions.client',
             'tag': 'display_notification',
             'params': {
-                'title': _('Missing sampling plans'),
-                'message': _(
-                    '%(count)s plan cells are still missing (mode / sample size '
-                    'code / AQL): %(gaps)s',
-                    count=len(gaps),
-                    gaps=', '.join(gaps),
-                ),
+                'title': _('Sampling matrix needs attention'),
+                'message': ' '.join(messages),
                 'type': 'warning',
                 'sticky': True,
             },
