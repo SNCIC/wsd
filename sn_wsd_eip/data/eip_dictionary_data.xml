@@ -226,5 +226,152 @@
             <field name="name">导地线</field>
             <field name="category_id" ref="category_100"/>
         </record>
+        <!-- process codes of both production-data specs (the official
+             process-code tables); the report/schedule forms pick from
+             here instead of free-typing -->
+        <record id="process_code_1001" model="sn.wsd.eip.process.code">
+            <field name="code">1001</field>
+            <field name="name">PCB板贴装检验（AOI）</field>
+        </record>
+        <record id="process_code_1002" model="sn.wsd.eip.process.code">
+            <field name="code">1002</field>
+            <field name="name">耐压测试</field>
+        </record>
+        <record id="process_code_1003" model="sn.wsd.eip.process.code">
+            <field name="code">1003</field>
+            <field name="name">单板测试（FCT）</field>
+        </record>
+        <record id="process_code_1004" model="sn.wsd.eip.process.code">
+            <field name="code">1004</field>
+            <field name="name">日计时误差</field>
+        </record>
+        <record id="process_code_1005" model="sn.wsd.eip.process.code">
+            <field name="code">1005</field>
+            <field name="name">电池电流</field>
+        </record>
+        <record id="process_code_1006" model="sn.wsd.eip.process.code">
+            <field name="code">1006</field>
+            <field name="name">基本误差</field>
+        </record>
+        <record id="process_code_1007" model="sn.wsd.eip.process.code">
+            <field name="code">1007</field>
+            <field name="name">基本误差详情</field>
+        </record>
+        <record id="process_code_1008" model="sn.wsd.eip.process.code">
+            <field name="code">1008</field>
+            <field name="name">参数设置</field>
+        </record>
+        <record id="process_code_1009" model="sn.wsd.eip.process.code">
+            <field name="code">1009</field>
+            <field name="name">回流焊</field>
+        </record>
+        <record id="process_code_1010" model="sn.wsd.eip.process.code">
+            <field name="code">1010</field>
+            <field name="name">波峰焊接</field>
+        </record>
+        <record id="process_code_1011" model="sn.wsd.eip.process.code">
+            <field name="code">1011</field>
+            <field name="name">高温老化</field>
+        </record>
+        <record id="process_code_1012" model="sn.wsd.eip.process.code">
+            <field name="code">1012</field>
+            <field name="name">压敏电阻</field>
+        </record>
+        <record id="process_code_1013" model="sn.wsd.eip.process.code">
+            <field name="code">1013</field>
+            <field name="name">光电耦合器</field>
+        </record>
+        <record id="process_code_1014" model="sn.wsd.eip.process.code">
+            <field name="code">1014</field>
+            <field name="name">晶体谐振器</field>
+        </record>
+        <record id="process_code_1015" model="sn.wsd.eip.process.code">
+            <field name="code">1015</field>
+            <field name="name">瞬变二极管</field>
+        </record>
+        <record id="process_code_1016" model="sn.wsd.eip.process.code">
+            <field name="code">1016</field>
+            <field name="name">时钟电池</field>
+        </record>
+        <record id="process_code_1017" model="sn.wsd.eip.process.code">
+            <field name="code">1017</field>
+            <field name="name">液晶</field>
+        </record>
+        <record id="process_code_1018" model="sn.wsd.eip.process.code">
+            <field name="code">1018</field>
+            <field name="name">电流互感器</field>
+        </record>
+        <record id="process_code_1090" model="sn.wsd.eip.process.code">
+            <field name="code">1090</field>
+            <field name="name">包装入库</field>
+        </record>
+        <record id="process_code_1091" model="sn.wsd.eip.process.code">
+            <field name="code">1091</field>
+            <field name="name">成品发货</field>
+        </record>
+        <record id="process_code_2001" model="sn.wsd.eip.process.code">
+            <field name="code">2001</field>
+            <field name="name">PCB板贴装检验（AOI）</field>
+        </record>
+        <record id="process_code_2002" model="sn.wsd.eip.process.code">
+            <field name="code">2002</field>
+            <field name="name">单板测试（FCT）</field>
+        </record>
+        <record id="process_code_2003" model="sn.wsd.eip.process.code">
+            <field name="code">2003</field>
+            <field name="name">耐压测试</field>
+        </record>
+        <record id="process_code_2004" model="sn.wsd.eip.process.code">
+            <field name="code">2004</field>
+            <field name="name">参数设置和查询</field>
+        </record>
+        <record id="process_code_2005" model="sn.wsd.eip.process.code">
+            <field name="code">2005</field>
+            <field name="name">通信接口检测</field>
+        </record>
+        <record id="process_code_2006" model="sn.wsd.eip.process.code">
+            <field name="code">2006</field>
+            <field name="name">交流模拟量采集</field>
+        </record>
+        <record id="process_code_2007" model="sn.wsd.eip.process.code">
+            <field name="code">2007</field>
+            <field name="name">电池电流</field>
+        </record>
+        <record id="process_code_2008" model="sn.wsd.eip.process.code">
+            <field name="code">2008</field>
+            <field name="name">回流焊</field>
+        </record>
+        <record id="process_code_2009" model="sn.wsd.eip.process.code">
+            <field name="code">2009</field>
+            <field name="name">波峰焊接</field>
+        </record>
+        <record id="process_code_2010" model="sn.wsd.eip.process.code">
+            <field name="code">2010</field>
+            <field name="name">高温老化</field>
+        </record>
+        <record id="process_code_2011" model="sn.wsd.eip.process.code">
+            <field name="code">2011</field>
+            <field name="name">压敏电压</field>
+        </record>
+        <record id="process_code_2012" model="sn.wsd.eip.process.code">
+            <field name="code">2012</field>
+            <field name="name">光电耦合器</field>
+        </record>
+        <record id="process_code_2013" model="sn.wsd.eip.process.code">
+            <field name="code">2013</field>
+            <field name="name">晶体谐振器</field>
+        </record>
+        <record id="process_code_2014" model="sn.wsd.eip.process.code">
+            <field name="code">2014</field>
+            <field name="name">瞬变二极管</field>
+        </record>
+        <record id="process_code_2090" model="sn.wsd.eip.process.code">
+            <field name="code">2090</field>
+            <field name="name">包装入库</field>
+        </record>
+        <record id="process_code_2091" model="sn.wsd.eip.process.code">
+            <field name="code">2091</field>
+            <field name="name">成品出库</field>
+        </record>
     </data>
 </odoo>
