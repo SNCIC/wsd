@@ -186,6 +186,9 @@
                     </div>
                     <group>
                         <group string="Report">
+                            <field name="work_order_id"
+                                   readonly="eip_synced"
+                                   placeholder="Pick a work order to fill the report"/>
                             <field name="ipo_no" readonly="eip_synced"/>
                             <field name="wo_no" readonly="eip_synced"/>
                             <field name="process_code_id"/>

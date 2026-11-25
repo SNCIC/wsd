@@ -301,6 +301,31 @@ class TestEipForms(EipOrderCase):
                          'Single-phase smart meter')
         self.assertFalse(work.entity_code)
 
+    def test_65_report_fills_from_work_order(self):
+        """Pick a work order on the report: numbers, category, route,
+        entity and batch ride along (the picker column itself is not
+        stored)."""
+        work = self.env['sn.wsd.eip.work.order'].browse(
+            self._order().action_create_work_order()['res_id'])
+        work.write({'materials_batch': 'B2025', 'entity_code': 'ENT-X'})
+        report = self.env['sn.wsd.eip.process.work'].create({
+            'company_id': work.company_id.id,
+            'ipo_no': 'TMP', 'wo_no': 'TMP',
+        })
+        # the picker is a form-only column: set it after create, exactly
+        # like the user picking in the UI
+        report.work_order_id = work
+        report._onchange_work_order_id()
+        self.assertEqual(report.wo_no, work.wo_no)
+        self.assertEqual(report.ipo_no, work.ipo_no)
+        self.assertEqual(report.category_id, work.category_id)
+        self.assertEqual(report.subclass_id, work.subclass_id)
+        self.assertEqual(report.process_no, work.process_route_no)
+        self.assertEqual(report.entity_no, 'ENT-X')
+        self.assertEqual(report.product_batch_no, 'B2025')
+        report.invalidate_recordset()
+        self.assertFalse(report.work_order_id)  # not stored: gone on reload
+
     def test_61_one_order_can_create_several_work_orders(self):
         order = self._order()
         order.action_create_work_order()

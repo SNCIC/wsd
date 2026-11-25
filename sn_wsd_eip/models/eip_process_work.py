@@ -76,6 +76,24 @@ class EipProcessWork(models.Model):
     workshop_code = fields.Char(string='Workshop Code')
     workshop_name = fields.Char(string='Workshop Name')
     wo_no = fields.Char(string='Work Order No.', required=True, index=True)
+    work_order_id = fields.Many2one(
+        'sn.wsd.eip.work.order', string='Work Order', store=False,
+        check_company=True, ondelete='set null',
+        help='Pick a work order and the report fills itself: numbers, '
+             'category, route, entity and batch ride along. Not stored '
+             'on purpose -- the report keeps its own columns.')
+
+    @api.onchange('work_order_id')
+    def _onchange_work_order_id(self):
+        work = self.work_order_id
+        if work:
+            self.wo_no = work.wo_no
+            self.ipo_no = work.ipo_no
+            self.category_id = work.category_id
+            self.subclass_id = work.subclass_id
+            self.process_no = work.process_route_no
+            self.entity_no = work.entity_code
+            self.product_batch_no = work.materials_batch
     entity_no = fields.Char(string='Entity ID')
     plan_start_time = fields.Datetime(string='Planned Start Time')
     plan_end_time = fields.Datetime(string='Planned End Time')

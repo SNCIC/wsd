@@ -121,8 +121,24 @@ class EipProductionOrder(models.Model):
 
     @api.onchange('purchase_line_id')
     def _onchange_purchase_line_id(self):
+        """Same bring-out as the derivation: the purchase line ID plus
+        the material fields, mapping first and the line as fallback."""
         if self.purchase_line_id:
-            self.po_item_id = self.purchase_line_id.po_item_id
+            line = self.purchase_line_id
+            self.po_item_id = line.po_item_id
+            self.amount = line.amount
+            mapping = line._eip_mapping_for()
+            self.materials_code = ((mapping.material_code
+                                    or line.material_code) if mapping
+                                   else line.material_code)
+            self.materials_name = ((mapping.material_name
+                                    or line.material_desc) if mapping
+                                   else line.material_desc)
+            self.materials_desc = ((mapping.material_desc
+                                    or line.material_desc) if mapping
+                                   else line.material_desc)
+            self.materials_unit = (mapping.material_unit if mapping
+                                   else '')
 
     def _eip_document_ref(self):
         self.ensure_one()
@@ -136,6 +152,10 @@ class EipProductionOrder(models.Model):
         """Create a draft work order of this production order; only
         required fields are brought over (user decision 2026-11-24)."""
         self.ensure_one()
+        # material description: the production order's own, else the
+        # purchase line it was derived from
+        description = (self.materials_desc
+                       or self.purchase_line_id.material_desc or '')
         work_order = self.env['sn.wsd.eip.work.order'].create({
             'company_id': self.company_id.id,
             'production_order_id': self.id,
@@ -143,6 +163,7 @@ class EipProductionOrder(models.Model):
             'category_id': self.category_id.id,
             'subclass_id': self.subclass_id.id,
             'materials_code': self.materials_code,
+            'materials_description': description,
             'amount': self.amount,
             'unit': self.unit,
         })

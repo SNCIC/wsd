@@ -50,10 +50,13 @@ class TestEipConfig(TransactionCase):
         self.assertFalse(root.parent_id)
         self.assertIn(self.env.ref('mrp.group_mrp_user'), root.group_ids)
         for xmlid in ('menu_eip_pass_config', 'menu_eip_order_data',
-                      'menu_eip_inventory', 'menu_eip_push_center',
-                      'menu_eip_config'):
+                      'menu_eip_push_center', 'menu_eip_config'):
             menu = self.env.ref('sn_wsd_eip.%s' % xmlid)
             self.assertEqual(menu.parent_id, root)
+        # inventory is a subsection of the order-data menu (2026-11-25)
+        inventory = self.env.ref('sn_wsd_eip.menu_eip_inventory')
+        self.assertEqual(inventory.parent_id,
+                         self.env.ref('sn_wsd_eip.menu_eip_order_data'))
         # the configuration group is manager-only
         config_menu = self.env.ref('sn_wsd_eip.menu_eip_config')
         self.assertIn(self.env.ref('mrp.group_mrp_manager'),

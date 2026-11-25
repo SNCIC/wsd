@@ -101,6 +101,8 @@ class EipWorkOrder(models.Model):
             self.category_id = order.category_id
             self.subclass_id = order.subclass_id
             self.materials_code = order.materials_code
+            self.materials_description = (order.materials_desc
+                or order.purchase_line_id.material_desc or '')
             self.amount = order.amount
             self.unit = order.unit
 

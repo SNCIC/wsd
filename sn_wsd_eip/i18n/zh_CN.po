@@ -5029,3 +5029,16 @@ msgstr "工单 %s 没有数采行。"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_clean_order_wizard_form
 msgid "Re-clean by Work Order"
 msgstr "按工单重洗"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_process_work__work_order_id
+msgid ""
+"Pick a work order and the report fills itself: numbers, category, route, "
+"entity and batch ride along. Not stored on purpose -- the report keeps its "
+"own columns."
+msgstr "选择工单后自动带入：单号、品类、路线、实物ID 与批次。选择器本身不入库——报工单保留自己的列。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_process_work_form
+msgid "Pick a work order to fill the report"
+msgstr "选择工单，自动带入报工信息"
