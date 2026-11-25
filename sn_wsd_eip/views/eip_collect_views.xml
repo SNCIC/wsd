@@ -242,7 +242,6 @@
     <menuitem id="menu_eip_collect_outbox"
               name="Collect Outbox"
               parent="menu_eip_collect"
-              action="action_eip_collect_outbox"
               sequence="10"/>
     <menuitem id="menu_eip_collect_interface"
               name="Collect Interfaces"
@@ -254,4 +253,822 @@
               parent="menu_eip_collect"
               action="action_eip_collect_log"
               sequence="30"/>
+    <!-- all snapshots: the original full-column table -->
+    <menuitem id="menu_eip_outbox_all"
+              name="All Snapshots"
+              parent="menu_eip_collect_outbox"
+              action="action_eip_collect_outbox"
+              sequence="1"/>
+    <menuitem id="menu_eip_outbox_meter"
+              name="Meter Snapshot"
+              parent="menu_eip_collect_outbox"
+              sequence="10"/>
+    <record id="view_eip_outbox_1001" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.1001</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_1001" model="ir.actions.act_window">
+        <field name="name">AOI Inspection (Meter)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1001')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_1001"
+              name="AOI Inspection (Meter)"
+              parent="menu_eip_outbox_meter"
+              action="action_eip_outbox_1001"
+              sequence="1"/>
+
+    <record id="view_eip_outbox_1002" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.1002</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_name" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_check_duration" optional="show"/>
+                <field name="payload_testing_voltage" optional="show"/>
+                <field name="payload_leakage_current" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_1002" model="ir.actions.act_window">
+        <field name="name">Withstand Voltage (Meter)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1002')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_1002"
+              name="Withstand Voltage (Meter)"
+              parent="menu_eip_outbox_meter"
+              action="action_eip_outbox_1002"
+              sequence="2"/>
+
+    <record id="view_eip_outbox_1003" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.1003</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_1003" model="ir.actions.act_window">
+        <field name="name">Board Test FCT (Meter)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1003')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_1003"
+              name="Board Test FCT (Meter)"
+              parent="menu_eip_outbox_meter"
+              action="action_eip_outbox_1003"
+              sequence="3"/>
+
+    <record id="view_eip_outbox_1004" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.1004</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_name" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_allowable_error" optional="show"/>
+                <field name="payload_real_error" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_1004" model="ir.actions.act_window">
+        <field name="name">Daily Timing Error (Meter)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1004')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_1004"
+              name="Daily Timing Error (Meter)"
+              parent="menu_eip_outbox_meter"
+              action="action_eip_outbox_1004"
+              sequence="4"/>
+
+    <record id="view_eip_outbox_1005" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.1005</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_current_value" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_1005" model="ir.actions.act_window">
+        <field name="name">Battery Current (Meter)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1005')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_1005"
+              name="Battery Current (Meter)"
+              parent="menu_eip_outbox_meter"
+              action="action_eip_outbox_1005"
+              sequence="5"/>
+
+    <record id="view_eip_outbox_1006" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.1006</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_name" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_1006" model="ir.actions.act_window">
+        <field name="name">Basic Error (Meter)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1006')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_1006"
+              name="Basic Error (Meter)"
+              parent="menu_eip_outbox_meter"
+              action="action_eip_outbox_1006"
+              sequence="6"/>
+
+    <record id="view_eip_outbox_1007" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.1007</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_name" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_average_error_type" optional="show"/>
+                <field name="payload_average_error" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_1007" model="ir.actions.act_window">
+        <field name="name">Basic Error Detail (Meter)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1007')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_1007"
+              name="Basic Error Detail (Meter)"
+              parent="menu_eip_outbox_meter"
+              action="action_eip_outbox_1007"
+              sequence="7"/>
+
+    <record id="view_eip_outbox_1008" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.1008</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_name" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_software_version" optional="show"/>
+                <field name="payload_plant_code" optional="show"/>
+                <field name="payload_nameplate_code" optional="show"/>
+                <field name="payload_table_no" optional="show"/>
+                <field name="payload_table_address" optional="show"/>
+                <field name="payload_asset_management_no" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_1008" model="ir.actions.act_window">
+        <field name="name">Parameter Setting (Meter)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1008')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_1008"
+              name="Parameter Setting (Meter)"
+              parent="menu_eip_outbox_meter"
+              action="action_eip_outbox_1008"
+              sequence="8"/>
+
+    <record id="view_eip_outbox_1009" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.1009</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_warming_zone" optional="show"/>
+                <field name="payload_constant_temperature_zone" optional="show"/>
+                <field name="payload_welding_zone" optional="show"/>
+                <field name="payload_cooling_zone" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_1009" model="ir.actions.act_window">
+        <field name="name">Reflow Soldering (Meter)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1009')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_1009"
+              name="Reflow Soldering (Meter)"
+              parent="menu_eip_outbox_meter"
+              action="action_eip_outbox_1009"
+              sequence="9"/>
+
+    <record id="view_eip_outbox_1010" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.1010</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_preheating_area" optional="show"/>
+                <field name="payload_welding_zone" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_1010" model="ir.actions.act_window">
+        <field name="name">Wave Soldering (Meter)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1010')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_1010"
+              name="Wave Soldering (Meter)"
+              parent="menu_eip_outbox_meter"
+              action="action_eip_outbox_1010"
+              sequence="10"/>
+
+    <record id="view_eip_outbox_1011" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.1011</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_agingroom_temperature" optional="show"/>
+                <field name="payload_standard_value" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_1011" model="ir.actions.act_window">
+        <field name="name">High-Temp Aging (Meter)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '1011')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_1011"
+              name="High-Temp Aging (Meter)"
+              parent="menu_eip_outbox_meter"
+              action="action_eip_outbox_1011"
+              sequence="11"/>
+
+    <menuitem id="menu_eip_outbox_coll"
+              name="Coll Snapshot"
+              parent="menu_eip_collect_outbox"
+              sequence="90"/>
+    <record id="view_eip_outbox_2001" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.2001</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_2001" model="ir.actions.act_window">
+        <field name="name">AOI Inspection (Collector)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '2001')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_2001"
+              name="AOI Inspection (Collector)"
+              parent="menu_eip_outbox_coll"
+              action="action_eip_outbox_2001"
+              sequence="1"/>
+
+    <record id="view_eip_outbox_2002" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.2002</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_2002" model="ir.actions.act_window">
+        <field name="name">Board Test FCT (Collector)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '2002')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_2002"
+              name="Board Test FCT (Collector)"
+              parent="menu_eip_outbox_coll"
+              action="action_eip_outbox_2002"
+              sequence="2"/>
+
+    <record id="view_eip_outbox_2003" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.2003</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_name" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_check_duration" optional="show"/>
+                <field name="payload_testing_voltage" optional="show"/>
+                <field name="payload_leakage_current" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_2003" model="ir.actions.act_window">
+        <field name="name">Withstand Voltage (Collector)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '2003')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_2003"
+              name="Withstand Voltage (Collector)"
+              parent="menu_eip_outbox_coll"
+              action="action_eip_outbox_2003"
+              sequence="3"/>
+
+    <record id="view_eip_outbox_2004" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.2004</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_name" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_plant_code" optional="show"/>
+                <field name="payload_logic_address" optional="show"/>
+                <field name="payload_bureau_num" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_2004" model="ir.actions.act_window">
+        <field name="name">Parameter Setting &amp;amp; Query (Collector)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '2004')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_2004"
+              name="Parameter Setting &amp;amp; Query (Collector)"
+              parent="menu_eip_outbox_coll"
+              action="action_eip_outbox_2004"
+              sequence="4"/>
+
+    <record id="view_eip_outbox_2005" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.2005</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_name" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_2005" model="ir.actions.act_window">
+        <field name="name">Comm Interface Test (Collector)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '2005')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_2005"
+              name="Comm Interface Test (Collector)"
+              parent="menu_eip_outbox_coll"
+              action="action_eip_outbox_2005"
+              sequence="5"/>
+
+    <record id="view_eip_outbox_2006" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.2006</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_name" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_average_error_type" optional="show"/>
+                <field name="payload_standard_value" optional="show"/>
+                <field name="payload_measured_value" optional="show"/>
+                <field name="payload_error_value" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_2006" model="ir.actions.act_window">
+        <field name="name">AC Analog Acquisition (Collector)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '2006')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_2006"
+              name="AC Analog Acquisition (Collector)"
+              parent="menu_eip_outbox_coll"
+              action="action_eip_outbox_2006"
+              sequence="6"/>
+
+    <record id="view_eip_outbox_2007" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.2007</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_current_value" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_2007" model="ir.actions.act_window">
+        <field name="name">Battery Current (Collector)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '2007')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_2007"
+              name="Battery Current (Collector)"
+              parent="menu_eip_outbox_coll"
+              action="action_eip_outbox_2007"
+              sequence="7"/>
+
+    <record id="view_eip_outbox_2008" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.2008</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_warming_zone" optional="show"/>
+                <field name="payload_constant_temperature_zone" optional="show"/>
+                <field name="payload_welding_zone" optional="show"/>
+                <field name="payload_cooling_zone" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_2008" model="ir.actions.act_window">
+        <field name="name">Reflow Soldering (Collector)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '2008')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_2008"
+              name="Reflow Soldering (Collector)"
+              parent="menu_eip_outbox_coll"
+              action="action_eip_outbox_2008"
+              sequence="8"/>
+
+    <record id="view_eip_outbox_2009" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.2009</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_pcb_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_preheating_area" optional="show"/>
+                <field name="payload_welding_zone" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_2009" model="ir.actions.act_window">
+        <field name="name">Wave Soldering (Collector)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '2009')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_2009"
+              name="Wave Soldering (Collector)"
+              parent="menu_eip_outbox_coll"
+              action="action_eip_outbox_2009"
+              sequence="9"/>
+
+    <record id="view_eip_outbox_2010" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.collect.outbox.2010</field>
+        <field name="model">sn.wsd.eip.collect.outbox</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="state" optional="show"/>
+                <field name="delivered_time" optional="show"/>
+                <field name="payload_standard_version" optional="show"/>
+                <field name="payload_production_order_id" optional="show"/>
+                <field name="payload_work_order_code" optional="show"/>
+                <field name="payload_info_type_code" optional="show"/>
+                <field name="payload_device_no" optional="show"/>
+                <field name="payload_test_code" optional="show"/>
+                <field name="payload_model_code" optional="show"/>
+                <field name="payload_check_time" optional="show"/>
+                <field name="payload_create_time" optional="show"/>
+                <field name="payload_upload_time" optional="show"/>
+                <field name="payload_agingroom_temperature" optional="show"/>
+                <field name="payload_standard_value" optional="show"/>
+                <field name="payload_conclusion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_outbox_2010" model="ir.actions.act_window">
+        <field name="name">High-Temp Aging (Collector)</field>
+        <field name="res_model">sn.wsd.eip.collect.outbox</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('info_type_code', '=', '2010')]</field>
+    </record>
+
+    <menuitem id="menu_eip_outbox_2010"
+              name="High-Temp Aging (Collector)"
+              parent="menu_eip_outbox_coll"
+              action="action_eip_outbox_2010"
+              sequence="10"/>
+
 </odoo>

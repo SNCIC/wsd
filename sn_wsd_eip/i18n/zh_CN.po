@@ -571,6 +571,7 @@ msgstr "创建"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__create_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__create_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_order_wizard__create_uid
 msgid "Created by"
 msgstr "创建人"
 
@@ -616,6 +617,7 @@ msgstr "创建人"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__create_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__create_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_order_wizard__create_date
 msgid "Created on"
 msgstr "创建时间"
 
@@ -815,6 +817,7 @@ msgstr "停用的接口不会被调用。"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_order_wizard__display_name
 msgid "Display Name"
 msgstr "显示名称"
 
@@ -1514,6 +1517,7 @@ msgstr "被推单据的可读键（单号）。"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result_detail__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_serial_operation_history__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_order_wizard__id
 msgid "ID"
 msgstr ""
 
@@ -1820,6 +1824,7 @@ msgstr "平台更新时间"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_order_wizard__write_uid
 msgid "Last Updated by"
 msgstr "最后更新人"
 
@@ -1865,6 +1870,7 @@ msgstr "最后更新人"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__write_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_log__write_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_order_wizard__write_date
 msgid "Last Updated on"
 msgstr "最后更新时间"
 
@@ -4134,6 +4140,7 @@ msgstr "工位"
 #. module: sn_wsd_eip
 #. odoo-python
 #: code:addons/sn_wsd_eip/models/eip_production_order.py:0
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__work_order_id
 msgid "Work Order"
 msgstr "生产工单"
 
@@ -4408,6 +4415,7 @@ msgstr "交付"
 
 #. module: sn_wsd_eip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_form
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__lines_count
 msgid "Detail Lines"
 msgstr "明细行"
 
@@ -5225,6 +5233,8 @@ msgstr "参数设置与查询（采集设备）"
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_parameter_meter
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1008
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1008
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_1008
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_1008
 msgid "Parameter Setting (Meter)"
 msgstr "参数设置（电能表）"
 
@@ -5319,78 +5329,104 @@ msgstr "耐压测试"
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2006
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2006
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_2006
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_2006
 msgid "AC Analog Acquisition (Collector)"
 msgstr "交流模拟量采集（采集设备）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2001
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2001
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_2001
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_2001
 msgid "AOI Inspection (Collector)"
 msgstr "AOI检验（采集设备）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1001
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1001
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_1001
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_1001
 msgid "AOI Inspection (Meter)"
 msgstr "AOI检验（电能表）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1006
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1006
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_1006
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_1006
 msgid "Basic Error (Meter)"
 msgstr "基本误差（电能表）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1007
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1007
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_1007
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_1007
 msgid "Basic Error Detail (Meter)"
 msgstr "基本误差详情（电能表）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2007
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2007
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_2007
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_2007
 msgid "Battery Current (Collector)"
 msgstr "电池电流（采集设备）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1005
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1005
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_1005
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_1005
 msgid "Battery Current (Meter)"
 msgstr "电池电流（电能表）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2002
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2002
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_2002
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_2002
 msgid "Board Test FCT (Collector)"
 msgstr "单板测试（采集设备）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1003
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1003
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_1003
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_1003
 msgid "Board Test FCT (Meter)"
 msgstr "单板测试（电能表）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2005
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2005
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_2005
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_2005
 msgid "Comm Interface Test (Collector)"
 msgstr "通信接口检测（采集设备）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1004
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1004
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_1004
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_1004
 msgid "Daily Timing Error (Meter)"
 msgstr "日计时误差（电能表）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2010
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2010
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_2010
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_2010
 msgid "High-Temp Aging (Collector)"
 msgstr "高温老化（采集设备）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1011
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1011
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_1011
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_1011
 msgid "High-Temp Aging (Meter)"
 msgstr "高温老化（电能表）"
 
@@ -5402,41 +5438,64 @@ msgstr "电能表台账"
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2004
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2004
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_2004
 msgid "Parameter Setting & Query (Collector)"
 msgstr "参数设置与查询（采集设备）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2008
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2008
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_2008
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_2008
 msgid "Reflow Soldering (Collector)"
 msgstr "回流焊（采集设备）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1009
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1009
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_1009
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_1009
 msgid "Reflow Soldering (Meter)"
 msgstr "回流焊（电能表）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2009
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2009
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_2009
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_2009
 msgid "Wave Soldering (Collector)"
 msgstr "波峰焊接（采集设备）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1010
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1010
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_1010
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_1010
 msgid "Wave Soldering (Meter)"
 msgstr "波峰焊接（电能表）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_2003
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_2003
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_2003
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_2003
 msgid "Withstand Voltage (Collector)"
 msgstr "耐压测试（采集设备）"
 
 #. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ledger_1002
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ledger_1002
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_outbox_1002
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_1002
 msgid "Withstand Voltage (Meter)"
 msgstr "耐压测试（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_all
+msgid "All Snapshots"
+msgstr "全部快照"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_outbox_meter
+msgid "Meter Snapshot"
+msgstr "电能表快照"
