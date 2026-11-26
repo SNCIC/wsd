@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-26 03:23+0000\n"
-"PO-Revision-Date: 2026-11-26 03:23+0000\n"
+"POT-Creation-Date: 2026-11-26 05:57+0000\n"
+"PO-Revision-Date: 2026-11-26 05:57+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,6 +20,20 @@ msgstr ""
 #: code:addons/sn_wsd_eip/models/eip_value_mapping.py:0
 msgid "%(code)s is not a collectable EIP interface code."
 msgstr "%(code)s 不是可采集的 EIP 接口编码。"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_pack_capture.py:0
+msgid "%(created)s packing-storage rows created."
+msgstr "已生成 %(created)s 条入库记录。"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_pack_capture.py:0
+msgid ""
+"%(created)s packing-storage rows created; %(skipped)s binding(s) skipped (no"
+" production order or no mapped spec family)."
+msgstr "已生成 %(created)s 条入库记录；跳过 %(skipped)s 条绑定（无生产订单或产品未映射规范族）。"
 
 #. module: sn_wsd_eip
 #. odoo-python
@@ -542,6 +556,7 @@ msgstr "电流实测值"
 #. module: sn_wsd_eip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_clean_fix_wizard_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_clean_order_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pack_capture_wizard_form
 msgid "Cancel"
 msgstr "取消"
 
@@ -552,6 +567,22 @@ msgid ""
 "Cannot change %s: the document was already pushed to EIP and these keys "
 "locate it there."
 msgstr "不能修改 %s：单据已推送至 EIP，这些字段是在对端定位它的键。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pack_capture_wizard_form
+msgid "Capture"
+msgstr "采集"
+
+#. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_pack_capture_wizard
+msgid "Capture Packing Storage by Work Order"
+msgstr "按工单采集入库记录"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_pack_capture_wizard
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pack_capture_wizard_form
+msgid "Capture by Work Order"
+msgstr "按工单采集"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_supply_note__cargo_name
@@ -972,6 +1003,7 @@ msgstr "创建"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__create_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__create_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_capture_wizard__create_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__create_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__create_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__create_uid
@@ -1022,6 +1054,7 @@ msgstr "创建人"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__create_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__create_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_capture_wizard__create_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__create_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__create_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__create_date
@@ -1205,6 +1238,7 @@ msgstr "交付时间"
 #: code:addons/sn_wsd_eip/models/eip_pack_ship.py:0
 #: code:addons/sn_wsd_eip/models/eip_pass_record.py:0
 #: code:addons/sn_wsd_eip/models/eip_raw_record.py:0
+#: code:addons/sn_wsd_eip/models/eip_raw_report.py:0
 msgid ""
 "Delivered rows are frozen: the gateway already took them, nothing can be "
 "edited afterwards."
@@ -1328,6 +1362,7 @@ msgstr "停用的接口不会被调用。"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_capture_wizard__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__display_name
@@ -1367,6 +1402,7 @@ msgstr "停用的接口不会被调用。"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result_detail__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_serial_binding__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_serial_operation_history__display_name
 msgid "Display Name"
 msgstr "显示名称"
@@ -1629,6 +1665,11 @@ msgstr "EIP PCB_CODE：SN 本身（1011 留空，老化接口没有板卡身份�
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__production_order_no
 msgid "EIP PRODUCTION_ORDER_ID: manufacturing order name snapshot."
 msgstr "EIP PRODUCTION_ORDER_ID：制造订单号记录。"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_pack_capture_wizard
+msgid "EIP Packing Storage Capture by Work Order"
+msgstr "EIP 成品包装入库按工单采集"
 
 #. module: sn_wsd_eip
 #: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_pack_record
@@ -1971,6 +2012,13 @@ msgid ""
 msgstr "携带该工单号的全部数采行重新过闸：合格行重建采集记录，不合格行刷新原因。"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pack_capture_wizard__work_order_no
+msgid ""
+"Every nameplate binding of the machines passed under this work order gets "
+"its packing-storage row."
+msgstr "该工单下过站的整机，其铭牌绑定都会生成入库记录。"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_production_order__ipo_status__4
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_work_order__wo_status__4
 msgid "Factory Test"
@@ -2219,6 +2267,7 @@ msgstr "被推单据的可读键（单号）。"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_capture_wizard__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__id
@@ -2258,6 +2307,7 @@ msgstr "被推单据的可读键（单号）。"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result_detail__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_serial_binding__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_serial_operation_history__id
 msgid "ID"
 msgstr "ID"
@@ -2606,6 +2656,7 @@ msgstr "平台更新时间"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_capture_wizard__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__write_uid
@@ -2656,6 +2707,7 @@ msgstr "最后更新人"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_interface__write_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_material_mapping__write_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_capture_wizard__write_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__write_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__write_date
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__write_date
@@ -2786,6 +2838,7 @@ msgstr "MES测试结果明细项"
 
 #. module: sn_wsd_eip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_clean_order_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pack_capture_wizard_form
 msgid "MES work order number"
 msgstr "MES 工单号"
 
@@ -2793,6 +2846,11 @@ msgstr "MES 工单号"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_model_code
 msgid "MODEL_CODE"
 msgstr "规格型号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__serial_identity_id
+msgid "Machine SN"
+msgstr "整机SN"
 
 #. module: sn_wsd_eip
 #: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_raw_record
@@ -3087,6 +3145,11 @@ msgid "Name of the delivered goods used on the supply note."
 msgstr "供货单或电话沟通中使用的交付货物名称。"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__binding_id
+msgid "Nameplate Binding"
+msgstr "铭牌绑定"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__nameplate_code
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix__field_name__nameplate_code
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_fix_wizard__field_name__nameplate_code
@@ -3196,6 +3259,12 @@ msgid "No grid purchase order pulled yet"
 msgstr "还没有拉取到国网采购订单"
 
 #. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_pack_capture.py:0
+msgid "No nameplate binding was found for work order \"%s\"."
+msgstr "工单\"%s\"下没有找到铭牌绑定。"
+
+#. module: sn_wsd_eip
 #: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_process_work
 msgid "No process work report yet"
 msgstr "还没有报工信息"
@@ -3239,6 +3308,15 @@ msgstr "还没有生产工单"
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_process_work__wavy_status__0
 msgid "None"
 msgstr "空"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_pack_capture.py:0
+msgid ""
+"None of the %(count)s nameplate bindings of work order \"%(number)s\" can be"
+" captured: they are already collected or their machines have no production "
+"order or no mapped spec family."
+msgstr "工单\"%(number)s\"的 %(count)s 条铭牌绑定都无法采集：已采集过，或整机没有生产订单、产品未映射规范族。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_entity_id__entity_status__0
@@ -3527,6 +3605,8 @@ msgid "Packing Storage (Meter)"
 msgstr "包装入库（电能表）"
 
 #. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_pack_capture.py:0
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_pack_record
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_pack_record
 msgid "Packing Storage Records"
@@ -4861,6 +4941,11 @@ msgid "Sequence"
 msgstr "序号"
 
 #. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_serial_binding
+msgid "Serial Identity Binding"
+msgstr "SN 真身绑定"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__test_code
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_ship_record__test_code
 msgid "Serial No."
@@ -5456,6 +5541,11 @@ msgid "The sale order number must be unique per company."
 msgstr "同一公司内销售订单号必须唯一。"
 
 #. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_pack_record_binding_uniq
+msgid "The same nameplate binding can only be collected once."
+msgstr "同一个铭牌绑定只能采集一次。"
+
+#. module: sn_wsd_eip
 #: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_schedule_schedule_uniq
 msgid "The schedule code must be unique per purchase order line."
 msgstr "同一公司内 排产计划编码 + 采购订单行项目 ID 必须唯一。"
@@ -5624,7 +5714,8 @@ msgid ""
 "Type code the limit applies to (basic error detail D1..D4 / H / A / B / C, "
 "AC analog IA.. II1). Empty = applies to every value of the field regardless "
 "of type."
-msgstr "限值适用的类型编码（基本误差明细 D1..D4 / H / A / B / C，交流模拟量 ⅠA..Ⅱ1）。留空 = 不分类型，对该字段的每个值都生效。"
+msgstr ""
+"限值适用的类型编码（基本误差明细 D1..D4 / H / A / B / C，交流模拟量 ⅠA..Ⅱ1）。留空 = 不分类型，对该字段的每个值都生效。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_upload_time
@@ -5901,6 +5992,7 @@ msgstr "生产工单"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_order_wizard__work_order_no
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_capture_wizard__work_order_no
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__work_order_no
 msgid "Work Order No"
 msgstr "工单编号"
@@ -5965,6 +6057,7 @@ msgstr "https://host:port"
 
 #. module: sn_wsd_eip
 #. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_pack_capture.py:0
 #: code:addons/sn_wsd_eip/models/eip_purchase_order.py:0
 msgid "id"
 msgstr "ID"

@@ -10,4 +10,5 @@ from . import test_eip_collect_serve
 from . import test_eip_collect_wire
 from . import test_eip_clean
 from . import test_eip_manual
+from . import test_eip_pack_capture
 from . import test_eip_transform

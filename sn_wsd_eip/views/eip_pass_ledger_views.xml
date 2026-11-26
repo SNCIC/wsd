@@ -1114,6 +1114,7 @@
                 <field name="info_type_code"/>
                 <field name="production_order_no"/>
                 <field name="work_order_no"/>
+                <field name="serial_identity_id" optional="show"/>
                 <field name="test_code"/>
                 <field name="model_code"/>
                 <field name="nameplate_code"/>
@@ -1153,6 +1154,8 @@
                             <field name="info_type_code"/>
                             <field name="production_order_no"/>
                             <field name="work_order_no"/>
+                            <field name="serial_identity_id"/>
+                            <field name="binding_id"/>
                             <field name="test_code"/>
                             <field name="model_code"/>
                         </group>
@@ -1247,4 +1250,35 @@
               action="action_eip_ship_record"
               sequence="40"/>
 
+    <!-- backfill of packing-storage rows for nameplate bindings made
+         before the capture hook (typed work order, same capture) -->
+    <record id="view_eip_pack_capture_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pack.capture.wizard.form</field>
+        <field name="model">sn.wsd.eip.pack.capture.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Capture by Work Order">
+                <group>
+                    <field name="work_order_no" placeholder="MES work order number"/>
+                </group>
+                <footer>
+                    <button name="action_capture" type="object"
+                            string="Capture" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_eip_pack_capture_wizard" model="ir.actions.act_window">
+        <field name="name">Capture by Work Order</field>
+        <field name="res_model">sn.wsd.eip.pack.capture.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_eip_pack_capture_wizard"
+              name="Capture Packing Storage by Work Order"
+              parent="menu_eip_entry_manual"
+              action="action_eip_pack_capture_wizard"
+              sequence="35"/>
 </odoo>

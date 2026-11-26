@@ -36,6 +36,14 @@ class EipPackRecord(models.Model):
     production_order_no = fields.Char(string='Production Order No.',
                                       required=True)
     work_order_no = fields.Char(string='Work Order No.', required=True)
+    # capture link: the nameplate-to-machine binding this row was born
+    # from (empty on a row entered by hand)
+    binding_id = fields.Many2one(
+        'sn.wsd.serial.binding', string='Nameplate Binding',
+        ondelete='restrict', index=True, copy=False)
+    serial_identity_id = fields.Many2one(
+        'sn.wsd.serial.identity', string='Machine SN',
+        ondelete='restrict', index=True, copy=False)
     test_code = fields.Char(
         string='Serial No.', required=True, index=True,
         help='Unique ID generated per storage event.')
@@ -55,6 +63,67 @@ class EipPackRecord(models.Model):
         selection=[('pending', 'Pending'), ('delivered', 'Delivered')],
         string='State', required=True, default='pending', index=True)
     delivered_time = fields.Datetime(string='Delivered Time', readonly=True)
+
+    _binding_uniq = models.Constraint(
+        'unique(company_id, binding_id)',
+        'The same nameplate binding can only be collected once.',
+    )
+
+    # spec family -> interface code / unit of the packing-storage rows
+    PACK_CODE = {'meter': '1090', 'collector': '2090'}
+    PACK_UNIT = {'meter': '只', 'collector': '台'}
+
+    @api.model
+    def _eip_capture_from_bindings(self, bindings):
+        """One pending packing-storage row per nameplate binding: the
+        nameplate SN of the binding is the stored unit's grid nameplate
+        number, the machine SN supplies the production order, the work
+        order and the model (its latest pass). SNs without a production
+        order or without a mapped spec family are skipped -- nothing is
+        invented for them; the by-work-order wizard reports the gap."""
+        bindings = bindings.filtered(
+            lambda binding: binding.binding_type == 'nameplate')
+        bindings -= self.sudo().search(
+            [('binding_id', 'in', bindings.ids)]).binding_id
+        if not bindings:
+            return self
+        histories = self.env['sn.wsd.serial.operation.history'].sudo().search(
+            [('serial_identity_id', 'in',
+              bindings.bound_serial_identity_id.ids)],
+            order='out_date desc, id desc')
+        latest = {}
+        for history in histories:
+            latest.setdefault(history.serial_identity_id, history)
+        resolver = self.env['sn.wsd.eip.pass.record']
+        records = self
+        for binding in bindings:
+            history = latest.get(binding.bound_serial_identity_id)
+            order = history and history.mes_order_id
+            production = order and order.production_id
+            if not production:
+                continue
+            family = resolver._eip_resolve_family(
+                order.product_id, binding.company_id)
+            if not family:
+                continue
+            records |= self.create({
+                'company_id': binding.company_id.id,
+                'info_type_code': self.PACK_CODE[family],
+                'production_order_no': production.name,
+                'work_order_no': order.name,
+                'binding_id': binding.id,
+                'serial_identity_id': binding.bound_serial_identity_id.id,
+                'test_code': '%s-%s' % (self.PACK_CODE[family],
+                                        binding.id),
+                'model_code': (order.product_id.material_specification
+                               or order.product_id.default_code),
+                'nameplate_code': binding.serial_identity_id.name,
+                'number': 1,
+                'unit': self.PACK_UNIT[family],
+                'storage_date': fields.Date.to_date(
+                    binding.binding_date),
+            })
+        return records
 
     # the only columns the delivery stamp itself may write on an
     # already-delivered row -- everything else is frozen forever
