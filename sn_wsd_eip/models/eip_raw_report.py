@@ -13,7 +13,8 @@ that copy, whatever the register says afterwards.
 """
 import uuid
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class EipRawReport(models.Model):
@@ -75,6 +76,19 @@ class EipRawReport(models.Model):
             report.family = ('meter'
                              if (report.procedure_code or '1').startswith('1')
                              else 'collector')
+
+    # the only columns the delivery stamp itself may write on an
+    # already-delivered report -- everything else is frozen forever
+    DELIVERY_WRITE_KEYS = frozenset({'state', 'delivered_time'})
+
+    def write(self, vals):
+        if (any(record.state == 'delivered' for record in self)
+                and any(key not in self.DELIVERY_WRITE_KEYS
+                        for key in vals)):
+            raise UserError(_(
+                'Delivered rows are frozen: the gateway already took '
+                'them, nothing can be edited afterwards.'))
+        return super().write(vals)
 
     @api.onchange('work_order_id')
     def _onchange_work_order_id(self):

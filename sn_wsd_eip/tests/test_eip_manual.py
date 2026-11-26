@@ -273,6 +273,9 @@ class TestEipManual(TransactionCase):
         # does not rewrite what the report says
         work.write({'wo_no': 'WO-RENAMED'})
         self.assertEqual(report.production_work_no, payload['productionWorkNo'])
+        # served reports are frozen like every other manual table
+        with self.assertRaises(UserError):
+            report.write({'production_order_no': 'IPO-CHANGED'})
 
     def test_60_report_interface_requires_base_url(self):
         self.config.write({'collect_base_url': False})
