@@ -2503,11 +2503,6 @@ msgid "MODEL_CODE"
 msgstr "规格型号"
 
 #. module: sn_wsd_eip
-#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_entry_manual
-msgid "Manual Entry"
-msgstr "手工录入"
-
-#. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_raw_report__test_file_type__2
 msgid "Manufacturer Report"
 msgstr "生产厂商报告"
@@ -3931,6 +3926,11 @@ msgid "Raw Material Unit"
 msgstr "原材料单位"
 
 #. module: sn_wsd_eip
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_entry_manual
+msgid "Raw Material and Stock In/Out"
+msgstr "原材料与出入库"
+
+#. module: sn_wsd_eip
 #: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_pass_record_ledger
 msgid "Raw collection rows, straight from the stations"
 msgstr "来自工位的原始数采行"
@@ -5033,7 +5033,7 @@ msgstr "压敏电压实测值"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_record__error_value
 msgid "Varistor Voltage Error"
-msgstr "误差值"
+msgstr "压敏电压误差值"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_record__voltage_values
