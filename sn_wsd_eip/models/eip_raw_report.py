@@ -90,12 +90,25 @@ class EipRawReport(models.Model):
                 'them, nothing can be edited afterwards.'))
         return super().write(vals)
 
-    @api.onchange('work_order_id')
+    @api.onchange('work_order_id', 'procedure_code')
     def _onchange_work_order_id(self):
+        """Picking the work order copies its numbers and its material
+        batch; the inspection batch is the latest raw-material inspection
+        of that work order under the chosen procedure."""
         work_order = self.work_order_id
-        if work_order:
-            self.production_order_no = work_order.ipo_no
-            self.production_work_no = work_order.wo_no
+        if not work_order:
+            return
+        self.production_order_no = work_order.ipo_no
+        self.production_work_no = work_order.wo_no
+        if work_order.materials_batch:
+            self.material_batch = work_order.materials_batch
+        if self.procedure_code:
+            inspection = self.env['sn.wsd.eip.raw.record'].search(
+                [('work_order_no', '=', work_order.wo_no),
+                 ('info_type_code', '=', self.procedure_code)],
+                order='check_time desc, id desc', limit=1)
+            if inspection:
+                self.material_check_batch = inspection.material_check_batch
 
     @api.model
     def _eip_claim(self, family, amount):

@@ -248,8 +248,16 @@ class TestEipManual(TransactionCase):
         UUID generated per report."""
         Report = self.env['sn.wsd.eip.raw.report']
         work = self.env['sn.wsd.eip.work.order'].create({
-            'company_id': self.company.id, 'ipo_no': 'IPO-R1'})
-        draft = Report.new({'work_order_id': work.id})
+            'company_id': self.company.id, 'ipo_no': 'IPO-R1',
+            'materials_batch': 'PC-WO'})
+        self._raw(code='1012', work_order_no=work.wo_no,
+                  material_check_batch='JC-INSPECTED')
+        draft = Report.new({'work_order_id': work.id, 'procedure_code': '1012'})
+        draft._onchange_work_order_id()
+        # batch numbers follow: the work order's batch and the latest
+        # inspection batch of that work order under the procedure
+        self.assertEqual(draft.material_batch, 'PC-WO')
+        self.assertEqual(draft.material_check_batch, 'JC-INSPECTED')
         draft._onchange_work_order_id()
         self.assertEqual(draft.production_order_no, 'IPO-R1')
         self.assertEqual(draft.production_work_no, work.wo_no)
