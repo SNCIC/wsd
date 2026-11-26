@@ -5,7 +5,14 @@ batch. The gateway polls /api/eip/collect/M-REPORT (or C-REPORT) and
 receives the fileArray of pending reports: procedure code, batches,
 testFileType and a downloadable file URL. Claimed reports flip to
 delivered -- fire-and-forget, same as every other interface.
+
+The file serial number is a UUID generated per report. The work order
+is picked from the work-order register (dropdown); its order and work
+order numbers are copied onto the report -- the served payload keeps
+that copy, whatever the register says afterwards.
 """
+import uuid
+
 from odoo import api, fields, models
 
 
@@ -22,6 +29,11 @@ class EipRawReport(models.Model):
     production_order_no = fields.Char(
         string='Production Order No.', required=True)
     production_work_no = fields.Char(string='Production Work No.')
+    work_order_id = fields.Many2one(
+        'sn.wsd.eip.work.order', string='Production Work Order',
+        ondelete='set null', index=True, check_company=True,
+        help='Picks the work order from the register; its production '
+             'order and work order numbers are copied onto the report.')
     procedure_code = fields.Selection(
         selection=[('1012', '压敏电阻'), ('1013', '光电耦合器'),
                    ('1014', '晶体谐振器'), ('1015', '瞬变二极管'),
@@ -33,8 +45,9 @@ class EipRawReport(models.Model):
         help='The raw-material inspection procedure the report belongs '
              'to (platform-issued names).')
     test_code = fields.Char(
-        string='Report Code', required=True, index=True,
-        help='File serial number, unique per procedure and report type.')
+        string='Report Code', required=True, index=True, copy=False,
+        default=lambda self: str(uuid.uuid4()),
+        help='File serial number: a UUID generated for each report.')
     test_file_type = fields.Selection(
         selection=[('1', 'Incoming Check Report'),
                    ('2', 'Manufacturer Report')],
@@ -62,6 +75,13 @@ class EipRawReport(models.Model):
             report.family = ('meter'
                              if (report.procedure_code or '1').startswith('1')
                              else 'collector')
+
+    @api.onchange('work_order_id')
+    def _onchange_work_order_id(self):
+        work_order = self.work_order_id
+        if work_order:
+            self.production_order_no = work_order.ipo_no
+            self.production_work_no = work_order.wo_no
 
     @api.model
     def _eip_claim(self, family, amount):

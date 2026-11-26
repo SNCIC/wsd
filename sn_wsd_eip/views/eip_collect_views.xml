@@ -1078,8 +1078,9 @@
         <field name="model">sn.wsd.eip.raw.report</field>
         <field name="arch" type="xml">
             <list editable="bottom">
+                <field name="work_order_id" options="{'no_create': True}"/>
                 <field name="production_order_no"/>
-                <field name="production_work_no" optional="hide"/>
+                <field name="production_work_no"/>
                 <field name="procedure_code"/>
                 <field name="test_code"/>
                 <field name="test_file_type"/>
@@ -1100,6 +1101,7 @@
                 <sheet>
                     <group>
                         <group string="Report">
+                            <field name="work_order_id" options="{'no_create': True}"/>
                             <field name="production_order_no"/>
                             <field name="production_work_no"/>
                             <field name="procedure_code"/>
@@ -1137,7 +1139,7 @@
 
     <menuitem id="menu_eip_raw_report"
               name="Raw Material Reports"
-              parent="menu_eip_collect"
+              parent="menu_eip_entry_manual"
               action="action_eip_raw_report"
-              sequence="12"/>
+              sequence="20"/>
 </odoo>

@@ -2,6 +2,8 @@
 plus the raw-material report file interface: end-to-end flows through
 the shared cleansing / serving machinery."""
 
+import uuid
+
 from odoo import fields
 from odoo.exceptions import UserError
 from odoo.tests import TransactionCase
@@ -239,6 +241,38 @@ class TestEipManual(TransactionCase):
         self.assertEqual(
             self.Interface._eip_serve('C-REPORT', 10)['data'][0]
             ['Test_Code'], 'RPT-002')
+
+    def test_52_report_work_order_dropdown_and_uuid(self):
+        """The work order is picked from the register: its numbers are
+        copied onto the report and served; the file serial number is a
+        UUID generated per report."""
+        Report = self.env['sn.wsd.eip.raw.report']
+        work = self.env['sn.wsd.eip.work.order'].create({
+            'company_id': self.company.id, 'ipo_no': 'IPO-R1'})
+        draft = Report.new({'work_order_id': work.id})
+        draft._onchange_work_order_id()
+        self.assertEqual(draft.production_order_no, 'IPO-R1')
+        self.assertEqual(draft.production_work_no, work.wo_no)
+        self.config.write({'collect_base_url': 'http://192.168.1.13:8069'})
+        report = Report.create({
+            'company_id': self.company.id,
+            'work_order_id': work.id,
+            'production_order_no': draft.production_order_no,
+            'production_work_no': draft.production_work_no,
+            'procedure_code': '1012',
+            'test_file_type': '1',
+            'material_check_batch': 'JC20251126',
+        })
+        # generated at entry: a well-formed UUID without typing
+        self.assertEqual(str(uuid.UUID(report.test_code)), report.test_code)
+        payload = self.Interface._eip_serve('M-REPORT', 10)['data'][0]
+        self.assertEqual(payload['productionOrderNo'], 'IPO-R1')
+        self.assertEqual(payload['productionWorkNo'], work.wo_no)
+        self.assertEqual(payload['Test_Code'], report.test_code)
+        # the register is only the picker: renaming the work order later
+        # does not rewrite what the report says
+        work.write({'wo_no': 'WO-RENAMED'})
+        self.assertEqual(report.production_work_no, payload['productionWorkNo'])
 
     def test_60_report_interface_requires_base_url(self):
         self.config.write({'collect_base_url': False})
