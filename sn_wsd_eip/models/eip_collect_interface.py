@@ -19,6 +19,17 @@ class EipCollectError(Exception):
     it into a status-1 envelope."""
 
 
+# raw-material inspection codes: served from sn.wsd.eip.raw.record
+RAW_INTERFACE_CODES = frozenset(
+    {'1012', '1013', '1014', '1015', '1016', '1017', '1018',
+     '2011', '2012', '2013', '2014'})
+
+
+class EipCollectError(Exception):
+    """Protocol-level failure of a gateway fetch; the controller turns
+    it into a status-1 envelope."""
+
+
 class EipCollectInterface(models.Model):
     _name = 'sn.wsd.eip.collect.interface'
     _description = 'EIP Collect Interface'
@@ -82,6 +93,11 @@ class EipCollectInterface(models.Model):
         ], limit=1)
         if not config:
             raise EipCollectError('no active EIP integration config')
+        if code in RAW_INTERFACE_CODES:
+            claimed = self.env['sn.wsd.eip.raw.record']._eip_claim(
+                code, amount)
+            return {'supplier_code': config.supplier_code,
+                    'data': claimed._eip_raw_payloads()}
         if code in ('1090', '2090', '1091', '2091'):
             # logistics documents serve directly from their own tables
             model = 'sn.wsd.eip.pack.record' if code in ('1090', '2090')                 else 'sn.wsd.eip.ship.record'

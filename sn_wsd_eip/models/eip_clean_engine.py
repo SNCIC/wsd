@@ -100,17 +100,6 @@ PAYLOAD_COLUMNS = {
     'ERROR_VALUE': ('error_value', 'dec3'),
     'LOGIC_ADDRESS': ('logic_address', 'text'),
     'BUREAU_NUM': ('bureau_num', 'text'),
-    'MATERIAL_CHECK_BATCH': ('material_check_batch', 'text'),
-    'MATERIAL_BATCH': ('material_batch', 'text'),
-    'MATERIAL_BRAND': ('material_brand', 'text'),
-    'MATERIAL_SUPPLIER': ('material_supplier', 'text'),
-    'MATERIAL_LEAVE_TIME': ('material_leave_date', 'date'),
-    'INCOMING_CHECK_TIME': ('incoming_check_date', 'date'),
-    'VARISTOR_VOLTAGE': ('varistor_voltage', 'dec1'),
-    'RATIO_VALUE': ('ratio_value', 'dec1'),
-    'FREQUENCY_VALUE': ('frequency_value', 'dec1'),
-    'VOLTAGE_VALUES': ('voltage_values', 'dec3'),
-    'CONTRAST_VALUE': ('contrast_value', 'dec3'),
 }
 
 # per-interface payload additions on top of the base (the spec field
@@ -183,28 +172,6 @@ INTERFACE_PAYLOAD_FIELDS = {
     '2010': [],
 }
 
-# manual-entry interfaces: the payload is the EXACT spec field list
-# (no DEVICE_NO / PCB_CODE / TEST_NAME for raw material rows, no
-# check/device fields for packing/shipping rows)
-M6 = ['STANDARD_VERSION', 'PRODUCTION_ORDER_ID', 'WORK_ORDER_CODE',
-      'INFO_TYPE_CODE', 'MATERIAL_CHECK_BATCH', 'MATERIAL_BATCH',
-      'MATERIAL_BRAND', 'MATERIAL_SUPPLIER', 'MATERIAL_LEAVE_TIME',
-      'INCOMING_CHECK_TIME', 'TEST_CODE', 'MODEL_CODE', 'CHECK_TIME',
-      'CREATE_TIME', 'UPLOAD_TIME']
-FULL_PAYLOAD_FIELDS = {
-    '1012': M6 + ['VARISTOR_VOLTAGE', 'ERROR_VALUE', 'CONCLUSION'],
-    '1013': M6 + ['RATIO_VALUE', 'CONCLUSION'],
-    '1014': M6 + ['FREQUENCY_VALUE', 'CONCLUSION'],
-    '1015': M6 + ['LEAKAGE_CURRENT', 'CONCLUSION'],
-    '1016': M6 + ['VOLTAGE_VALUES', 'CONCLUSION'],
-    '1017': M6 + ['CONCLUSION'],
-    '1018': M6 + ['CONTRAST_VALUE', 'CONCLUSION'],
-    '2011': M6 + ['VARISTOR_VOLTAGE', 'ERROR_VALUE', 'CONCLUSION'],
-    '2012': M6 + ['RATIO_VALUE', 'CONCLUSION'],
-    '2013': M6 + ['FREQUENCY_VALUE', 'CONCLUSION'],
-    '2014': M6 + ['LEAKAGE_CURRENT', 'CONCLUSION'],
-}
-
 # required row columns per interface, from the spec field tables.
 # pipeline-guaranteed columns (info_type_code, standard_version,
 # conclusion) are not re-judged; upload_time is stamped by delivery.
@@ -248,22 +215,7 @@ CLEAN_REQUIRED = {
                                'welding_zone'],
     '2010': COMMON_REQUIRED,
 }
-COMMON_MAT = ['production_order_no', 'work_order_no', 'material_check_batch',
-              'material_batch', 'material_brand', 'material_supplier',
-              'material_leave_date', 'incoming_check_date', 'test_code',
-              'model_code', 'check_time', 'create_time']
 CLEAN_REQUIRED.update({
-    '1012': COMMON_MAT + ['varistor_voltage', 'error_value'],
-    '1013': COMMON_MAT + ['ratio_value'],
-    '1014': COMMON_MAT + ['frequency_value'],
-    '1015': COMMON_MAT + ['leakage_current'],
-    '1016': COMMON_MAT + ['voltage_values'],
-    '1017': COMMON_MAT,
-    '1018': COMMON_MAT + ['contrast_value'],
-    '2011': COMMON_MAT + ['varistor_voltage', 'error_value'],
-    '2012': COMMON_MAT + ['ratio_value'],
-    '2013': COMMON_MAT + ['frequency_value'],
-    '2014': COMMON_MAT + ['leakage_current'],
 })
 
 
@@ -325,10 +277,7 @@ class EipPassRecordClean(models.Model):
                 payloads = record._eip_ac_analog_payloads(
                     now, problems, fixes, rules)
             elif code in CLEAN_REQUIRED:
-                if code in FULL_PAYLOAD_FIELDS:
-                    payloads = [record._eip_exact_payload(code, now, fixes)]
-                else:
-                    payloads = [record._eip_standard_payload(code, now, fixes)]
+                payloads = [record._eip_standard_payload(code, now, fixes)]
             else:
                 problems.append('interface %s has no payload definition' %
                                 code)
@@ -356,35 +305,6 @@ class EipPassRecordClean(models.Model):
                     'clean_time': now,
                     'clean_note': False,
                 })
-
-    def _eip_exact_payload(self, code, upload_time, fixes):
-        """Payload with the EXACT spec field list of a manual-entry
-        interface (raw material / packing / shipping)."""
-        fixes = fixes or {}
-        base = {
-            'STANDARD_VERSION': int(self.standard_version or 2),
-            'PRODUCTION_ORDER_ID': self.production_order_no or '',
-            'WORK_ORDER_CODE': self.work_order_no or '',
-            'INFO_TYPE_CODE': self.info_type_code or '',
-            'DEVICE_NO': self.device_no or '',
-            'TEST_CODE': self.test_code or '',
-            'MODEL_CODE': fixes.get('model_code', self.model_code) or '',
-            'PCB_CODE': self.pcb_code or '',
-            'CHECK_TIME': _fmt_dt(self.check_time),
-            'CREATE_TIME': _fmt_dt(self.create_time),
-            'CONCLUSION': int(self.conclusion or 0),
-        }
-        payload = {}
-        for name in FULL_PAYLOAD_FIELDS[code]:
-            if name == 'UPLOAD_TIME':
-                payload[name] = _fmt_dt(upload_time)
-            elif name in base:
-                payload[name] = base[name]
-            else:
-                column, kind = PAYLOAD_COLUMNS[name]
-                payload[name] = self._eip_format_value(
-                    fixes.get(column, self[column]), kind)
-        return payload
 
     def _eip_standard_payload(self, code, upload_time, fixes=None):
         """One data record built from the row columns with the archive

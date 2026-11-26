@@ -192,34 +192,6 @@ class EipPassRecord(models.Model):
              'number (lower nameplate).')
 
     # ----- raw material inspection (1012..1018 / 2011..2014) -----
-    material_check_batch = fields.Char(
-        string='Material Check Batch',
-        help='Raw-material inspection batch of our side.')
-    material_batch = fields.Char(
-        string='Material Batch',
-        help='Batch number of the manufacturer.')
-    material_brand = fields.Char(
-        string='Material Brand',
-        help='Brand full name, or the agent full name when unbranded.')
-    material_supplier = fields.Char(
-        string='Material Manufacturer',
-        help='Manufacturer full name of the raw material.')
-    material_leave_date = fields.Date(
-        string='Material Leave Date',
-        help='Manufacturer leave date; weekly dates become Monday.')
-    incoming_check_date = fields.Date(
-        string='Incoming Check Date')
-    varistor_voltage = fields.Float(
-        string='Varistor Voltage (V)', digits=(10, 1))
-    ratio_value = fields.Float(
-        string='Ratio Value (%)', digits=(10, 1))
-    frequency_value = fields.Float(
-        string='Frequency Value (ppm)', digits=(10, 1))
-    voltage_values = fields.Float(
-        string='Nominal Voltage (V)', digits=(10, 3))
-    contrast_value = fields.Float(
-        string='Contrast Value (%)', digits=(10, 3))
-
     # ----- state / metadata -----
     state = fields.Selection(
         selection=[

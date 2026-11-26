@@ -17,6 +17,7 @@ class TestEipManual(TransactionCase):
         self.company = self.env['res.company'].search(
             [], order='id asc', limit=1)
         self.PassRecord = self.env['sn.wsd.eip.pass.record']
+        self.Raw = self.env['sn.wsd.eip.raw.record']
         self.Outbox = self.env['sn.wsd.eip.collect.outbox']
         self.Interface = self.env['sn.wsd.eip.collect.interface']
         self.config = self._ensure_config()
@@ -49,39 +50,53 @@ class TestEipManual(TransactionCase):
         vals.setdefault('model_code', 'RV-01')
         vals.setdefault('check_time', '2025-11-26 09:00:00')
         vals.setdefault('conclusion', 0)
-        if code == '1012':
-            vals.setdefault('varistor_voltage', 390.5)
+        vals.setdefault('value', 390.5)
+        if code in ('1012', '2011'):
             vals.setdefault('error_value', 1.2)
-        if code == '1015':
-            vals.setdefault('leakage_current', 2.0)
-        return self.PassRecord.create(vals)
+        return self.Raw.create(vals)
 
     def test_10_raw_inspection_end_to_end(self):
-        """1012 manual row: gates pass, EXACT spec payload, served."""
-        row = self._raw()
-        self.PassRecord._eip_clean_by_order('W-MANUAL')
-        self.assertEqual(row.state, 'qualified')
-        snapshot = row.outbox_ids
-        self.assertEqual(snapshot.info_type_code, '1012')
-        payload = snapshot.payload
-        # exact field list: no DEVICE_NO / PCB_CODE / TEST_NAME
-        self.assertNotIn('DEVICE_NO', payload)
-        self.assertNotIn('PCB_CODE', payload)
+        """1012 manual record: required fields at entry, exact spec
+        payload, served FIFO by the 1012 interface."""
+        Raw = self.env['sn.wsd.eip.raw.record']
+        raw = Raw.create({
+            'company_id': self.company.id,
+            'info_type_code': '1012',
+            'production_order_no': 'MO-M1',
+            'work_order_no': 'W-MANUAL',
+            'material_check_batch': 'JC20251126',
+            'material_batch': 'PC20251126',
+            'material_brand': 'Brand X',
+            'material_supplier': 'Maker Y',
+            'material_leave_date': '2025-11-01',
+            'incoming_check_date': '2025-11-03',
+            'test_code': '1012-M1',
+            'model_code': 'RV-01',
+            'check_time': '2025-11-26 09:00:00',
+            'value': 390.5,
+            'error_value': 1.2,
+        })
+        self.assertEqual(raw.family, 'meter')
+        result = self.Interface._eip_serve('1012', 10)
+        self.assertEqual(raw.state, 'delivered')
+        self.assertTrue(raw.delivered_time)
+        payload = result['data'][0]
         self.assertEqual(payload['MATERIAL_CHECK_BATCH'], 'JC20251126')
         self.assertEqual(payload['MATERIAL_BRAND'], 'Brand X')
         self.assertEqual(payload['VARISTOR_VOLTAGE'], 390.5)
         self.assertEqual(payload['ERROR_VALUE'], 1.2)
-        self.assertEqual(payload['CONCLUSION'], 0)
-        result = self.Interface._eip_serve('1012', 10)
-        self.assertEqual(result['data'], [payload])
-        self.assertEqual(row.state, 'delivered')
+        self.assertEqual(payload['MATERIAL_LEAVE_TIME'], '2025-11-01')
+        # FIFO exhausted
+        self.assertEqual(self.Interface._eip_serve('1012', 10)['data'], [])
 
-    def test_20_raw_missing_batch_rejects(self):
-        row = self._raw(code='1015', leakage_current=2.0)
-        row.material_check_batch = False
-        self.PassRecord._eip_clean_by_order('W-MANUAL')
-        self.assertEqual(row.state, 'rejected')
-        self.assertIn('material_check_batch', row.clean_note)
+    def test_20_raw_missing_batch_rejects_entry(self):
+        """Required fields are enforced at entry (no cleansing gates on
+        manual documents)."""
+        with self.assertRaises(Exception):
+            self._raw(material_check_batch=False)
+        # collector family auto-derived from the code
+        raw = self._raw(code='2013')
+        self.assertEqual(raw.family, 'collector')
 
     def test_30_packing_entry_flow(self):
         """Packing storage: one record per unit, exact spec payload,
@@ -136,14 +151,33 @@ class TestEipManual(TransactionCase):
         self.assertNotIn('CONCLUSION', payload)
 
     def test_40_delivered_rows_are_frozen_against_manual_edit(self):
-        row = self._raw()
-        self.PassRecord._eip_clean_by_order('W-MANUAL')
+        # raw single table: once served, the row is frozen forever
+        raw = self._raw()
         self.Interface._eip_serve('1012', 10)
+        self.assertEqual(raw.state, 'delivered')
+        with self.assertRaises(UserError):
+            raw.write({'material_brand': 'Rewrite'})
+        # the delivery stamp itself is always allowed
+        raw.write({'delivered_time': fields.Datetime.now()})
+        # wide table: same freeze on station-pass rows
+        row = self.PassRecord.create({
+            'company_id': self.company.id,
+            'info_type_code': '1005',
+            'production_order_no': 'MO-M1',
+            'work_order_no': 'W-MANUAL',
+            'device_no': 'DX01',
+            'test_code': '1005-F1',
+            'model_code': 'DDSY10217',
+            'pcb_code': 'SN-F1',
+            'check_time': '2025-11-26 09:00:00',
+            'conclusion': 0,
+            'current_value': 2.05,
+        })
+        row._eip_clean_rows()
+        self.Interface._eip_serve('1005', 10)
         self.assertEqual(row.state, 'delivered')
         with self.assertRaises(UserError):
-            row.write({'material_brand': 'Rewrite'})
-        # the delivery stamp itself is always allowed
-        row.write({'upload_time': fields.Datetime.now()})
+            row.write({'device_no': 'DX02'})
 
     def test_50_raw_report_flow(self):
         Report = self.env['sn.wsd.eip.raw.report']

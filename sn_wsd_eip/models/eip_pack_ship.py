@@ -14,7 +14,8 @@ tables (FIFO claim, delivered on serve, exact spec payloads). Required
 fields are enforced at entry; import flows through the same editable
 lists.
 """
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class EipPackRecord(models.Model):
@@ -54,6 +55,19 @@ class EipPackRecord(models.Model):
         selection=[('pending', 'Pending'), ('delivered', 'Delivered')],
         string='State', required=True, default='pending', index=True)
     delivered_time = fields.Datetime(string='Delivered Time', readonly=True)
+
+    # the only columns the delivery stamp itself may write on an
+    # already-delivered row -- everything else is frozen forever
+    DELIVERY_WRITE_KEYS = frozenset({'state', 'delivered_time'})
+
+    def write(self, vals):
+        if (any(record.state == 'delivered' for record in self)
+                and any(key not in self.DELIVERY_WRITE_KEYS
+                        for key in vals)):
+            raise UserError(_(
+                'Delivered rows are frozen: the gateway already took '
+                'them, nothing can be edited afterwards.'))
+        return super().write(vals)
 
     def _eip_claim(self, code, amount):
         """Atomically take up to ``amount`` pending records of one code,
@@ -137,6 +151,19 @@ class EipShipRecord(models.Model):
         selection=[('pending', 'Pending'), ('delivered', 'Delivered')],
         string='State', required=True, default='pending', index=True)
     delivered_time = fields.Datetime(string='Delivered Time', readonly=True)
+
+    # the only columns the delivery stamp itself may write on an
+    # already-delivered row -- everything else is frozen forever
+    DELIVERY_WRITE_KEYS = frozenset({'state', 'delivered_time'})
+
+    def write(self, vals):
+        if (any(record.state == 'delivered' for record in self)
+                and any(key not in self.DELIVERY_WRITE_KEYS
+                        for key in vals)):
+            raise UserError(_(
+                'Delivered rows are frozen: the gateway already took '
+                'them, nothing can be edited afterwards.'))
+        return super().write(vals)
 
     def _eip_claim(self, code, amount):
         self.env.flush_all()
