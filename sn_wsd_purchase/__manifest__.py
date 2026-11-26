@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Purchase Contract Report',
-    'version': '19.0.4.14.0',
+    'version': '19.0.4.15.0',
     'summary': 'Purchase contract fields, purchase detail tracking, vendor price sync, '
                'supplier-only vendor field and vendor billing from receipts',
     'depends': ['purchase', 'sale', 'purchase_request', 'account', 'stock', 'sn_wsd_mrp', 'sn_wsd_material', 'sn_wsd_code_rule', 'sn_wsd_list', 'sn_wsd_prn'],

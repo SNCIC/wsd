@@ -21,6 +21,18 @@ class PurchaseRequestLine(models.Model):
         digits='Product Unit of Measure',
         compute='_compute_approved_pending_qty',
     )
+    # The module computes the ordered quantity without storing it, which keeps
+    # the column out of the list sorting: a computed field is sortable only when
+    # it is stored. The split quantity is stored here so the detail reports can
+    # be ordered and aggregated on it; the dependencies below follow every value
+    # the split reads.
+    purchased_qty = fields.Float(
+        string='RFQ/PO Qty',
+        digits='Product Unit of Measure',
+        compute='_compute_purchased_qty',
+        store=True,
+        readonly=True,
+    )
     create_user_id = fields.Many2one(
         related='create_uid',
         string='Created By',
@@ -173,8 +185,11 @@ class PurchaseRequestLine(models.Model):
         return options
 
     @api.depends(
+        'approved_qty',
+        'product_qty',
         'purchase_request_allocation_ids',
         'purchase_request_allocation_ids.requested_product_uom_qty',
+        'purchase_request_allocation_ids.product_uom_id',
         'purchase_request_allocation_ids.purchase_line_id',
         'purchase_request_allocation_ids.purchase_line_id.product_qty',
         'purchase_request_allocation_ids.purchase_line_id.product_uom_id',
@@ -183,6 +198,13 @@ class PurchaseRequestLine(models.Model):
         'purchase_lines.product_qty',
         'purchase_lines.product_uom_id',
         'purchase_lines.state',
+        'purchase_lines.purchase_request_allocation_ids',
+        'purchase_lines.purchase_request_allocation_ids.requested_product_uom_qty',
+        'purchase_lines.purchase_request_allocation_ids.product_uom_id',
+        'purchase_lines.purchase_request_allocation_ids.purchase_request_line_id',
+        'purchase_lines.purchase_request_lines',
+        'purchase_lines.purchase_request_lines.approved_qty',
+        'purchase_lines.purchase_request_lines.product_qty',
         'product_uom_id',
     )
     def _compute_purchased_qty(self):
@@ -191,7 +213,8 @@ class PurchaseRequestLine(models.Model):
         The module counts the whole quantity of a purchase order line on every
         request line linked to it, which counts the same goods once per line as
         soon as several request lines share an order line. The quantity is
-        split between them here instead.
+        split between them here instead, and stored so the detail reports can
+        be ordered on it.
         """
         quantities = self._get_ordered_quantities()
         by_line = defaultdict(float)
