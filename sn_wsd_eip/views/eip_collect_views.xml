@@ -55,7 +55,7 @@
                 <filter string="Disabled" name="filter_disabled"
                         domain="[('active', '=', False)]"/>
                 <group>
-                    <filter name="group_by_family" string="Spec Family"
+                    <filter name="group_by_family" string="Device Category"
                             context="{'group_by': 'family'}"/>
                 </group>
             </search>

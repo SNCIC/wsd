@@ -35,7 +35,7 @@ class EipOperationMapping(models.Model):
             ('meter', 'Electricity Meter'),
             ('collector', 'Collection Device'),
         ],
-        string='Spec Family', required=True, default='meter', index=True,
+        string='Device Category', required=True, default='meter', index=True,
         help='Production-data spec the code belongs to: electricity '
              'meter (1xxx) or collection device (2xxx).')
     info_code = fields.Char(

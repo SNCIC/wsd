@@ -46,7 +46,7 @@ class EipCollectInterface(models.Model):
             ('meter', 'Electricity Meter'),
             ('collector', 'Collection Device'),
         ],
-        string='Spec Family', required=True, index=True,
+        string='Device Category', required=True, index=True,
         help='Which production-data spec the interface belongs to.')
     name = fields.Char(string='Name', required=True)
     method = fields.Selection(

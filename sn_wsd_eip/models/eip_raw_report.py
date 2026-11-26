@@ -63,7 +63,7 @@ class EipRawReport(models.Model):
     family = fields.Selection(
         selection=[('meter', 'Electricity Meter'),
                    ('collector', 'Collection Device')],
-        string='Spec Family', compute='_compute_family', store=True,
+        string='Device Category', compute='_compute_family', store=True,
         index=True)
     state = fields.Selection(
         selection=[('pending', 'Pending'), ('delivered', 'Delivered')],

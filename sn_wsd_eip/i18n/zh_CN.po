@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-26 06:30+0000\n"
-"PO-Revision-Date: 2026-11-26 06:30+0000\n"
+"POT-Creation-Date: 2026-11-26 06:38+0000\n"
+"PO-Revision-Date: 2026-11-26 06:38+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1296,9 +1296,16 @@ msgid ""
 msgstr "本映射针对的明细上限：区分同名明细（三相表两个功率因数=1.0 的点）。空 = 名称相同的行都命中。"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__family
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__family
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__family
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__family
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__spec_family
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_record__family
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_report__family
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_ship_record__family
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_collect_interface_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_search
 msgid "Device Category"
 msgstr "种类"
 
@@ -5078,17 +5085,6 @@ msgid ""
 "Spare parts of the finished products, refreshed on the\n"
 "                platform every 24 hours."
 msgstr "产成品的备品备件库存，每 24 小时在平台刷新一次。"
-
-#. module: sn_wsd_eip
-#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_interface__family
-#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__family
-#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__family
-#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__spec_family
-#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_report__family
-#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_collect_interface_search
-#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_search
-msgid "Spec Family"
-msgstr "规范族"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_interface__code

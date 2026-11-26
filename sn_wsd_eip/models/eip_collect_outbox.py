@@ -78,7 +78,7 @@ class EipCollectOutbox(models.Model):
             ('meter', 'Electricity Meter'),
             ('collector', 'Collection Device'),
         ],
-        string='Spec Family', required=True, index=True)
+        string='Device Category', required=True, index=True)
     test_code = fields.Char(string='Test Code', index=True)
     payload = fields.Json(
         string='Payload',

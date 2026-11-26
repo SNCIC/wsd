@@ -130,7 +130,7 @@ class EipPassRecord(models.Model):
             ('meter', 'Electricity Meter'),
             ('collector', 'Collection Device'),
         ],
-        string='Spec Family', index=True,
+        string='Device Category', index=True,
         help='Production-data spec this row belongs to, resolved per '
              'product via the material mapping subclass (30002 meter / '
              '30001 collector). Empty = unmapped product: the row is '
