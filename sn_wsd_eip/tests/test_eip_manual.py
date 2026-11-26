@@ -14,6 +14,11 @@ class TestEipManual(TransactionCase):
         super().setUp()
         self.env = self.env(context=dict(self.env.context, lang='en_US'))
         self.env['sn.wsd.eip.collect.outbox'].search([]).unlink()
+        # hermetic serving tests: drop every manual row inside the test
+        # transaction (rollback restores any data committed outside)
+        for model in ('sn.wsd.eip.raw.record', 'sn.wsd.eip.pack.record',
+                      'sn.wsd.eip.ship.record', 'sn.wsd.eip.raw.report'):
+            self.env[model].search([]).unlink()
         self.company = self.env['res.company'].search(
             [], order='id asc', limit=1)
         self.PassRecord = self.env['sn.wsd.eip.pass.record']
@@ -50,9 +55,19 @@ class TestEipManual(TransactionCase):
         vals.setdefault('model_code', 'RV-01')
         vals.setdefault('check_time', '2025-11-26 09:00:00')
         vals.setdefault('conclusion', 0)
-        vals.setdefault('value', 390.5)
         if code in ('1012', '2011'):
+            vals.setdefault('varistor_voltage', 390.5)
             vals.setdefault('error_value', 1.2)
+        if code in ('1013', '2012'):
+            vals.setdefault('ratio_value', 98.6)
+        if code in ('1014', '2013'):
+            vals.setdefault('frequency_value', -2.5)
+        if code in ('1015', '2014'):
+            vals.setdefault('leakage_current', 0.812)
+        if code == '1016':
+            vals.setdefault('voltage_values', 3.645)
+        if code == '1018':
+            vals.setdefault('contrast_value', -0.023)
         return self.Raw.create(vals)
 
     def test_10_raw_inspection_end_to_end(self):
@@ -73,7 +88,7 @@ class TestEipManual(TransactionCase):
             'test_code': '1012-M1',
             'model_code': 'RV-01',
             'check_time': '2025-11-26 09:00:00',
-            'value': 390.5,
+            'varistor_voltage': 390.5,
             'error_value': 1.2,
         })
         self.assertEqual(raw.family, 'meter')

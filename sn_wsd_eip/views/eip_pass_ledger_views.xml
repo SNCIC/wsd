@@ -1015,21 +1015,21 @@
         <field name="name">sn.wsd.eip.raw.record.list</field>
         <field name="model">sn.wsd.eip.raw.record</field>
         <field name="arch" type="xml">
-            <list editable="bottom">
+            <list>
                 <field name="info_type_code"/>
-                <field name="production_order_no"/>
-                <field name="work_order_no"/>
+                <field name="family"/>
                 <field name="material_check_batch"/>
                 <field name="material_batch"/>
-                <field name="material_brand"/>
-                <field name="material_supplier"/>
-                <field name="material_leave_date"/>
-                <field name="incoming_check_date"/>
+                <field name="material_brand" optional="hide"/>
                 <field name="test_code"/>
-                <field name="model_code"/>
                 <field name="check_time"/>
-                <field name="value"/>
+                <field name="varistor_voltage" optional="hide"/>
                 <field name="error_value" optional="hide"/>
+                <field name="ratio_value" optional="hide"/>
+                <field name="frequency_value" optional="hide"/>
+                <field name="leakage_current" optional="hide"/>
+                <field name="voltage_values" optional="hide"/>
+                <field name="contrast_value" optional="hide"/>
                 <field name="conclusion"/>
                 <field name="state"/>
             </list>
@@ -1045,6 +1045,7 @@
                     <group>
                         <group string="Batch">
                             <field name="info_type_code"/>
+                            <field name="family"/>
                             <field name="production_order_no"/>
                             <field name="work_order_no"/>
                             <field name="material_check_batch"/>
@@ -1058,8 +1059,20 @@
                             <field name="test_code"/>
                             <field name="model_code"/>
                             <field name="check_time"/>
-                            <field name="value"/>
-                            <field name="error_value"/>
+                            <field name="varistor_voltage"
+                                   invisible="info_type_code not in ('1012', '2011')"/>
+                            <field name="error_value"
+                                   invisible="info_type_code not in ('1012', '2011')"/>
+                            <field name="ratio_value"
+                                   invisible="info_type_code not in ('1013', '2012')"/>
+                            <field name="frequency_value"
+                                   invisible="info_type_code not in ('1014', '2013')"/>
+                            <field name="leakage_current"
+                                   invisible="info_type_code not in ('1015', '2014')"/>
+                            <field name="voltage_values"
+                                   invisible="info_type_code != '1016'"/>
+                            <field name="contrast_value"
+                                   invisible="info_type_code != '1018'"/>
                             <field name="conclusion"/>
                             <field name="state" readonly="1"/>
                         </group>
@@ -1090,4 +1103,146 @@
               parent="menu_eip_entry_manual"
               action="action_eip_raw_record"
               sequence="10"/>
+
+    <record id="view_eip_pack_record_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pack.record.list</field>
+        <field name="model">sn.wsd.eip.pack.record</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="info_type_code"/>
+                <field name="production_order_no"/>
+                <field name="work_order_no"/>
+                <field name="test_code"/>
+                <field name="model_code"/>
+                <field name="nameplate_code"/>
+                <field name="number"/>
+                <field name="unit"/>
+                <field name="storage_date"/>
+                <field name="conclusion"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_eip_pack_record" model="ir.actions.act_window">
+        <field name="name">Packing Storage Records</field>
+        <field name="res_model">sn.wsd.eip.pack.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                One record per stored unit
+            </p>
+            <p>
+                Manual entry or Excel import; the gateway fetches these
+                by the 1090 / 2090 interfaces and served records are
+                frozen forever.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_eip_pack_record_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pack.record.form</field>
+        <field name="model">sn.wsd.eip.pack.record</field>
+        <field name="arch" type="xml">
+            <form string="Packing Storage">
+                <sheet>
+                    <group>
+                        <group string="Document">
+                            <field name="info_type_code"/>
+                            <field name="production_order_no"/>
+                            <field name="work_order_no"/>
+                            <field name="test_code"/>
+                            <field name="model_code"/>
+                        </group>
+                        <group string="Storage">
+                            <field name="nameplate_code"/>
+                            <field name="number"/>
+                            <field name="unit"/>
+                            <field name="storage_date"/>
+                            <field name="conclusion"/>
+                            <field name="state" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_ship_record_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.ship.record.list</field>
+        <field name="model">sn.wsd.eip.ship.record</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="info_type_code"/>
+                <field name="production_order_no"/>
+                <field name="work_order_no"/>
+                <field name="test_code"/>
+                <field name="model_code"/>
+                <field name="nameplate_start"/>
+                <field name="nameplate_final"/>
+                <field name="number"/>
+                <field name="unit"/>
+                <field name="deliver_date"/>
+                <field name="deliver_status"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_ship_record_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.ship.record.form</field>
+        <field name="model">sn.wsd.eip.ship.record</field>
+        <field name="arch" type="xml">
+            <form string="Shipping">
+                <sheet>
+                    <group>
+                        <group string="Document">
+                            <field name="info_type_code"/>
+                            <field name="production_order_no"/>
+                            <field name="work_order_no"/>
+                            <field name="test_code"/>
+                            <field name="model_code"/>
+                        </group>
+                        <group string="Shipment">
+                            <field name="nameplate_start"/>
+                            <field name="nameplate_final"/>
+                            <field name="number"/>
+                            <field name="unit"/>
+                            <field name="deliver_date"/>
+                            <field name="deliver_status"/>
+                            <field name="state" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_eip_ship_record" model="ir.actions.act_window">
+        <field name="name">Shipping Records</field>
+        <field name="res_model">sn.wsd.eip.ship.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                One record per shipment batch
+            </p>
+            <p>
+                A continuous nameplate range (start..final) plus the
+                shipped count; the gateway fetches these by the 1091 /
+                2091 interfaces and served records are frozen forever.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_eip_pack_record"
+              name="Packing Storage Records"
+              parent="menu_eip_entry_manual"
+              action="action_eip_pack_record"
+              sequence="30"/>
+    <menuitem id="menu_eip_ship_record"
+              name="Shipping Records"
+              parent="menu_eip_entry_manual"
+              action="action_eip_ship_record"
+              sequence="40"/>
+
 </odoo>

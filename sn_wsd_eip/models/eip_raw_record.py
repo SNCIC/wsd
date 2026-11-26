@@ -1,10 +1,12 @@
 """Raw-material inspection records (manual-entry interfaces
 1012..1018 meter and 2011..2014 collector).
 
-One record per raw-material inspection of one batch: the spec value
-fields are generic (value + error_value) -- the payload maps the value
-onto the interface's own spec key (VARISTOR_VOLTAGE / RATIO_VALUE /
-FREQUENCY_VALUE / VOLTAGE_VALUES / LEAKAGE_CURRENT / CONTRAST_VALUE).
+One record per raw-material inspection of one batch. Each interface
+has its own spec value column (varistor_voltage / ratio_value /
+frequency_value / voltage_values / leakage_current / contrast_value,
+plus error_value for the varistor voltage) so the form shows the
+field under its spec name; the payload maps the column onto the
+interface's own spec key.
 
 Not station-pass data: served directly from this table (FIFO claim,
 delivered on serve) like the packing/shipping and report interfaces.
@@ -13,19 +15,18 @@ Required fields are enforced at entry/import; no cleansing gates.
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
-# per-code spec key of the generic value column
+# per-code spec column -> payload key; 1017 LCD has no value column
 RAW_VALUE_KEY = {
-    '1012': 'VARISTOR_VOLTAGE',
-    '2011': 'VARISTOR_VOLTAGE',
-    '1013': 'RATIO_VALUE',
-    '2012': 'RATIO_VALUE',
-    '1014': 'FREQUENCY_VALUE',
-    '2013': 'FREQUENCY_VALUE',
-    '1015': 'LEAKAGE_CURRENT',
-    '2014': 'LEAKAGE_CURRENT',
-    '1016': 'VOLTAGE_VALUES',
-    '1018': 'CONTRAST_VALUE',
-    # 1017 液晶: conclusion only, no value field
+    '1012': ('varistor_voltage', 'VARISTOR_VOLTAGE'),
+    '2011': ('varistor_voltage', 'VARISTOR_VOLTAGE'),
+    '1013': ('ratio_value', 'RATIO_VALUE'),
+    '2012': ('ratio_value', 'RATIO_VALUE'),
+    '1014': ('frequency_value', 'FREQUENCY_VALUE'),
+    '2013': ('frequency_value', 'FREQUENCY_VALUE'),
+    '1015': ('leakage_current', 'LEAKAGE_CURRENT'),
+    '2014': ('leakage_current', 'LEAKAGE_CURRENT'),
+    '1016': ('voltage_values', 'VOLTAGE_VALUES'),
+    '1018': ('contrast_value', 'CONTRAST_VALUE'),
 }
 RAW_VALUE_KIND = {
     'VARISTOR_VOLTAGE': 1,
@@ -93,13 +94,27 @@ class EipRawRecord(models.Model):
         help='Unique ID per inspection.')
     model_code = fields.Char(string='Model Code', required=True)
     check_time = fields.Datetime(string='Check Time', required=True)
-    value = fields.Float(
-        string='Inspection Value', digits=(10, 3),
-        help='The measured value of this inspection; lands on the '
-             'interface-specific spec key of the payload.')
+    varistor_voltage = fields.Float(
+        string='Varistor Voltage', digits=(10, 1),
+        help='1012/2011 only: measured varistor voltage in V.')
     error_value = fields.Float(
-        string='Error Value', digits=(10, 3),
+        string='Varistor Voltage Error', digits=(10, 3),
         help='1012/2011 only: the error of the varistor voltage.')
+    ratio_value = fields.Float(
+        string='Ratio Value', digits=(10, 1),
+        help='1013/2012 only: measured transfer ratio in %.')
+    frequency_value = fields.Float(
+        string='Frequency Value', digits=(10, 1),
+        help='1014/2013 only: nominal frequency deviation in ppm.')
+    voltage_values = fields.Float(
+        string='Voltage Values', digits=(10, 3),
+        help='1016 only: nominal voltage in V.')
+    leakage_current = fields.Float(
+        string='Leakage Current', digits=(10, 3),
+        help='1015/2014 only: leakage current.')
+    contrast_value = fields.Float(
+        string='Contrast Value', digits=(10, 3),
+        help='1018 only: ratio error in %.')
     conclusion = fields.Integer(
         string='Conclusion', required=True, default=0,
         help='0 pass, 1 fail.')
@@ -169,10 +184,11 @@ class EipRawRecord(models.Model):
                 'UPLOAD_TIME': _fmt_dt(record.delivered_time),
                 'CONCLUSION': int(record.conclusion or 0),
             }
-            key = RAW_VALUE_KEY.get(record.info_type_code)
-            if key:
+            spec = RAW_VALUE_KEY.get(record.info_type_code)
+            if spec:
+                column, key = spec
                 kind = RAW_VALUE_KIND[key]
-                value = float(record.value or 0.0)
+                value = float(record[column] or 0.0)
                 payload[key] = (round(value, 1) if kind == 1
                                 else round(value, 3))
             if record.info_type_code in ('1012', '2011'):

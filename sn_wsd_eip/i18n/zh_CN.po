@@ -43,9 +43,39 @@ msgid "1 standard contract, 2 framework stock, 3 purchase supply note."
 msgstr "1 标准合同；2 协议库存；3 采购供货单。"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_record__varistor_voltage
+msgid "1012/2011 only: measured varistor voltage in V."
+msgstr "仅 1012/2011：压敏电压实测值（V）。"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_record__error_value
 msgid "1012/2011 only: the error of the varistor voltage."
 msgstr "仅 1012/2011：压敏电压的误差值。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_record__ratio_value
+msgid "1013/2012 only: measured transfer ratio in %."
+msgstr "仅 1013/2012：传输比实测值（%）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_record__frequency_value
+msgid "1014/2013 only: nominal frequency deviation in ppm."
+msgstr "仅 1014/2013：标称频差（ppm）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_record__leakage_current
+msgid "1015/2014 only: leakage current."
+msgstr "仅 1015/2014：漏电流。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_record__voltage_values
+msgid "1016 only: nominal voltage in V."
+msgstr "仅 1016：标称电压（V）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_record__contrast_value
+msgid "1018 only: ratio error in %."
+msgstr "仅 1018：比差值（%）。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__logic_address
@@ -726,6 +756,11 @@ msgid "Contract number of the State Grid legal system."
 msgstr "国网经法系统的合同编号。"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_record__contrast_value
+msgid "Contrast Value"
+msgstr "比差值"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__cooling_zone
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_rule__field_name__cooling_zone
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__cooling_zone
@@ -1162,6 +1197,8 @@ msgstr "显示名称"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_log__document_ref
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_preview__document_ref
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_push_queue__document_ref
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pack_record_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_ship_record_form
 msgid "Document"
 msgstr "单据"
 
@@ -1715,7 +1752,6 @@ msgstr "误差类型"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__error_value
-#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_record__error_value
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_clean_rule__field_name__error_value
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__error_value
 msgid "Error Value"
@@ -1813,6 +1849,11 @@ msgstr "采购技术固化ID"
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_supply_note__con_type__2
 msgid "Framework Stock"
 msgstr "协议库存"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_record__frequency_value
+msgid "Frequency Value"
+msgstr "标称频差"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_raw_inventory__mat_code
@@ -2074,11 +2115,6 @@ msgstr "工序编码"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_raw_record_form
 msgid "Inspection"
 msgstr "检验信息"
-
-#. module: sn_wsd_eip
-#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_record__value
-msgid "Inspection Value"
-msgstr "检验值"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_call_log_mixin__config_id
@@ -2368,6 +2404,11 @@ msgstr "最后更新人"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__write_date
 msgid "Last Updated on"
 msgstr "最后更新时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_record__leakage_current
+msgid "Leakage Current"
+msgstr "漏电流"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__leakage_current
@@ -2927,6 +2968,16 @@ msgid "One record per raw-material batch inspection"
 msgstr "每个原材料批次检验一条记录"
 
 #. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_ship_record
+msgid "One record per shipment batch"
+msgstr "每批发货一条记录"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_pack_record
+msgid "One record per stored unit"
+msgstr "每个台/只一条记录"
+
+#. module: sn_wsd_eip
 #: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_config_company_uniq
 msgid "Only one EIP integration config per company."
 msgstr "每家公司只能有一条 EIP 对接配置。"
@@ -3058,6 +3109,11 @@ msgid "Packed and Stocked"
 msgstr "包装入库"
 
 #. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pack_record_form
+msgid "Packing Storage"
+msgstr "成品包装入库"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pack_record__info_type_code__2090
 msgid "Packing Storage (Collector)"
 msgstr "包装入库（采集设备）"
@@ -3066,6 +3122,12 @@ msgstr "包装入库（采集设备）"
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pack_record__info_type_code__1090
 msgid "Packing Storage (Meter)"
 msgstr "包装入库（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_pack_record
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_pack_record
+msgid "Packing Storage Records"
+msgstr "成品包装入库记录"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pull_log__page_num
@@ -3812,6 +3874,11 @@ msgid "REAL_ERROR"
 msgstr "实际误差"
 
 #. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_record__ratio_value
+msgid "Ratio Value"
+msgstr "传输比实测值"
+
+#. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_raw_record
 #: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_raw_record
 msgid "Raw Inspection Records"
@@ -4286,9 +4353,19 @@ msgid "Several IDs are joined with \"&\"."
 msgstr "多个 ID 用\"&\"拼接。"
 
 #. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_ship_record_form
+msgid "Shipment"
+msgstr "发货信息"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_ship_record__deliver_status__1
 msgid "Shipped"
 msgstr "已发货"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_ship_record_form
+msgid "Shipping"
+msgstr "成品发货"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_ship_record__info_type_code__2091
@@ -4299,6 +4376,12 @@ msgstr "成品发货（采集设备）"
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_ship_record__info_type_code__1091
 msgid "Shipping (Meter)"
 msgstr "成品发货（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ship_record
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ship_record
+msgid "Shipping Records"
+msgstr "成品发货记录"
 
 #. module: sn_wsd_eip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_collect_outbox_form
@@ -4428,6 +4511,11 @@ msgstr "状态"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_production_order_form
 msgid "Status"
 msgstr "状态"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pack_record_form
+msgid "Storage"
+msgstr "入库信息"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__storage_date
@@ -4936,6 +5024,21 @@ msgstr "数值字段"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__values_extracted
 msgid "Values Extracted"
 msgstr "已执行提取"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_record__varistor_voltage
+msgid "Varistor Voltage"
+msgstr "压敏电压实测值"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_record__error_value
+msgid "Varistor Voltage Error"
+msgstr "误差值"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_record__voltage_values
+msgid "Voltage Values"
+msgstr "标称电压"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__payload_warming_zone
