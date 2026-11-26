@@ -101,6 +101,11 @@ class PurchaseOrder(models.Model):
             origin=self.name,
             company=self.company_id.name,
         ))
+        # Keep the link on this side too: the form shows it and the lookups
+        # stop needing a search over the sales orders.
+        self.sudo().with_context(skip_intercompany_sync=True).write({
+            'auto_sale_order_id': sale_order.id,
+        })
         self._sn_link_lines(sale_order)
         if not self.partner_ref:
             self.sudo().partner_ref = sale_order.name
