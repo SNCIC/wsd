@@ -100,6 +100,44 @@ class SnIntercompanySyncMixin(models.AbstractModel):
             return agreement, False, counterpart
         return agreement, direction, counterpart
 
+    @api.model
+    def _sn_normalize_partner_name(self, name):
+        """Comparable form of a partner name.
+
+        The vendor record and the company record of the same legal entity are
+        typed by hand in two different imports, so they differ by spaces, by
+        half/full width brackets and by case.
+        """
+        text = (name or '').strip().lower()
+        for source, target in (('（', '('), ('）', ')'), ('　', ''), (' ', '')):
+            text = text.replace(source, target)
+        return text
+
+    @api.model
+    def _sn_company_of_namesake(self, partner):
+        """Company whose partner stands for ``partner`` without being linked.
+
+        A vendor entered twice never resolves to a counterpart company, and the
+        documents then stay unlinked with no trace at all. Matching the VAT
+        number first and the normalized name second lets the caller report the
+        duplication instead of silently doing nothing.
+        """
+        if not partner or not partner.is_company:
+            return self.env['res.company']
+        vat = (partner.vat or '').strip().lower()
+        name = self._sn_normalize_partner_name(partner.name)
+        companies = self.env['res.company'].sudo().search([])
+        for company in companies:
+            company_partner = company.sudo().partner_id
+            if not company_partner or company_partner == partner:
+                continue
+            company_vat = (company_partner.vat or '').strip().lower()
+            if vat and company_vat and vat == company_vat:
+                return company
+            if name and name == self._sn_normalize_partner_name(company_partner.name):
+                return company
+        return self.env['res.company']
+
     def _sn_seller_company(self, counterpart):
         """Company selling in this document.
 

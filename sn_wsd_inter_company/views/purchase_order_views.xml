@@ -5,6 +5,13 @@
         <field name="model">purchase.order</field>
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_sn_generate_counterpart"
+                        string="Generate Inter-Company Document"
+                        type="object" invisible="auto_generated"
+                        groups="sn_wsd_inter_company.group_sn_intercompany_manager"
+                        help="Create the sales order of the vendor company when it is missing, for example after the vendor was linked to that company."/>
+            </xpath>
             <xpath expr="//page[@name='products']" position="after">
                 <page string="Inter-Company" name="intercompany"
                       groups="sn_wsd_inter_company.group_sn_intercompany_manager">

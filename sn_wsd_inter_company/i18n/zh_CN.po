@@ -1998,3 +1998,38 @@ msgid ""
 "two catalogues: it identifies the article even when the two companies "
 "numbered it differently."
 msgstr "物料的助记码就是同一物料在另一套目录里的编码，双向成立。它是两套目录之间最强的关联：即使两家公司各自编号不同，也能认出是同一物料。"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_purchase_order_form_intercompany
+msgid "Create the sales order of the vendor company when it is missing, for"
+" example after the vendor was linked to that company."
+msgstr "供应商公司缺少销售订单时生成，例如在把该供应商关联到该公司之后。"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_purchase_order_form_intercompany
+msgid "Generate Inter-Company Document"
+msgstr "生成跨公司单据"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+msgid "Inter-Company Document"
+msgstr "跨公司单据"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+msgid ""
+"No counterpart company is linked to the vendor %(partner)s. It carries the "
+"name of %(company)s but is a separate contact: merge the two partners, or set "
+"this one as the partner of the company, then press \"Generate Inter-Company "
+"Document\"."
+msgstr ""
+"供应商 %(partner)s 未关联任何对应公司。它与 %(company)s 同名，但属于另一条联系人记录："
+"请合并这两个伙伴，或把它设为该公司的伙伴，然后点击“生成跨公司单据”。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+msgid "No inter-company document was generated for %s."
+msgstr "没有为 %s 生成跨公司单据。"

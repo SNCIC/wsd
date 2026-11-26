@@ -35,6 +35,7 @@ class PurchaseOrder(models.Model):
                 continue
             agreement, direction, company = order._sn_resolve('sale.order')
             if not company:
+                order._sn_report_unlinked_vendor()
                 continue
             if agreement and not direction:
                 continue
@@ -109,6 +110,56 @@ class PurchaseOrder(models.Model):
                 or (not agreement and self._sn_auto_state() == 'posted'):
             sale_order.with_user(user).action_confirm()
         return sale_order
+
+    def _sn_report_unlinked_vendor(self):
+        """Flag a vendor that stands for another company but is not linked.
+
+        Nothing is generated in that case, and nothing was recorded either: the
+        order stayed silent while the other company waited for a sales order.
+        The reason is now written on the order and queued as an issue, so the
+        duplicated partner gets merged instead of the loss going unnoticed.
+        """
+        self.ensure_one()
+        namesake = self._sn_company_of_namesake(self.partner_id)
+        if not namesake:
+            return False
+        message = _(
+            "No counterpart company is linked to the vendor %(partner)s. It "
+            "carries the name of %(company)s but is a separate contact: merge "
+            "the two partners, or set this one as the partner of the company, "
+            "then press \"Generate Inter-Company Document\".",
+            partner=self.partner_id.display_name,
+            company=namesake.display_name,
+        )
+        self.sudo().with_context(skip_intercompany_sync=True).write({
+            'intercompany_skip_reason': message,
+        })
+        self._sn_issue('data', message)
+        self._sn_log('create', 'skipped', detail=message)
+        return True
+
+    def action_sn_generate_counterpart(self):
+        """Generate the counterpart document on demand.
+
+        Orders approved while their vendor was not linked to the other company
+        stay without a sales order; once the partner relationship is fixed the
+        button replays the creation without touching the order itself.
+        """
+        self.ensure_one()
+        counterpart = self._sn_counterpart() or self._sn_replay_sync()
+        if not counterpart:
+            raise UserError(_(
+                "No inter-company document was generated for %s.",
+                self.display_name,
+            ))
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Inter-Company Document'),
+            'res_model': counterpart._name,
+            'res_id': counterpart.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
 
     def _sn_link_lines(self, counterpart):
         """Store the line link on both sides, so later changes find their row."""
