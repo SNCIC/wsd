@@ -5787,3 +5787,66 @@ msgstr "出入库"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_entry_raw_meter_form
 msgid "Raw Material Inspection"
 msgstr "原材料检验"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__cleansed_value
+msgid "Cleansed Value"
+msgstr "清洗后值"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_value_mapping__target_type
+msgid ""
+"Detail translation rows: the EIP type code this line translates to (H1, "
+"IA...)."
+msgstr "明细翻译行：本行翻译出的类型代号（H1、ⅠA…）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_value_mapping__match_up_limit
+msgid ""
+"Detail upper limit this mapping targets: distinguishes same-name detail "
+"lines (the two PF=1.0 points of a three-phase meter). Empty = any line with "
+"the name."
+msgstr "本映射针对的明细上限：区分同名明细（三相表两个功率因数=1.0 的点）。空 = 名称相同的行都命中。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__match_up_limit
+msgid "Match Up Limit"
+msgstr "匹配上限值"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_value_mapping__transform_code
+msgid ""
+"Optional full Python function defining def transform(value, low, up, name, "
+"seq, detail) and returning the target number (None skips the item). Runs in "
+"an isolated namespace at cleansing time; only the six plain-data arguments "
+"are visible."
+msgstr ""
+"可选的完整 Python 函数定义：def transform(value, low, up, name, seq, "
+"detail)，返回目标数值（None 跳过该明细）。清洗时在隔离命名空间运行，仅六个纯数据参数可见。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__target_test_name
+msgid "Target Test Name"
+msgstr "目标试验名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__target_type
+msgid "Target Type Code"
+msgstr "目标类型代号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__transform_code
+msgid "Transform Code"
+msgstr "转换代码"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_value_mapping_form
+msgid "Trial"
+msgstr "试算"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__cleansed_value
+msgid ""
+"Value after the mapping transform ran (audit of the raw-to-payload "
+"conversion)."
+msgstr "映射转换运行后的值（原始值到报文值的留痕）。"

@@ -135,6 +135,30 @@ VALUE_RULE_FIELDS = {
     '2007': ['current_value'],
 }
 
+def _eip_float_or_none(raw):
+    """Parse a raw value to float; empty / junk -> None."""
+    if raw is None or raw == '':
+        return None
+    try:
+        return float(str(raw).strip())
+    except (TypeError, ValueError):
+        return None
+
+
+def _eip_match_rule(rules, field_name, type_code=None):
+    """Pick the limit rule for one field from the interface's rule
+    list: exact type match first, then the empty-type fallback rule;
+    None when nothing matches."""
+    for rule in rules:
+        if rule.field_name == field_name and type_code \
+                and rule.average_error_type == type_code:
+            return rule
+    for rule in rules:
+        if rule.field_name == field_name and not rule.average_error_type:
+            return rule
+    return None
+
+
 INTERFACE_PAYLOAD_FIELDS = {
     '1001': [],
     '1002': ['TEST_NAME', 'CHECK_DURATION', 'TESTING_VOLTAGE',
@@ -322,10 +346,10 @@ class EipPassRecordClean(models.Model):
                 payloads = record._eip_aging_payloads(now, problems, fixes)
             elif code == '1007':
                 payloads = record._eip_error_detail_payloads(
-                    now, problems, fixes)
+                    now, problems, fixes, rules)
             elif code == '2006':
                 payloads = record._eip_ac_analog_payloads(
-                    now, problems, fixes)
+                    now, problems, fixes, rules)
             elif code in CLEAN_REQUIRED:
                 if code in FULL_PAYLOAD_FIELDS:
                     payloads = [record._eip_exact_payload(code, now, fixes)]
@@ -435,52 +459,164 @@ class EipPassRecordClean(models.Model):
             return round(value, 2)
         return round(value, 3)
 
-    def _eip_error_detail_payloads(self, upload_time, problems, fixes=None):
-        """1007: one record per recognizable test-detail line (type code
-        from the platform name table, error from the measured value).
-        No valid line at all -> the row is rejected."""
+    def _eip_error_detail_payloads(self, upload_time, problems, fixes=None,
+                                   rules=None):
+        """1007: one record per test-detail line. Each line is
+        translated to (type code, test name, value) by its
+        detail_translate mapping row -- transform code first, the
+        platform name table as the fallback; lines without any
+        translation are skipped. Per-type limit rules judge the
+        cleansed value; an out-of-limit detail rejects the whole
+        row."""
+        translations = {}
+        for mapping in self.env['sn.wsd.eip.value.mapping'].search([
+                ('info_type_code', '=', '1007'),
+                ('source_kind', '=', 'detail_translate'),
+                ('company_id', 'in', [self.company_id.id, False])]):
+            translations.setdefault(
+                (mapping.source_key or '').strip(), []).append(mapping)
         payloads = []
-        for line in self.line_ids.filtered(
-                lambda item: item.line_type == 'test_detail'):
-            type_code = AVERAGE_ERROR_TYPE_NAMES.get(
-                (line.project_name or '').strip())
+        skipped = []
+        for index, line in enumerate(self.line_ids.filtered(
+                lambda item: item.line_type == 'test_detail'), 1):
+            name = (line.project_name or '').strip()
             try:
                 value = float(str(line.actual_value).strip())
             except (TypeError, ValueError):
                 value = None
-            if not type_code or value is None:
+            candidates = translations.get(name) or []
+            picked = None
+            if candidates:
+                exact = [m for m in candidates
+                         if _eip_float_or_none(m.match_up_limit)
+                         is not None
+                         and _eip_float_or_none(m.match_up_limit)
+                         == _eip_float_or_none(line.upper_limit)]
+                if exact:
+                    picked = exact[0]
+                elif len(candidates) == 1 and _eip_float_or_none(
+                        candidates[0].match_up_limit) is None:
+                    picked = candidates[0]
+            type_code = test_name = None
+            if picked:
+                type_code = picked.target_type
+                test_name = picked.target_test_name
+                if picked.transform_code:
+                    number, err = picked._eip_call_transform(
+                        line.actual_value, line.lower_limit,
+                        line.upper_limit, name, index,
+                        {'project_name': line.project_name,
+                         'lower_limit': line.lower_limit,
+                         'upper_limit': line.upper_limit,
+                         'actual_value': line.actual_value})
+                    if err:
+                        skipped.append('%s: %s' % (name, err))
+                        continue
+                    if number is None:
+                        skipped.append('%s: transform skipped' % name)
+                        continue
+                    value = number
+            else:
+                type_code = AVERAGE_ERROR_TYPE_NAMES.get(name)
+                test_name = name
+            if value is None:
+                skipped.append('%s: empty value' % name)
                 continue
+            if not type_code:
+                skipped.append('%s: no translation' % name)
+                continue
+            rule = _eip_match_rule(rules or [], 'average_error', type_code)
+            if rule:
+                problem = rule._eip_limit_problem(value)
+                if problem:
+                    problems.append('limit fail: %s' % problem)
+            line.cleansed_value = str(round(value, 3))
             payload = self._eip_base_payload(
                 upload_time, with_pcb=True, fixes=fixes)
-            payload['TEST_NAME'] = line.project_name
+            payload['TEST_NAME'] = test_name
             payload['AVERAGE_ERROR_TYPE'] = type_code
             payload['AVERAGE_ERROR'] = round(value, 3)
             payloads.append(payload)
         if not payloads:
             problems.append(
-                'no valid error-detail lines (unrecognized type names or '
-                'empty values)')
+                'no valid error-detail lines (untranslated names or empty '
+                'values)' + ('; skipped: %s' % '; '.join(skipped[:3])
+                             if skipped else ''))
         return payloads
 
-    def _eip_ac_analog_payloads(self, upload_time, problems, fixes=None):
-        """2006: one record per recognizable AC-analog line. The type
-        code comes from the platform name table (see the caveat on the
-        1/3-type naming); the standard and error come from the row
-        columns, the measured value from the line."""
+    def _eip_ac_analog_payloads(self, upload_time, problems, fixes=None,
+                                rules=None):
+        """2006: one record per test-detail line -- the type code and
+        measured value come from the detail_translate mapping row
+        (transform code first, platform name table fallback), standard
+        and error values stay row columns. Per-type limit rules judge
+        the measured value."""
+        translations = {}
+        for mapping in self.env['sn.wsd.eip.value.mapping'].search([
+                ('info_type_code', '=', '2006'),
+                ('source_kind', '=', 'detail_translate'),
+                ('company_id', 'in', [self.company_id.id, False])]):
+            translations.setdefault(
+                (mapping.source_key or '').strip(), []).append(mapping)
         payloads = []
-        for line in self.line_ids.filtered(
-                lambda item: item.line_type == 'test_detail'):
-            type_code = AC_ANALOG_TYPE_NAMES.get(
-                (line.project_name or '').strip())
+        skipped = []
+        for index, line in enumerate(self.line_ids.filtered(
+                lambda item: item.line_type == 'test_detail'), 1):
+            name = (line.project_name or '').strip()
             try:
                 measured = float(str(line.actual_value).strip())
             except (TypeError, ValueError):
                 measured = None
-            if not type_code or measured is None:
+            candidates = translations.get(name) or []
+            picked = None
+            if candidates:
+                exact = [m for m in candidates
+                         if _eip_float_or_none(m.match_up_limit)
+                         is not None
+                         and _eip_float_or_none(m.match_up_limit)
+                         == _eip_float_or_none(line.upper_limit)]
+                if exact:
+                    picked = exact[0]
+                elif len(candidates) == 1 and _eip_float_or_none(
+                        candidates[0].match_up_limit) is None:
+                    picked = candidates[0]
+            type_code = test_name = None
+            if picked:
+                type_code = picked.target_type
+                test_name = picked.target_test_name
+                if picked.transform_code:
+                    number, err = picked._eip_call_transform(
+                        line.actual_value, line.lower_limit,
+                        line.upper_limit, name, index,
+                        {'project_name': line.project_name,
+                         'lower_limit': line.lower_limit,
+                         'upper_limit': line.upper_limit,
+                         'actual_value': line.actual_value})
+                    if err:
+                        skipped.append('%s: %s' % (name, err))
+                        continue
+                    if number is None:
+                        skipped.append('%s: transform skipped' % name)
+                        continue
+                    measured = number
+            else:
+                type_code = AC_ANALOG_TYPE_NAMES.get(name)
+                test_name = name
+            if measured is None:
+                skipped.append('%s: empty value' % name)
                 continue
+            if not type_code:
+                skipped.append('%s: no translation' % name)
+                continue
+            rule = _eip_match_rule(rules or [], 'measured_value', type_code)
+            if rule:
+                problem = rule._eip_limit_problem(measured)
+                if problem:
+                    problems.append('limit fail: %s' % problem)
+            line.cleansed_value = str(round(measured, 1))
             payload = self._eip_base_payload(
                 upload_time, with_pcb=True, fixes=fixes)
-            payload['TEST_NAME'] = line.project_name
+            payload['TEST_NAME'] = test_name
             payload['AVERAGE_ERROR_TYPE'] = type_code
             payload['STANDARD_VALUE'] = round(
                 self.standard_value or 0.0, 1)
@@ -489,8 +625,9 @@ class EipPassRecordClean(models.Model):
             payloads.append(payload)
         if not payloads:
             problems.append(
-                'no valid ac-analog lines (unrecognized type names or '
-                'empty values)')
+                'no valid ac-analog lines (untranslated names or empty '
+                'values)' + ('; skipped: %s' % '; '.join(skipped[:3])
+                             if skipped else ''))
         return payloads
 
     def _eip_aging_payloads(self, upload_time, problems, fixes=None):

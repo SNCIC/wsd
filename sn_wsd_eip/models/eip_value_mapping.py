@@ -234,10 +234,24 @@ class EipValueMapping(models.Model):
     def _check_transform_code(self):
         for mapping in self:
             if mapping.transform_code:
-                _, err = mapping._eip_compile_transform()
+                fn, err = mapping._eip_compile_transform()
                 if err:
                     raise ValidationError(_(
                         'Transform code error: %s', err))
+                if fn:
+                    # dry-run with a sample value: return-type errors
+                    # block the save, input-dependent runtime errors do
+                    # not (they are judged on real data)
+                    try:
+                        result = fn('1', 0, 0, mapping.source_key or '', 1, {})
+                    except Exception:
+                        continue
+                    if result is not None and (
+                            isinstance(result, bool)
+                            or not isinstance(result, (int, float))):
+                        raise ValidationError(_(
+                            'Transform must return a number, got %r.',
+                            result,))
 
     @api.constrains('source_kind', 'target_type', 'target_test_name')
     def _check_detail_translate(self):

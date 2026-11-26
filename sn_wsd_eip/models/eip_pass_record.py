@@ -491,13 +491,35 @@ class EipPassRecord(models.Model):
             if not mappings:
                 continue
             values = {}
-            for mapping in mappings:
+            for mapping_index, mapping in enumerate(mappings):
                 if mapping.eip_field in values:
                     continue
                 detail = result.detail_ids.filtered(
                     lambda item: item.project_name == mapping.source_key)[:1]
                 if detail:
-                    values[mapping.eip_field] = detail.actual_value
+                    if mapping.transform_code:
+                        # transform contract: cleanse the raw detail value
+                        # before it lands in the wide-table column
+                        try:
+                            result_value = mapping._eip_call_transform(
+                                detail.actual_value, detail.lower_limit,
+                                detail.upper_limit, detail.project_name,
+                                mapping_index,
+                                {'project_name': detail.project_name,
+                                 'lower_limit': detail.lower_limit,
+                                 'upper_limit': detail.upper_limit,
+                                 'actual_value': detail.actual_value})
+                        except Exception as exc:  # noqa: BLE001 -- one mapping must not break the row
+                            _logger.warning(
+                                'EIP transform failed for %s: %s',
+                                mapping.source_key, exc)
+                            continue
+                        if result_value is None:
+                            continue
+                        values[mapping.eip_field] = str(result_value)
+                        detail.cleansed_value = str(result_value)
+                    else:
+                        values[mapping.eip_field] = detail.actual_value
             if record._fill_empty_values(values):
                 record.values_extracted = True
 
@@ -657,3 +679,7 @@ class EipPassRecordLine(models.Model):
     item_result = fields.Selection(
         selection=[('ok', 'OK'), ('ng', 'NG')], string='Item Result')
     raw_line = fields.Char(string='Raw Line')
+    cleansed_value = fields.Char(
+        string='Cleansed Value',
+        help='Value after the mapping transform ran (audit of the '
+             'raw-to-payload conversion).')
