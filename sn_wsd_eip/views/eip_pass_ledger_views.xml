@@ -1131,16 +1131,6 @@
         <field name="name">Packing Storage Records</field>
         <field name="res_model">sn.wsd.eip.pack.record</field>
         <field name="view_mode">list,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                One record per stored unit
-            </p>
-            <p>
-                Manual entry or Excel import; the gateway fetches these
-                by the 1090 / 2090 interfaces and served records are
-                frozen forever.
-            </p>
-        </field>
     </record>
 
     <record id="view_eip_pack_record_form" model="ir.ui.view">
