@@ -1138,6 +1138,11 @@
         <field name="model">sn.wsd.eip.pack.record</field>
         <field name="arch" type="xml">
             <form string="Packing Storage">
+                <header>
+                    <button name="%(action_eip_pack_capture_wizard)d"
+                            type="action" string="Capture by Work Order"
+                            groups="mrp.group_mrp_manager"/>
+                </header>
                 <sheet>
                     <group>
                         <group string="Document">
@@ -1264,11 +1269,10 @@
         <field name="res_model">sn.wsd.eip.pack.capture.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
+        <!-- no sidebar menu (user decision): lives in the Actions menu
+             of the packing-storage list -->
+        <field name="binding_model_id"
+               ref="model_sn_wsd_eip_pack_record"/>
+        <field name="binding_view_types">list</field>
     </record>
-
-    <menuitem id="menu_eip_pack_capture_wizard"
-              name="Capture Packing Storage by Work Order"
-              parent="menu_eip_entry_manual"
-              action="action_eip_pack_capture_wizard"
-              sequence="35"/>
 </odoo>
