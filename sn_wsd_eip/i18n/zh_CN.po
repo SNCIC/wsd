@@ -5536,11 +5536,13 @@ msgstr "比差值（%）"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__deliver_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_ship_record__deliver_date
 msgid "Deliver Date"
 msgstr "发货时间"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__deliver_status
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_ship_record__deliver_status
 msgid "Deliver Status"
 msgstr "发货状态"
 
@@ -5569,11 +5571,13 @@ msgstr "标称频差（ppm）"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__nameplate_final
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_ship_record__nameplate_final
 msgid "Grid device number range end; * for random codes."
 msgstr "国网设备统一编号（终号）；随机编码用 * 表示。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__nameplate_start
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_ship_record__nameplate_start
 msgid "Grid device number range start; * for random codes."
 msgstr "国网设备统一编号（始号）；随机编码用 * 表示。"
 
@@ -5638,16 +5642,20 @@ msgstr "原材料制造商"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__unit
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pack_record__unit
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_ship_record__unit
 msgid "Meter: 只; collection device: 台."
 msgstr "电能表“只”；采集设备“台”。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__nameplate_final
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_ship_record__nameplate_final
 msgid "Nameplate Final"
 msgstr "局编号/下铭牌号（终号）"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__nameplate_start
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_ship_record__nameplate_start
 msgid "Nameplate Start"
 msgstr "局编号/下铭牌号（始号）"
 
@@ -5658,6 +5666,8 @@ msgstr "标称电压（V）"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__number
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__number
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_ship_record__number
 msgid "Number"
 msgstr "数量"
 
@@ -5741,6 +5751,7 @@ msgstr "报告类型"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__storage_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__storage_date
 msgid "Storage Date"
 msgstr "入库时间"
 
@@ -5760,6 +5771,8 @@ msgstr "报告文件本体（PDF 等），以可下载 URL 交付网关。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__unit
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__unit
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_ship_record__unit
 msgid "Unit"
 msgstr "计量单位"
 
@@ -5850,3 +5863,92 @@ msgid ""
 "Value after the mapping transform ran (audit of the raw-to-payload "
 "conversion)."
 msgstr "映射转换运行后的值（原始值到报文值的留痕）。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_ship_record
+msgid ""
+"A continuous nameplate range (start..final) plus the\n"
+"                shipped count; the gateway fetches these by the 1091 /\n"
+"                2091 interfaces and served records are frozen forever."
+msgstr "一段连续的局编号区间（始号~终号）加发货数量；网关经 1091/2091 接口抓取，已交付记录永久冻结。"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_pack_record
+msgid "EIP Packing Storage Record"
+msgstr "EIP 包装入库记录"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_ship_record
+msgid "EIP Shipping Record"
+msgstr "EIP 成品发货记录"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__nameplate_code
+msgid "Grid Nameplate No."
+msgstr "局编号/下铭牌号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pack_record__nameplate_code
+msgid "Grid device number of the stored unit (实物ID)."
+msgstr "入库台/只的国网设备编号（实物ID）。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_pack_record
+msgid ""
+"Manual entry or Excel import; the gateway fetches these\n"
+"                by the 1090 / 2090 interfaces and served records are\n"
+"                frozen forever."
+msgstr "手工录入或 Excel 导入；网关经 1090/2090 接口抓取，已交付记录永久冻结。"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_pack_record
+msgid "One record per stored unit"
+msgstr "每个台/只一条记录"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pack_record__info_type_code__2090
+msgid "Packing Storage (Collector)"
+msgstr "包装入库（采集设备）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pack_record__info_type_code__1090
+msgid "Packing Storage (Meter)"
+msgstr "包装入库（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_pack_record
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_pack_record
+msgid "Packing Storage Records"
+msgstr "成品包装入库记录"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__test_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_ship_record__test_code
+msgid "Serial No."
+msgstr "流水号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_ship_record__info_type_code__2091
+msgid "Shipping (Collector)"
+msgstr "成品发货（采集设备）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_ship_record__info_type_code__1091
+msgid "Shipping (Meter)"
+msgstr "成品发货（电能表）"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_ship_record
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_ship_record
+msgid "Shipping Records"
+msgstr "成品发货记录"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_ship_record__test_code
+msgid "Unique ID generated per shipping event."
+msgstr "每次发货生成的唯一流水号。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pack_record__test_code
+msgid "Unique ID generated per storage event."
+msgstr "每次入库生成的唯一流水号。"

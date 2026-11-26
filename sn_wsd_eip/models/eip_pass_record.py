@@ -220,21 +220,6 @@ class EipPassRecord(models.Model):
     contrast_value = fields.Float(
         string='Contrast Value (%)', digits=(10, 3))
 
-    # ----- packing / shipping (1090/1091 / 2090/2091) -----
-    number = fields.Integer(string='Number')
-    unit = fields.Char(string='Unit',
-        help='Meter: 只; collection device: 台.')
-    storage_date = fields.Date(string='Storage Date')
-    nameplate_start = fields.Char(
-        string='Nameplate Start',
-        help='Grid device number range start; * for random codes.')
-    nameplate_final = fields.Char(
-        string='Nameplate Final',
-        help='Grid device number range end; * for random codes.')
-    deliver_date = fields.Date(string='Deliver Date')
-    deliver_status = fields.Char(
-        string='Deliver Status', help='0 not shipped, 1 shipped.')
-
     # ----- state / metadata -----
     state = fields.Selection(
         selection=[

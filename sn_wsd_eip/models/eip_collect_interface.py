@@ -82,6 +82,15 @@ class EipCollectInterface(models.Model):
         ], limit=1)
         if not config:
             raise EipCollectError('no active EIP integration config')
+        if code in ('1090', '2090', '1091', '2091'):
+            # logistics documents serve directly from their own tables
+            model = 'sn.wsd.eip.pack.record' if code in ('1090', '2090')                 else 'sn.wsd.eip.ship.record'
+            claimed = self.env[model]._eip_claim(code, amount)
+            payloads = (claimed._eip_pack_payloads()
+                        if code in ('1090', '2090')
+                        else claimed._eip_ship_payloads())
+            return {'supplier_code': config.supplier_code,
+                    'data': payloads}
         if interface.method == 'get':
             if not config.collect_base_url:
                 raise EipCollectError(

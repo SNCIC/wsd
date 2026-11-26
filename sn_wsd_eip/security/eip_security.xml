@@ -151,5 +151,15 @@
             <field name="model_id" ref="model_sn_wsd_eip_raw_report"/>
             <field name="domain_force">[('company_id', 'in', company_ids)]</field>
         </record>
+        <record id="rule_eip_pack_record_company" model="ir.rule">
+            <field name="name">EIP Pack Record Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_pack_record"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_eip_ship_record_company" model="ir.rule">
+            <field name="name">EIP Ship Record Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_eip_ship_record"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
     </data>
 </odoo>

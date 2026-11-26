@@ -4,6 +4,7 @@ from . import eip_pass_record
 from . import eip_collect_interface
 from . import eip_collect_outbox
 from . import eip_collect_log
+from . import eip_pack_ship
 from . import eip_raw_report
 from . import eip_clean_rule
 from . import eip_clean_fix

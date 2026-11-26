@@ -35,14 +35,19 @@
                         <group>
                             <field name="source_kind"/>
                             <field name="source_key"/>
-                            <field name="sample_value"/>
                             <field name="active" invisible="1"/>
                         </group>
                     </group>
-                    <button name="action_test_transform" type="object"
-                            string="Trial" class="btn-secondary"
-                            invisible="not transform_code"/>
-                    <field name="transform_code"/>
+                    <group string="Transform Code (Python)">
+                        <field name="transform_code" widget="ace"
+                               placeholder="def transform(value, low, up, name, seq, detail): return ..."/>
+                        <group>
+                            <field name="sample_value" placeholder="raw value to try"/>
+                            <button name="action_test_transform" type="object"
+                                    string="Trial" class="btn-primary"
+                                    icon="fa-play"/>
+                        </group>
+                    </group>
                 </sheet>
             </form>
         </field>

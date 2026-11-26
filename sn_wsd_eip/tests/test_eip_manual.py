@@ -84,29 +84,56 @@ class TestEipManual(TransactionCase):
         self.assertIn('material_check_batch', row.clean_note)
 
     def test_30_packing_entry_flow(self):
-        row = self._raw(code='1090')
-        row.write({'model_code': 'DDSY10217', 'nameplate_code': 'NP-1',
-                   'number': 100, 'unit': '只',
-                   'storage_date': '2025-11-26'})
-        self.PassRecord._eip_clean_by_order('W-MANUAL')
-        self.assertEqual(row.state, 'qualified')
-        payload = row.outbox_ids.payload
-        self.assertEqual(payload['NUMBER'], 100)
-        self.assertEqual(payload['UNIT'], '只')
-        self.assertEqual(payload['STORAGE_TIME'], '2025-11-26')
+        """Packing storage: one record per unit, exact spec payload,
+        served FIFO by the 1090 interface."""
+        Pack = self.env['sn.wsd.eip.pack.record']
+        pack = Pack.create({
+            'company_id': self.company.id,
+            'info_type_code': '1090',
+            'production_order_no': 'MO-M1',
+            'work_order_no': 'W-MANUAL',
+            'test_code': 'IN-001',
+            'model_code': 'DDSY10217',
+            'nameplate_code': 'NP-1',
+            'number': 1,
+            'unit': '只',
+            'storage_date': '2025-11-26',
+        })
+        self.Interface._eip_serve('1090', 10)
+        self.assertEqual(pack.state, 'delivered')
+        self.assertTrue(pack.delivered_time)
+        payload = pack._eip_pack_payloads()[0]
         self.assertEqual(payload['NAMEPLATE_CODE'], 'NP-1')
+        self.assertEqual(payload['NUMBER'], 1)
+        self.assertEqual(payload['STORAGE_TIME'], '2025-11-26')
+        # FIFO exhausted
+        self.assertEqual(self.Interface._eip_serve('1090', 10)['data'], [])
 
     def test_31_shipping_flow(self):
-        row = self._raw(code='1091')
-        row.write({'model_code': 'DDSY10217',
-                   'nameplate_start': 'NP-001', 'nameplate_final': 'NP-100',
-                   'number': 100, 'unit': '只',
-                   'deliver_date': '2025-11-27', 'deliver_status': '1'})
-        self.PassRecord._eip_clean_by_order('W-MANUAL')
-        self.assertEqual(row.state, 'qualified')
-        payload = row.outbox_ids.payload
+        """Shipping: one record per batch, a continuous nameplate
+        range, no CONCLUSION field in the payload (spec field table)."""
+        Ship = self.env['sn.wsd.eip.ship.record']
+        ship = Ship.create({
+            'company_id': self.company.id,
+            'info_type_code': '1091',
+            'production_order_no': 'MO-M1',
+            'work_order_no': 'W-MANUAL',
+            'test_code': 'SH-001',
+            'model_code': 'DDSY10217',
+            'nameplate_start': 'NP-001',
+            'nameplate_final': 'NP-100',
+            'number': 100,
+            'unit': '只',
+            'deliver_date': '2025-11-27',
+            'deliver_status': '1',
+        })
+        self.Interface._eip_serve('1091', 10)
+        self.assertEqual(ship.state, 'delivered')
+        payload = ship._eip_ship_payloads()[0]
         self.assertEqual(payload['NAMEPLATE_CODE_START'], 'NP-001')
-        self.assertEqual(payload['DELIVER_STATUS'], '1')
+        self.assertEqual(payload['NAMEPLATE_CODE_FINAL'], 'NP-100')
+        self.assertEqual(payload['NUMBER'], 100)
+        self.assertNotIn('CONCLUSION', payload)
 
     def test_40_delivered_rows_are_frozen_against_manual_edit(self):
         row = self._raw()

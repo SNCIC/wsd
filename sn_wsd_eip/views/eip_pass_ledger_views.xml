@@ -1097,9 +1097,9 @@
               action="action_eip_entry_raw_coll"
               sequence="20"/>
 
-    <record id="view_eip_entry_pack_meter" model="ir.ui.view">
-        <field name="name">sn.wsd.eip.pass.record.entry.pack_meter</field>
-        <field name="model">sn.wsd.eip.pass.record</field>
+    <record id="view_eip_pack_record_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pack.record.list</field>
+        <field name="model">sn.wsd.eip.pack.record</field>
         <field name="arch" type="xml">
             <list editable="bottom">
                 <field name="info_type_code"/>
@@ -1108,111 +1108,36 @@
                 <field name="test_code"/>
                 <field name="model_code"/>
                 <field name="nameplate_code"/>
-                <field name="nameplate_start"/>
-                <field name="nameplate_final"/>
                 <field name="number"/>
                 <field name="unit"/>
                 <field name="storage_date"/>
-                <field name="deliver_date"/>
-                <field name="deliver_status"/>
                 <field name="conclusion"/>
-                <field name="clean_note" optional="hide"/>
+                <field name="state"/>
             </list>
         </field>
     </record>
 
-    <record id="action_eip_entry_pack_meter" model="ir.actions.act_window">
-        <field name="name">Packing &amp; Shipping Entry (Meter)</field>
-        <field name="res_model">sn.wsd.eip.pass.record</field>
+    <record id="action_eip_pack_record" model="ir.actions.act_window">
+        <field name="name">Packing Storage Records</field>
+        <field name="res_model">sn.wsd.eip.pack.record</field>
         <field name="view_mode">list,form</field>
-        <field name="domain">[('info_type_code', 'in', ['1090', '1091'])]</field>
-    </record>
-
-    <menuitem id="menu_eip_entry_pack_meter"
-              name="Packing &amp; Shipping Entry (Meter)"
-              parent="menu_eip_entry_manual"
-              action="action_eip_entry_pack_meter"
-              sequence="30"/>
-
-    <record id="view_eip_entry_pack_coll" model="ir.ui.view">
-        <field name="name">sn.wsd.eip.pass.record.entry.pack_coll</field>
-        <field name="model">sn.wsd.eip.pass.record</field>
-        <field name="arch" type="xml">
-            <list editable="bottom">
-                <field name="info_type_code"/>
-                <field name="production_order_no"/>
-                <field name="work_order_no"/>
-                <field name="test_code"/>
-                <field name="model_code"/>
-                <field name="nameplate_code"/>
-                <field name="nameplate_start"/>
-                <field name="nameplate_final"/>
-                <field name="number"/>
-                <field name="unit"/>
-                <field name="storage_date"/>
-                <field name="deliver_date"/>
-                <field name="deliver_status"/>
-                <field name="conclusion"/>
-                <field name="clean_note" optional="hide"/>
-            </list>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                One record per stored unit
+            </p>
+            <p>
+                Manual entry or Excel import; the gateway fetches these
+                by the 1090 / 2090 interfaces and served records are
+                frozen forever.
+            </p>
         </field>
     </record>
 
-    <record id="action_eip_entry_pack_coll" model="ir.actions.act_window">
-        <field name="name">Packing &amp; Shipping Entry (Collector)</field>
-        <field name="res_model">sn.wsd.eip.pass.record</field>
-        <field name="view_mode">list,form</field>
-        <field name="domain">[('info_type_code', 'in', ['2090', '2091'])]</field>
-    </record>
-
-    <menuitem id="menu_eip_entry_pack_coll"
-              name="Packing &amp; Shipping Entry (Collector)"
-              parent="menu_eip_entry_manual"
-              action="action_eip_entry_pack_coll"
-              sequence="40"/>
-
-    <record id="view_eip_entry_raw_meter_form" model="ir.ui.view">
-        <field name="name">sn.wsd.eip.pass.record.entry.raw.form</field>
-        <field name="model">sn.wsd.eip.pass.record</field>
+    <record id="view_eip_pack_record_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.pack.record.form</field>
+        <field name="model">sn.wsd.eip.pack.record</field>
         <field name="arch" type="xml">
-            <form string="Raw Material Inspection">
-                <sheet>
-                    <group>
-                        <group string="Batch">
-                            <field name="info_type_code"/>
-                            <field name="production_order_no"/>
-                            <field name="work_order_no"/>
-                            <field name="material_check_batch"/>
-                            <field name="material_batch"/>
-                            <field name="material_brand"/>
-                            <field name="material_supplier"/>
-                            <field name="material_leave_date"/>
-                            <field name="incoming_check_date"/>
-                        </group>
-                        <group string="Inspection">
-                            <field name="test_code"/>
-                            <field name="model_code"/>
-                            <field name="check_time"/>
-                            <field name="conclusion"/>
-                            <field name="varistor_voltage"/>
-                            <field name="error_value"/>
-                            <field name="ratio_value"/>
-                            <field name="frequency_value"/>
-                            <field name="voltage_values"/>
-                            <field name="leakage_current"/>
-                            <field name="contrast_value"/>
-                        </group>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-    <record id="view_eip_entry_pack_meter_form" model="ir.ui.view">
-        <field name="name">sn.wsd.eip.pass.record.entry.pack.form</field>
-        <field name="model">sn.wsd.eip.pass.record</field>
-        <field name="arch" type="xml">
-            <form string="Packing &amp; Shipping">
+            <form string="Packing Storage">
                 <sheet>
                     <group>
                         <group string="Document">
@@ -1222,40 +1147,95 @@
                             <field name="test_code"/>
                             <field name="model_code"/>
                         </group>
-                        <group string="Pack / Ship">
+                        <group string="Storage">
                             <field name="nameplate_code"/>
-                            <field name="nameplate_start"/>
-                            <field name="nameplate_final"/>
                             <field name="number"/>
                             <field name="unit"/>
                             <field name="storage_date"/>
-                            <field name="deliver_date"/>
-                            <field name="deliver_status"/>
                             <field name="conclusion"/>
+                            <field name="state" readonly="1"/>
                         </group>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
-    <record id="action_eip_entry_raw_meter" model="ir.actions.act_window">
-        <field name="view_ids" eval="[(5, 0, 0),
-            (0, 0, {'view_mode': 'list', 'view_id': ref('view_eip_entry_raw_meter')}),
-            (0, 0, {'view_mode': 'form', 'view_id': ref('view_eip_entry_raw_meter_form')})]"/>
+
+    <record id="view_eip_ship_record_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.ship.record.list</field>
+        <field name="model">sn.wsd.eip.ship.record</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="info_type_code"/>
+                <field name="production_order_no"/>
+                <field name="work_order_no"/>
+                <field name="test_code"/>
+                <field name="model_code"/>
+                <field name="nameplate_start"/>
+                <field name="nameplate_final"/>
+                <field name="number"/>
+                <field name="unit"/>
+                <field name="deliver_date"/>
+                <field name="deliver_status"/>
+                <field name="state"/>
+            </list>
+        </field>
     </record>
-    <record id="action_eip_entry_raw_coll" model="ir.actions.act_window">
-        <field name="view_ids" eval="[(5, 0, 0),
-            (0, 0, {'view_mode': 'list', 'view_id': ref('view_eip_entry_raw_meter')}),
-            (0, 0, {'view_mode': 'form', 'view_id': ref('view_eip_entry_raw_meter_form')})]"/>
+
+    <record id="view_eip_ship_record_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.ship.record.form</field>
+        <field name="model">sn.wsd.eip.ship.record</field>
+        <field name="arch" type="xml">
+            <form string="Shipping">
+                <sheet>
+                    <group>
+                        <group string="Document">
+                            <field name="info_type_code"/>
+                            <field name="production_order_no"/>
+                            <field name="work_order_no"/>
+                            <field name="test_code"/>
+                            <field name="model_code"/>
+                        </group>
+                        <group string="Shipment">
+                            <field name="nameplate_start"/>
+                            <field name="nameplate_final"/>
+                            <field name="number"/>
+                            <field name="unit"/>
+                            <field name="deliver_date"/>
+                            <field name="deliver_status"/>
+                            <field name="state" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
     </record>
-    <record id="action_eip_entry_pack_meter" model="ir.actions.act_window">
-        <field name="view_ids" eval="[(5, 0, 0),
-            (0, 0, {'view_mode': 'list', 'view_id': ref('view_eip_entry_pack_meter')}),
-            (0, 0, {'view_mode': 'form', 'view_id': ref('view_eip_entry_pack_meter_form')})]"/>
+
+    <record id="action_eip_ship_record" model="ir.actions.act_window">
+        <field name="name">Shipping Records</field>
+        <field name="res_model">sn.wsd.eip.ship.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                One record per shipment batch
+            </p>
+            <p>
+                A continuous nameplate range (start..final) plus the
+                shipped count; the gateway fetches these by the 1091 /
+                2091 interfaces and served records are frozen forever.
+            </p>
+        </field>
     </record>
-    <record id="action_eip_entry_pack_coll" model="ir.actions.act_window">
-        <field name="view_ids" eval="[(5, 0, 0),
-            (0, 0, {'view_mode': 'list', 'view_id': ref('view_eip_entry_pack_meter')}),
-            (0, 0, {'view_mode': 'form', 'view_id': ref('view_eip_entry_pack_meter_form')})]"/>
-    </record>
+
+    <menuitem id="menu_eip_pack_record"
+              name="Packing Storage Records"
+              parent="menu_eip_entry_manual"
+              action="action_eip_pack_record"
+              sequence="30"/>
+    <menuitem id="menu_eip_ship_record"
+              name="Shipping Records"
+              parent="menu_eip_entry_manual"
+              action="action_eip_ship_record"
+              sequence="40"/>
+
 </odoo>

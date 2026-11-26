@@ -111,13 +111,6 @@ PAYLOAD_COLUMNS = {
     'FREQUENCY_VALUE': ('frequency_value', 'dec1'),
     'VOLTAGE_VALUES': ('voltage_values', 'dec3'),
     'CONTRAST_VALUE': ('contrast_value', 'dec3'),
-    'NUMBER': ('number', 'int'),
-    'UNIT': ('unit', 'text'),
-    'STORAGE_TIME': ('storage_date', 'date'),
-    'NAMEPLATE_CODE_START': ('nameplate_start', 'text'),
-    'NAMEPLATE_CODE_FINAL': ('nameplate_final', 'text'),
-    'DELIVER_TIME': ('deliver_date', 'date'),
-    'DELIVER_STATUS': ('deliver_status', 'text'),
 }
 
 # per-interface payload additions on top of the base (the spec field
@@ -198,15 +191,6 @@ M6 = ['STANDARD_VERSION', 'PRODUCTION_ORDER_ID', 'WORK_ORDER_CODE',
       'MATERIAL_BRAND', 'MATERIAL_SUPPLIER', 'MATERIAL_LEAVE_TIME',
       'INCOMING_CHECK_TIME', 'TEST_CODE', 'MODEL_CODE', 'CHECK_TIME',
       'CREATE_TIME', 'UPLOAD_TIME']
-PACK_IN = ['STANDARD_VERSION', 'PRODUCTION_ORDER_ID', 'WORK_ORDER_CODE',
-           'INFO_TYPE_CODE', 'TEST_CODE', 'MODEL_CODE', 'NAMEPLATE_CODE',
-           'CREATE_TIME', 'UPLOAD_TIME', 'NUMBER', 'UNIT', 'STORAGE_TIME',
-           'CONCLUSION']
-PACK_OUT = ['STANDARD_VERSION', 'PRODUCTION_ORDER_ID', 'WORK_ORDER_CODE',
-            'INFO_TYPE_CODE', 'TEST_CODE', 'MODEL_CODE',
-            'NAMEPLATE_CODE_START', 'NAMEPLATE_CODE_FINAL', 'CREATE_TIME',
-            'UPLOAD_TIME', 'NUMBER', 'UNIT', 'DELIVER_TIME',
-            'DELIVER_STATUS', 'CONCLUSION']
 FULL_PAYLOAD_FIELDS = {
     '1012': M6 + ['VARISTOR_VOLTAGE', 'ERROR_VALUE', 'CONCLUSION'],
     '1013': M6 + ['RATIO_VALUE', 'CONCLUSION'],
@@ -219,8 +203,6 @@ FULL_PAYLOAD_FIELDS = {
     '2012': M6 + ['RATIO_VALUE', 'CONCLUSION'],
     '2013': M6 + ['FREQUENCY_VALUE', 'CONCLUSION'],
     '2014': M6 + ['LEAKAGE_CURRENT', 'CONCLUSION'],
-    '1090': PACK_IN, '2090': PACK_IN,
-    '1091': PACK_OUT, '2091': PACK_OUT,
 }
 
 # required row columns per interface, from the spec field tables.
@@ -270,8 +252,6 @@ COMMON_MAT = ['production_order_no', 'work_order_no', 'material_check_batch',
               'material_batch', 'material_brand', 'material_supplier',
               'material_leave_date', 'incoming_check_date', 'test_code',
               'model_code', 'check_time', 'create_time']
-COMMON_PACK = ['production_order_no', 'work_order_no', 'test_code',
-               'model_code', 'number', 'unit', 'create_time']
 CLEAN_REQUIRED.update({
     '1012': COMMON_MAT + ['varistor_voltage', 'error_value'],
     '1013': COMMON_MAT + ['ratio_value'],
@@ -284,12 +264,6 @@ CLEAN_REQUIRED.update({
     '2012': COMMON_MAT + ['ratio_value'],
     '2013': COMMON_MAT + ['frequency_value'],
     '2014': COMMON_MAT + ['leakage_current'],
-    '1090': COMMON_PACK + ['nameplate_code', 'storage_date'],
-    '2090': COMMON_PACK + ['nameplate_code', 'storage_date'],
-    '1091': COMMON_PACK + ['nameplate_start', 'nameplate_final',
-                           'deliver_date', 'deliver_status'],
-    '2091': COMMON_PACK + ['nameplate_start', 'nameplate_final',
-                           'deliver_date', 'deliver_status'],
 })
 
 
