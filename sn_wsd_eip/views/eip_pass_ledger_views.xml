@@ -1112,6 +1112,7 @@
         <field name="arch" type="xml">
             <list editable="bottom">
                 <field name="info_type_code"/>
+                <field name="family"/>
                 <field name="production_order_no"/>
                 <field name="work_order_no"/>
                 <field name="serial_identity_id" optional="show"/>
@@ -1147,6 +1148,7 @@
                     <group>
                         <group string="Document">
                             <field name="info_type_code"/>
+                            <field name="family"/>
                             <field name="production_order_no"/>
                             <field name="work_order_no"/>
                             <field name="serial_identity_id"/>
@@ -1174,6 +1176,7 @@
         <field name="arch" type="xml">
             <list editable="bottom">
                 <field name="info_type_code"/>
+                <field name="family"/>
                 <field name="production_order_no"/>
                 <field name="work_order_no"/>
                 <field name="test_code"/>
@@ -1198,6 +1201,7 @@
                     <group>
                         <group string="Document">
                             <field name="info_type_code"/>
+                            <field name="family"/>
                             <field name="production_order_no"/>
                             <field name="work_order_no"/>
                             <field name="test_code"/>

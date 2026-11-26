@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-26 05:57+0000\n"
-"PO-Revision-Date: 2026-11-26 05:57+0000\n"
+"POT-Creation-Date: 2026-11-26 06:30+0000\n"
+"PO-Revision-Date: 2026-11-26 06:30+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -574,13 +574,9 @@ msgid "Capture"
 msgstr "采集"
 
 #. module: sn_wsd_eip
-#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_pack_capture_wizard
-msgid "Capture Packing Storage by Work Order"
-msgstr "按工单采集入库记录"
-
-#. module: sn_wsd_eip
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_pack_capture_wizard
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pack_capture_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pack_record_form
 msgid "Capture by Work Order"
 msgstr "按工单采集"
 
@@ -700,9 +696,11 @@ msgstr "采集记录"
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_interface__family__collector
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_outbox__family__collector
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_operation_mapping__family__collector
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pack_record__family__collector
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record__spec_family__collector
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_raw_record__family__collector
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_raw_report__family__collector
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_ship_record__family__collector
 msgid "Collection Device"
 msgstr "采集设备"
 
@@ -1296,6 +1294,13 @@ msgid ""
 "lines (the two PF=1.0 points of a three-phase meter). Empty = any line with "
 "the name."
 msgstr "本映射针对的明细上限：区分同名明细（三相表两个功率因数=1.0 的点）。空 = 名称相同的行都命中。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__family
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_record__family
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_ship_record__family
+msgid "Device Category"
+msgstr "种类"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__device_no
@@ -1923,9 +1928,11 @@ msgstr "误差值"
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_interface__family__meter
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_collect_outbox__family__meter
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_operation_mapping__family__meter
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pack_record__family__meter
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record__spec_family__meter
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_raw_record__family__meter
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_raw_report__family__meter
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_ship_record__family__meter
 msgid "Electricity Meter"
 msgstr "电能表"
 
@@ -5077,7 +5084,6 @@ msgstr "产成品的备品备件库存，每 24 小时在平台刷新一次。"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__family
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__family
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__spec_family
-#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_record__family
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_report__family
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_collect_interface_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_pass_record_ledger_search

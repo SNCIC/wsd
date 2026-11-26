@@ -33,6 +33,11 @@ class EipPackRecord(models.Model):
         selection=[('1090', 'Packing Storage (Meter)'),
                    ('2090', 'Packing Storage (Collector)')],
         string='Info Type Code', required=True, index=True)
+    family = fields.Selection(
+        selection=[('meter', 'Electricity Meter'),
+                   ('collector', 'Collection Device')],
+        string='Device Category', compute='_compute_family', store=True,
+        index=True)
     production_order_no = fields.Char(string='Production Order No.',
                                       required=True)
     work_order_no = fields.Char(string='Work Order No.', required=True)
@@ -125,6 +130,13 @@ class EipPackRecord(models.Model):
             })
         return records
 
+    @api.depends('info_type_code')
+    def _compute_family(self):
+        for record in self:
+            record.family = ('meter'
+                             if (record.info_type_code or '1').startswith('1')
+                             else 'collector')
+
     # the only columns the delivery stamp itself may write on an
     # already-delivered row -- everything else is frozen forever
     DELIVERY_WRITE_KEYS = frozenset({'state', 'delivered_time'})
@@ -195,6 +207,11 @@ class EipShipRecord(models.Model):
         selection=[('1091', 'Shipping (Meter)'),
                    ('2091', 'Shipping (Collector)')],
         string='Info Type Code', required=True, index=True)
+    family = fields.Selection(
+        selection=[('meter', 'Electricity Meter'),
+                   ('collector', 'Collection Device')],
+        string='Device Category', compute='_compute_family', store=True,
+        index=True)
     production_order_no = fields.Char(string='Production Order No.',
                                       required=True)
     work_order_no = fields.Char(string='Work Order No.', required=True)
@@ -220,6 +237,13 @@ class EipShipRecord(models.Model):
         selection=[('pending', 'Pending'), ('delivered', 'Delivered')],
         string='State', required=True, default='pending', index=True)
     delivered_time = fields.Datetime(string='Delivered Time', readonly=True)
+
+    @api.depends('info_type_code')
+    def _compute_family(self):
+        for record in self:
+            record.family = ('meter'
+                             if (record.info_type_code or '1').startswith('1')
+                             else 'collector')
 
     # the only columns the delivery stamp itself may write on an
     # already-delivered row -- everything else is frozen forever

@@ -67,7 +67,7 @@ class EipRawRecord(models.Model):
     family = fields.Selection(
         selection=[('meter', 'Electricity Meter'),
                    ('collector', 'Collection Device')],
-        string='Spec Family', compute='_compute_family', store=True,
+        string='Device Category', compute='_compute_family', store=True,
         index=True)
     production_order_no = fields.Char(string='Production Order No.',
                                       required=True)
