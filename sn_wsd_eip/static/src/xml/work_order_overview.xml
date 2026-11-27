@@ -4,7 +4,9 @@
          child-env SearchModel (see OverviewSearchArea in the js) -->
     <t t-name="sn_wsd_eip.OverviewSearchArea">
         <div class="o_eip_overview_search_area mb-2" t-if="state.ready">
-            <SearchBar placeholder="'Search'"/>
+            <!-- Odoo 19 SearchBar takes no placeholder prop: the
+                 template hardcodes its own "Search..." label -->
+            <SearchBar/>
         </div>
     </t>
 
