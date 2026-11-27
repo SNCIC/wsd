@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_eip.WorkOrderOverview">
+        <div class="o_eip_work_order_overview container-fluid p-3">
+
+            <div class="o_eip_topbar d-flex flex-wrap align-items-center gap-2 mb-2">
+                <h5 class="mb-0 fw-bold text-nowrap" t-esc="labels.title"/>
+                <div class="position-relative">
+                    <input class="form-control form-control-sm o_eip_order_input"
+                           t-att-placeholder="labels.searchPlaceholder"
+                           t-att-value="state.term"
+                           autocomplete="off"
+                           t-on-input="onTermInput"
+                           t-on-keydown="onTermKeydown"
+                           t-on-blur="hideSuggestions"/>
+                    <ul t-if="state.suggestions.length"
+                        class="o_eip_suggestions list-group position-absolute w-100 shadow">
+                        <t t-foreach="state.suggestions" t-as="suggestion" t-key="suggestion_index">
+                            <li class="list-group-item list-group-item-action"
+                                t-on-mousedown.prevent="() => this.pickSuggestion(suggestion)"
+                                t-esc="suggestion"/>
+                        </t>
+                    </ul>
+                </div>
+                <button t-if="canClean" type="button"
+                        class="btn btn-sm btn-outline-secondary text-nowrap"
+                        t-esc="labels.cleanProcessData"
+                        t-att-disabled="state.loading ? '' : undefined"
+                        t-on-click="() => this.cleanProcessData()"/>
+                <div t-if="state.workOrderNo"
+                     class="o_eip_header_line d-flex flex-wrap gap-3 small text-muted ms-auto">
+                    <span class="text-nowrap">
+                        <t t-esc="labels.workOrder"/>:
+                        <strong class="text-body" t-esc="state.workOrderNo"/>
+                    </span>
+                    <span t-if="state.header.production_order_no" class="text-nowrap">
+                        <t t-esc="labels.productionOrder"/>:
+                        <strong class="text-body" t-esc="state.header.production_order_no"/>
+                    </span>
+                    <span t-if="state.header.planned_qty" class="text-nowrap">
+                        <t t-esc="labels.plannedQty"/>:
+                        <strong class="text-body"
+                                t-esc="state.header.planned_qty"/>
+                    </span>
+                    <span t-if="state.header.first_check_time" class="text-nowrap">
+                        <t t-esc="labels.firstCheck"/>:
+                        <strong class="text-body" t-esc="state.header.first_check_time"/>
+                    </span>
+                    <span t-if="state.header.last_check_time" class="text-nowrap">
+                        <t t-esc="labels.lastCheck"/>:
+                        <strong class="text-body" t-esc="state.header.last_check_time"/>
+                    </span>
+                </div>
+            </div>
+
+            <div t-if="state.loading" class="text-center text-muted p-4">
+                <span class="oi oi-loading oi-2x" aria-hidden="true"/>
+            </div>
+
+            <div t-elif="state.tabs.length" class="o_eip_content">
+                <ul class="nav nav-tabs">
+                    <t t-foreach="state.tabs" t-as="tab" t-key="tab">
+                        <li class="nav-item">
+                            <button type="button" class="nav-link"
+                                    t-att-class="state.activeTab === tab ? 'active' : ''"
+                                    t-on-click="() => this.switchTab(tab)">
+                                <t t-esc="tabLabel(tab)"/>
+                                <span class="badge text-bg-secondary ms-1" t-esc="tabCount(tab)"/>
+                            </button>
+                        </li>
+                    </t>
+                </ul>
+
+                <div t-if="state.activeTab === 'pass'" class="o_eip_summary table-responsive">
+                    <table class="table table-sm table-hover align-middle mb-2">
+                        <thead>
+                            <tr class="text-muted">
+                                <th t-esc="labels.operation"/>
+                                <th t-esc="labels.code"/>
+                                <th class="o_eip_num" t-esc="labels.units"/>
+                                <th class="o_eip_num" t-esc="labels.qualifiedUnits"/>
+                                <th class="o_eip_num" t-esc="labels.ngUnits"/>
+                                <th class="o_eip_num" t-esc="labels.missingRequired"/>
+                                <th class="o_eip_num" t-esc="labels.outOfLimit"/>
+                                <th class="o_eip_num" t-esc="labels.pendingClean"/>
+                                <th class="o_eip_num" t-esc="labels.rejected"/>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="state.pass" t-as="row" t-key="row.code">
+                                <tr>
+                                    <td>
+                                        <div t-esc="row.operation || row.name"/>
+                                    </td>
+                                    <td class="text-muted" t-esc="row.code"/>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'units')">
+                                        <a t-if="row.units > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'units')"
+                                           t-esc="row.units"/>
+                                        <t t-else="" t-esc="row.units"/>
+                                    </td>
+                                    <td t-att-class="'o_eip_num ' + (isFullyQualified(row) ? 'text-success fw-bold' : '')"
+                                        t-esc="row.qualified"/>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'ng')">
+                                        <a t-if="row.ng > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'ng')"
+                                           t-esc="row.ng"/>
+                                        <t t-else="" t-esc="row.ng"/>
+                                    </td>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'missing')">
+                                        <a t-if="row.missing > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'missing')"
+                                           t-esc="row.missing"/>
+                                        <t t-else="" t-esc="row.missing"/>
+                                    </td>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'limit')">
+                                        <t t-if="!row.has_limit">—</t>
+                                        <a t-elif="row.limit > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'limit')"
+                                           t-esc="row.limit"/>
+                                        <t t-else="" t-esc="row.limit"/>
+                                    </td>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'pending')">
+                                        <a t-if="row.pending > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'pending')"
+                                           t-esc="row.pending"/>
+                                        <t t-else="" t-esc="row.pending"/>
+                                    </td>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'rejected')">
+                                        <a t-if="row.rejected > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'rejected')"
+                                           t-esc="row.rejected"/>
+                                        <t t-else="" t-esc="row.rejected"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div t-elif="state.activeTab === 'raw'" class="o_eip_summary table-responsive">
+                    <table class="table table-sm table-hover align-middle mb-2">
+                        <thead>
+                            <tr class="text-muted">
+                                <th t-esc="labels.inspection"/>
+                                <th class="o_eip_num" t-esc="labels.records"/>
+                                <th class="o_eip_num" t-esc="labels.ngRecords"/>
+                                <th class="o_eip_num" t-esc="labels.reports"/>
+                                <th class="o_eip_num" t-esc="labels.pending"/>
+                                <th class="o_eip_num" t-esc="labels.delivered"/>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="state.raw" t-as="row" t-key="row.code">
+                                <tr>
+                                    <td>
+                                        <div t-esc="row.name"/>
+                                        <div class="text-muted small" t-esc="row.code"/>
+                                    </td>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'all')">
+                                        <a t-if="row.count > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'all')"
+                                           t-esc="row.count"/>
+                                        <t t-else="" t-esc="row.count"/>
+                                    </td>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'ng')">
+                                        <a t-if="row.ng > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'ng')"
+                                           t-esc="row.ng"/>
+                                        <t t-else="" t-esc="row.ng"/>
+                                    </td>
+                                    <td class="o_eip_num" t-esc="row.reports"/>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'pending')">
+                                        <a t-if="row.pending > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'pending')"
+                                           t-esc="row.pending"/>
+                                        <t t-else="" t-esc="row.pending"/>
+                                    </td>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'delivered')">
+                                        <a t-if="row.delivered > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'delivered')"
+                                           t-esc="row.delivered"/>
+                                        <t t-else="" t-esc="row.delivered"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div t-elif="state.activeTab === 'pack'" class="o_eip_summary table-responsive">
+                    <table class="table table-sm table-hover align-middle mb-2">
+                        <thead>
+                            <tr class="text-muted">
+                                <th t-esc="labels.interfaceCol"/>
+                                <th class="o_eip_num" t-esc="labels.storedUnits"/>
+                                <th class="o_eip_num" t-esc="labels.ngUnits"/>
+                                <th class="o_eip_num" t-esc="labels.pending"/>
+                                <th class="o_eip_num" t-esc="labels.delivered"/>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="state.pack" t-as="row" t-key="row.code">
+                                <tr>
+                                    <td>
+                                        <div t-esc="row.name"/>
+                                        <div class="text-muted small" t-esc="row.code"/>
+                                    </td>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'all')">
+                                        <a t-if="row.qty > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'all')"
+                                           t-esc="row.qty"/>
+                                        <t t-else="" t-esc="row.qty"/>
+                                    </td>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'ng')">
+                                        <a t-if="row.ng_qty > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'ng')"
+                                           t-esc="row.ng_qty"/>
+                                        <t t-else="" t-esc="row.ng_qty"/>
+                                    </td>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'pending')">
+                                        <a t-if="row.pending > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'pending')"
+                                           t-esc="row.pending"/>
+                                        <t t-else="" t-esc="row.pending"/>
+                                    </td>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'delivered')">
+                                        <a t-if="row.delivered > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'delivered')"
+                                           t-esc="row.delivered"/>
+                                        <t t-else="" t-esc="row.delivered"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div t-elif="state.activeTab === 'ship'" class="o_eip_summary table-responsive">
+                    <table class="table table-sm table-hover align-middle mb-2">
+                        <thead>
+                            <tr class="text-muted">
+                                <th t-esc="labels.interfaceCol"/>
+                                <th class="o_eip_num" t-esc="labels.batches"/>
+                                <th class="o_eip_num" t-esc="labels.shippedQuantity"/>
+                                <th class="o_eip_num" t-esc="labels.shippedBatches"/>
+                                <th class="o_eip_num" t-esc="labels.notShippedBatches"/>
+                                <th class="o_eip_num" t-esc="labels.pending"/>
+                                <th class="o_eip_num" t-esc="labels.delivered"/>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="state.ship" t-as="row" t-key="row.code">
+                                <tr>
+                                    <td>
+                                        <div t-esc="row.name"/>
+                                        <div class="text-muted small" t-esc="row.code"/>
+                                    </td>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'all')">
+                                        <a t-if="row.batches > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'all')"
+                                           t-esc="row.batches"/>
+                                        <t t-else="" t-esc="row.batches"/>
+                                    </td>
+                                    <td class="o_eip_num" t-esc="row.qty"/>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'shipped')">
+                                        <a t-if="row.shipped > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'shipped')"
+                                           t-esc="row.shipped"/>
+                                        <t t-else="" t-esc="row.shipped"/>
+                                    </td>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'not_shipped')">
+                                        <a t-if="row.not_shipped > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'not_shipped')"
+                                           t-esc="row.not_shipped"/>
+                                        <t t-else="" t-esc="row.not_shipped"/>
+                                    </td>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'pending')">
+                                        <a t-if="row.pending > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'pending')"
+                                           t-esc="row.pending"/>
+                                        <t t-else="" t-esc="row.pending"/>
+                                    </td>
+                                    <td class="o_eip_num" t-att-class="cellClass(row.code, 'delivered')">
+                                        <a t-if="row.delivered > 0" href="#"
+                                           t-on-click.prevent="() => this.drill(row, 'delivered')"
+                                           t-esc="row.delivered"/>
+                                        <t t-else="" t-esc="row.delivered"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div t-if="state.detail" class="o_eip_detail card mt-3">
+                    <div class="card-header d-flex flex-wrap gap-2 align-items-center">
+                        <strong class="me-2 text-nowrap">
+                            <t t-esc="detailTitle"/>
+                            (<t t-esc="state.detail.total"/>)
+                        </strong>
+                        <span t-if="state.detail.loading" class="oi oi-loading text-muted"
+                              aria-hidden="true"/>
+                        <button t-if="canBatchFix"
+                                type="button" class="btn btn-sm btn-outline-primary ms-auto text-nowrap"
+                                t-esc="labels.batchCorrection"
+                                t-att-disabled="state.detail.loading ? '' : undefined"
+                                t-on-click="() => this.batchCorrection()"/>
+                    </div>
+                    <div class="card-body">
+                        <OverviewSearchArea t-if="state.detail.tab &amp;&amp; detailModel"
+                            model="detailModel"
+                            fieldNames="detailFieldNames"
+                            domain="state.detail.searchDomain || []"
+                            onSearch.bind="onSearch"/>
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle mb-1">
+                                <thead t-if="state.detail.tab === 'pass'">
+                                    <tr class="text-muted">
+                                        <th t-esc="labels.sn"/>
+                                        <th t-esc="labels.checkTime"/>
+                                        <th t-esc="labels.workcenter"/>
+                                        <th t-esc="labels.state"/>
+                                        <th t-esc="labels.conclusion"/>
+                                        <th t-foreach="state.detail.columns || []" t-as="column" t-key="column[0]"
+                                            class="text-nowrap" t-esc="column[1]"/>
+                                        <th t-esc="labels.issues"/>
+                                        <th/>
+                                    </tr>
+                                </thead>
+                                <tbody t-if="state.detail.tab === 'pass'">
+                                    <t t-foreach="detailRows" t-as="rec" t-key="rec.id">
+                                        <tr>
+                                            <td t-esc="rec.sn"/>
+                                            <td class="text-nowrap" t-esc="rec.check_time"/>
+                                            <td t-esc="rec.workcenter"/>
+                                            <td>
+                                                <span class="badge" t-att-class="badgeClass(rec.state)"
+                                                      t-esc="stateLabel(rec.state)"/>
+                                            </td>
+                                            <td>
+                                                <span class="badge" t-att-class="conclusionClass(rec.conclusion)"
+                                                      t-esc="conclusionLabel(rec.conclusion)"/>
+                                            </td>
+                                            <td t-foreach="rec.values || []" t-as="value" t-key="value_index"
+                                                class="text-nowrap" t-esc="value === '' ? '-' : value"/>
+                                            <td class="o_eip_issues">
+                                                <t t-foreach="rec.issues || []" t-as="issue" t-key="issue_index">
+                                                    <div class="o_eip_issue_line" t-esc="issueLine(issue)"/>
+                                                </t>
+                                            </td>
+                                            <td class="text-nowrap">
+                                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                                        t-on-click="() => this.openRecord(rec)"
+                                                        t-esc="labels.open"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <thead t-if="state.detail.tab === 'raw'">
+                                    <tr class="text-muted">
+                                        <th t-esc="labels.testCode"/>
+                                        <th t-esc="labels.materialCheckBatch"/>
+                                        <th t-esc="labels.materialBatch"/>
+                                        <th t-esc="labels.checkTime"/>
+                                        <th t-esc="labels.conclusion"/>
+                                        <th t-esc="labels.state"/>
+                                        <th/>
+                                    </tr>
+                                </thead>
+                                <tbody t-if="state.detail.tab === 'raw'">
+                                    <t t-foreach="state.detail.rows" t-as="rec" t-key="rec.id">
+                                        <tr>
+                                            <td t-esc="rec.test_code"/>
+                                            <td t-esc="rec.material_check_batch"/>
+                                            <td t-esc="rec.material_batch"/>
+                                            <td class="text-nowrap" t-esc="rec.check_time"/>
+                                            <td>
+                                                <span class="badge" t-att-class="conclusionClass(rec.conclusion)"
+                                                      t-esc="conclusionLabel(rec.conclusion)"/>
+                                            </td>
+                                            <td>
+                                                <span class="badge" t-att-class="badgeClass(rec.state)"
+                                                      t-esc="stateLabel(rec.state)"/>
+                                            </td>
+                                            <td class="text-nowrap">
+                                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                                        t-on-click="() => this.openRecord(rec)"
+                                                        t-esc="labels.open"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <thead t-if="state.detail.tab === 'pack'">
+                                    <tr class="text-muted">
+                                        <th t-esc="labels.testCode"/>
+                                        <th t-esc="labels.nameplateCode"/>
+                                        <th class="o_eip_num" t-esc="labels.number"/>
+                                        <th t-esc="labels.storageDate"/>
+                                        <th t-esc="labels.conclusion"/>
+                                        <th t-esc="labels.state"/>
+                                        <th/>
+                                    </tr>
+                                </thead>
+                                <tbody t-if="state.detail.tab === 'pack'">
+                                    <t t-foreach="state.detail.rows" t-as="rec" t-key="rec.id">
+                                        <tr>
+                                            <td t-esc="rec.test_code"/>
+                                            <td t-esc="rec.nameplate_code"/>
+                                            <td class="o_eip_num" t-esc="rec.number"/>
+                                            <td class="text-nowrap" t-esc="rec.storage_date"/>
+                                            <td>
+                                                <span class="badge" t-att-class="conclusionClass(rec.conclusion)"
+                                                      t-esc="conclusionLabel(rec.conclusion)"/>
+                                            </td>
+                                            <td>
+                                                <span class="badge" t-att-class="badgeClass(rec.state)"
+                                                      t-esc="stateLabel(rec.state)"/>
+                                            </td>
+                                            <td class="text-nowrap">
+                                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                                        t-on-click="() => this.openRecord(rec)"
+                                                        t-esc="labels.open"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <thead t-if="state.detail.tab === 'ship'">
+                                    <tr class="text-muted">
+                                        <th t-esc="labels.testCode"/>
+                                        <th t-esc="labels.nameplateStart"/>
+                                        <th t-esc="labels.nameplateFinal"/>
+                                        <th class="o_eip_num" t-esc="labels.number"/>
+                                        <th t-esc="labels.deliverDate"/>
+                                        <th t-esc="labels.deliverStatus"/>
+                                        <th t-esc="labels.state"/>
+                                        <th/>
+                                    </tr>
+                                </thead>
+                                <tbody t-if="state.detail.tab === 'ship'">
+                                    <t t-foreach="state.detail.rows" t-as="rec" t-key="rec.id">
+                                        <tr>
+                                            <td t-esc="rec.test_code"/>
+                                            <td t-esc="rec.nameplate_start"/>
+                                            <td t-esc="rec.nameplate_final"/>
+                                            <td class="o_eip_num" t-esc="rec.number"/>
+                                            <td class="text-nowrap" t-esc="rec.deliver_date"/>
+                                            <td>
+                                                <span class="badge" t-att-class="deliverStatusClass(rec.deliver_status)"
+                                                      t-esc="deliverStatusLabel(rec.deliver_status)"/>
+                                            </td>
+                                            <td>
+                                                <span class="badge" t-att-class="badgeClass(rec.state)"
+                                                      t-esc="stateLabel(rec.state)"/>
+                                            </td>
+                                            <td class="text-nowrap">
+                                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                                        t-on-click="() => this.openRecord(rec)"
+                                                        t-esc="labels.open"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 mt-1">
+                            <button t-if="canLoadMore" type="button"
+                                    class="btn btn-sm btn-outline-secondary"
+                                    t-esc="labels.loadMore"
+                                    t-on-click="() => this.loadMore()"/>
+                            <span class="text-muted small">
+                                <t t-esc="state.detail.rows.length"/> / <t t-esc="state.detail.total"/>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div t-else="" class="text-muted p-4" t-esc="labels.emptyHint"/>
+        </div>
+    </t>
+</templates>

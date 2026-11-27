@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Work order data overview: one page, every collected record of
+         one work order (the MES order number), summary numbers that
+         drill down to their records. OWL client action. -->
+    <record id="action_eip_work_order_overview" model="ir.actions.client">
+        <field name="name">Work Order Data Overview</field>
+        <field name="tag">sn_wsd_eip_work_order_overview</field>
+    </record>
+
+    <menuitem id="menu_eip_work_order_overview"
+              name="Work Order Data Overview"
+              parent="menu_eip_collect"
+              action="action_eip_work_order_overview"
+              sequence="3"/>
+
+</odoo>
