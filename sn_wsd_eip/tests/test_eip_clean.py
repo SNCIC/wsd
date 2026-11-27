@@ -110,18 +110,17 @@ class TestEipClean(TransactionCase):
         ok._eip_clean_rows()
         self.assertEqual(ok.state, 'qualified')
 
-    def test_40_requalified_snapshot_supersedes(self):
+    def test_40_recleaned_stale_snapshots_are_deleted(self):
         row = self._full_1002()
         row._eip_clean_rows()
         first = row.outbox_ids
         # the raw column keeps its value; a failing re-judgement flips
-        # the row and the stale snapshot
+        # the row and deletes the stale (undelivered) snapshot
         row.write({'conclusion': 1})
         row._eip_clean_rows()
         self.assertEqual(row.state, 'rejected')
-        self.assertEqual(first.state, 'superseded')
-        self.assertFalse(
-            row.outbox_ids.filtered(lambda item: item.state == 'qualified'))
+        self.assertFalse(first.exists())
+        self.assertFalse(row.outbox_ids)
 
     def test_50_error_detail_expansion(self):
         row = self._source(code='1007')

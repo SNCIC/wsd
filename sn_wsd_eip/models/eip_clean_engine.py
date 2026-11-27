@@ -315,9 +315,12 @@ class EipPassRecordClean(models.Model):
             if issues:
                 self.env['sn.wsd.eip.clean.issue'].sudo().create([
                     dict(issue, source_id=record.id) for issue in issues])
+            # re-generation replaces stale snapshots: undelivered ones are
+            # deleted outright (user decision 2026-11-27, no superseded
+            # state); delivered ones are frozen and never touched here
             record.outbox_ids.filtered(
                 lambda snap: snap.state == 'qualified'
-            ).write({'state': 'superseded'})
+            ).unlink()
             if problems or not payloads:
                 record.write({
                     'state': 'rejected',

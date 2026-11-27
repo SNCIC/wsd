@@ -88,13 +88,11 @@ class EipCollectOutbox(models.Model):
         selection=[
             ('qualified', 'Qualified'),
             ('delivered', 'Delivered'),
-            ('superseded', 'Superseded'),
         ],
         string='State', required=True, default='qualified', index=True,
         help='Qualified: waiting for the gateway to fetch it. Delivered: '
-             'fetched, frozen forever. Superseded: replaced by a newer '
-             'snapshot of the same source (re-cleansing), never '
-             'delivered.')
+             'fetched, frozen forever. Re-cleansing of an undelivered row '
+             'deletes its stale snapshots outright.')
     delivered_time = fields.Datetime(
         string='Delivered Time', readonly=True,
         help='When the gateway fetched this snapshot.')
