@@ -99,6 +99,35 @@ class EipCollectOutbox(models.Model):
         string='Delivered Time', readonly=True,
         help='When the gateway fetched this snapshot.')
 
+    # ---- searchable keys (stored copies of payload keys) ----
+    # the payload_* display columns are non-stored projections of the
+    # JSON blob and cannot be searched in SQL; these three are what
+    # users actually look snapshots up by, so they land in real columns
+    work_order_no = fields.Char(
+        string='Work Order No', compute='_compute_search_keys',
+        store=True, index=True,
+        help='WORK_ORDER_CODE of the payload: look snapshots up by work '
+             'order.')
+    production_order_no = fields.Char(
+        string='Production Order No', compute='_compute_search_keys',
+        store=True,
+        help='PRODUCTION_ORDER_ID of the payload.')
+    pcb_code = fields.Char(
+        string='PCB Code', compute='_compute_search_keys',
+        store=True, index=True,
+        help='PCB_CODE of the payload (the SN); empty for aging rows '
+             '(1011/2010), which fall back to the source SN.')
+
+    @api.depends('payload', 'source_id.sn_name')
+    def _compute_search_keys(self):
+        for row in self:
+            payload = row.payload or {}
+            row.work_order_no = payload.get('WORK_ORDER_CODE') or ''
+            row.production_order_no = payload.get('PRODUCTION_ORDER_ID') or ''
+            row.pcb_code = (payload.get('PCB_CODE')
+                            or (row.source_id.sn_name if row.source_id
+                                else '') or '')
+
     # payload display columns (non-stored, one per spec key)
     payload_standard_version = fields.Char(
         string='STANDARD_VERSION', compute='_compute_payload_columns',

@@ -47,7 +47,7 @@ msgstr "%(field)s 不属于接口 %(code)s。"
 msgid ""
 "%(total)s rows re-cleaned for %(order)s: %(qualified)s quali"
 "fied, %(rejected)s rejected."
-msgstr "%(order)s 共重洗 %(total)s 行：合格 %(qualified)s、不合格 %(rejected)s。"
+msgstr "%(order)s 共生成 %(total)s 行：合格 %(qualified)s、不合格 %(rejected)s。"
 
 #. module: sn_wsd_eip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_interface_form
@@ -336,7 +336,7 @@ msgstr "锚点"
 #. module: sn_wsd_eip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_clean_fix_wizard_form
 msgid "Apply and Re-clean"
-msgstr "应用并重洗"
+msgstr "应用并生成"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_clean_fix__field_name
@@ -1661,7 +1661,7 @@ msgstr "EIP 数采上下限规则"
 #. module: sn_wsd_eip
 #: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_clean_order_wizard
 msgid "EIP Collection Re-clean by Work Order"
-msgstr "EIP 按工单重洗数采"
+msgstr "EIP 按工单生成数采"
 
 #. module: sn_wsd_eip
 #: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_pass_record_line
@@ -3880,6 +3880,7 @@ msgstr "采集记录"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__pcb_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__pcb_code
 msgid "PCB Code"
 msgstr "电路板编号"
 
@@ -4337,7 +4338,7 @@ msgid ""
 "apping is maintained."
 msgstr ""
 "该 EIP 物料的产品族：电能表（30002）或采集设备（30001）。数采行按此列落入对应规范的采集；未映射的行暂不出"
-"库，维护映射后批量重洗即可。"
+"库，维护映射后批量生成即可。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_process_work__product_batch_no
@@ -4367,6 +4368,7 @@ msgstr "生产订单"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__production_order_no
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__production_order_no
 msgid "Production Order No"
 msgstr "生产订单编号"
 
@@ -4809,7 +4811,7 @@ msgid ""
 "Qualified: waiting for the gateway to fetch it. Delivered: f"
 "etched, frozen forever. Superseded: replaced by a newer snap"
 "shot of the same source (re-cleansing), never delivered."
-msgstr "待抓取：等待网关取走。已交付：已取走，永久冻结。被替代：同源行重洗后由新记录替代，未交付过。"
+msgstr "待抓取：等待网关取走。已交付：已取走，永久冻结。被替代：同源行重新生成后由新记录替代，未交付过。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_production_order__amount
@@ -4947,7 +4949,7 @@ msgstr "我方来料检验批次号。"
 #. module: sn_wsd_eip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_clean_order_wizard_form
 msgid "Re-clean"
-msgstr "重洗"
+msgstr "生成"
 
 #. module: sn_wsd_eip
 #. odoo-javascript
@@ -4957,7 +4959,7 @@ msgstr "重洗"
 #: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_clean_order_wizard
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_clean_order_wizard_form
 msgid "Re-clean by Work Order"
-msgstr "按工单重洗"
+msgstr "按工单生成"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__real_error
@@ -6523,6 +6525,7 @@ msgstr "工单数据总览"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_order_wizard__work_order_no
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__work_order_no
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_capture_wizard__work_order_no
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__work_order_no
 msgid "Work Order No"

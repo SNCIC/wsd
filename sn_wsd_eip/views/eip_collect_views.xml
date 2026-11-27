@@ -165,7 +165,9 @@
             <search>
                 <field name="info_type_code"/>
                 <field name="test_code"/>
-                <field name="payload_test_name" optional="show"/>
+                <field name="work_order_no"/>
+                <field name="production_order_no"/>
+                <field name="pcb_code"/>
                 <field name="source_id"/>
                 <filter string="Qualified" name="filter_qualified"
                         domain="[('state', '=', 'qualified')]"/>
