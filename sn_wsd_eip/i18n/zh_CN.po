@@ -1327,10 +1327,11 @@ msgstr "已交付"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__delivered_time
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pack_record__delivered_time
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_record__delivered_time
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_collect_outbox__delivered_time
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_raw_report__delivered_time
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_ship_record__delivered_time
 msgid "Delivered Time"
-msgstr "交付时间"
+msgstr "抓取时间"
 
 #. module: sn_wsd_eip
 #. odoo-python
@@ -6287,7 +6288,7 @@ msgstr "更新时间止"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__upload_time
 msgid "Upload Time"
-msgstr "交付时间"
+msgstr "抓取时间"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_clean_issue__upper_limit
