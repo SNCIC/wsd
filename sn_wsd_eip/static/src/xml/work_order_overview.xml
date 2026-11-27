@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
+    <!-- native search area of one detail list: the SearchBar of the
+         child-env SearchModel (see OverviewSearchArea in the js) -->
+    <t t-name="sn_wsd_eip.OverviewSearchArea">
+        <div class="o_eip_overview_search_area mb-2" t-if="state.ready">
+            <SearchBar placeholder="'Search'"/>
+        </div>
+    </t>
+
     <t t-name="sn_wsd_eip.WorkOrderOverview">
         <div class="o_eip_work_order_overview container-fluid p-3">
 
