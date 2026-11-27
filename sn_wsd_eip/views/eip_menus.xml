@@ -5,7 +5,7 @@
     <menuitem id="menu_eip_root"
               name="EIP"
               sequence="70"
-              groups="mrp.group_mrp_user"/>
+              groups="group_eip_user"/>
 
     <!-- Group 0: production-data serving, gateway-facing ledgers
          (outbox / interface registry / fetch log; the raw-data ledger
@@ -55,5 +55,5 @@
               name="Configuration"
               parent="menu_eip_root"
               sequence="50"
-              groups="mrp.group_mrp_manager"/>
+              groups="group_eip_manager"/>
 </odoo>

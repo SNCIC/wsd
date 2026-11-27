@@ -5,8 +5,8 @@
     'version': '19.0.2.0.0',
     'depends': ['sn_wsd_mrp', 'sn_wsd_api', 'sn_wsd_device', 'sn_wsd_workorder'],
     'data': [
-        'security/ir.model.access.csv',
         'security/eip_security.xml',
+        'security/ir.model.access.csv',
         'views/eip_menus.xml',
         'views/eip_config_views.xml',
         'views/eip_interface_views.xml',

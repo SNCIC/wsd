@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
+
+        <!-- standalone permission groups (user decision 2026-11-27:
+             EIP no longer shares the manufacturing groups; mirrors the
+             NQI integration setup) -->
+        <record id="module_category_eip" model="ir.module.category">
+            <field name="name">EIP Integration</field>
+            <field name="sequence">66</field>
+        </record>
+        <record model="res.groups.privilege" id="res_groups_privilege_eip">
+            <field name="name">EIP Integration</field>
+            <field name="category_id" ref="module_category_eip"/>
+        </record>
+        <record id="group_eip_user" model="res.groups">
+            <field name="name">EIP User</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="privilege_id" ref="res_groups_privilege_eip"/>
+        </record>
+        <record id="group_eip_manager" model="res.groups">
+            <field name="name">EIP Manager</field>
+            <field name="implied_ids" eval="[(4, ref('group_eip_user'))]"/>
+            <field name="privilege_id" ref="res_groups_privilege_eip"/>
+        </record>
         <record id="rule_eip_config_company" model="ir.rule">
             <field name="name">EIP Config Multi-company</field>
             <field name="model_id" ref="model_sn_wsd_eip_config"/>

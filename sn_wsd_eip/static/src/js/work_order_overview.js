@@ -162,7 +162,7 @@ export class WorkOrderOverview extends Component {
         // managers only.
         onWillStart(async () => {
             this.state.isManager = await user.hasGroup(
-                "mrp.group_mrp_manager"
+                "sn_wsd_eip.group_eip_manager"
             );
         });
         this.labels = {

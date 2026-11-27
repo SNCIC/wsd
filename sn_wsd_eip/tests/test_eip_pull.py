@@ -473,7 +473,7 @@ class TestEipPull(EipOrderCase):
             'name': 'EIP Pull MRP User',
             'login': 'eip_pull_mrp_user',
             'email': 'eip_pull_mrp_user@example.com',
-            'group_ids': [(4, self.env.ref('mrp.group_mrp_user').id)],
+            'group_ids': [(4, self.env.ref('sn_wsd_eip.group_eip_user').id)],
         })
         self.server.enqueue(eip_page([po_row('1001')], 1, 1000, 1, 1))
         wizard = self.env['sn.wsd.eip.pull.wizard'].with_user(user).create(

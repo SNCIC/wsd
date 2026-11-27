@@ -296,7 +296,7 @@ class TestEipCleanIssue(TransactionCase):
         user = self.env['res.users'].create({
             'name': 'EIP MRP User', 'login': 'eip_mrp_user_issues',
             'group_ids': [(4, self.env.ref('base.group_user').id),
-                          (4, self.env.ref('mrp.group_mrp_user').id)],
+                          (4, self.env.ref('sn_wsd_eip.group_eip_user').id)],
         })
         user_env = self.env(user=user)
         self.assertFalse(user_env['sn.wsd.eip.clean.issue'].check_access_rights(

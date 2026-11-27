@@ -48,7 +48,7 @@ class TestEipConfig(TransactionCase):
     def test_10_root_menu_and_groups(self):
         root = self.env.ref('sn_wsd_eip.menu_eip_root')
         self.assertFalse(root.parent_id)
-        self.assertIn(self.env.ref('mrp.group_mrp_user'), root.group_ids)
+        self.assertIn(self.env.ref('sn_wsd_eip.group_eip_user'), root.group_ids)
         for xmlid in ('menu_eip_pass_config', 'menu_eip_order_data',
                       'menu_eip_push_center', 'menu_eip_config'):
             menu = self.env.ref('sn_wsd_eip.%s' % xmlid)
@@ -59,7 +59,7 @@ class TestEipConfig(TransactionCase):
                          self.env.ref('sn_wsd_eip.menu_eip_order_data'))
         # the configuration group is manager-only
         config_menu = self.env.ref('sn_wsd_eip.menu_eip_config')
-        self.assertIn(self.env.ref('mrp.group_mrp_manager'),
+        self.assertIn(self.env.ref('sn_wsd_eip.group_eip_manager'),
                       config_menu.group_ids)
         # phase-1 menus moved under the pass-data collection group
         pass_menu = self.env.ref('sn_wsd_eip.menu_eip_pass_config')
@@ -222,8 +222,8 @@ class TestEipConfig(TransactionCase):
         Mapping = self.env['sn.wsd.eip.material.mapping']
         company_a = self.env.company
         company_b = self.env['res.company'].create({'name': 'EIP Co B'})
-        mrp_users = self.env.ref('mrp.group_mrp_user')
-        mrp_managers = self.env.ref('mrp.group_mrp_manager')
+        mrp_users = self.env.ref('sn_wsd_eip.group_eip_user')
+        mrp_managers = self.env.ref('sn_wsd_eip.group_eip_manager')
         # (4, id) appends the group, base.group_user stays on board
         user = self.env['res.users'].create({
             'name': 'EIP MRP User',
