@@ -227,8 +227,8 @@ class EipPassRecord(models.Model):
         'sn.wsd.eip.clean.fix', 'source_id', string='Corrections')
 
     _history_uniq = models.Constraint(
-        'unique(company_id, history_id)',
-        'This station-pass row is already collected.',
+        'unique(company_id, history_id, info_type_code)',
+        'This station-pass row is already collected for this interface.',
     )
 
     # the only columns the delivery stamp itself may write on an
@@ -279,8 +279,9 @@ class EipPassRecord(models.Model):
     # capture (phase 1 -- same transaction as the verdict backfill)
     # ------------------------------------------------------------------
     def _capture_from_history(self, history_rows):
-        """Create one collection row per completed pass on a mapped
-        operation, then run the in-DB extraction buckets (zone packets,
+        """Create one collection row per completed pass and mapped EIP
+        code (a station feeding several interfaces spawns one row per
+        code), then run the in-DB extraction buckets (zone packets,
         aging points). The operation mapping is spec-family aware: the
         family resolves per product, legacy single-row setups fall back
         meter-first."""
@@ -293,30 +294,27 @@ class EipPassRecord(models.Model):
             order = history.mes_order_id
             product = order.product_id
             family = self._eip_resolve_family(product, history.company_id)
-            mapping = False
+            mappings = Mapping
             if family:
-                mapping = Mapping.search([
+                mappings = Mapping.search([
                     ('operation_id', '=', operation.id),
                     ('family', '=', family),
                     ('company_id', 'in', [history.company_id.id, False]),
-                ], limit=1)
-            if not mapping:
+                ])
+            if not mappings:
                 # legacy single-family lines (or an unmapped product):
-                # deterministic meter-first fallback keeps the old
-                # one-mapping-per-operation behavior
+                # deterministic meter-first fallback -- every mapping of
+                # the fallback family fires, so a multi-code station
+                # keeps producing all its rows
                 for fallback in ('meter', 'collector'):
-                    mapping = Mapping.search([
+                    mappings = Mapping.search([
                         ('operation_id', '=', operation.id),
                         ('family', '=', fallback),
                         ('company_id', 'in', [history.company_id.id, False]),
-                    ], limit=1)
-                    if mapping:
+                    ])
+                    if mappings:
                         break
-            if not mapping:
-                continue
-            if self.search_count([
-                    ('history_id', '=', history.id),
-                    ('company_id', '=', history.company_id.id)]):
+            if not mappings:
                 continue
             production = order.production_id
             workcenter = history.workcenter_id
@@ -325,32 +323,39 @@ class EipPassRecord(models.Model):
             equipment = (
                 workcenter.sn_equipment_ids.sorted('sequence')[:1]
                 .equipment_id)
-            records |= self.create({
-                'company_id': history.company_id.id,
-                'history_id': history.id,
-                'serial_identity_id': history.serial_identity_id.id,
-                'sn_name': history.serial_identity_id.name,
-                'mes_order_id': order.id,
-                'work_order_no': order.name,
-                'production_id': production.id,
-                'production_order_no': production.name,
-                'route_operation_id': history.route_operation_id.id,
-                'operation_id': operation.id,
-                'workcenter_id': workcenter.id,
-                'equipment_id': equipment.id,
-                'info_type_code': mapping.info_code,
-                'spec_family': family,
-                'device_no': equipment.code or workcenter.code,
-                'test_code': f'{mapping.info_code}-{history.id}',
-                'model_code': (
-                    product.material_specification or product.default_code),
-                'pcb_code': (
-                    history.serial_identity_id.name
-                    if mapping.info_code != AGING_INFO_CODE else False),
-                'test_name': operation.name,
-                'check_time': history.out_date,
-                'conclusion': 1 if history.result == 'ng' else 0,
-            })
+            for mapping in mappings.sorted('info_code'):
+                if self.search_count([
+                        ('history_id', '=', history.id),
+                        ('company_id', '=', history.company_id.id),
+                        ('info_type_code', '=', mapping.info_code)]):
+                    continue
+                records |= self.create({
+                    'company_id': history.company_id.id,
+                    'history_id': history.id,
+                    'serial_identity_id': history.serial_identity_id.id,
+                    'sn_name': history.serial_identity_id.name,
+                    'mes_order_id': order.id,
+                    'work_order_no': order.name,
+                    'production_id': production.id,
+                    'production_order_no': production.name,
+                    'route_operation_id': history.route_operation_id.id,
+                    'operation_id': operation.id,
+                    'workcenter_id': workcenter.id,
+                    'equipment_id': equipment.id,
+                    'info_type_code': mapping.info_code,
+                    'spec_family': family,
+                    'device_no': equipment.code or workcenter.code,
+                    'test_code': f'{mapping.info_code}-{history.id}',
+                    'model_code': (
+                        product.material_specification
+                        or product.default_code),
+                    'pcb_code': (
+                        history.serial_identity_id.name
+                        if mapping.info_code != AGING_INFO_CODE else False),
+                    'test_name': operation.name,
+                    'check_time': history.out_date,
+                    'conclusion': 1 if history.result == 'ng' else 0,
+                })
         # single writer for every trigger: the extraction guards
         # (state / bucket / fill-empty) live inside, callers cannot
         # bypass them
@@ -363,49 +368,53 @@ class EipPassRecord(models.Model):
         """Backfill rows from freshly ingested reports. Two entry points
         share this method: test-result create (link + device refresh)
         and detail create (the report's last write -- re-extract). An
-        already-linked row is only re-extracted; an unlinked row is
-        matched by same SN + same route operation, latest first, and
-        the report device wins over the work-center chain."""
+        already-linked pass is only re-extracted; an unlinked pass is
+        matched by same SN + same route operation, and EVERY unlinked
+        collection row of that pass is linked: a multi-code station
+        spawns one row per interface and the single device report feeds
+        them all (each row extracts its own code's value mappings). The
+        report device wins over the work-center chain."""
         records = self
         for result in test_results:
-            row = self.search([
+            rows = self.search([
                 ('test_result_id', '=', result.id),
                 ('company_id', '=', result.company_id.id),
-            ], limit=1)
-            if not row:
+            ])
+            if not rows:
                 if not result.serial_identity_id \
                         or not result.route_operation_id:
                     continue
-                row = self.search([
+                rows = self.search([
                     ('serial_identity_id', '=',
                      result.serial_identity_id.id),
                     ('route_operation_id', '=',
                      result.route_operation_id.id),
                     ('test_result_id', '=', False),
                     ('company_id', '=', result.company_id.id),
-                ], order='id desc', limit=1)
-                if not row:
+                ], order='id desc')
+                if not rows:
                     continue
                 vals = {'test_result_id': result.id}
                 if result.equipment_id:
                     vals['equipment_id'] = result.equipment_id.id
                     vals['device_no'] = (
-                        result.equipment_id.code or row.device_no)
-                row.write(vals)
-            records |= row
-            # detail snapshot once (the report is immutable)
-            if result.detail_ids and not row.line_ids.filtered(
-                    lambda line: line.line_type == 'test_detail'):
-                row.line_ids = [Command.create({
-                    'line_type': 'test_detail',
-                    'sequence': detail.sequence,
-                    'project_name': detail.project_name,
-                    'lower_limit': detail.lower_limit,
-                    'upper_limit': detail.upper_limit,
-                    'actual_value': detail.actual_value,
-                    'item_result': detail.result,
-                    'raw_line': detail.raw_line,
-                }) for detail in result.detail_ids]
+                        result.equipment_id.code or rows[:1].device_no)
+                rows.write(vals)
+            records |= rows
+            for row in rows:
+                # detail snapshot once (the report is immutable)
+                if result.detail_ids and not row.line_ids.filtered(
+                        lambda line: line.line_type == 'test_detail'):
+                    row.line_ids = [Command.create({
+                        'line_type': 'test_detail',
+                        'sequence': detail.sequence,
+                        'project_name': detail.project_name,
+                        'lower_limit': detail.lower_limit,
+                        'upper_limit': detail.upper_limit,
+                        'actual_value': detail.actual_value,
+                        'item_result': detail.result,
+                        'raw_line': detail.raw_line,
+                    }) for detail in result.detail_ids]
         records._apply_value_extraction()
 
     # ------------------------------------------------------------------

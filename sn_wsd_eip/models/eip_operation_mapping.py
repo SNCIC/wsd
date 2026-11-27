@@ -5,10 +5,14 @@ class EipOperationMapping(models.Model):
     """Standard operation -> EIP interface code (INFO_TYPE_CODE).
 
     Only operations mapped here produce EIP collection rows at station
-    pass. The mapping carries the spec family dimension: the same
-    operation (an AOI station, say) gets 1001 on the electricity-meter
-    line and 2001 on the collection-device line, chosen per product at
-    capture time. Legacy single-family setups keep one meter row.
+    pass. One operation may carry SEVERAL codes: real stations feed more
+    than one interface from one scan (the DIP board-test station reports
+    1003 FCT and 1005 battery current; meter calibration reports 1006
+    and 1007), so a pass spawns one collection row per mapped code. The
+    mapping carries the spec family dimension: the same operation (an
+    AOI station, say) gets 1001 on the electricity-meter line and 2001
+    on the collection-device line, chosen per product at capture time.
+    Legacy single-family setups keep one meter row.
     """
     _name = 'sn.wsd.eip.operation.mapping'
     _description = 'EIP Operation Code Mapping'
@@ -52,7 +56,7 @@ class EipOperationMapping(models.Model):
     note = fields.Char(string='Notes')
 
     _operation_uniq = models.Constraint(
-        'unique(company_id, operation_id, family)',
-        'The operation already has an EIP code mapping for this spec '
+        'unique(company_id, operation_id, family, info_code)',
+        'The operation already has this EIP code mapping for this spec '
         'family.',
     )

@@ -102,3 +102,62 @@ class TestEipCapture(eip_test_common.EipCaptureCase):
         self.assertEqual(row.sn_name, '126100000007')
         self.assertEqual(row.work_order_no, order.name)
         self.assertEqual(row.conclusion, 0)
+
+    # ------------------------------------------------------------------
+    # multi-code operations (2026-11-27 joint-test finding): one pass on
+    # a station mapped to several interfaces spawns one row per code
+    # ------------------------------------------------------------------
+    def test_70_multi_code_pass_one_row_per_code(self):
+        Mapping = self.env['sn.wsd.eip.operation.mapping']
+        Mapping.create({'operation_id': self.op_a.id, 'info_code': '1005'})
+        order = self._make_order_online()
+        wcs = self._wcs()
+        serial = self._pass(order, wcs['a'], '126100000010', 'ok')
+        rows = self._rows('126100000010')
+        self.assertEqual(sorted(rows.mapped('info_type_code')),
+                         ['1003', '1005'])
+        # same pass anchor, one test_code per code, common fields equal
+        self.assertEqual(len(rows.mapped('history_id')), 1)
+        self.assertEqual(
+            sorted(rows.mapped('test_code')),
+            ['1003-%d' % rows[0].history_id.id,
+             '1005-%d' % rows[0].history_id.id])
+        self.assertEqual(rows.mapped('sn_name'),
+                         ['126100000010', '126100000010'])
+        # re-running the capture hook stays idempotent per code
+        self.env['sn.wsd.eip.pass.record']._capture_from_history(
+            rows.history_id)
+        rows = self._rows('126100000010')
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(sorted(rows.mapped('info_type_code')),
+                         ['1003', '1005'])
+
+    def test_71_multi_code_report_feeds_all_rows(self):
+        Mapping = self.env['sn.wsd.eip.operation.mapping']
+        Mapping.create({'operation_id': self.op_a.id, 'info_code': '1005'})
+        self.env['sn.wsd.eip.value.mapping'].create({
+            'info_type_code': '1005', 'source_kind': 'detail_item',
+            'source_key': 'Battery Current', 'eip_field': 'current_value'})
+        order = self._make_order_online()
+        wcs = self._wcs()
+        self._pass(order, wcs['a'], '126100000011', 'ok')
+        rop = order.x_mes_route_id.operation_ids.filtered(
+            lambda op: op.operation_id == self.op_a)
+        serial = self.env['sn.wsd.serial.identity'].search(
+            [('name', '=', '126100000011')])
+        result = self.env['sn.wsd.mes.test.result'].create({
+            'serial_identity_id': serial.id, 'result': 'ok',
+            'test_type': 'final_test', 'mes_order_id': order.id,
+            'route_operation_id': rop.id})
+        self.env['sn.wsd.mes.test.result.detail'].create({
+            'test_result_id': result.id, 'sequence': 1,
+            'project_name': 'Battery Current', 'actual_value': '12.5',
+            'result': 'ok'})
+        rows = self._rows('126100000011')
+        self.assertEqual(len(rows), 2)
+        # the single report fed every row of the pass
+        self.assertEqual(rows.mapped('test_result_id'), result)
+        by_code = {row.info_type_code: row for row in rows}
+        # each row extracted only its own code's value mappings
+        self.assertEqual(by_code['1005'].current_value, 12.5)
+        self.assertFalse(by_code['1003'].current_value)
