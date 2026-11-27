@@ -42,11 +42,15 @@
               parent="menu_nqi_push_center"
               sequence="5"
               groups="sn_wsd_nqi.group_nqi_manager"/>
+    <!-- hidden per ops request: backfill is a one-shot init action, keep
+         the server action (action_nqi_ops_backfill) callable via code
+         but out of the menu
     <menuitem id="menu_nqi_ops_backfill"
               name="Backfill History"
               parent="menu_nqi_ops"
               action="action_nqi_ops_backfill"
               sequence="10"/>
+    -->
     <menuitem id="menu_nqi_ops_queue"
               name="Process Birth Queue"
               parent="menu_nqi_ops"

@@ -353,7 +353,7 @@ msgstr "升流误差平均"
 #: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_ops_backfill
 #: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_ops_backfill
 msgid "Backfill History"
-msgstr "补抽历史数据"
+msgstr "重取历史过站数据"
 
 #. module: sn_wsd_nqi
 #. odoo-python
@@ -1867,7 +1867,7 @@ msgstr "结束度数"
 #: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_ops_enrich
 #: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_ops_enrich
 msgid "Enrich Asset Rows"
-msgstr "富化资产行"
+msgstr "重取资产信息表"
 
 #. module: sn_wsd_nqi
 #. odoo-python
@@ -3633,7 +3633,7 @@ msgstr "管理人员人数"
 #: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_ops_mapping
 #: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_ops_mapping
 msgid "Map Test Results"
-msgstr "映射检定结果"
+msgstr "重取生产检测数据"
 
 #. module: sn_wsd_nqi
 #. odoo-python
@@ -4908,22 +4908,22 @@ msgstr "需要 NQI 用户组权限。"
 #. module: sn_wsd_nqi
 #: model:ir.actions.server,name:sn_wsd_nqi.ir_cron_nqi_enrich_ir_actions_server
 msgid "NQI: Enrich Mirror Rows"
-msgstr "NQI：补全镜像行"
+msgstr "NQI定时：重取资产信息表"
 
 #. module: sn_wsd_nqi
 #: model:ir.actions.server,name:sn_wsd_nqi.ir_cron_nqi_test_mapping_ir_actions_server
 msgid "NQI: Map Test Results"
-msgstr "NQI：映射检测结果"
+msgstr "NQI定时：重取生产检测数据"
 
 #. module: sn_wsd_nqi
 #: model:ir.actions.server,name:sn_wsd_nqi.ir_cron_nqi_birth_queue_ir_actions_server
 msgid "NQI: Process Birth Queue"
-msgstr "NQI：处理 SN 建档队列"
+msgstr "NQI定时：重取生产过程数据"
 
 #. module: sn_wsd_nqi
 #: model:ir.actions.server,name:sn_wsd_nqi.ir_cron_nqi_progress_ir_actions_server
 msgid "NQI: Update Production Progress"
-msgstr "NQI：更新生产进度"
+msgstr "NQI定时：生产进度汇总"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_code__name
@@ -5968,7 +5968,7 @@ msgstr "工序名称"
 #: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_ops_queue
 #: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_ops_queue
 msgid "Process Birth Queue"
-msgstr "处理生成队列"
+msgstr "重取生产过程数据"
 
 #. module: sn_wsd_nqi
 #: model:ir.model,name:sn_wsd_nqi.model_product_template
@@ -7652,7 +7652,7 @@ msgstr "升流误差2"
 #: model:ir.actions.server,name:sn_wsd_nqi.action_nqi_ops_progress
 #: model:ir.ui.menu,name:sn_wsd_nqi.menu_nqi_ops_progress
 msgid "Update Production Progress"
-msgstr "更新生产进度"
+msgstr "生产进度汇总"
 
 #. module: sn_wsd_nqi
 #: model:ir.model.fields,field_description:sn_wsd_nqi.field_sn_wsd_nqi_et_device__used_years
