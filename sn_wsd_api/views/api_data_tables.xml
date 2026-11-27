@@ -360,6 +360,8 @@
                        decoration-warning="binding_type == 'nameplate'"/>
                 <field name="serial_identity_id" string="SN / Nameplate"/>
                 <field name="bound_serial_identity_id" string="Machine SN"/>
+                <field name="production_id"/>
+                <field name="mes_order_id"/>
                 <field name="binding_date"/>
                 <field name="source"/>
                 <field name="company_id" groups="base.group_multi_company"/>
