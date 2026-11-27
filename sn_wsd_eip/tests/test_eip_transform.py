@@ -19,6 +19,11 @@ class TestEipTransform(TransactionCase):
         self.config = self._ensure_config()
         self.Mapping = self.env['sn.wsd.eip.value.mapping']
         self.Rule = self.env['sn.wsd.eip.clean.rule']
+        # seeded/demo rules of the codes these tests judge must not
+        # leak into the expectations
+        self.Rule.search([
+            ('company_id', '=', self.company.id),
+            ('info_type_code', 'in', ['1007', '2006'])]).unlink()
         self.PassRecord = self.env['sn.wsd.eip.pass.record']
         self.Line = self.env['sn.wsd.eip.pass.record.line']
         self.counter = 0

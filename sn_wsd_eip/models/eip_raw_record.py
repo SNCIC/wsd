@@ -52,6 +52,8 @@ class EipRawRecord(models.Model):
     _order = 'id'
     _rec_name = 'test_code'
     _check_company_auto = True
+    # overview page: the rows of one work order of one company
+    _work_order_idx = models.Index('(company_id, work_order_no)')
 
     company_id = fields.Many2one(
         'res.company', string='Company', required=True, index=True,

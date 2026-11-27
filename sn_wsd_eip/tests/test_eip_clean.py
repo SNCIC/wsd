@@ -234,9 +234,12 @@ class TestEipClean(TransactionCase):
         broken = self._source()  # same order W001, missing fields
         other = self._full_1002()
         other.work_order_no = 'W002'
-        self.env['sn.wsd.eip.clean.order.wizard'].create({
+        result = self.env['sn.wsd.eip.clean.order.wizard'].create({
             'work_order_no': 'W001',
         }).action_re_clean()
+        # closes the dialog and nothing else: the result goes out as a
+        # bus toast (the webclient does not handle an action 'effect')
+        self.assertEqual(result, {'type': 'ir.actions.act_window_close'})
         self.assertEqual(row.state, 'qualified')
         self.assertEqual(broken.state, 'rejected')
         self.assertEqual(other.state, 'pending')

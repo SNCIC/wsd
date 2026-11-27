@@ -14,7 +14,6 @@ class EipProductionOrder(models.Model):
     _check_company_auto = True
 
     EIP_INTERFACE = 'production_order'
-    EIP_SEQUENCE = 'sn.wsd.eip.production.order'
     EIP_NUMBER_FIELD = 'ipo_no'
     # Parameter table of the spec, ADD / UPDATE required flags included
     EIP_FIELDS = (
@@ -60,9 +59,18 @@ class EipProductionOrder(models.Model):
          ('2', 'Secondary Device')],
         string='Order Type', default='0',
         help='0 is the default value and can be ignored.')
+    # the production order number is the manufacturing order number,
+    # same key the collected production data carries
+    production_id = fields.Many2one(
+        'mrp.production', string='Manufacturing Order',
+        ondelete='set null', check_company=True, index=True, copy=False,
+        help='Picks the manufacturing order; its number becomes the '
+             'production order number (a copy, the ledger stays usable '
+             'without it).')
     ipo_no = fields.Char(
-        string='Production Order No.', required=True, index=True,
-        copy=False, default=lambda self: self._eip_new_number())
+        string='Production Order No.', index=True, copy=False,
+        help='Bring it out with the manufacturing order picker, or type '
+             'it; the pre-push required check refuses an empty number.')
     category_id = fields.Many2one(
         'sn.wsd.eip.category', string='Category Code', index=True,
         default=lambda self: self.env['sn.wsd.eip.config']._eip_default(
@@ -118,6 +126,11 @@ class EipProductionOrder(models.Model):
         'unique(company_id, ipo_no)',
         'The production order number must be unique per company.',
     )
+
+    @api.onchange('production_id')
+    def _onchange_production_id(self):
+        if self.production_id:
+            self.ipo_no = self.production_id.name
 
     @api.onchange('purchase_line_id')
     def _onchange_purchase_line_id(self):

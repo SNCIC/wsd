@@ -249,6 +249,7 @@ class TestEipManual(TransactionCase):
         Report = self.env['sn.wsd.eip.raw.report']
         work = self.env['sn.wsd.eip.work.order'].create({
             'company_id': self.company.id, 'ipo_no': 'IPO-R1',
+            'wo_no': 'WO-R1',
             'materials_batch': 'PC-WO'})
         self._raw(code='1012', work_order_no=work.wo_no,
                   material_check_batch='JC-INSPECTED')

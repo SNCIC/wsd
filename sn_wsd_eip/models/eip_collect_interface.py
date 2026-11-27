@@ -48,7 +48,9 @@ class EipCollectInterface(models.Model):
         ],
         string='Device Category', required=True, index=True,
         help='Which production-data spec the interface belongs to.')
-    name = fields.Char(string='Name', required=True)
+    # platform-issued interface title: translated so the ledgers
+    # and the work-order overview show it in the user language
+    name = fields.Char(string='Name', required=True, translate=True)
     method = fields.Selection(
         selection=[('post', 'POST'), ('get', 'GET')],
         string='Method', required=True, default='post')

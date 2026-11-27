@@ -20,6 +20,9 @@ class TestEipPackCapture(EipCaptureCase):
         self.machine = self._pass(self.order, self.wcs['a'], '210000000001', 'ok')
         self.Pack = self.env['sn.wsd.eip.pack.record']
         self.Binding = self.env['sn.wsd.serial.binding']
+        # seeded/demo pack rows may exist: the assertions of this
+        # class scope to its own nameplate range
+        self._scope = [('nameplate_code', 'like', '2600000000')]
 
     def _map_meter(self):
         self.env['sn.wsd.eip.material.mapping'].create({
@@ -43,12 +46,12 @@ class TestEipPackCapture(EipCaptureCase):
         """No spec family mapping for the product: the binding creates
         no row (1090 vs 2090 cannot be decided) -- nothing is invented."""
         self._bind('260000000001')
-        self.assertEqual(self.Pack.search([]), self.Pack)
+        self.assertFalse(self.Pack.search(self._scope))
 
     def test_20_binding_creates_one_pending_row(self):
         self._map_meter()
         binding = self._bind('260000000001')
-        row = self.Pack.search([])
+        row = self.Pack.search(self._scope)
         self.assertEqual(len(row), 1)
         self.assertEqual(row.binding_id, binding)
         self.assertEqual(row.info_type_code, '1090')
@@ -73,12 +76,12 @@ class TestEipPackCapture(EipCaptureCase):
         self.assertFalse(self.Pack._eip_capture_from_bindings(binding))
         # a swapped nameplate is a new binding -> a second row
         self._bind('260000000002')
-        self.assertEqual(self.Pack.search_count([]), 2)
+        self.assertEqual(self.Pack.search_count(self._scope), 2)
 
     def test_40_wizard_backfills_by_work_order(self):
         # bound while the product was unmapped: skipped by the hook
         self._bind('260000000001')
-        self.assertEqual(self.Pack.search_count([]), 0)
+        self.assertEqual(self.Pack.search_count(self._scope), 0)
         with self.assertRaises(UserError):
             self.env['sn.wsd.eip.pack.capture.wizard'].create({
                 'work_order_no': 'NO-SUCH-ORDER',
@@ -88,9 +91,10 @@ class TestEipPackCapture(EipCaptureCase):
             'work_order_no': self.order.name,
         })
         action = wizard.action_capture()
-        self.assertEqual(self.Pack.search_count([]), 1)
+        self.assertEqual(self.Pack.search_count(self._scope), 1)
         self.assertEqual(action['domain'], [('id', 'in',
-                                            self.Pack.search([]).ids)])
+                                            self.Pack.search(
+                                                self._scope).ids)])
         # a second run has nothing left to capture
         with self.assertRaises(UserError):
             self.env['sn.wsd.eip.pack.capture.wizard'].create({

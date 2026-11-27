@@ -55,6 +55,47 @@ ENTITY_KEYS = (
 @tagged('post_install', '-at_install')
 class TestEipForms(EipOrderCase):
 
+    def _mes_order(self, suffix):
+        """A plain MES order under a manufacturing order: enough to
+        carry the two numbers the ledger copies. The order needs a
+        released route bound to its drawing number, built here."""
+        product = self.env['product.product'].create({
+            'name': 'P-%s' % suffix, 'default_code': 'DWG-%s' % suffix,
+            'x_board_side': 'single'})
+        mo = self.env['mrp.production'].create({
+            'product_id': product.id, 'product_qty': 5})
+        mo.name = 'MO-%s' % suffix
+        workshop = self.env['sn.mrp.workshop'].create({
+            'name': 'WS-%s' % suffix, 'code': 'WS%s' % suffix})
+        line = self.env['sn.mrp.production.line'].create({
+            'name': 'PL-%s' % suffix, 'code': 'PL%s' % suffix,
+            'workshop_id': workshop.id})
+        operation = self.env['sn.wsd.operation'].create({
+            'name': 'OP-%s' % suffix, 'code': 'OP%s' % suffix,
+            'x_max_test_count': 9})
+        route = self.env['sn.wsd.process.route'].with_context(
+            sn_wsd_skip_flow_versioning=True).create({
+                'name': 'RT-%s' % suffix, 'code': 'RT%s' % suffix,
+                'x_workshop_id': workshop.id,
+                'state': 'confirmed',
+                'x_production_side': 'single',
+                'route_operation_ids': [
+                    (0, 0, {'operation_id': operation.id, 'sequence': 10})],
+                'x_daily_input_operation_id': operation.id,
+                'x_daily_output_operation_id': operation.id,
+                'x_workorder_input_operation_id': operation.id,
+            })
+        self.env['sn.wsd.process.route.drawing'].create({
+            'route_id': route.id, 'x_drawing_no': product.default_code})
+        order = self.env['sn.wsd.mes.order'].create({
+            'production_id': mo.id,
+            'production_line_id': line.id,
+            'date_plan': datetime.date(2026, 12, 1),
+            'planned_qty': 5,
+        })
+        order.name = 'MES-%s' % suffix
+        return order
+
     def _order(self, **values):
         values.setdefault('po_item_id', '699708678428688384')
         values.setdefault('materials_code', 'MC-1')
@@ -195,12 +236,13 @@ class TestEipForms(EipOrderCase):
         self.assertEqual(values['dataSource'], '0')
         self.assertEqual(values['dataSourceCreateTime'],
                          self.transport._eip_format_datetime(work.create_date))
-        # auto number, editable before the push
-        self.assertTrue(work.wo_no.startswith('WO'))
+        # no sequence any more: the number is the MES order number,
+        # brought out by the picker or typed, until then empty
+        self.assertFalse(work.wo_no)
 
     def test_41_work_order_number_locked_after_push(self):
         work = self.env['sn.wsd.eip.work.order'].create({
-            'ipo_no': 'IPO-9',
+            'ipo_no': 'IPO-9', 'wo_no': 'WO-9',
             'materials_code': 'MC', 'amount': '1', 'unit': 'PCS',
             'plan_start_date': datetime.date(2027, 1, 1),
             'plan_finish_date': datetime.date(2027, 1, 2),
@@ -274,8 +316,9 @@ class TestEipForms(EipOrderCase):
         orders = self.env['sn.wsd.eip.production.order'].search(
             [('purchase_line_id', '=', line.id)])
         self.assertEqual(len(orders), 2)
-        self.assertNotEqual(orders.mapped('ipo_no')[0],
-                            orders.mapped('ipo_no')[1])
+        # no number until the manufacturing order is picked or the
+        # number is typed
+        self.assertEqual(orders.mapped('ipo_no'), [False, False])
         self.assertEqual(orders.mapped('po_item_id'), ['1003', '1003'])
 
     # ------------------------------------------------------------------
@@ -306,8 +349,9 @@ class TestEipForms(EipOrderCase):
         entity and batch ride along (the picker column itself is not
         stored)."""
         work = self.env['sn.wsd.eip.work.order'].browse(
-            self._order().action_create_work_order()['res_id'])
-        work.write({'materials_batch': 'B2025', 'entity_code': 'ENT-X'})
+            self._order(ipo_no='IPO-R').action_create_work_order()['res_id'])
+        work.write({'wo_no': 'WO-R', 'materials_batch': 'B2025',
+                    'entity_code': 'ENT-X'})
         report = self.env['sn.wsd.eip.process.work'].create({
             'company_id': work.company_id.id,
             'ipo_no': 'TMP', 'wo_no': 'TMP',
@@ -333,7 +377,100 @@ class TestEipForms(EipOrderCase):
         works = self.env['sn.wsd.eip.work.order'].search(
             [('production_order_id', '=', order.id)])
         self.assertEqual(len(works), 2)
-        self.assertNotEqual(works[0].wo_no, works[1].wo_no)
+        self.assertEqual(works.mapped('wo_no'), [False, False])
+
+    def test_62_mes_order_brings_out_both_numbers(self):
+        """Pick the MES order on the work order: its number is the work
+        order number, its manufacturing order the production order
+        number."""
+        mes_order = self._mes_order('A')
+        order = self._order(ipo_no='OLD')
+        work = self.env['sn.wsd.eip.work.order'].browse(
+            order.action_create_work_order()['res_id'])
+        self.assertEqual(work.ipo_no, 'OLD')
+        work.mes_order_id = mes_order
+        work._onchange_mes_order_id()
+        self.assertEqual(work.wo_no, mes_order.name)
+        self.assertEqual(work.ipo_no, mes_order.production_id.name)
+        self.assertEqual(work.wo_no, 'MES-A')
+        self.assertEqual(work.ipo_no, 'MO-A')
+        work.mes_order_id = self._mes_order('B')
+        work._onchange_mes_order_id()
+        self.assertEqual((work.wo_no, work.ipo_no), ('MES-B', 'MO-B'))
+
+    def test_63_manufacturing_order_brings_out_production_order_no(self):
+        mes_order = self._mes_order('C')
+        order = self._order()
+        self.assertFalse(order.ipo_no)
+        order.production_id = mes_order.production_id
+        order._onchange_production_id()
+        self.assertEqual(order.ipo_no, 'MO-C')
+
+    def test_64_number_is_free_to_type_and_unique(self):
+        first = self.env['sn.wsd.eip.work.order'].create({
+            'ipo_no': 'IPO-T', 'wo_no': 'TYPED-1'})
+        self.assertEqual(first.wo_no, 'TYPED-1')
+        with self.assertRaises(IntegrityError), mute_logger('odoo.sql_db'):
+            with self.env.cr.savepoint():
+                self.env['sn.wsd.eip.work.order'].create({
+                    'ipo_no': 'IPO-T', 'wo_no': 'TYPED-1'})
+
+    def test_65_several_drafts_without_a_number(self):
+        """The numbers are not required at save time: drafts may pile
+        up without one (the unique constraint ignores empty values)."""
+        works = self.env['sn.wsd.eip.work.order'].create([
+            {'ipo_no': 'IPO-D1'}, {'ipo_no': 'IPO-D2'},
+            {'ipo_no': 'IPO-D3'},
+        ])
+        self.assertEqual(len(works), 3)
+        orders = self.env['sn.wsd.eip.production.order'].create([
+            {'po_item_id': '1'}, {'po_item_id': '2'},
+        ])
+        self.assertEqual(len(orders), 2)
+
+    def test_66_push_refuses_an_empty_work_order_number(self):
+        work = self.env['sn.wsd.eip.work.order'].create({
+            'ipo_no': 'IPO-9',
+            'materials_code': 'MC', 'amount': '1', 'unit': 'PCS',
+            'plan_start_date': datetime.date(2027, 1, 1),
+            'plan_finish_date': datetime.date(2027, 1, 2),
+            'category_id': self.env.ref('sn_wsd_eip.category_30').id,
+            'subclass_id': self.env.ref('sn_wsd_eip.subclass_30002').id,
+        })
+        self.assertFalse(work.wo_no)
+        result = work._eip_push_one()
+        self.assertFalse(result['success'])
+        self.assertIn('Missing required fields', result['error'])
+        self.assertEqual(self.server.calls, 0)
+
+    def test_67_push_refuses_an_empty_production_order_number(self):
+        order = self._order()
+        self.assertFalse(order.ipo_no)
+        result = order._eip_push_one()
+        self.assertFalse(result['success'])
+        self.assertIn('Missing required fields', result['error'])
+        self.assertEqual(self.server.calls, 0)
+
+    def test_68_raw_report_copies_the_ledger_numbers(self):
+        """The raw-material report keyed by the work order carries the
+        same two numbers as the ledger."""
+        mes_order = self._mes_order('R')
+        work = self.env['sn.wsd.eip.work.order'].browse(
+            self._order(ipo_no='OLD').action_create_work_order()['res_id'])
+        work.mes_order_id = mes_order
+        work._onchange_mes_order_id()
+        Report = self.env['sn.wsd.eip.raw.report']
+        report = Report.create({
+            'production_order_no': 'TMP',
+            'procedure_code': '1012',
+            'material_check_batch': 'MB-1',
+        })
+        report.work_order_id = work
+        report._onchange_work_order_id()
+        self.assertEqual(report.production_work_no, work.wo_no)
+        self.assertEqual(report.production_order_no, work.ipo_no)
+        self.assertEqual(report.production_work_no, 'MES-R')
+        self.assertEqual(report.production_order_no, 'MO-R')
 
 
 @tagged('post_install', '-at_install')

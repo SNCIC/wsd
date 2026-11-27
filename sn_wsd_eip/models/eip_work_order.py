@@ -15,7 +15,6 @@ class EipWorkOrder(models.Model):
     _check_company_auto = True
 
     EIP_INTERFACE = 'work_order'
-    EIP_SEQUENCE = 'sn.wsd.eip.work.order'
     EIP_NUMBER_FIELD = 'wo_no'
     EIP_FIELDS = (
         C('purchaserHqCode', 'purchaser_hq_code', add=True),
@@ -52,12 +51,26 @@ class EipWorkOrder(models.Model):
         ondelete='set null', check_company=True, index=True,
         help='Picks the production order; its number is copied into '
              'the payload key.')
+    # the work order number is the MES order number: the collected
+    # production data is keyed by it, and the platform joins the two
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order', string='MES Order', ondelete='set null',
+        check_company=True, index=True, copy=False,
+        help='Picks the MES order; its number becomes the work order '
+             'number and its manufacturing order the production order '
+             'number. The numbers are copies, the ledger stays usable '
+             'without the MES order.')
     ipo_no = fields.Char(
-        string='Production Order No.', required=True, index=True,
-        help='Number of the production order this work order belongs to.')
+        string='Production Order No.', index=True,
+        help='Number of the production order this work order belongs '
+             'to. Bring it out with the MES order picker, or type it; '
+             'the pre-push required check refuses an empty number.')
     wo_no = fields.Char(
-        string='Work Order No.', required=True, index=True,
-        copy=False, default=lambda self: self._eip_new_number())
+        string='Work Order No.', index=True, copy=False,
+        help='Key the platform joins the collected production data by. '
+             'Bring it out with the MES order picker (the MES order '
+             'number), or type it; the pre-push required check refuses '
+             'an empty number.')
     category_id = fields.Many2one(
         'sn.wsd.eip.category', string='Category Code', index=True,
         default=lambda self: self.env['sn.wsd.eip.config']._eip_default(
@@ -92,6 +105,15 @@ class EipWorkOrder(models.Model):
         'unique(company_id, wo_no)',
         'The work order number must be unique per company.',
     )
+
+    @api.onchange('mes_order_id')
+    def _onchange_mes_order_id(self):
+        """MES order picked: its number is the work order number, its
+        manufacturing order the production order number."""
+        order = self.mes_order_id
+        if order:
+            self.wo_no = order.name
+            self.ipo_no = order.production_id.name or self.ipo_no
 
     @api.onchange('production_order_id')
     def _onchange_production_order_id(self):

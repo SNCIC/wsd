@@ -23,6 +23,8 @@ class EipRawReport(models.Model):
     _order = 'id'
     _rec_name = 'test_code'
     _check_company_auto = True
+    # overview page: the report count of one work order
+    _work_order_idx = models.Index('(company_id, production_work_no)')
 
     company_id = fields.Many2one(
         'res.company', string='Company', required=True, index=True,

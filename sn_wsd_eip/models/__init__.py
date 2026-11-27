@@ -10,6 +10,8 @@ from . import eip_pack_capture
 from . import serial_binding
 from . import eip_raw_report
 from . import eip_clean_rule
+from . import eip_clean_issue
+from . import eip_work_order_overview
 from . import eip_clean_fix
 from . import eip_clean_engine
 from . import eip_config

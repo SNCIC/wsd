@@ -12,3 +12,5 @@ from . import test_eip_clean
 from . import test_eip_manual
 from . import test_eip_pack_capture
 from . import test_eip_transform
+from . import test_eip_clean_issue
+from . import test_eip_work_order_overview

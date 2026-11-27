@@ -219,6 +219,13 @@ CLEAN_REQUIRED.update({
 })
 
 
+def _eip_add_issue(issues, issue):
+    """Collect one structured problem next to its text; a caller that
+    passes no list only wanted the text."""
+    if issues is not None:
+        issues.append(issue)
+
+
 def _fmt_dt(value):
     """Spec datetime format ('yyyy-MM-dd HH:mm:ss'); the stored wall
     time is used verbatim -- device packets and passes join on it."""
@@ -253,9 +260,18 @@ class EipPassRecordClean(models.Model):
             # order), the raw columns themselves stay untouched
             fixes = {fix.field_name: fix.value for fix in record.fix_ids}
             problems = []
+            # the structured twin of the problem texts: one entry per
+            # problem, written as clean-issue rows once judged (NG is
+            # not an issue, the conclusion column says it)
+            issues = []
             for fname in CLEAN_REQUIRED.get(code, []):
                 if not fixes.get(fname, record[fname]):
                     problems.append('missing required: %s' % fname)
+                    issues.append({
+                        'kind': 'missing',
+                        'field_name': fname,
+                        'message': problems[-1],
+                    })
             if record.conclusion == 1:
                 # the conclusion gate: a failing test never ships
                 problems.append('conclusion failed: 1')
@@ -266,21 +282,39 @@ class EipPassRecordClean(models.Model):
                 problem = rule and rule._eip_limit_problem(record[field_name])
                 if problem:
                     problems.append('limit fail: %s' % problem)
+                    issues.append({
+                        'kind': 'limit',
+                        'field_name': field_name,
+                        'actual_value': record[field_name],
+                        'lower_limit': rule.lower_limit,
+                        'upper_limit': rule.upper_limit,
+                        'message': problems[-1],
+                    })
             now = fields.Datetime.now()
             payloads = []
             if code in AGING_CODES:
-                payloads = record._eip_aging_payloads(now, problems, fixes)
+                payloads = record._eip_aging_payloads(
+                    now, problems, fixes, issues)
             elif code == '1007':
                 payloads = record._eip_error_detail_payloads(
-                    now, problems, fixes, rules)
+                    now, problems, fixes, rules, issues)
             elif code == '2006':
                 payloads = record._eip_ac_analog_payloads(
-                    now, problems, fixes, rules)
+                    now, problems, fixes, rules, issues)
             elif code in CLEAN_REQUIRED:
                 payloads = [record._eip_standard_payload(code, now, fixes)]
             else:
                 problems.append('interface %s has no payload definition' %
                                 code)
+                issues.append({'kind': 'other', 'message': problems[-1]})
+            if not payloads and not problems:
+                problems.append('no deliverable records')
+                issues.append({'kind': 'other', 'message': problems[-1]})
+            # the issue set mirrors the latest pass: rebuilt whole
+            record.issue_ids.sudo().unlink()
+            if issues:
+                self.env['sn.wsd.eip.clean.issue'].sudo().create([
+                    dict(issue, source_id=record.id) for issue in issues])
             record.outbox_ids.filtered(
                 lambda snap: snap.state == 'qualified'
             ).write({'state': 'superseded'})
@@ -354,7 +388,7 @@ class EipPassRecordClean(models.Model):
         return round(value, 3)
 
     def _eip_error_detail_payloads(self, upload_time, problems, fixes=None,
-                                   rules=None):
+                                   rules=None, issues=None):
         """1007: one record per test-detail line. Each line is
         translated to (type code, test name, value) by its
         detail_translate mapping row -- transform code first, the
@@ -424,6 +458,16 @@ class EipPassRecordClean(models.Model):
                 problem = rule._eip_limit_problem(value)
                 if problem:
                     problems.append('limit fail: %s' % problem)
+                    _eip_add_issue(issues, {
+                        'kind': 'limit',
+                        'line_id': line.id,
+                        'field_name': 'average_error',
+                        'type_code': type_code,
+                        'actual_value': value,
+                        'lower_limit': rule.lower_limit,
+                        'upper_limit': rule.upper_limit,
+                        'message': problems[-1],
+                    })
             line.cleansed_value = str(round(value, 3))
             payload = self._eip_base_payload(
                 upload_time, with_pcb=True, fixes=fixes)
@@ -436,10 +480,12 @@ class EipPassRecordClean(models.Model):
                 'no valid error-detail lines (untranslated names or empty '
                 'values)' + ('; skipped: %s' % '; '.join(skipped[:3])
                              if skipped else ''))
+            _eip_add_issue(issues, {
+                'kind': 'other', 'message': problems[-1]})
         return payloads
 
     def _eip_ac_analog_payloads(self, upload_time, problems, fixes=None,
-                                rules=None):
+                                rules=None, issues=None):
         """2006: one record per test-detail line -- the type code and
         measured value come from the detail_translate mapping row
         (transform code first, platform name table fallback), standard
@@ -507,6 +553,16 @@ class EipPassRecordClean(models.Model):
                 problem = rule._eip_limit_problem(measured)
                 if problem:
                     problems.append('limit fail: %s' % problem)
+                    _eip_add_issue(issues, {
+                        'kind': 'limit',
+                        'line_id': line.id,
+                        'field_name': 'measured_value',
+                        'type_code': type_code,
+                        'actual_value': measured,
+                        'lower_limit': rule.lower_limit,
+                        'upper_limit': rule.upper_limit,
+                        'message': problems[-1],
+                    })
             line.cleansed_value = str(round(measured, 1))
             payload = self._eip_base_payload(
                 upload_time, with_pcb=True, fixes=fixes)
@@ -522,9 +578,12 @@ class EipPassRecordClean(models.Model):
                 'no valid ac-analog lines (untranslated names or empty '
                 'values)' + ('; skipped: %s' % '; '.join(skipped[:3])
                              if skipped else ''))
+            _eip_add_issue(issues, {
+                'kind': 'other', 'message': problems[-1]})
         return payloads
 
-    def _eip_aging_payloads(self, upload_time, problems, fixes=None):
+    def _eip_aging_payloads(self, upload_time, problems, fixes=None,
+                            issues=None):
         """1011/2010: one record per aging point of the window (the spec
         wants >= 6 points per order -- volume is a process duty, the
         engine ships what the window holds)."""
@@ -547,6 +606,8 @@ class EipPassRecordClean(models.Model):
             payloads.append(payload)
         if not payloads:
             problems.append('no aging temperature points collected')
+            _eip_add_issue(issues, {
+                'kind': 'other', 'message': problems[-1]})
         return payloads
 
     # ------------------------------------------------------------------

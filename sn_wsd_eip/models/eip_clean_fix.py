@@ -161,20 +161,18 @@ class EipCleanOrderWizard(models.TransientModel):
         rows = self.env['sn.wsd.eip.pass.record']._eip_clean_by_order(
             self.work_order_no.strip())
         qualified = sum(1 for row in rows if row.state == 'qualified')
-        return {
-            'type': 'ir.actions.act_window_close',
-            'effect': {
-                'type': 'ir.actions.client',
-                'tag': 'display_notification',
-                'params': {
-                    'message': _(
-                        '%(total)s rows re-cleaned for %(order)s: '
-                        '%(qualified)s qualified, %(rejected)s rejected.',
-                        total=len(rows),
-                        order=self.work_order_no,
-                        qualified=qualified,
-                        rejected=len(rows) - qualified),
-                    'sticky': False,
-                },
-            },
-        }
+        # the result as a toast on the bus; the 'effect' key of the
+        # returned action is not handled by the Odoo 19 webclient
+        self.env['bus.bus']._sendone(
+            self.env.user.partner_id, 'simple_notification', {
+                'type': 'success' if qualified else 'warning',
+                'title': _('Re-clean by Work Order'),
+                'message': _(
+                    '%(total)s rows re-cleaned for %(order)s: '
+                    '%(qualified)s qualified, %(rejected)s rejected.',
+                    total=len(rows),
+                    order=self.work_order_no,
+                    qualified=qualified,
+                    rejected=len(rows) - qualified),
+            })
+        return {'type': 'ir.actions.act_window_close'}

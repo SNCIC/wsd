@@ -7,6 +7,7 @@ and the duplicate (20006) fallback of the eip-business-push spec.
 """
 
 import datetime
+import itertools
 import json
 from unittest.mock import patch
 
@@ -30,11 +31,16 @@ LOCATE_KEYS = ('supplierCode', 'supplierName', 'ipoNo', 'poItemId',
                'dataType', 'dataSourceCreateTime')
 
 
+# numbers are no longer generated: every order gets its own
+_number = itertools.count(1)
+
+
 @tagged('post_install', '-at_install')
 class TestEipPush(EipOrderCase):
 
     def _order(self, **values):
         values.setdefault('po_item_id', '699708678428688384')
+        values.setdefault('ipo_no', 'IPO-%s' % next(_number))
         values.setdefault('materials_code', 'MC-1')
         values.setdefault('materials_name', 'Meter X')
         values.setdefault('materials_unit', 'PCS')
@@ -256,6 +262,7 @@ class TestEipPushQueue(EipOrderCase):
 
     def _order(self, **values):
         values.setdefault('po_item_id', '699708678428688384')
+        values.setdefault('ipo_no', 'IPO-%s' % next(_number))
         values.setdefault('materials_code', 'MC-1')
         values.setdefault('materials_name', 'Meter X')
         values.setdefault('materials_unit', 'PCS')
