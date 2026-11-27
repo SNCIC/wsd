@@ -108,4 +108,44 @@
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
+
+    <record id="view_eip_reserve_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.reserve.wizard.form</field>
+        <field name="model">sn.wsd.eip.reserve.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Re-serve">
+                <group>
+                    <group>
+                        <field name="work_order_no"/>
+                        <field name="info_type_code"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_re_serve" type="object"
+                            string="Re-serve" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_eip_reserve_wizard" model="ir.actions.act_window">
+        <field name="name">Re-serve</field>
+        <field name="res_model">sn.wsd.eip.reserve.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- collect-outbox list action menu: prefill from the selection -->
+    <record id="action_outbox_re_serve" model="ir.actions.server">
+        <field name="name">Re-serve</field>
+        <field name="model_id" ref="model_sn_wsd_eip_collect_outbox"/>
+        <field name="binding_model_id" ref="model_sn_wsd_eip_collect_outbox"/>
+        <field name="state">code</field>
+        <field name="code">
+action = env["ir.actions.act_window"]._for_xml_id(
+    "sn_wsd_eip.action_eip_reserve_wizard")
+</field>
+    </record>
 </odoo>

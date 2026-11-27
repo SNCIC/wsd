@@ -35,3 +35,4 @@ from . import eip_raw_inventory
 from . import eip_inventories
 from . import mes_test_result
 from . import serial_operation_history
+from . import eip_reserve_wizard

@@ -122,6 +122,62 @@ class TestEipClean(TransactionCase):
         self.assertFalse(first.exists())
         self.assertFalse(row.outbox_ids)
 
+    # ------------------------------------------------------------------
+    # re-serve (user decision 2026-11-27): re-queue delivered snapshots
+    # of one work order + interface, same payload, sources ride along
+    # ------------------------------------------------------------------
+    def test_60_re_serve_flips_delivered(self):
+        row = self._full_1002()
+        row._eip_clean_rows()
+        snapshot = row.outbox_ids
+        snapshot.write({'state': 'delivered',
+                        'delivered_time': fields.Datetime.now()})
+        row.write({'state': 'delivered',
+                   'upload_time': fields.Datetime.now()})
+        wizard = self.env['sn.wsd.eip.reserve.wizard'].create({
+            'work_order_no': 'W001', 'info_type_code': '1002'})
+        wizard.action_re_serve()
+        self.assertEqual(snapshot.state, 'qualified')
+        self.assertFalse(snapshot.delivered_time)
+        self.assertEqual(row.state, 'qualified')
+        self.assertFalse(row.upload_time)
+
+    def test_61_re_serve_scopes_by_work_order_and_code(self):
+        row_a = self._full_1002()
+        row_a._eip_clean_rows()
+        row_a.outbox_ids.write({'state': 'delivered'})
+        row_b = self._source(code='1005', current_value=30.0,
+                             work_order_no='W002')
+        row_b._eip_clean_rows()
+        row_b.outbox_ids.write({'state': 'delivered'})
+        row_b.write({'state': 'delivered'})
+        row_c = self._full_1002()
+        row_c._eip_clean_rows()  # qualified, not delivered
+        wizard = self.env['sn.wsd.eip.reserve.wizard'].create({
+            'work_order_no': 'W001', 'info_type_code': '1002'})
+        wizard.action_re_serve()
+        # only the delivered 1002/W001 slice flipped
+        self.assertEqual(row_a.state, 'qualified')
+        self.assertEqual(row_b.state, 'delivered')
+        self.assertEqual(row_c.state, 'qualified')
+        self.assertEqual(
+            row_b.outbox_ids.mapped('state'), ['delivered'])
+
+    def test_62_re_serve_without_delivered_raises(self):
+        wizard = self.env['sn.wsd.eip.reserve.wizard'].create({
+            'work_order_no': 'W-MISSING', 'info_type_code': '1002'})
+        with self.assertRaises(UserError):
+            wizard.action_re_serve()
+
+    def test_63_wizard_prefills_from_selection(self):
+        row = self._full_1002()
+        row._eip_clean_rows()
+        defaults = self.env['sn.wsd.eip.reserve.wizard'].with_context(
+            active_ids=row.outbox_ids.ids).default_get(
+                ['work_order_no', 'info_type_code'])
+        self.assertEqual(defaults.get('work_order_no'), 'W001')
+        self.assertEqual(defaults.get('info_type_code'), '1002')
+
     def test_50_error_detail_expansion(self):
         row = self._source(code='1007')
         self.env['sn.wsd.eip.pass.record.line'].create([

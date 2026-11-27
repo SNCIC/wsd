@@ -6688,3 +6688,48 @@ msgstr "电流互感器"
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_raw_report__procedure_code__2014
 msgid "瞬变二极管"
 msgstr "瞬变二极管"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_reserve_wizard
+#: model:ir.actions.server,name:sn_wsd_eip.action_outbox_re_serve
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_reserve_wizard_form
+msgid "Re-serve"
+msgstr "重新抓取"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_reserve_wizard.py:0
+msgid "Re-served"
+msgstr "重新抓取完成"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_reserve_wizard.py:0
+msgid "%(total)s snapshots re-queued for work order %(order)s / interface %(code)s: the gateway fetches the same payloads again."
+msgstr "已为工单 %(order)s / 工序 %(code)s 重新入队 %(total)s 条快照：网关将再次抓取同一报文。"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_collect_outbox.py:0
+msgid "No delivered snapshot for work order %(order)s and interface %(code)s: nothing to re-serve."
+msgstr "工单 %(order)s / 工序 %(code)s 没有已交付的快照：无可重传。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_reserve_wizard__work_order_no
+msgid "Every delivered snapshot carrying this work order number is re-queued."
+msgstr "携带该工单号的全部已交付快照将被重新入队。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_reserve_wizard__info_type_code
+msgid "The interface whose delivered snapshots of the work order are re-queued."
+msgstr "所选工序的该工单已交付快照将被重新入队。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_reserve_wizard__info_type_code
+msgid "Info Type Code"
+msgstr "工序编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_reserve_wizard
+msgid "EIP Collection Re-serve by Work Order and Interface"
+msgstr "EIP 按工单与工序重新抓取"

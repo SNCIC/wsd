@@ -7,6 +7,8 @@ claims FIFO and marks delivered. Re-cleansing of an undelivered row
 supersedes its old snapshots; nothing is ever deleted.
 """
 from odoo import api, fields, models
+from odoo.exceptions import UserError
+from odoo import _
 
 
 # ---- payload display columns ----
@@ -275,6 +277,34 @@ class EipCollectOutbox(models.Model):
         claimed = self.browse(ids)
         claimed._eip_freeze_sources()
         return claimed
+
+    def _eip_re_serve(self, work_order_no, info_type_code):
+        """Re-serve the delivered snapshots of ONE work order and ONE
+        interface (user decision 2026-11-27): the gateway may not
+        display data it was served, so the manager re-queues the whole
+        work-order/code slice -- the snapshots flip back to qualified
+        and the next gateway pull delivers the very same payload again.
+        The payload is never rebuilt; the source collection rows ride
+        along (the delivery stamp itself may flip their state)."""
+        targets = self.search([
+            ('work_order_no', '=', work_order_no),
+            ('info_type_code', '=', info_type_code),
+            ('state', '=', 'delivered'),
+        ])
+        if not targets:
+            raise UserError(_(
+                'No delivered snapshot for work order %(order)s and '
+                'interface %(code)s: nothing to re-serve.',
+                order=work_order_no, code=info_type_code))
+        targets.write({'state': 'qualified', 'delivered_time': False})
+        sources = targets.mapped('source_id').filtered(
+            lambda row: row and row.state == 'delivered')
+        if sources:
+            sources.sudo().write({
+                'state': 'qualified',
+                'upload_time': False,
+            })
+        return targets
 
     def _eip_freeze_sources(self):
         """Mark the source collection rows delivered and stamp
