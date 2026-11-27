@@ -3051,9 +3051,30 @@ msgstr "实测值"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__mes_order_id
-#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__mes_order_id
 msgid "MES Order"
 msgstr "制令单"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__mes_order_ids
+msgid "Linked MES Orders"
+msgstr "关联制令单"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_work_order__mes_order_id
+msgid "Main MES Order"
+msgstr "主制令单"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_work_order.py:0
+msgid "MES order %(order)s is already linked to work order %(work)s: one MES order can only belong to one work order."
+msgstr "制令单 %(order)s 已挂在工单 %(work)s：一张制令单只能属于一张工单。"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_work_order.py:0
+msgid "The main MES order %(order)s must also be one of the linked MES orders."
+msgstr "主制令单 %(order)s 必须同时在关联制令单列表中。"
 
 #. module: sn_wsd_eip
 #: model:ir.model,name:sn_wsd_eip.model_sn_wsd_mes_test_result
@@ -4092,12 +4113,13 @@ msgstr "选择工单，自动带入报工信息"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_work_order__mes_order_id
-msgid ""
-"Picks the MES order; its number becomes the work order numbe"
-"r and its manufacturing order the production order number. T"
-"he numbers are copies, the ledger stays usable without the M"
-"ES order."
-msgstr "选择制令单；其单号成为工单号，其制造订单号成为生产订单号。单号是拷贝，不选制令单也能用。"
+msgid "Picks the main MES order; its number becomes the work order number and its manufacturing order the production order number. The numbers are copies, the ledger stays usable without the MES order."
+msgstr "选择主制令单；其单号成为工单号，其制造订单号成为生产订单号。单号是拷贝，不选制令单也能用。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_work_order__mes_order_ids
+msgid "Every MES order whose collected production data is reported under this work order, the main one included. One MES order can only be linked to one work order."
+msgstr "挂在本工单下的所有制令单（含主单），其采集数据都上报本工单号。一张制令单只能挂一张工单。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_finished_inventory__subclass_id

@@ -85,9 +85,11 @@ class EipPackRecord(models.Model):
         """One pending packing-storage row per nameplate binding: the
         nameplate SN of the binding is the stored unit's grid nameplate
         number, the machine SN supplies the production order, the work
-        order and the model (its latest pass). SNs without a production
-        order or without a mapped spec family are skipped -- nothing is
-        invented for them; the by-work-order wizard reports the gap."""
+        order (the ledger numbers when its MES order is linked to an EIP
+        work order) and the model (its latest pass). SNs without a
+        production order or without a mapped spec family are skipped --
+        nothing is invented for them; the by-work-order wizard reports
+        the gap."""
         bindings = bindings.filtered(
             lambda binding: binding.binding_type == 'nameplate')
         bindings -= self.sudo().search(
@@ -113,11 +115,18 @@ class EipPackRecord(models.Model):
                 order.product_id, binding.company_id)
             if not family:
                 continue
+            # normalized numbers: the MES order linked to the EIP work
+            # order ledger reports the ledger numbers, an unlinked one
+            # keeps its own
+            numbers = self.env[
+                'sn.wsd.eip.work.order']._eip_resolve_normalized(order)
             records |= self.create({
                 'company_id': binding.company_id.id,
                 'info_type_code': self.PACK_CODE[family],
-                'production_order_no': production.name,
-                'work_order_no': order.name,
+                'production_order_no': (
+                    (numbers[1] or production.name) if numbers
+                    else production.name),
+                'work_order_no': numbers[0] if numbers else order.name,
                 'binding_id': binding.id,
                 'serial_identity_id': binding.bound_serial_identity_id.id,
                 'test_code': '%s-%s' % (self.PACK_CODE[family],

@@ -9,6 +9,7 @@
             <list>
                 <field name="wo_no"/>
                 <field name="ipo_no"/>
+                <field name="mes_order_id" optional="hide"/>
                 <field name="push_state" widget="badge"
                        decoration-success="push_state == 'pushed'"
                        decoration-danger="push_state == 'failed'"
@@ -52,8 +53,10 @@
                     </div>
                     <group>
                         <group>
-                            <field name="production_order_id"/>
                             <field name="mes_order_id" readonly="eip_synced"/>
+                            <field name="mes_order_ids" widget="many2many_tags"
+                                   options="{'no_create': True}"/>
+                            <field name="production_order_id"/>
                             <field name="ipo_no" readonly="eip_synced"/>
                             <field name="category_id"/>
                             <field name="subclass_id"/>

@@ -317,6 +317,16 @@ class EipPassRecord(models.Model):
             if not mappings:
                 continue
             production = order.production_id
+            # normalized numbers: an MES order linked to the EIP work
+            # order ledger reports the ledger numbers (the SMT / DIP /
+            # assembly lines of one product converge on one work order);
+            # an unlinked order keeps its own numbers
+            numbers = self.env[
+                'sn.wsd.eip.work.order']._eip_resolve_normalized(order)
+            work_order_no = numbers[0] if numbers else order.name
+            production_order_no = (
+                (numbers[1] or production.name) if numbers
+                else production.name)
             workcenter = history.workcenter_id
             # device chain level 2: the equipment assigned to the work
             # center (sn.wsd.workcenter.equipment, first by sequence)
@@ -335,9 +345,9 @@ class EipPassRecord(models.Model):
                     'serial_identity_id': history.serial_identity_id.id,
                     'sn_name': history.serial_identity_id.name,
                     'mes_order_id': order.id,
-                    'work_order_no': order.name,
+                    'work_order_no': work_order_no,
                     'production_id': production.id,
-                    'production_order_no': production.name,
+                    'production_order_no': production_order_no,
                     'route_operation_id': history.route_operation_id.id,
                     'operation_id': operation.id,
                     'workcenter_id': workcenter.id,

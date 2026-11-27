@@ -17,8 +17,19 @@ class EipPackCaptureWizard(models.TransientModel):
     def action_capture(self):
         self.ensure_one()
         number = self.work_order_no.strip()
+        # the typed number is the EIP work order number: when a ledger
+        # carries it, every MES order linked to the ledger is captured
+        # (SMT / DIP / assembly lines of one product); otherwise the
+        # number is taken as a bare MES order name
+        work = self.env['sn.wsd.eip.work.order'].sudo().search([
+            ('company_id', '=', self.env.company.id),
+            ('wo_no', '=', number),
+        ], limit=1)
+        orders = work.mes_order_id | work.mes_order_ids
         History = self.env['sn.wsd.serial.operation.history'].sudo()
-        histories = History.search([('mes_order_id.name', '=', number)])
+        histories = History.search(
+            [('mes_order_id', 'in', orders.ids)] if orders
+            else [('mes_order_id.name', '=', number)])
         bindings = self.env['sn.wsd.serial.binding'].sudo().search([
             ('bound_serial_identity_id', 'in',
              histories.serial_identity_id.ids),

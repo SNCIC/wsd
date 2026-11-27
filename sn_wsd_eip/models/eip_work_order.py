@@ -1,4 +1,5 @@
-from odoo import api, fields, models
+from odoo import Command, _, api, fields, models
+from odoo.exceptions import ValidationError
 
 from .eip_push import C, F, K, T
 
@@ -54,12 +55,18 @@ class EipWorkOrder(models.Model):
     # the work order number is the MES order number: the collected
     # production data is keyed by it, and the platform joins the two
     mes_order_id = fields.Many2one(
-        'sn.wsd.mes.order', string='MES Order', ondelete='set null',
+        'sn.wsd.mes.order', string='Main MES Order', ondelete='set null',
         check_company=True, index=True, copy=False,
-        help='Picks the MES order; its number becomes the work order '
+        help='Picks the main MES order; its number becomes the work order '
              'number and its manufacturing order the production order '
              'number. The numbers are copies, the ledger stays usable '
              'without the MES order.')
+    mes_order_ids = fields.Many2many(
+        'sn.wsd.mes.order', string='Linked MES Orders',
+        check_company=True, copy=False,
+        help='Every MES order whose collected production data is reported '
+             'under this work order, the main one included. One MES order '
+             'can only be linked to one work order.')
     ipo_no = fields.Char(
         string='Production Order No.', index=True,
         help='Number of the production order this work order belongs '
@@ -106,14 +113,21 @@ class EipWorkOrder(models.Model):
         'The work order number must be unique per company.',
     )
 
+    # how many collection rows one rewrite statement may carry
+    REWRITE_BATCH = 1000
+
     @api.onchange('mes_order_id')
     def _onchange_mes_order_id(self):
         """MES order picked: its number is the work order number, its
-        manufacturing order the production order number."""
+        manufacturing order the production order number. The main order
+        joins the linked list by itself (the save-time check demands
+        it)."""
         order = self.mes_order_id
         if order:
             self.wo_no = order.name
             self.ipo_no = order.production_id.name or self.ipo_no
+            if order not in self.mes_order_ids:
+                self.mes_order_ids = [Command.link(order.id)]
 
     @api.onchange('production_order_id')
     def _onchange_production_order_id(self):
@@ -127,6 +141,114 @@ class EipWorkOrder(models.Model):
                 or order.purchase_line_id.material_desc or '')
             self.amount = order.amount
             self.unit = order.unit
+
+    # ------------------------------------------------------------------
+    # linked MES orders (one work order covers the SMT / DIP / assembly
+    # lines of one product: a single ledger, several MES orders)
+    # ------------------------------------------------------------------
+    @api.constrains('mes_order_id', 'mes_order_ids')
+    def _check_mes_orders(self):
+        for work in self:
+            main = work.mes_order_id
+            if main and main not in work.mes_order_ids:
+                raise ValidationError(_(
+                    'The main MES order %(order)s must also be one of the '
+                    'linked MES orders.', order=main.name))
+            linked = main | work.mes_order_ids
+            if not linked:
+                continue
+            other = self.search([
+                ('id', '!=', work.id),
+                ('company_id', '=', work.company_id.id),
+                '|', ('mes_order_id', 'in', linked.ids),
+                ('mes_order_ids', 'in', linked.ids),
+            ], limit=1)
+            if other:
+                clash = linked & (other.mes_order_id | other.mes_order_ids)
+                raise ValidationError(_(
+                    'MES order %(order)s is already linked to work order '
+                    '%(work)s: one MES order can only belong to one work '
+                    'order.', order=clash[:1].name, work=other.wo_no))
+
+    @api.model
+    def _eip_resolve_normalized(self, order):
+        """Collected-data numbers of an MES order: ``(wo_no, ipo_no)`` of
+        the work order it is linked to, ``False`` when no work order
+        carries it (or the ledger has no number yet) -- the capture then
+        keeps the MES order numbers."""
+        if not order:
+            return False
+        work = self.search([
+            ('company_id', '=', order.company_id.id),
+            '|', ('mes_order_id', '=', order.id),
+            ('mes_order_ids', 'in', order.id),
+        ], limit=1)
+        if not work or not work.wo_no:
+            return False
+        return work.wo_no, work.ipo_no
+
+    # ------------------------------------------------------------------
+    # write-back of the undelivered collection rows
+    # ------------------------------------------------------------------
+    @api.model_create_multi
+    def create(self, vals_list):
+        works = super().create(vals_list)
+        works._eip_rewrite_collected_numbers()
+        return works
+
+    def write(self, vals):
+        relinks = bool({'mes_order_id', 'mes_order_ids'} & set(vals))
+        previous = ({work.id: work.wo_no for work in self}
+                    if relinks else {})
+        result = super().write(vals)
+        if relinks:
+            self._eip_rewrite_collected_numbers(previous)
+        return result
+
+    def _eip_rewrite_collected_numbers(self, previous_wo_no=None):
+        """Converge the undelivered collection rows of every linked MES
+        order on the ledger numbers; delivered rows are frozen by their
+        own write guard and stay untouched."""
+        previous_wo_no = previous_wo_no or {}
+        Pass = self.env['sn.wsd.eip.pass.record'].sudo()
+        Pack = self.env['sn.wsd.eip.pack.record'].sudo()
+        for work in self:
+            if not work.wo_no:
+                continue
+            numbers = {'work_order_no': work.wo_no}
+            if work.ipo_no:
+                numbers['production_order_no'] = work.ipo_no
+            orders = work.mes_order_id | work.mes_order_ids
+            if orders:
+                # station-pass rows carry the MES order they were born
+                # from: an exact anchor
+                rows = Pass.search([
+                    ('company_id', '=', work.company_id.id),
+                    ('mes_order_id', 'in', orders.ids),
+                    ('state', '!=', 'delivered'),
+                ])
+                self._eip_rewrite_batches(rows, numbers)
+            # packing-storage rows carry no MES order: converge the ones
+            # still reporting one of this work order's MES order numbers
+            # (and the number the ledger had before this write)
+            reported = {order.name for order in orders}
+            if previous_wo_no.get(work.id):
+                reported.add(previous_wo_no[work.id])
+            reported.discard(work.wo_no)
+            if not reported:
+                continue
+            rows = Pack.search([
+                ('company_id', '=', work.company_id.id),
+                ('work_order_no', 'in', list(reported)),
+                ('state', '!=', 'delivered'),
+            ])
+            self._eip_rewrite_batches(rows, numbers)
+
+    def _eip_rewrite_batches(self, records, vals):
+        """Batch the rewrite: one UPDATE per chunk instead of one huge
+        IN list on the high-volume collection tables."""
+        for start in range(0, len(records), self.REWRITE_BATCH):
+            records[start:start + self.REWRITE_BATCH].write(vals)
 
     def _eip_document_ref(self):
         self.ensure_one()

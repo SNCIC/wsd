@@ -325,6 +325,16 @@ class TestEipForms(EipOrderCase):
     # derive: production order -> work order
     # ------------------------------------------------------------------
 
+    def _pick_mes_order(self, work, mes_order):
+        """Pick the main MES order the way the form does: the field
+        change brings out the numbers, and the main order joins the
+        linked list (the save-time check demands it there)."""
+        work.write({
+            'mes_order_id': mes_order.id,
+            'mes_order_ids': [(4, mes_order.id)],
+        })
+        work._onchange_mes_order_id()
+
     def test_60_create_work_order(self):
         order = self._order()
         action = order.action_create_work_order()
@@ -388,14 +398,13 @@ class TestEipForms(EipOrderCase):
         work = self.env['sn.wsd.eip.work.order'].browse(
             order.action_create_work_order()['res_id'])
         self.assertEqual(work.ipo_no, 'OLD')
-        work.mes_order_id = mes_order
-        work._onchange_mes_order_id()
+        self._pick_mes_order(work, mes_order)
         self.assertEqual(work.wo_no, mes_order.name)
         self.assertEqual(work.ipo_no, mes_order.production_id.name)
         self.assertEqual(work.wo_no, 'MES-A')
         self.assertEqual(work.ipo_no, 'MO-A')
-        work.mes_order_id = self._mes_order('B')
-        work._onchange_mes_order_id()
+        other = self._mes_order('B')
+        self._pick_mes_order(work, other)
         self.assertEqual((work.wo_no, work.ipo_no), ('MES-B', 'MO-B'))
 
     def test_63_manufacturing_order_brings_out_production_order_no(self):
@@ -457,8 +466,7 @@ class TestEipForms(EipOrderCase):
         mes_order = self._mes_order('R')
         work = self.env['sn.wsd.eip.work.order'].browse(
             self._order(ipo_no='OLD').action_create_work_order()['res_id'])
-        work.mes_order_id = mes_order
-        work._onchange_mes_order_id()
+        self._pick_mes_order(work, mes_order)
         Report = self.env['sn.wsd.eip.raw.report']
         report = Report.create({
             'production_order_no': 'TMP',
