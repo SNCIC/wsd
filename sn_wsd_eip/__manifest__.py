@@ -27,6 +27,7 @@
         'views/eip_collect_views.xml',
         'views/eip_clean_views.xml',
         'views/eip_pass_ledger_views.xml',
+        'views/eip_work_order_overview.xml',
         'data/cron_eip.xml',
         'data/cron_eip_order.xml',
         'data/cron_eip_push.xml',
@@ -36,6 +37,13 @@
         'data/eip_dictionary_data.xml',
         'data/eip_collect_interface_data.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'sn_wsd_eip/static/src/js/work_order_overview.js',
+            'sn_wsd_eip/static/src/scss/work_order_overview.scss',
+            'sn_wsd_eip/static/src/xml/work_order_overview.xml',
+        ],
+    },
     'installable': True,
     'application': True,
     'author': 'SNCIC',

@@ -55,6 +55,7 @@
                     </div>
                     <group>
                         <group string="Production Order">
+                            <field name="production_id" readonly="eip_synced"/>
                             <field name="ipo_type"/>
                             <field name="category_id"/>
                             <field name="subclass_id"/>
@@ -116,6 +117,7 @@
             <search>
                 <field name="ipo_no"/>
                 <field name="po_item_id"/>
+                <field name="production_id"/>
                 <field name="materials_code" filter_domain="['|', ('materials_code', 'ilike', self), ('materials_name', 'ilike', self)]"/>
                 <field name="schedule_code"/>
                 <filter string="Draft" name="filter_draft"
