@@ -35,6 +35,14 @@ class SerialBinding(models.Model):
         default='manual', required=True,
         help='Manual entries come from the UI; API entries are uploaded by '
              'the future device API.')
+    # Read-time columns: the orders the bound machine SN was produced under
+    # (latest pass row wins, an SN reworked on several orders shows the last)
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order', string='MES Order', compute='_compute_mes_order',
+        help='MES order of the latest station pass of the bound machine SN.')
+    production_id = fields.Many2one(
+        'mrp.production', string='Manufacturing Order',
+        related='mes_order_id.production_id')
     note = fields.Text()
     is_current = fields.Boolean(
         string='Current', default=False, index=True, copy=False,
@@ -51,6 +59,17 @@ class SerialBinding(models.Model):
         'binding_type)',
         'The same SN pair can only be bound once per binding type.',
     )
+
+    @api.depends('bound_serial_identity_id')
+    def _compute_mes_order(self):
+        histories = self.env['sn.wsd.serial.operation.history'].search(
+            [('serial_identity_id', 'in', self.bound_serial_identity_id.ids)],
+            order='id desc')
+        latest = {}
+        for history in histories:
+            latest.setdefault(history.serial_identity_id.id, history.mes_order_id)
+        for binding in self:
+            binding.mes_order_id = latest.get(binding.bound_serial_identity_id.id)
 
     @api.model_create_multi
     def create(self, vals_list):

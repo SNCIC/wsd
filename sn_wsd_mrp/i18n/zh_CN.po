@@ -3021,6 +3021,7 @@ msgstr "制造库位"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__production_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_quick_entry_wizard__production_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_excess_return_search
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__production_id
 msgid "Manufacturing Order"
 msgstr "制造订单"
 
@@ -3278,8 +3279,14 @@ msgstr "制令单"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_operation_report_search
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__mes_order_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__mes_order_id
 msgid "MES Order"
 msgstr "制令单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_binding__mes_order_id
+msgid "MES order of the latest station pass of the bound machine SN."
+msgstr "绑定机器 SN 最近一次过站所在的制令单。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
